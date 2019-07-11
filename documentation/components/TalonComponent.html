@@ -1,0 +1,888 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>vmp-frontend documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">vmp-frontend documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li>TalonComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li >
+            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li >
+            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li >
+            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/talon/talon.component.ts</code>
+</p>
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+    </p>
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-talon</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./talon.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./talon.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#access">access</a>
+                            </li>
+                            <li>
+                                <a href="#onTalonChange">onTalonChange</a>
+                            </li>
+                            <li>
+                                <a href="#talon">talon</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#getTalon">getTalon</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#isEditable">isEditable</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#isReadable">isReadable</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit">ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#saveTalon">saveTalon</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(route: <a href="https://angular.io/api/router/ActivatedRoute" target="_blank">ActivatedRoute</a>, location: <a href="https://angular.io/api/common/Location" target="_blank">Location</a>, router: <a href="https://angular.io/api/router/Router" target="_blank">Router</a>, talonService: <a href="../injectables/TalonService.html">TalonService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/talon/talon.component.ts:30</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>route</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/router/ActivatedRoute" target="_blank" >ActivatedRoute</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>location</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/common/Location" target="_blank" >Location</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>router</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/router/Router" target="_blank" >Router</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>talonService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/TalonService.html" target="_self" >TalonService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getTalon"></a>
+                    <span class="name">
+                        <b>
+                            getTalon
+                        </b>
+                        <a href="#getTalon"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getTalon(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="51"
+                            class="link-to-prism">src/app/talon/talon.component.ts:51</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isEditable"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Public</span>
+                            isEditable
+                        </b>
+                        <a href="#isEditable"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>isEditable(field: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="71"
+                            class="link-to-prism">src/app/talon/talon.component.ts:71</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>field</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isReadable"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Public</span>
+                            isReadable
+                        </b>
+                        <a href="#isReadable"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>isReadable(field: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="67"
+                            class="link-to-prism">src/app/talon/talon.component.ts:67</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>field</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <b>
+                            ngOnInit
+                        </b>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="39"
+                            class="link-to-prism">src/app/talon/talon.component.ts:39</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="saveTalon"></a>
+                    <span class="name">
+                        <b>
+                            saveTalon
+                        </b>
+                        <a href="#saveTalon"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>saveTalon()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="59"
+                            class="link-to-prism">src/app/talon/talon.component.ts:59</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="access"></a>
+                        <span class="name">
+                            <b>
+                            access</b>
+                            <a href="#access"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/Access.html" target="_self" >Access</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/talon/talon.component.ts:28</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="onTalonChange"></a>
+                        <span class="name">
+                            <b>
+                            onTalonChange</b>
+                            <a href="#onTalonChange"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/Talon.html" target="_self" >EventEmitter&lt;Talon&gt;</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>new EventEmitter()</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/talon/talon.component.ts:30</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="talon"></a>
+                        <span class="name">
+                            <b>
+                            talon</b>
+                            <a href="#talon"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/Talon.html" target="_self" >Talon</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/talon/talon.component.ts:27</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {Component, EventEmitter, Input, OnInit} from &#x27;@angular/core&#x27;;
+import {ActivatedRoute, Router} from &#x27;@angular/router&#x27;;
+import {Location} from &#x27;@angular/common&#x27;;
+import {Access, FinancingSource, Talon} from &#x27;../talon&#x27;;
+import {TalonService} from &#x27;../service/talon.service&#x27;;
+
+export const pickerI18n &#x3D; {
+    cancel: &#x27;Отмена&#x27;,
+        clear: &#x27;Очистить&#x27;,
+        done: &#x27;ОК&#x27;,
+        previousMonth: &#x27;‹&#x27;,
+        nextMonth: &#x27;›&#x27;,
+        months: [&#x27;Январь&#x27;, &#x27;Февраль&#x27;, &#x27;Март&#x27;, &#x27;Апрель&#x27;, &#x27;Май&#x27;, &#x27;Июнь&#x27;, &#x27;Июль&#x27;, &#x27;Август&#x27;, &#x27;Сентябрь&#x27;, &#x27;Октябрь&#x27;, &#x27;Ноябрь&#x27;, &#x27;Декабрь&#x27;],
+        monthsShort: [&#x27;Янв&#x27;, &#x27;Фев&#x27;, &#x27;Мар&#x27;, &#x27;Апр&#x27;, &#x27;Май&#x27;, &#x27;Июнь&#x27;, &#x27;Июль&#x27;, &#x27;Авг&#x27;, &#x27;Сен&#x27;, &#x27;Окт&#x27;, &#x27;Ноя&#x27;, &#x27;Дек&#x27;],
+        weekdays: [&#x27;Воскресенье&#x27;, &#x27;Понедельник&#x27;, &#x27;Вторник&#x27;, &#x27;Среда&#x27;, &#x27;Четверг&#x27;, &#x27;Пятница&#x27;, &#x27;Суббота&#x27;],
+        weekdaysShort: [&#x27;ВС&#x27;, &#x27;ПН&#x27;, &#x27;ВТ&#x27;, &#x27;СР&#x27;, &#x27;ЧТ&#x27;, &#x27;ПТ&#x27;, &#x27;СБ&#x27;],
+        weekdaysAbbrev: [&#x27;В&#x27;, &#x27;П&#x27;, &#x27;В&#x27;, &#x27;С&#x27;, &#x27;Ч&#x27;, &#x27;П&#x27;, &#x27;С&#x27;]
+};
+
+@Component({
+  selector: &#x27;app-talon&#x27;,
+  templateUrl: &#x27;./talon.component.html&#x27;,
+  styleUrls: [&#x27;./talon.component.scss&#x27;]
+})
+export class TalonComponent implements OnInit {
+
+    talon: Talon;
+    access: Access;
+
+    onTalonChange: EventEmitter&lt;Talon&gt; &#x3D; new EventEmitter();
+
+    constructor(
+        private route: ActivatedRoute,
+        private location: Location,
+        private router: Router,
+        private talonService: TalonService
+    ) { }
+
+    ngOnInit() {
+        const params &#x3D; this.route.snapshot.paramMap;
+
+        this.talon &#x3D; new Talon();
+
+        console.log(this.talon, &#x27;here&#x27;);
+
+        if (params.has(&#x27;id&#x27;)) {
+            this.getTalon(Number(params.get(&#x27;id&#x27;)));
+        }
+    }
+
+    getTalon(id: number) {
+        this.talonService.getTalon(id).subscribe(response &#x3D;&gt; {
+            this.talon &#x3D; response.talon;
+            this.access &#x3D; response.access;
+            this.onTalonChange.emit(this.talon);
+        });
+    }
+
+    saveTalon() {
+        if (this.talon.id) {
+            this.talonService.putTalon(this.talon).subscribe(response &#x3D;&gt; {
+                console.log(response);
+            });
+        }
+    }
+
+    public isReadable(field: string): boolean {
+        return !(this.access &amp;&amp; this.access.rules[field] !&#x3D;&#x3D; undefined &amp;&amp; this.access.rules[field] &#x3D;&#x3D;&#x3D; 0);
+    }
+
+    public isEditable(field: string): boolean {
+        return !(this.access &amp;&amp; this.access.rules[field] !&#x3D;&#x3D; undefined &amp;&amp; this.access.rules[field] &lt; 2);
+    }
+
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;z-depth-2 col s9 vmp_content&quot; style&#x3D;&quot;padding:0&quot;&gt;
+  &lt;ul materialize&#x3D;&quot;Tabs&quot; class&#x3D;&quot;tabs tabs-fixed-width tab-demo z-depth-1 green-text&quot; style&#x3D;&quot;margin-bottom: 20px&quot;&gt;
+    &lt;li class&#x3D;&quot;tab&quot;&gt;&lt;a class&#x3D;&quot;active&quot; href&#x3D;&quot;#0_etap&quot;&gt;Талон на ВМП&lt;/a&gt;&lt;/li&gt;
+    &lt;li class&#x3D;&quot;tab&quot;&gt;&lt;a href&#x3D;&quot;#1_etap&quot;&gt;1 этап&lt;/a&gt;&lt;/li&gt;
+    &lt;li class&#x3D;&quot;tab&quot;&gt;&lt;a href&#x3D;&quot;#2_etap&quot;&gt;2 этап&lt;/a&gt;&lt;/li&gt;
+    &lt;li class&#x3D;&quot;tab&quot;&gt;&lt;a href&#x3D;&quot;#3_etap&quot;&gt;3 этап&lt;/a&gt;&lt;/li&gt;
+    &lt;li class&#x3D;&quot;tab&quot;&gt;&lt;a href&#x3D;&quot;#4_etap&quot;&gt;4 этап&lt;/a&gt;&lt;/li&gt;
+    &lt;li class&#x3D;&quot;tab&quot;&gt;&lt;a href&#x3D;&quot;#5_etap&quot;&gt;5 этап&lt;/a&gt;&lt;/li&gt;
+    &lt;li class&#x3D;&quot;tab&quot;&gt;&lt;a href&#x3D;&quot;#6_etap&quot;&gt;6 этап&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+
+  &lt;div id&#x3D;&quot;0_etap&quot; class&#x3D;&quot;col s12&quot;&gt;
+    &lt;app-stage0&gt;&lt;/app-stage0&gt;
+  &lt;/div&gt;
+
+  &lt;div id&#x3D;&quot;1_etap&quot; class&#x3D;&quot;col s12&quot;&gt;
+    &lt;app-stage1&gt;&lt;/app-stage1&gt;
+  &lt;/div&gt;
+
+  &lt;div id&#x3D;&quot;2_etap&quot; class&#x3D;&quot;col s12&quot;&gt;
+    &lt;app-stage2&gt;&lt;/app-stage2&gt;
+  &lt;/div&gt;
+
+  &lt;div id&#x3D;&quot;3_etap&quot; class&#x3D;&quot;col s12&quot;&gt;
+    &lt;app-stage3&gt;&lt;/app-stage3&gt;
+  &lt;/div&gt;
+
+  &lt;div id&#x3D;&quot;4_etap&quot; class&#x3D;&quot;col s12&quot;&gt;
+    &lt;app-stage4&gt;&lt;/app-stage4&gt;
+  &lt;/div&gt;
+
+  &lt;div id&#x3D;&quot;5_etap&quot; class&#x3D;&quot;col s12&quot;&gt;
+    &lt;app-stage5&gt;&lt;/app-stage5&gt;
+  &lt;/div&gt;
+
+  &lt;div id&#x3D;&quot;6_etap&quot; class&#x3D;&quot;col s12&quot;&gt;
+    &lt;app-stage6&gt;&lt;/app-stage6&gt;
+  &lt;/div&gt;
+
+&lt;/div&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-styleData">
+                <p class="comment">
+                    <code>./talon.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss"></code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="z-depth-2 col s9 vmp_content" style="padding:0">  <ul materialize="Tabs" class="tabs tabs-fixed-width tab-demo z-depth-1 green-text" style="margin-bottom: 20px">    <li class="tab"><a class="active" href="#0_etap">Талон на ВМП</a></li>    <li class="tab"><a href="#1_etap">1 этап</a></li>    <li class="tab"><a href="#2_etap">2 этап</a></li>    <li class="tab"><a href="#3_etap">3 этап</a></li>    <li class="tab"><a href="#4_etap">4 этап</a></li>    <li class="tab"><a href="#5_etap">5 этап</a></li>    <li class="tab"><a href="#6_etap">6 этап</a></li>  </ul>  <div id="0_etap" class="col s12">    <app-stage0></app-stage0>  </div>  <div id="1_etap" class="col s12">    <app-stage1></app-stage1>  </div>  <div id="2_etap" class="col s12">    <app-stage2></app-stage2>  </div>  <div id="3_etap" class="col s12">    <app-stage3></app-stage3>  </div>  <div id="4_etap" class="col s12">    <app-stage4></app-stage4>  </div>  <div id="5_etap" class="col s12">    <app-stage5></app-stage5>  </div>  <div id="6_etap" class="col s12">    <app-stage6></app-stage6>  </div></div></div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'MaterializeAutocompleteComponent', 'selector': 'app-materialize-autocomplete'},{'name': 'PatientCardComponent', 'selector': 'app-patient-card'},{'name': 'PatientDocumentModalComponent', 'selector': 'app-patient-document-modal'},{'name': 'PatientHistoryModalComponent', 'selector': 'app-patient-history-modal'},{'name': 'PatientUnionModalComponent', 'selector': 'app-patient-union-modal'},{'name': 'Stage0Component', 'selector': 'app-stage0'},{'name': 'Stage1Component', 'selector': 'app-stage1'},{'name': 'Stage2Component', 'selector': 'app-stage2'},{'name': 'Stage3Component', 'selector': 'app-stage3'},{'name': 'Stage4Component', 'selector': 'app-stage4'},{'name': 'Stage5Component', 'selector': 'app-stage5'},{'name': 'Stage6Component', 'selector': 'app-stage6'},{'name': 'TalonComponent', 'selector': 'app-talon'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'TalonComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'TalonComponent.html';
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

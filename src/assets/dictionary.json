@@ -1,0 +1,66 @@
+[
+  {
+    "name": "u",
+    "value": "изменил"
+  },
+  {
+    "name": "i",
+    "value": "создал"
+  },
+  {
+    "name": "d",
+    "value": "удалил"
+  },
+  {
+    "name": "username",
+    "value": "имя пациента"
+  },
+  {
+    "name": "series",
+    "value": "серия документа"
+  },
+  {
+    "name": "number",
+    "value": "номер документа"
+  },
+  {
+    "name": "documentType",
+    "value": "тип документа"
+  },
+  {
+    "name": "idVmpSex",
+    "value": "пол"
+  },
+  {
+    "name": "snils",
+    "value": "СНИЛС"
+  },
+  {
+    "name": "surname",
+    "value": "фамилия"
+  },
+  {
+    "name": "name",
+    "value": "имя"
+  },
+  {
+    "name": "patronymic",
+    "value": "отчество"
+  },
+  {
+    "name": "isParentDocument",
+    "value": "документы родителя"
+  },
+  {
+    "name": "issuedDate",
+    "value": "дату выдачи документа"
+  },
+  {
+    "name": "issuedBy",
+    "value": "орган выдачи документа"
+  },
+  {
+    "name": "birthdate",
+    "value": "дату рождения"
+  }
+]

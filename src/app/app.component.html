@@ -1,0 +1,79 @@
+<!-- user_bar -->
+<ul class='dropdown-content' id='user'>
+  <li><a href="#!"><i class="material-icons">info</i>Пользователь</a></li>
+  <li><a href="#!"><i class="material-icons">email</i>Уведомления</a></li>
+  <li><a href="#!"><i class="material-icons">exit_to_app</i>Выйти</a></li>
+</ul>
+<ul class='dropdown-content' id='user-mobile'>
+  <li><a href="#!">Пользователь</a></li>
+  <li><a href="#!">Уведомления</a></li>
+  <li><a href="#!">Выйти</a></li>
+</ul>
+<!-- lech_bar -->
+<ul class='dropdown-content' id='lech'>
+  <li class="active"><a href="card_sk.html">Карта пациента</a></li>
+  <li><a href="#!">Поиск пациента</a></li>
+  <li><a href="#!">Поиск заявки</a></li>
+  <li><a href="#!">Справочная информация</a></li>
+</ul>
+<ul class='dropdown-content' id='lech-mobile'>
+  <li class="active"><a href="card_sk.html">Карта пациента</a></li>
+  <li><a href="#!">Поиск пациента</a></li>
+  <li><a href="#!">Поиск заявки</a></li>
+  <li><a href="#!">Справочная информация</a></li>
+</ul>
+
+<nav class="green" style="margin-bottom: 12px">
+  <div class="nav-wrapper">
+    <a class="sidenav-trigger" data-target="mobile-nav" href="#"><i class="material-icons">menu</i></a>
+    <a href="">
+      <div class="tooltipped brand-logo right" data-tooltip="Cистема мониторинга санаторно-курортного лечения">
+        <span>ЕГИСЗ</span>
+        <img class="right logo-egisz" src="img/logo-langing.png">
+      </div>
+    </a>
+    <ul class="left hide-on-med-and-down">
+      <li style="width: 210px"><a class="dropdown-trigger" data-target="user" href="#!"><i class="material-icons left">account_box</i>ЦЕНТР
+        Т.П. <i class="material-icons right">arrow_drop_down</i></a></li>
+      <li style="width: 210px"><a class="dropdown-trigger" data-target="lech" href="#!">ЛЕЧЕНИЕ<i
+        class="material-icons right">arrow_drop_down</i></a></li>
+      <li><a href="">МОНИТОРИНГ</a></li>
+      <li><a href=""><i class="material-icons tooltipped" data-tooltip="АДМИНИСТРИРОВАНИЕ">settings</i></a></li>
+      <li><a class="tooltipped" data-tooltip="ФОРУМ" href="https://portal.egisz.rosminzdrav.ru/forum/"
+             target="_blank"><i class="material-icons small">forum</i></a></li>
+    </ul>
+  </div>
+</nav>
+
+<ul class="sidenav" id="mobile-nav">
+  <li><a class="dropdown-trigger" data-target="user-mobile" href="#!">ЦЕНТР Т.П.<i class="material-icons right">arrow_drop_down</i></a>
+  </li>
+  <li><a class="dropdown-trigger" data-target="lech-mobile" href="#!">ЛЕЧЕНИЕ<i class="material-icons right">arrow_drop_down</i></a>
+  </li>
+  <li><a href="">МОНИТОРИНГ</a></li>
+  <li><a href="">АДМИНИСТРИРОВАНИЕ</a></li>
+  <li><a href="https://portal.egisz.rosminzdrav.ru/forum/" target="_blank">ФОРУМ</a></li>
+</ul>
+
+<router-outlet></router-outlet>
+
+
+<div class="ias_footer">
+  <div>
+    <div>
+      <div style="padding:5px; text-align: right;">
+            <span class="white-text fs1">
+              Служба поддержки: 8-800-500-74-78 (по России)<br>
+              Обращение в тех. поддержку:
+              <a href="mailto:egisz@rt-eu.ru">
+              egisz@rt-eu.ru
+              </a>  |
+              <a href="https://support.egisz.rosminzdrav.ru" target="_blank">
+                ЕГИСЗ.РФ
+              </a>
+              <br> © 2016-2018 Министерство здравоохранения Российской Федерации
+            </span>
+      </div>
+    </div>
+  </div>
+</div>

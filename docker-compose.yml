@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  nginx:
+    build:
+      dockerfile: dev.Dockerfile
+      context: ./
+    ports:
+    - 8083:80
+    volumes:
+    - ./nginx:/etc/nginx/conf.d
+    - .:/var/www/html

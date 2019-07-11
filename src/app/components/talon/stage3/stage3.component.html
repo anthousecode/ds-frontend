@@ -1,0 +1,69 @@
+<form class="col s12">
+  <div class="row">
+    <div class="input-field col s12">
+      <select>
+        <option  value="1">Да</option>
+        <option selected value="2">Нет</option>
+      </select>
+      <label>Талоны на проезд предоставляются</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <input required id="date_talons_way" type="text" class="datepicker validate">
+      <label for="date_talons_way">Дата выдачи талонов на проезд для отдельных категорий граждан <span class="red-text">*</span></label>
+      <span class="helper-text" data-error="Выберите дату"></span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <input required class="validate" id="way_talon_nums" type="text">
+      <label for="way_talon_nums">Номер талона на проезд <span class="red-text">*</span></label>
+      <span class="helper-text" data-error="Введите номер талона"></span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <select>
+        <option  value="1">Да</option>
+        <option selected value="2">Нет</option>
+      </select>
+      <label>Нуждается в сопровождении</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <input required class="validate" id="fio_attend" type="text">
+      <label for="fio_attend">ФИО сопровождающего лица <span class="red-text">*</span></label>
+      <span class="helper-text" data-error="Введите ФИО"></span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <input required id="date_obr_pat" type="text" class="datepicker validate">
+      <label for="date_obr_pat">Дата обращения пациента в МО (МО) (согласовано с МО (МО)) <span class="red-text">*</span></label>
+      <span class="helper-text" data-error="Выберите дату"></span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <textarea id="comment_2" class="materialize-textarea"></textarea>
+      <label for="comment_2">Комментарий</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <select>
+        <option value="" disabled selected>Выберите должностное лицо</option>
+        <option value="1">Петров П.П.,главный врач,89872348473,sdjn@mail.ru</option>
+      </select>
+      <label>Должностное лицо <span class="red-text">*</span></label>
+    </div>
+  </div>
+  <div class="row">
+    <a onclick="M.toast({html: 'Этап сохранён'})" class="waves-effect waves-light btn-small green">Сохранить</a>
+    <a href="#export" class="modal-trigger waves-effect waves-light btn-small green">Экспорт</a>
+    <a href="#addfile" class="modal-trigger waves-effect waves-light btn-small green">Прикрепить документ</a>
+    <a onclick="M.toast({html: 'Согласовано'})" class="tooltipped waves-effect waves-light btn-small green" data-tooltip="Согласовать дату госпитализации">Согласовать</a>
+  </div>
+</form>

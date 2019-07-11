@@ -1,0 +1,179 @@
+<form class="col s12" #vmpStage0Form="ngForm" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div class="input-field col s12">
+      <label [class]="parent && parent.talon && parent.talon.patient ? 'active' : ''">Пациент</label>
+      <input *ngIf="parent.talon.patient" disabled type="text" value="{{parent.talon.patient.surname}} {{parent.talon.patient.name}} {{parent.talon.patient.patronymic}} ({{parent.talon.patient.snils | snils }})">
+      <input *ngIf="!parent.talon.patient" disabled type="text" value="">
+    </div>
+  </div>
+  <div class="row" *ngIf="parent.isReadable('talon.vmpStage0.insuranceCompany')">
+    <div class="input-field col s12">
+      <mat-form-field>
+        <input type="text" matInput [formControl]="insuranceCompanySearch" [matAutocomplete]="auto"
+               [value]="vmpStage0 && vmpStage0.insuranceCompany ? vmpStage0.insuranceCompany.name : ''"
+               placeholder="Страховая компания">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let insuranceCompany of filteredInsuranceCompanies" [value]="insuranceCompany.name" (onSelectionChange)="setInsuranceCompany(insuranceCompany)">
+            {{ insuranceCompany.name }}{{insuranceCompany.territorialUnit ? ' (' + insuranceCompany.territorialUnit.name + ')' : ''}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row" *ngIf="parent.isReadable('talon.vmpStage0.numPolis')">
+    <div class="input-field col s12">
+      <input id="num_pol" type="text" [value]="vmpStage0.numPolis" [disabled]="!parent.isEditable('talon.vmpStage0.numPolis')">
+      <label for="num_pol" [class]="vmpStage0.numPolis ? 'active' : ''">Номер полиса</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <app-materialize-autocomplete
+          elementId="country"
+          [data]="dictionaryService.getCountries()"
+          [value]="vmpStage0.country ? vmpStage0.country.name : null"
+          label="Государство"></app-materialize-autocomplete>
+      <label [class]="vmpStage0.country ? 'active' : ''" for="country">Государство</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <input name="streetName" [(ngModel)]="vmpStage0.fiasAddress.streetName" ngControl="vmpStage0.fiasAddress" class="validate" required id="address" type="text">
+      <label [class]="vmpStage0.fiasAddress && vmpStage0.fiasAddress.streetName ? 'active' : ''" for="address">Адрес <span class="red-text">*</span></label>
+      <span class="helper-text" data-error="Введите адрес до улицы включительно"></span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s3">
+      <input name="fiasAddress.homeNumber" [(ngModel)]="vmpStage0.fiasAddress.homeNumber" class="validate" required id="home" type="text">
+      <label [class]="vmpStage0.fiasAddress && vmpStage0.fiasAddress.homeNumber ? 'active' : ''" for="home">Дом <span class="red-text">*</span></label>
+      <span class="helper-text" data-error="Выберите дом"></span>
+    </div>
+    <div class="input-field col s3">
+      <input name="fiasAddress.housingNumber" [(ngModel)]="vmpStage0.fiasAddress.housingNumber" id="korp" type="text">
+      <label [class]="vmpStage0.fiasAddress && vmpStage0.fiasAddress.housingNumber ? 'active' : ''" for="korp">Корпус</label>
+    </div>
+    <div class="input-field col s3">
+      <input id="stroi" type="text">
+      <label for="stroi">Строение</label>
+    </div>
+    <div class="input-field col s3">
+      <input name="fiasAddress.flatNumber" [(ngModel)]="vmpStage0.fiasAddress.flatNumber" ngControl="vmpStage0.fiasAddress" id="flat" type="text">
+      <label [class]="vmpStage0.fiasAddress && vmpStage0.fiasAddress.flatNumber ? 'active' : ''" for="flat">Квартира</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <input name="contactData" [(ngModel)]="vmpStage0.contactData" ngControl="vmpStage0.contactData" id="phone" type="text">
+      <label for="phone">Контактный телефон</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <input name="email" id="email" type="email" class="validate" [(ngModel)]="vmpStage0.email" ngControl="vmpStage0.email">
+      <label for="email">Email</label>
+      <span class="helper-text">info@gmail.com</span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s11">
+      <select materialize="FormSelect" [(ngModel)]="vmpStage0.readyUsedate" name="readyUsedate">
+        <option value="1">Да</option>
+        <option value="">Нет</option>
+      </select>
+      <label>Согласие на использование персональных данных</label>
+    </div>
+    <div class="input-field col s1">
+      <a class="tooltipped" data-tooltip="Скачать документ" href=""><i class="material-icons small">insert_drive_file</i></a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <mat-form-field>
+        <mat-label>Категория льготы</mat-label>
+        <mat-select [(ngModel)]="vmpStage0.lgota" name="lgota" [compareWith]="compareId">
+          <mat-option *ngFor="let lgota of lgotas | async" [value]="lgota">{{lgota.id}} - {{lgota.description}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <select materialize="FormSelect" [(ngModel)]="vmpStage0.socialStatus" name="socialStatus" [compareWith]="compareId">
+        <option *ngFor="let socialStatus of socialStatuses | async"
+                [ngValue]="socialStatus">{{socialStatus.id}} - {{socialStatus.description}}</option>
+      </select>
+      <label>Социальная группа</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <input materialize="Datepicker" [materializeParams]="[{format: 'dd.mm.yyyy', i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]"
+             id="zajav_date" type="text" class="datepicker validate"
+             value="{{parent.talon.date | date: 'dd.MM.yyyy'}}" required>
+      <label [class]="parent.talon.date ? 'active' : ''" for="zajav_date">Дата оформления талона <span class="red-text">*</span></label>
+      <span class="helper-text" data-error="Выберите дату"></span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <select materialize="FormSelect" [(ngModel)]="parent.talon.appealType" name="appealType" [compareWith]="compareId">
+        <option [selected]="parent.talon.appealType == 1" value="1">Первичное</option>
+        <option [selected]="parent.talon.appealType == 2" value="2">Вторичное</option>
+      </select>
+      <label>Обращение за ВМП</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <select materialize="FormSelect" name="financingSource" id="financingSource" [(ngModel)]="parent.talon.financingSource" [compareWith]="compareId">
+        <option *ngFor="let financingSource of financingSources | async"
+                [ngValue]="financingSource">{{financingSource.id}} - {{financingSource.description}}</option>
+      </select>
+      <label>Источник финансирования</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <select materialize="FormSelect" id="napr" name="referral" [(ngModel)]="parent.talon.referral" [compareWith]="compareId">
+        <option [selected]="parent.talon.referral == 0" value="0">0 - ОУЗ</option>
+        <option [selected]="parent.talon.referral == 1" value="1">1 - перевод из МУ</option>
+        <option [selected]="parent.talon.referral == 2" value="2">2 - по экстренным показаниям</option>
+      </select>
+      <label for="napr">Направление</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <select materialize="FormSelect" name="napr_org" id="napr_org" [(ngModel)]="parent.talon.organ" [compareWith]="compareId">
+        <option *ngFor="let organ of organs | async"
+                [ngValue]="organ">{{organ.id}} - {{organ.description}}</option>
+      </select>
+      <label for="napr_org">Орган, направивший пациента на ВМП</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <button type="submit" class="waves-effect waves-light btn-small green">Сохранить</button>
+    </div>
+    <div class="col">
+      <a href="#export" class="modal-trigger waves-effect waves-light btn-small green">Экспорт</a>
+    </div>
+    <div class="col">
+      <a onclick="M.toast({html: 'Талон заблокирован'})" class="waves-effect waves-light btn-small green">Заблокировать</a>
+    </div>
+    <div class="col">
+      <select materialize="FormSelect">
+        <option selected disabled value="">Вернуть на</option>
+        <option value="1">1 этап</option>
+        <option value="2">2 этап</option>
+        <option value="3">3 этап</option>
+        <option value="4">4 этап</option>
+        <option value="5">5 этап</option>
+      </select>
+    </div>
+    <div class="col">
+      <a onclick="M.toast({html: 'Талон возвращёна на х этап'})" class="waves-effect waves-light btn-small green">Вернуть</a>
+    </div>
+  </div>
+</form>

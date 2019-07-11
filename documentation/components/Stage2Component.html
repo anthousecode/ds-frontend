@@ -1,0 +1,968 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>vmp-frontend documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">vmp-frontend documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li>Stage2Component</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li >
+            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li >
+            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li >
+            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/talon/stage2/stage2.component.ts</code>
+</p>
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+    </p>
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-stage2</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./stage2.component.sass</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./stage2.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#decisions">decisions</a>
+                            </li>
+                            <li>
+                                <a href="#parent">parent</a>
+                            </li>
+                            <li>
+                                <a href="#pickerI18n">pickerI18n</a>
+                            </li>
+                            <li>
+                                <a href="#responsiblePersons">responsiblePersons</a>
+                            </li>
+                            <li>
+                                <a href="#vmpStage2">vmpStage2</a>
+                            </li>
+                            <li>
+                                <a href="#vmpTypes">vmpTypes</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#compareId">compareId</a>
+                            </li>
+                            <li>
+                                <a href="#initEmpty">initEmpty</a>
+                            </li>
+                            <li>
+                                <a href="#loadVmpTypes">loadVmpTypes</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit">ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#setStage">setStage</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(dictionaryService: <a href="../injectables/DictionaryService.html">DictionaryService</a>, parent: <a href="../classes/Talon.html">TalonComponent</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/talon/stage2/stage2.component.ts:19</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>dictionaryService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/DictionaryService.html" target="_self" >DictionaryService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>parent</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../classes/Talon.html" target="_self" >TalonComponent</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="compareId"></a>
+                    <span class="name">
+                        <b>
+                            compareId
+                        </b>
+                        <a href="#compareId"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>compareId(obj1: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, obj2: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="48"
+                            class="link-to-prism">src/app/talon/stage2/stage2.component.ts:48</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>obj1</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>obj2</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initEmpty"></a>
+                    <span class="name">
+                        <b>
+                            initEmpty
+                        </b>
+                        <a href="#initEmpty"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initEmpty()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="29"
+                            class="link-to-prism">src/app/talon/stage2/stage2.component.ts:29</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadVmpTypes"></a>
+                    <span class="name">
+                        <b>
+                            loadVmpTypes
+                        </b>
+                        <a href="#loadVmpTypes"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>loadVmpTypes()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="53"
+                            class="link-to-prism">src/app/talon/stage2/stage2.component.ts:53</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <b>
+                            ngOnInit
+                        </b>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="43"
+                            class="link-to-prism">src/app/talon/stage2/stage2.component.ts:43</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setStage"></a>
+                    <span class="name">
+                        <b>
+                            setStage
+                        </b>
+                        <a href="#setStage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>setStage()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="33"
+                            class="link-to-prism">src/app/talon/stage2/stage2.component.ts:33</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="decisions"></a>
+                        <span class="name">
+                            <b>
+                            decisions</b>
+                            <a href="#decisions"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/Decision.html" target="_self" >Decision[]</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/app/talon/stage2/stage2.component.ts:17</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="parent"></a>
+                        <span class="name">
+                            <b>
+                            parent</b>
+                            <a href="#parent"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/Talon.html" target="_self" >TalonComponent</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">src/app/talon/stage2/stage2.component.ts:14</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="pickerI18n"></a>
+                        <span class="name">
+                            <b>
+                            pickerI18n</b>
+                            <a href="#pickerI18n"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>pickerI18n</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="15" class="link-to-prism">src/app/talon/stage2/stage2.component.ts:15</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="responsiblePersons"></a>
+                        <span class="name">
+                            <b>
+                            responsiblePersons</b>
+                            <a href="#responsiblePersons"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/ResponsiblePerson.html" target="_self" >ResponsiblePerson[]</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/talon/stage2/stage2.component.ts:19</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="vmpStage2"></a>
+                        <span class="name">
+                            <b>
+                            vmpStage2</b>
+                            <a href="#vmpStage2"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/VmpStage2.html" target="_self" >VmpStage2</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/app/talon/stage2/stage2.component.ts:16</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="vmpTypes"></a>
+                        <span class="name">
+                            <b>
+                            vmpTypes</b>
+                            <a href="#vmpTypes"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/VmpType.html" target="_self" >VmpType[]</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">src/app/talon/stage2/stage2.component.ts:18</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit } from &#x27;@angular/core&#x27;;
+import {pickerI18n, TalonComponent} from &#x27;../talon.component&#x27;;
+import {DictionaryService} from &#x27;../../service/dictionary.service&#x27;;
+import {VmpStage2} from &#x27;../../talon&#x27;;
+import {Decision, ResponsiblePerson, VmpType} from &#x27;../../dictionary&#x27;;
+
+@Component({
+    selector: &#x27;app-stage2&#x27;,
+    templateUrl: &#x27;./stage2.component.html&#x27;,
+    styleUrls: [&#x27;./stage2.component.sass&#x27;]
+})
+export class Stage2Component implements OnInit {
+
+    parent: TalonComponent;
+    pickerI18n &#x3D; pickerI18n;
+    vmpStage2: VmpStage2;
+    decisions: Decision[];
+    vmpTypes: VmpType[];
+    responsiblePersons: ResponsiblePerson[];
+
+    constructor(private dictionaryService: DictionaryService, parent: TalonComponent) {
+        this.parent &#x3D; parent;
+
+        this.parent.onTalonChange.subscribe(talon &#x3D;&gt; {
+            this.setStage();
+        });
+    }
+
+    initEmpty() {
+        this.vmpStage2 &#x3D; new VmpStage2();
+    }
+
+    setStage() {
+        if (this.parent.talon &amp;&amp; this.parent.talon.vmpStage2) {
+            this.vmpStage2 &#x3D; this.parent.talon.vmpStage2;
+        } else {
+            this.initEmpty();
+        }
+
+        this.loadVmpTypes();
+    }
+
+    ngOnInit() {
+        this.dictionaryService.getDecisions(2).subscribe(response &#x3D;&gt; this.decisions &#x3D; response);
+        this.dictionaryService.getResponsiblePersons().subscribe(response &#x3D;&gt; this.responsiblePersons &#x3D; response);
+    }
+
+    compareId(obj1: any, obj2: any): boolean {
+        console.log(&#x27;compareId&#x27;, obj1, obj2);
+        return obj1 &amp;&amp; obj2 ? obj1.id &#x3D;&#x3D;&#x3D; obj2.id : obj1 &#x3D;&#x3D;&#x3D; obj2;
+    }
+
+    loadVmpTypes() {
+        const talon &#x3D; this.parent.talon;
+        if (talon.vmpStage1 &amp;&amp; talon.vmpStage1.vmpType) {
+            this.dictionaryService.getVmpTypes(
+                talon.date,
+                talon.isOMS ? 1 : 0,
+                talon.vmpStage1.medicalProfile.id,
+                talon.vmpStage1.vmpType.groupId
+            ).subscribe(response &#x3D;&gt; this.vmpTypes &#x3D; response);
+        }
+    }
+
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">  &lt;form class&#x3D;&quot;col s12&quot;&gt;
+    &lt;div class&#x3D;&quot;row&quot;&gt;
+      &lt;div class&#x3D;&quot;input-field col s12&quot;&gt;
+        &lt;input id&#x3D;&quot;date_doc_from_ouz&quot; materialize&#x3D;&quot;Datepicker&quot;
+               [materializeParams]&#x3D;&quot;[{format: &#x27;dd.mm.yyyy&#x27;, i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]&quot;
+                type&#x3D;&quot;text&quot; class&#x3D;&quot;datepicker validate&quot;
+                value&#x3D;&quot;{{vmpStage2.documentReceiveDate | date: &#x27;dd.MM.yyyy&#x27;}}&quot; required&gt;
+        &lt;label for&#x3D;&quot;date_doc_from_ouz&quot;&gt;Дата получения документов от ОУЗ &lt;span class&#x3D;&quot;red-text&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
+        &lt;span class&#x3D;&quot;helper-text&quot; data-error&#x3D;&quot;Выберите дату&quot;&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class&#x3D;&quot;row&quot;&gt;
+      &lt;div class&#x3D;&quot;input-field col s12&quot;&gt;
+        &lt;input id&#x3D;&quot;date_registration_docs&quot; materialize&#x3D;&quot;Datepicker&quot;
+               [materializeParams]&#x3D;&quot;[{format: &#x27;dd.mm.yyyy&#x27;, i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]&quot;
+               type&#x3D;&quot;text&quot; class&#x3D;&quot;datepicker validate&quot;
+               value&#x3D;&quot;{{vmpStage2.documentRegistrationDate | date: &#x27;dd.MM.yyyy&#x27;}}&quot; required&gt;
+        &lt;label for&#x3D;&quot;date_registration_docs&quot;&gt;Дата оформления документов МО-ВМП&lt;/label&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class&#x3D;&quot;row&quot;&gt;
+      &lt;div class&#x3D;&quot;input-field col s12&quot;&gt;
+        &lt;select materialize&#x3D;&quot;FormSelect&quot; [(ngModel)]&#x3D;&quot;vmpStage2.decision&quot; [compareWith]&#x3D;&quot;compareId&quot; name&#x3D;&quot;decision&quot;&gt;
+          &lt;option *ngFor&#x3D;&quot;let decision of decisions&quot;&gt;{{decision.id}} - {{decision.name}}&lt;/option&gt;
+        &lt;/select&gt;
+        &lt;label&gt;Принятое решение&lt;/label&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class&#x3D;&quot;row&quot;&gt;
+      &lt;div class&#x3D;&quot;input-field col s12&quot;&gt;
+        &lt;input id&#x3D;&quot;decis_date&quot; materialize&#x3D;&quot;Datepicker&quot;
+               [materializeParams]&#x3D;&quot;[{format: &#x27;dd.mm.yyyy&#x27;, i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]&quot;
+               type&#x3D;&quot;text&quot; class&#x3D;&quot;datepicker validate&quot;
+               value&#x3D;&quot;{{vmpStage2.decisionDate | date: &#x27;dd.MM.yyyy&#x27;}}&quot; required&gt;
+        &lt;label for&#x3D;&quot;decis_date&quot;&gt;Дата принятия решения &lt;span class&#x3D;&quot;red-text&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
+        &lt;span class&#x3D;&quot;helper-text&quot; data-error&#x3D;&quot;Выберите дату&quot;&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class&#x3D;&quot;row&quot;&gt;
+      &lt;div class&#x3D;&quot;input-field col s12&quot;&gt;
+        &lt;ng-select placeholder&#x3D;&quot;Вид ВМП&quot; name&#x3D;&quot;vmpType&quot;
+                   [disabled]&#x3D;&quot;vmpTypes &#x3D;&#x3D;&#x3D; null&quot;
+                   [items]&#x3D;&quot;vmpTypes&quot;
+                   [ngModel]&#x3D;&quot;vmpStage2 ? vmpStage2.vmpType : null&quot;
+                   (ngModelChange)&#x3D;&quot;vmpStage2.vmpType &#x3D; $event&quot;&gt;
+          &lt;ng-template ng-label-tmp let-item&#x3D;&quot;item&quot;&gt;
+            {{item.subProfile ? item.subProfile.codeP : &#x27;&#x27;}}.{{item.subProfile ? item.subProfile.code : &#x27;&#x27;}}.{{item.code}} {{item.name}}
+          &lt;/ng-template&gt;
+          &lt;ng-template ng-option-tmp let-item&#x3D;&quot;item&quot; let-index&#x3D;&quot;index&quot; let-search&#x3D;&quot;searchTerm&quot;&gt;
+            &lt;div style&#x3D;&quot;white-space: normal; line-height: 1em; margin: 1em;&quot; [ngOptionHighlight]&#x3D;&quot;search&quot;&gt;
+              {{item.subProfile.codeP}}.{{item.subProfile.code}}.{{item.code}} {{item.name}}
+            &lt;/div&gt;
+          &lt;/ng-template&gt;
+        &lt;/ng-select&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class&#x3D;&quot;row&quot;&gt;
+      &lt;div class&#x3D;&quot;input-field col s12&quot;&gt;
+        &lt;input id&#x3D;&quot;plan_date_hosp&quot; materialize&#x3D;&quot;Datepicker&quot;
+               [materializeParams]&#x3D;&quot;[{format: &#x27;dd.mm.yyyy&#x27;, i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]&quot;
+               type&#x3D;&quot;text&quot; class&#x3D;&quot;datepicker validate&quot;
+               value&#x3D;&quot;{{vmpStage2.plannedDate | date: &#x27;dd.MM.yyyy&#x27;}}&quot; required&gt;
+        &lt;label for&#x3D;&quot;plan_date_hosp&quot;&gt;Дата планируемой госпитализации &lt;span class&#x3D;&quot;red-text&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
+        &lt;span class&#x3D;&quot;helper-text&quot; data-error&#x3D;&quot;Выберите дату&quot;&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class&#x3D;&quot;row&quot;&gt;
+      &lt;div class&#x3D;&quot;input-field col s12&quot;&gt;
+        &lt;select materialize&#x3D;&quot;FormSelect&quot; [(ngModel)]&#x3D;&quot;vmpStage2.approveHospitalizationDate&quot; name&#x3D;&quot;approve_hosp_date&quot;&gt;
+          &lt;option value&#x3D;&quot;1&quot;&gt;Да&lt;/option&gt;
+          &lt;option value&#x3D;&quot;2&quot;&gt;Нет&lt;/option&gt;
+        &lt;/select&gt;
+        &lt;label&gt;Необходимо согласовать дату госпитализации&lt;/label&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class&#x3D;&quot;row&quot;&gt;
+      &lt;div class&#x3D;&quot;input-field col s12&quot;&gt;
+        &lt;input id&#x3D;&quot;date_ots_gosp&quot; materialize&#x3D;&quot;Datepicker&quot;
+               [materializeParams]&#x3D;&quot;[{format: &#x27;dd.mm.yyyy&#x27;, i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]&quot;
+               type&#x3D;&quot;text&quot; class&#x3D;&quot;datepicker validate&quot;
+               value&#x3D;&quot;{{vmpStage2.delayedDate | date: &#x27;dd.MM.yyyy&#x27;}}&quot; required&gt;
+        &lt;label for&#x3D;&quot;date_ots_gosp&quot;&gt;Дата отсроченной госпитализации&lt;/label&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class&#x3D;&quot;row&quot;&gt;
+      &lt;div class&#x3D;&quot;input-field col s12&quot;&gt;
+        &lt;input id&#x3D;&quot;date_send_to_ouz&quot; materialize&#x3D;&quot;Datepicker&quot;
+               [materializeParams]&#x3D;&quot;[{format: &#x27;dd.mm.yyyy&#x27;, i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]&quot;
+               type&#x3D;&quot;text&quot; class&#x3D;&quot;datepicker validate&quot;
+               value&#x3D;&quot;{{vmpStage2.notificationDate | date: &#x27;dd.MM.yyyy&#x27;}}&quot; required&gt;
+        &lt;label for&#x3D;&quot;date_send_to_ouz&quot;&gt;Дата уведомления ОУЗ и пациента о дате госпитализации в МО &lt;span class&#x3D;&quot;red-text&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
+        &lt;span class&#x3D;&quot;helper-text&quot; data-error&#x3D;&quot;Выберите дату&quot;&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class&#x3D;&quot;row&quot;&gt;
+      &lt;div class&#x3D;&quot;input-field col s12&quot;&gt;
+        &lt;select materialize&#x3D;&quot;FormSelect&quot; [(ngModel)]&#x3D;&quot;vmpStage2.noticeType&quot; name&#x3D;&quot;notice_type&quot;&gt;
+          &lt;option  value&#x3D;&quot;1&quot;&gt;1 - Почтой&lt;/option&gt;
+          &lt;option  value&#x3D;&quot;2&quot;&gt;2 - Телефонограммой&lt;/option&gt;
+          &lt;option selected value&#x3D;&quot;2&quot;&gt;3 - По электронной почте&lt;/option&gt;
+        &lt;/select&gt;
+        &lt;label&gt;Способ уведомления&lt;/label&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class&#x3D;&quot;row&quot;&gt;
+      &lt;div class&#x3D;&quot;input-field col s12&quot;&gt;
+        &lt;textarea id&#x3D;&quot;comment_2&quot; class&#x3D;&quot;materialize-textarea&quot;&gt;&lt;/textarea&gt;
+        &lt;label for&#x3D;&quot;comment_2&quot;&gt;Комментарий&lt;/label&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class&#x3D;&quot;row&quot;&gt;
+      &lt;div class&#x3D;&quot;input-field col s12&quot;&gt;
+        &lt;select materialize&#x3D;&quot;FormSelect&quot; name&#x3D;&quot;responsiblePerson&quot;&gt;
+          &lt;option *ngFor&#x3D;&quot;let person of responsiblePersons&quot;&gt;{{person.fullName}}, {{person.position}}, {{person.phone}}, {{person.email}}&lt;/option&gt;
+        &lt;/select&gt;
+        &lt;label&gt;Должностное лицо &lt;span class&#x3D;&quot;red-text&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class&#x3D;&quot;row&quot;&gt;
+      &lt;a onclick&#x3D;&quot;M.toast({html: &#x27;Этап сохранён&#x27;})&quot; class&#x3D;&quot;waves-effect waves-light btn-small green&quot;&gt;Сохранить&lt;/a&gt;
+      &lt;a href&#x3D;&quot;#export&quot; class&#x3D;&quot;modal-trigger waves-effect waves-light btn-small green&quot;&gt;Экспорт&lt;/a&gt;
+      &lt;a href&#x3D;&quot;#addfile&quot; class&#x3D;&quot;modal-trigger waves-effect waves-light btn-small green&quot;&gt;Прикрепить документ&lt;/a&gt;
+      &lt;a href&#x3D;&quot;#metka&quot; class&#x3D;&quot;modal-trigger waves-effect waves-light btn-small green&quot;&gt;Отметить талон&lt;/a&gt;
+      &lt;a href&#x3D;&quot;#!&quot; class&#x3D;&quot;waves-effect waves-light btn-small green&quot;&gt;Снять метку&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/form&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-styleData">
+                <p class="comment">
+                    <code>./stage2.component.sass</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss"></code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div>  <form class="col s12">    <div class="row">      <div class="input-field col s12">        <input id="date_doc_from_ouz" materialize="Datepicker"               [materializeParams]="[{format: \'dd.mm.yyyy\', i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]"                type="text" class="datepicker validate"                value="{{vmpStage2.documentReceiveDate | date: \'dd.MM.yyyy\'}}" required>        <label for="date_doc_from_ouz">Дата получения документов от ОУЗ <span class="red-text">*</span></label>        <span class="helper-text" data-error="Выберите дату"></span>      </div>    </div>    <div class="row">      <div class="input-field col s12">        <input id="date_registration_docs" materialize="Datepicker"               [materializeParams]="[{format: \'dd.mm.yyyy\', i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]"               type="text" class="datepicker validate"               value="{{vmpStage2.documentRegistrationDate | date: \'dd.MM.yyyy\'}}" required>        <label for="date_registration_docs">Дата оформления документов МО-ВМП</label>      </div>    </div>    <div class="row">      <div class="input-field col s12">        <select materialize="FormSelect" [(ngModel)]="vmpStage2.decision" [compareWith]="compareId" name="decision">          <option *ngFor="let decision of decisions">{{decision.id}} - {{decision.name}}</option>        </select>        <label>Принятое решение</label>      </div>    </div>    <div class="row">      <div class="input-field col s12">        <input id="decis_date" materialize="Datepicker"               [materializeParams]="[{format: \'dd.mm.yyyy\', i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]"               type="text" class="datepicker validate"               value="{{vmpStage2.decisionDate | date: \'dd.MM.yyyy\'}}" required>        <label for="decis_date">Дата принятия решения <span class="red-text">*</span></label>        <span class="helper-text" data-error="Выберите дату"></span>      </div>    </div>    <div class="row">      <div class="input-field col s12">        <ng-select placeholder="Вид ВМП" name="vmpType"                   [disabled]="vmpTypes === null"                   [items]="vmpTypes"                   [ngModel]="vmpStage2 ? vmpStage2.vmpType : null"                   (ngModelChange)="vmpStage2.vmpType = $event">          <ng-template ng-label-tmp let-item="item">            {{item.subProfile ? item.subProfile.codeP : \'\'}}.{{item.subProfile ? item.subProfile.code : \'\'}}.{{item.code}} {{item.name}}          </ng-template>          <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">            <div style="white-space: normal; line-height: 1em; margin: 1em;" [ngOptionHighlight]="search">              {{item.subProfile.codeP}}.{{item.subProfile.code}}.{{item.code}} {{item.name}}            </div>          </ng-template>        </ng-select>      </div>    </div>    <div class="row">      <div class="input-field col s12">        <input id="plan_date_hosp" materialize="Datepicker"               [materializeParams]="[{format: \'dd.mm.yyyy\', i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]"               type="text" class="datepicker validate"               value="{{vmpStage2.plannedDate | date: \'dd.MM.yyyy\'}}" required>        <label for="plan_date_hosp">Дата планируемой госпитализации <span class="red-text">*</span></label>        <span class="helper-text" data-error="Выберите дату"></span>      </div>    </div>    <div class="row">      <div class="input-field col s12">        <select materialize="FormSelect" [(ngModel)]="vmpStage2.approveHospitalizationDate" name="approve_hosp_date">          <option value="1">Да</option>          <option value="2">Нет</option>        </select>        <label>Необходимо согласовать дату госпитализации</label>      </div>    </div>    <div class="row">      <div class="input-field col s12">        <input id="date_ots_gosp" materialize="Datepicker"               [materializeParams]="[{format: \'dd.mm.yyyy\', i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]"               type="text" class="datepicker validate"               value="{{vmpStage2.delayedDate | date: \'dd.MM.yyyy\'}}" required>        <label for="date_ots_gosp">Дата отсроченной госпитализации</label>      </div>    </div>    <div class="row">      <div class="input-field col s12">        <input id="date_send_to_ouz" materialize="Datepicker"               [materializeParams]="[{format: \'dd.mm.yyyy\', i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]"               type="text" class="datepicker validate"               value="{{vmpStage2.notificationDate | date: \'dd.MM.yyyy\'}}" required>        <label for="date_send_to_ouz">Дата уведомления ОУЗ и пациента о дате госпитализации в МО <span class="red-text">*</span></label>        <span class="helper-text" data-error="Выберите дату"></span>      </div>    </div>    <div class="row">      <div class="input-field col s12">        <select materialize="FormSelect" [(ngModel)]="vmpStage2.noticeType" name="notice_type">          <option  value="1">1 - Почтой</option>          <option  value="2">2 - Телефонограммой</option>          <option selected value="2">3 - По электронной почте</option>        </select>        <label>Способ уведомления</label>      </div>    </div>    <div class="row">      <div class="input-field col s12">        <textarea id="comment_2" class="materialize-textarea"></textarea>        <label for="comment_2">Комментарий</label>      </div>    </div>    <div class="row">      <div class="input-field col s12">        <select materialize="FormSelect" name="responsiblePerson">          <option *ngFor="let person of responsiblePersons">{{person.fullName}}, {{person.position}}, {{person.phone}}, {{person.email}}</option>        </select>        <label>Должностное лицо <span class="red-text">*</span></label>      </div>    </div>    <div class="row">      <a onclick="M.toast({html: \'Этап сохранён\'})" class="waves-effect waves-light btn-small green">Сохранить</a>      <a href="#export" class="modal-trigger waves-effect waves-light btn-small green">Экспорт</a>      <a href="#addfile" class="modal-trigger waves-effect waves-light btn-small green">Прикрепить документ</a>      <a href="#metka" class="modal-trigger waves-effect waves-light btn-small green">Отметить талон</a>      <a href="#!" class="waves-effect waves-light btn-small green">Снять метку</a>    </div>  </form></div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'MaterializeAutocompleteComponent', 'selector': 'app-materialize-autocomplete'},{'name': 'PatientCardComponent', 'selector': 'app-patient-card'},{'name': 'PatientDocumentModalComponent', 'selector': 'app-patient-document-modal'},{'name': 'PatientHistoryModalComponent', 'selector': 'app-patient-history-modal'},{'name': 'PatientUnionModalComponent', 'selector': 'app-patient-union-modal'},{'name': 'Stage0Component', 'selector': 'app-stage0'},{'name': 'Stage1Component', 'selector': 'app-stage1'},{'name': 'Stage2Component', 'selector': 'app-stage2'},{'name': 'Stage3Component', 'selector': 'app-stage3'},{'name': 'Stage4Component', 'selector': 'app-stage4'},{'name': 'Stage5Component', 'selector': 'app-stage5'},{'name': 'Stage6Component', 'selector': 'app-stage6'},{'name': 'TalonComponent', 'selector': 'app-talon'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'Stage2Component'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'Stage2Component.html';
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

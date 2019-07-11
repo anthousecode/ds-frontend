@@ -1,0 +1,12 @@
+<form [formGroup]="form">
+  <mat-form-field>
+    <mat-label> {{placeholder}} <span class="red-text" *ngIf="placeholder !== 'Дата выдачи документа'">*</span></mat-label>
+    <input [formControlName]="controlName" [matDatepicker]="picker" appValidateInput="date" matInput [min]="minDate" [max]="maxDate">
+    <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-error *ngIf="isValid(controlName)">
+     Дата заполнена некорректно
+    </mat-error>
+  </mat-form-field>
+</form>
+

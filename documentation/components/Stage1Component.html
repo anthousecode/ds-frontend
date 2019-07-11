@@ -1,0 +1,2032 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>vmp-frontend documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">vmp-frontend documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li>Stage1Component</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li >
+            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li >
+            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li >
+            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/talon/stage1/stage1.component.ts</code>
+</p>
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+    </p>
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-stage1</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./stage1.component.sass</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./stage1.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#decisions">decisions</a>
+                            </li>
+                            <li>
+                                <a href="#diseaseCodes">diseaseCodes</a>
+                            </li>
+                            <li>
+                                <a href="#diseaseCodesLoading">diseaseCodesLoading</a>
+                            </li>
+                            <li>
+                                <a href="#diseaseCodesSearch">diseaseCodesSearch</a>
+                            </li>
+                            <li>
+                                <a href="#diseaseModels">diseaseModels</a>
+                            </li>
+                            <li>
+                                <a href="#group">group</a>
+                            </li>
+                            <li>
+                                <a href="#groups">groups</a>
+                            </li>
+                            <li>
+                                <a href="#medicalInstitutions">medicalInstitutions</a>
+                            </li>
+                            <li>
+                                <a href="#medicalProfiles">medicalProfiles</a>
+                            </li>
+                            <li>
+                                <a href="#methods">methods</a>
+                            </li>
+                            <li>
+                                <a href="#parent">parent</a>
+                            </li>
+                            <li>
+                                <a href="#pickerI18n">pickerI18n</a>
+                            </li>
+                            <li>
+                                <a href="#responsiblePersons">responsiblePersons</a>
+                            </li>
+                            <li>
+                                <a href="#vmpStage1">vmpStage1</a>
+                            </li>
+                            <li>
+                                <a href="#vmpTypes">vmpTypes</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#compareId">compareId</a>
+                            </li>
+                            <li>
+                                <a href="#initEmpty">initEmpty</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#loadDiseaseCodes">loadDiseaseCodes</a>
+                            </li>
+                            <li>
+                                <a href="#loadGroups">loadGroups</a>
+                            </li>
+                            <li>
+                                <a href="#loadMedicalInstitutions">loadMedicalInstitutions</a>
+                            </li>
+                            <li>
+                                <a href="#loadMethods">loadMethods</a>
+                            </li>
+                            <li>
+                                <a href="#loadModels">loadModels</a>
+                            </li>
+                            <li>
+                                <a href="#loadProfiles">loadProfiles</a>
+                            </li>
+                            <li>
+                                <a href="#loadTypes">loadTypes</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit">ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#onSubmit">onSubmit</a>
+                            </li>
+                            <li>
+                                <a href="#setGroup">setGroup</a>
+                            </li>
+                            <li>
+                                <a href="#setModel">setModel</a>
+                            </li>
+                            <li>
+                                <a href="#setProfile">setProfile</a>
+                            </li>
+                            <li>
+                                <a href="#setStage">setStage</a>
+                            </li>
+                            <li>
+                                <a href="#setType">setType</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(dictionaryService: <a href="../injectables/DictionaryService.html">DictionaryService</a>, parent: <a href="../classes/Talon.html">TalonComponent</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/talon/stage1/stage1.component.ts:40</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>dictionaryService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/DictionaryService.html" target="_self" >DictionaryService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>parent</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../classes/Talon.html" target="_self" >TalonComponent</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="compareId"></a>
+                    <span class="name">
+                        <b>
+                            compareId
+                        </b>
+                        <a href="#compareId"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>compareId(obj1: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, obj2: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="216"
+                            class="link-to-prism">src/app/talon/stage1/stage1.component.ts:216</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>obj1</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>obj2</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initEmpty"></a>
+                    <span class="name">
+                        <b>
+                            initEmpty
+                        </b>
+                        <a href="#initEmpty"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initEmpty()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="57"
+                            class="link-to-prism">src/app/talon/stage1/stage1.component.ts:57</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadDiseaseCodes"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            loadDiseaseCodes
+                        </b>
+                        <a href="#loadDiseaseCodes"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>loadDiseaseCodes()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="200"
+                            class="link-to-prism">src/app/talon/stage1/stage1.component.ts:200</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadGroups"></a>
+                    <span class="name">
+                        <b>
+                            loadGroups
+                        </b>
+                        <a href="#loadGroups"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>loadGroups()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="93"
+                            class="link-to-prism">src/app/talon/stage1/stage1.component.ts:93</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadMedicalInstitutions"></a>
+                    <span class="name">
+                        <b>
+                            loadMedicalInstitutions
+                        </b>
+                        <a href="#loadMedicalInstitutions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>loadMedicalInstitutions()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="187"
+                            class="link-to-prism">src/app/talon/stage1/stage1.component.ts:187</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadMethods"></a>
+                    <span class="name">
+                        <b>
+                            loadMethods
+                        </b>
+                        <a href="#loadMethods"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>loadMethods()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="171"
+                            class="link-to-prism">src/app/talon/stage1/stage1.component.ts:171</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadModels"></a>
+                    <span class="name">
+                        <b>
+                            loadModels
+                        </b>
+                        <a href="#loadModels"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>loadModels()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="148"
+                            class="link-to-prism">src/app/talon/stage1/stage1.component.ts:148</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadProfiles"></a>
+                    <span class="name">
+                        <b>
+                            loadProfiles
+                        </b>
+                        <a href="#loadProfiles"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>loadProfiles()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="78"
+                            class="link-to-prism">src/app/talon/stage1/stage1.component.ts:78</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadTypes"></a>
+                    <span class="name">
+                        <b>
+                            loadTypes
+                        </b>
+                        <a href="#loadTypes"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>loadTypes()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="120"
+                            class="link-to-prism">src/app/talon/stage1/stage1.component.ts:120</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <b>
+                            ngOnInit
+                        </b>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="51"
+                            class="link-to-prism">src/app/talon/stage1/stage1.component.ts:51</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onSubmit"></a>
+                    <span class="name">
+                        <b>
+                            onSubmit
+                        </b>
+                        <a href="#onSubmit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onSubmit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="220"
+                            class="link-to-prism">src/app/talon/stage1/stage1.component.ts:220</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setGroup"></a>
+                    <span class="name">
+                        <b>
+                            setGroup
+                        </b>
+                        <a href="#setGroup"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>setGroup(group: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="111"
+                            class="link-to-prism">src/app/talon/stage1/stage1.component.ts:111</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>group</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setModel"></a>
+                    <span class="name">
+                        <b>
+                            setModel
+                        </b>
+                        <a href="#setModel"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>setModel(model: <a href="../classes/DiseaseModel.html">DiseaseModel</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="163"
+                            class="link-to-prism">src/app/talon/stage1/stage1.component.ts:163</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>model</td>
+                                    <td>
+                                                <code><a href="../classes/DiseaseModel.html" target="_self" >DiseaseModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setProfile"></a>
+                    <span class="name">
+                        <b>
+                            setProfile
+                        </b>
+                        <a href="#setProfile"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>setProfile(profile?: <a href="../classes/MedicalProfile.html">MedicalProfile</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="85"
+                            class="link-to-prism">src/app/talon/stage1/stage1.component.ts:85</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>profile</td>
+                                    <td>
+                                                <code><a href="../classes/MedicalProfile.html" target="_self" >MedicalProfile</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setStage"></a>
+                    <span class="name">
+                        <b>
+                            setStage
+                        </b>
+                        <a href="#setStage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>setStage()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="61"
+                            class="link-to-prism">src/app/talon/stage1/stage1.component.ts:61</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setType"></a>
+                    <span class="name">
+                        <b>
+                            setType
+                        </b>
+                        <a href="#setType"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>setType(type?: <a href="../classes/VmpType.html">VmpType</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="137"
+                            class="link-to-prism">src/app/talon/stage1/stage1.component.ts:137</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>type</td>
+                                    <td>
+                                                <code><a href="../classes/VmpType.html" target="_self" >VmpType</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="decisions"></a>
+                        <span class="name">
+                            <b>
+                            decisions</b>
+                            <a href="#decisions"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/Decision.html" target="_self" >Decision[]</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/talon/stage1/stage1.component.ts:29</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="diseaseCodes"></a>
+                        <span class="name">
+                            <b>
+                            diseaseCodes</b>
+                            <a href="#diseaseCodes"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/DiseaseCode.html" target="_self" >Observable&lt;DiseaseCode[]&gt;</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/talon/stage1/stage1.component.ts:35</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="diseaseCodesLoading"></a>
+                        <span class="name">
+                            <b>
+                            diseaseCodesLoading</b>
+                            <a href="#diseaseCodesLoading"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>false</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/talon/stage1/stage1.component.ts:37</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="diseaseCodesSearch"></a>
+                        <span class="name">
+                            <b>
+                            diseaseCodesSearch</b>
+                            <a href="#diseaseCodesSearch"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>Subject&lt;string&gt;</code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>new Subject&lt;string&gt;()</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/talon/stage1/stage1.component.ts:36</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="diseaseModels"></a>
+                        <span class="name">
+                            <b>
+                            diseaseModels</b>
+                            <a href="#diseaseModels"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/DiseaseModel.html" target="_self" >DiseaseModel[]</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/talon/stage1/stage1.component.ts:38</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="group"></a>
+                        <span class="name">
+                            <b>
+                            group</b>
+                            <a href="#group"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/talon/stage1/stage1.component.ts:33</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="groups"></a>
+                        <span class="name">
+                            <b>
+                            groups</b>
+                            <a href="#groups"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>number[]</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/talon/stage1/stage1.component.ts:32</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="medicalInstitutions"></a>
+                        <span class="name">
+                            <b>
+                            medicalInstitutions</b>
+                            <a href="#medicalInstitutions"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/MedicalInstitution.html" target="_self" >Observable&lt;MedicalInstitution[]&gt;</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/talon/stage1/stage1.component.ts:40</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="medicalProfiles"></a>
+                        <span class="name">
+                            <b>
+                            medicalProfiles</b>
+                            <a href="#medicalProfiles"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/MedicalProfile.html" target="_self" >MedicalProfile[]</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/talon/stage1/stage1.component.ts:31</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="methods"></a>
+                        <span class="name">
+                            <b>
+                            methods</b>
+                            <a href="#methods"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/TreatmentMethod.html" target="_self" >TreatmentMethod[]</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/app/talon/stage1/stage1.component.ts:39</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="parent"></a>
+                        <span class="name">
+                            <b>
+                            parent</b>
+                            <a href="#parent"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/Talon.html" target="_self" >TalonComponent</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/talon/stage1/stage1.component.ts:26</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="pickerI18n"></a>
+                        <span class="name">
+                            <b>
+                            pickerI18n</b>
+                            <a href="#pickerI18n"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>pickerI18n</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/talon/stage1/stage1.component.ts:27</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="responsiblePersons"></a>
+                        <span class="name">
+                            <b>
+                            responsiblePersons</b>
+                            <a href="#responsiblePersons"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/ResponsiblePerson.html" target="_self" >ResponsiblePerson[]</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/talon/stage1/stage1.component.ts:30</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="vmpStage1"></a>
+                        <span class="name">
+                            <b>
+                            vmpStage1</b>
+                            <a href="#vmpStage1"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/VmpStage1.html" target="_self" >VmpStage1</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/talon/stage1/stage1.component.ts:28</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="vmpTypes"></a>
+                        <span class="name">
+                            <b>
+                            vmpTypes</b>
+                            <a href="#vmpTypes"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/VmpType.html" target="_self" >VmpType[]</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/talon/stage1/stage1.component.ts:34</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit } from &#x27;@angular/core&#x27;;
+import { pickerI18n, TalonComponent } from &#x27;../talon.component&#x27;;
+import { DictionaryService } from &#x27;../../service/dictionary.service&#x27;;
+import {
+    Decision,
+    DiseaseCode,
+    DiseaseModel,
+    MedicalInstitution,
+    MedicalProfile, ResponsiblePerson,
+    TreatmentMethod,
+    VmpType,
+    VmpTypeGroup
+} from &#x27;../../dictionary&#x27;;
+import {VmpStage1} from &#x27;../../talon&#x27;;
+import {FormControl} from &#x27;@angular/forms&#x27;;
+import {concat, Observable, of, Subject} from &#x27;rxjs&#x27;;
+import {catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap} from &#x27;rxjs/operators&#x27;;
+
+@Component({
+    selector: &#x27;app-stage1&#x27;,
+    templateUrl: &#x27;./stage1.component.html&#x27;,
+    styleUrls: [&#x27;./stage1.component.sass&#x27;]
+})
+export class Stage1Component implements OnInit {
+
+    parent: TalonComponent;
+    pickerI18n &#x3D; pickerI18n;
+    vmpStage1: VmpStage1;
+    decisions: Decision[];
+    responsiblePersons: ResponsiblePerson[];
+    medicalProfiles: MedicalProfile[];
+    groups: number[];
+    group: number;
+    vmpTypes: VmpType[];
+    diseaseCodes: Observable&lt;DiseaseCode[]&gt;;
+    diseaseCodesSearch: Subject&lt;string&gt; &#x3D; new Subject&lt;string&gt;();
+    diseaseCodesLoading &#x3D; false;
+    diseaseModels: DiseaseModel[];
+    methods: TreatmentMethod[];
+    medicalInstitutions: Observable&lt;MedicalInstitution[]&gt;;
+
+    constructor(private dictionaryService: DictionaryService, parent: TalonComponent) {
+        this.parent &#x3D; parent;
+        this.initEmpty();
+
+        this.parent.onTalonChange.subscribe(talon &#x3D;&gt; {
+            this.setStage();
+        });
+    }
+
+    ngOnInit() {
+        this.dictionaryService.getDecisions(1).subscribe(response &#x3D;&gt; this.decisions &#x3D; response);
+        this.dictionaryService.getResponsiblePersons().subscribe(response &#x3D;&gt; this.responsiblePersons &#x3D; response);
+        this.loadDiseaseCodes();
+    }
+
+    initEmpty() {
+        this.vmpStage1 &#x3D; new VmpStage1();
+    }
+
+    setStage() {
+        if (this.parent.talon &amp;&amp; this.parent.talon.vmpStage1) {
+            this.vmpStage1 &#x3D; this.parent.talon.vmpStage1;
+            const isGroupSet &#x3D; this.vmpStage1.vmpType &amp;&amp; this.vmpStage1.vmpType.groupId;
+            const group &#x3D; isGroupSet ? this.vmpStage1.vmpType.groupId : null;
+            this.group &#x3D; group;
+            this.loadProfiles();
+            this.loadGroups();
+            this.loadTypes();
+            this.loadModels();
+            this.loadMethods();
+            this.loadMedicalInstitutions();
+        } else {
+            this.initEmpty();
+        }
+    }
+
+    loadProfiles() {
+        const date &#x3D; this.parent.talon.date;
+
+        this.dictionaryService.getMedicalProfiles(date)
+            .subscribe(response &#x3D;&gt; this.medicalProfiles &#x3D; response);
+    }
+
+    setProfile(profile?: MedicalProfile) {
+        if (this.vmpStage1.medicalProfile !&#x3D;&#x3D; profile) {
+            this.vmpStage1.medicalProfile &#x3D; profile;
+            this.setGroup(null);
+            this.loadGroups();
+        }
+    }
+
+    loadGroups() {
+        if (this.vmpStage1.medicalProfile) {
+            const date &#x3D; this.parent.talon.date;
+            const razdel &#x3D; this.parent.talon.isOMS ? 1 : 0;
+            const profileId &#x3D; this.vmpStage1.medicalProfile.id;
+
+            this.dictionaryService.getVmpTypeGroups(date, razdel, profileId)
+                .subscribe(response &#x3D;&gt; {
+                    this.groups &#x3D; response.map(item &#x3D;&gt; item.groupId);
+                    const isGroupSet &#x3D; this.vmpStage1.vmpType &amp;&amp; this.vmpStage1.vmpType.groupId;
+                    const value &#x3D; isGroupSet ? this.vmpStage1.vmpType.groupId : null;
+                    this.group &#x3D; value;
+                });
+        } else {
+            this.groups &#x3D; null;
+        }
+    }
+
+    setGroup(group: number) {
+        console.log(&#x27;setGroup&#x27;, group);
+        if (this.group !&#x3D;&#x3D; group) {
+            this.group &#x3D; group;
+            this.setType(null);
+            this.loadTypes();
+        }
+    }
+
+    loadTypes() {
+        if (this.vmpStage1.medicalProfile &amp;&amp; this.group !&#x3D;&#x3D; null) {
+            const date &#x3D; this.parent.talon.date;
+            const razdel &#x3D; this.parent.talon.isOMS ? 1 : 0;
+            const profileId &#x3D; this.vmpStage1.medicalProfile.id;
+            const group &#x3D; this.group;
+
+            this.dictionaryService.getVmpTypes(date, razdel, profileId, group)
+                .subscribe(response &#x3D;&gt; {
+                    this.vmpTypes &#x3D; response;
+                    console.log(this.vmpTypes);
+                });
+        } else {
+            this.vmpTypes &#x3D; null;
+        }
+    }
+
+    setType(type?: VmpType) {
+        console.log(&#x27;setType&#x27;, type);
+        if (this.vmpStage1.vmpType !&#x3D;&#x3D; type) {
+            this.vmpStage1.vmpType &#x3D; type;
+            this.setModel(null);
+            this.vmpStage1.medicalInstitution &#x3D; null;
+            this.loadModels();
+            this.loadMedicalInstitutions();
+        }
+    }
+
+    loadModels() {
+        if (this.vmpStage1.vmpType) {
+            const date &#x3D; this.parent.talon.date;
+            const razdel &#x3D; this.parent.talon.isOMS ? 1 : 0;
+            const vmpTypeId &#x3D; this.vmpStage1.vmpType.id;
+
+            this.dictionaryService.getDiseaseModels(date, razdel, vmpTypeId)
+                .subscribe(response &#x3D;&gt; {
+                    this.diseaseModels &#x3D; response;
+                });
+        } else {
+            this.diseaseModels &#x3D; null;
+        }
+    }
+
+    setModel(model: DiseaseModel) {
+        if (this.vmpStage1.model !&#x3D;&#x3D; model) {
+            this.vmpStage1.model &#x3D; model;
+            this.vmpStage1.method &#x3D; null;
+            this.loadMethods();
+        }
+    }
+
+    loadMethods() {
+        if (this.vmpStage1.vmpType &amp;&amp; this.vmpStage1.model) {
+            const date &#x3D; this.parent.talon.date;
+            const razdel &#x3D; this.parent.talon.isOMS ? 1 : 0;
+            const vmpTypeId &#x3D; this.vmpStage1.vmpType.id;
+            const diseaseModelId &#x3D; this.vmpStage1.model.id;
+
+            this.dictionaryService.getTreatmentMethods(date, razdel, vmpTypeId, diseaseModelId)
+                .subscribe(response &#x3D;&gt; {
+                    this.methods &#x3D; response;
+                });
+        } else {
+            this.methods &#x3D; null;
+        }
+    }
+
+    loadMedicalInstitutions() {
+        if (this.vmpStage1.medicalProfile &amp;&amp; this.vmpStage1.vmpType) {
+            const talonId &#x3D; this.parent.talon.id;
+            const medicalProfileId &#x3D; this.vmpStage1.medicalProfile.id;
+            const groupId &#x3D; this.vmpStage1.vmpType.groupId;
+            const vmpTypeId &#x3D; this.vmpStage1.vmpType.id;
+
+            this.medicalInstitutions &#x3D; this.dictionaryService.getMedicalInstitutions(talonId, medicalProfileId, groupId, vmpTypeId);
+        } else {
+            this.medicalInstitutions &#x3D; of&lt;MedicalInstitution[]&gt;([]);
+        }
+    }
+
+    private loadDiseaseCodes() {
+        this.diseaseCodes &#x3D; concat&lt;DiseaseCode[], DiseaseCode[]&gt;(
+            of&lt;DiseaseCode[]&gt;([]), // default items
+            this.diseaseCodesSearch.pipe(
+                filter(term &#x3D;&gt; term.length &gt;&#x3D; 1),
+                debounceTime(500),
+                distinctUntilChanged(),
+                tap(() &#x3D;&gt; this.diseaseCodesLoading &#x3D; true),
+                switchMap(term &#x3D;&gt; this.dictionaryService.getDiseaseCodes(term).pipe(
+                    catchError(() &#x3D;&gt; of([])), // empty list on error
+                    tap(() &#x3D;&gt; this.diseaseCodesLoading &#x3D; false)
+                ))
+            )
+        );
+    }
+
+    compareId(obj1: any, obj2: any): boolean {
+        return obj1 &amp;&amp; obj2 ? obj1.id &#x3D;&#x3D;&#x3D; obj2.id : obj1 &#x3D;&#x3D;&#x3D; obj2;
+    }
+
+    onSubmit() {
+        console.log(&#x27;Submitting talon&#x27;, this.parent.talon);
+        // this.parent.saveTalon();
+    }
+
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;form #vmpStage1Form&#x3D;&quot;ngForm&quot; (ngSubmit)&#x3D;&quot;onSubmit()&quot; class&#x3D;&quot;col s12&quot;&gt;
+  &lt;div class&#x3D;&quot;row&quot;&gt;
+    &lt;div class&#x3D;&quot;input-field col s12&quot;&gt;
+      &lt;select [(ngModel)]&#x3D;&quot;vmpStage1.decision&quot; [compareWith]&#x3D;&quot;compareId&quot; materialize&#x3D;&quot;FormSelect&quot; name&#x3D;&quot;decision&quot;&gt;
+        &lt;option *ngFor&#x3D;&quot;let decision of decisions&quot;&gt;{{decision.id}} - {{decision.name}}&lt;/option&gt;
+      &lt;/select&gt;
+      &lt;label&gt;Принятое решение&lt;/label&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class&#x3D;&quot;row&quot;&gt;
+    &lt;div class&#x3D;&quot;input-field col s12&quot;&gt;
+      &lt;input [materializeParams]&#x3D;&quot;[{format: &#x27;dd.mm.yyyy&#x27;, i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]&quot;
+             class&#x3D;&quot;datepicker validate&quot;
+             id&#x3D;&quot;decision_date&quot; materialize&#x3D;&quot;Datepicker&quot; required
+             type&#x3D;&quot;text&quot; value&#x3D;&quot;{{vmpStage1.decisionDate | date: &#x27;dd.MM.yyyy&#x27;}}&quot;&gt;
+      &lt;label [class]&#x3D;&quot;vmpStage1.decisionDate ? &#x27;active&#x27; : &#x27;&#x27;&quot; for&#x3D;&quot;decision_date&quot;&gt;Дата принятого решения &lt;span
+        class&#x3D;&quot;red-text&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
+      &lt;span class&#x3D;&quot;helper-text&quot; data-error&#x3D;&quot;Выберите дату&quot;&gt;&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class&#x3D;&quot;row&quot;&gt;
+    &lt;div class&#x3D;&quot;input-field col s12&quot;&gt;
+      &lt;ng-select (ngModelChange)&#x3D;&quot;vmpStage1.diseaseCode &#x3D; $event&quot; [items]&#x3D;&quot;diseaseCodes | async&quot;
+                 [loading]&#x3D;&quot;diseaseCodesLoading&quot; [ngModel]&#x3D;&quot;vmpStage1 ? vmpStage1.diseaseCode : null&quot;
+                 [typeahead]&#x3D;&quot;diseaseCodesSearch&quot;
+                 bindLabel&#x3D;&quot;name&quot;
+                 name&#x3D;&quot;diseaseCode&quot;
+                 placeholder&#x3D;&quot;Диагноз по МКБ-10&quot;&gt;
+        &lt;ng-template let-item&#x3D;&quot;item&quot; ng-label-tmp&gt;
+          {{item.code}} {{item.name}}
+        &lt;/ng-template&gt;
+        &lt;ng-template let-index&#x3D;&quot;index&quot; let-item&#x3D;&quot;item&quot; let-search&#x3D;&quot;searchTerm&quot; ng-option-tmp&gt;
+          {{item.code}} {{item.name}}
+        &lt;/ng-template&gt;
+      &lt;/ng-select&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class&#x3D;&quot;row&quot;&gt;
+    &lt;div class&#x3D;&quot;input-field col s12&quot;&gt;
+      &lt;ng-select (ngModelChange)&#x3D;&quot;setProfile($event)&quot; [items]&#x3D;&quot;medicalProfiles&quot;
+                 [ngModel]&#x3D;&quot;vmpStage1 ? vmpStage1.medicalProfile : null&quot; bindLabel&#x3D;&quot;description&quot;
+                 name&#x3D;&quot;medicalProfile&quot;
+                 placeholder&#x3D;&quot;Профиль ВМП&quot;&gt;
+        &lt;ng-template let-item&#x3D;&quot;item&quot; ng-label-tmp&gt;
+          {{item.subProfile.codeP}}.{{item.subProfile.code}} {{item.description}}
+        &lt;/ng-template&gt;
+        &lt;ng-template let-index&#x3D;&quot;index&quot; let-item&#x3D;&quot;item&quot; let-search&#x3D;&quot;searchTerm&quot; ng-option-tmp&gt;
+          {{item.subProfile.codeP}}.{{item.subProfile.code}} {{item.description}}
+        &lt;/ng-template&gt;
+      &lt;/ng-select&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class&#x3D;&quot;row&quot;&gt;
+    &lt;div class&#x3D;&quot;input-field col s12&quot;&gt;
+      &lt;ng-select (ngModelChange)&#x3D;&quot;setGroup($event)&quot; [items]&#x3D;&quot;groups&quot; [ngModel]&#x3D;&quot;group&quot;
+                 name&#x3D;&quot;group&quot;
+                 placeholder&#x3D;&quot;Группа&quot;&gt;
+      &lt;/ng-select&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class&#x3D;&quot;row&quot;&gt;
+    &lt;div class&#x3D;&quot;input-field col s12&quot;&gt;
+      &lt;ng-select (ngModelChange)&#x3D;&quot;setType($event)&quot; [disabled]&#x3D;&quot;vmpTypes &#x3D;&#x3D;&#x3D; null&quot;
+                 [items]&#x3D;&quot;vmpTypes&quot;
+                 [ngModel]&#x3D;&quot;vmpStage1 ? vmpStage1.vmpType : null&quot;
+                 name&#x3D;&quot;vmpType&quot;
+                 placeholder&#x3D;&quot;Вид ВМП&quot;&gt;
+        &lt;ng-template let-item&#x3D;&quot;item&quot; ng-label-tmp&gt;
+          {{item.subProfile ? item.subProfile.codeP : &#x27;&#x27;}}.{{item.subProfile ? item.subProfile.code : &#x27;&#x27;}}
+          .{{item.code}} {{item.name}}
+        &lt;/ng-template&gt;
+        &lt;ng-template let-index&#x3D;&quot;index&quot; let-item&#x3D;&quot;item&quot; let-search&#x3D;&quot;searchTerm&quot; ng-option-tmp&gt;
+          &lt;div [ngOptionHighlight]&#x3D;&quot;search&quot; style&#x3D;&quot;white-space: normal; line-height: 1em; margin: 1em;&quot;&gt;
+            {{item.subProfile.codeP}}.{{item.subProfile.code}}.{{item.code}} {{item.name}}
+          &lt;/div&gt;
+        &lt;/ng-template&gt;
+      &lt;/ng-select&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class&#x3D;&quot;row&quot;&gt;
+    &lt;div class&#x3D;&quot;input-field col s12&quot;&gt;
+      &lt;ng-select (ngModelChange)&#x3D;&quot;setModel($event)&quot; [disabled]&#x3D;&quot;diseaseModels &#x3D;&#x3D;&#x3D; null&quot;
+                 [items]&#x3D;&quot;diseaseModels&quot;
+                 [ngModel]&#x3D;&quot;vmpStage1 ? vmpStage1.model : null&quot;
+                 name&#x3D;&quot;diseaseModel&quot;
+                 placeholder&#x3D;&quot;Модель&quot;&gt;
+        &lt;ng-template let-item&#x3D;&quot;item&quot; ng-label-tmp&gt;
+          {{item.name}}
+        &lt;/ng-template&gt;
+        &lt;ng-template let-index&#x3D;&quot;index&quot; let-item&#x3D;&quot;item&quot; let-search&#x3D;&quot;searchTerm&quot; ng-option-tmp&gt;
+          &lt;div [ngOptionHighlight]&#x3D;&quot;search&quot; style&#x3D;&quot;white-space: normal; line-height: 1em; margin: 1em;&quot;&gt;
+            {{item.name}}
+          &lt;/div&gt;
+        &lt;/ng-template&gt;
+      &lt;/ng-select&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class&#x3D;&quot;row&quot;&gt;
+    &lt;div class&#x3D;&quot;input-field col s12&quot;&gt;
+      &lt;ng-select (ngModelChange)&#x3D;&quot;vmpStage1.method &#x3D; $event&quot; [disabled]&#x3D;&quot;methods &#x3D;&#x3D;&#x3D; null&quot;
+                 [items]&#x3D;&quot;methods&quot;
+                 [ngModel]&#x3D;&quot;vmpStage1 ? vmpStage1.method : null&quot;
+                 name&#x3D;&quot;treatmentMethod&quot;
+                 placeholder&#x3D;&quot;Метод лечения&quot;&gt;
+        &lt;ng-template let-item&#x3D;&quot;item&quot; ng-label-tmp&gt;
+          {{item.name}}
+        &lt;/ng-template&gt;
+        &lt;ng-template let-index&#x3D;&quot;index&quot; let-item&#x3D;&quot;item&quot; let-search&#x3D;&quot;searchTerm&quot; ng-option-tmp&gt;
+          &lt;div [ngOptionHighlight]&#x3D;&quot;search&quot; style&#x3D;&quot;white-space: normal; line-height: 1em; margin: 1em;&quot;&gt;
+            {{item.name}}
+          &lt;/div&gt;
+        &lt;/ng-template&gt;
+      &lt;/ng-select&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class&#x3D;&quot;row&quot;&gt;
+    &lt;div class&#x3D;&quot;input-field col s12&quot;&gt;
+      &lt;ng-select (ngModelChange)&#x3D;&quot;vmpStage1.medicalInstitution &#x3D; $event&quot; [items]&#x3D;&quot;medicalInstitutions | async&quot;
+                 [ngModel]&#x3D;&quot;vmpStage1 ? vmpStage1.medicalInstitution : null&quot;
+                 name&#x3D;&quot;medicalInstitution&quot;
+                 placeholder&#x3D;&quot;Наименование МО&quot;&gt;
+        &lt;ng-template let-item&#x3D;&quot;item&quot; ng-label-tmp&gt;
+          {{item.name}}
+        &lt;/ng-template&gt;
+        &lt;ng-template let-index&#x3D;&quot;index&quot; let-item&#x3D;&quot;item&quot; let-search&#x3D;&quot;searchTerm&quot; ng-option-tmp&gt;
+          &lt;div [ngOptionHighlight]&#x3D;&quot;search&quot; style&#x3D;&quot;white-space: normal; line-height: 1em; margin: 1em;&quot;&gt;
+            {{item.code}} - {{item.name}}
+          &lt;/div&gt;
+        &lt;/ng-template&gt;
+      &lt;/ng-select&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class&#x3D;&quot;row&quot;&gt;
+    &lt;div class&#x3D;&quot;input-field col s12&quot;&gt;
+      &lt;input [materializeParams]&#x3D;&quot;[{format: &#x27;dd.mm.yyyy&#x27;, i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]&quot;
+             class&#x3D;&quot;datepicker validate&quot;
+             id&#x3D;&quot;date_napr_doc&quot; materialize&#x3D;&quot;Datepicker&quot; required
+             type&#x3D;&quot;text&quot; value&#x3D;&quot;{{vmpStage1.docSendDate | date: &#x27;dd.MM.yyyy&#x27;}}&quot;&gt;
+      &lt;label [class]&#x3D;&quot;vmpStage1.docSendDate ? &#x27;active&#x27; : &#x27;&#x27;&quot; for&#x3D;&quot;decision_date&quot;&gt;Дата направления документов в МО &lt;span
+        class&#x3D;&quot;red-text&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
+      &lt;span class&#x3D;&quot;helper-text&quot; data-error&#x3D;&quot;Выберите дату&quot;&gt;&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class&#x3D;&quot;row&quot;&gt;
+    &lt;div class&#x3D;&quot;input-field col s12&quot;&gt;
+      &lt;textarea class&#x3D;&quot;materialize-textarea&quot; data-length&#x3D;&quot;120&quot; id&#x3D;&quot;comment_1&quot;&gt;&lt;/textarea&gt;
+      &lt;label for&#x3D;&quot;comment_1&quot;&gt;Комментарий&lt;/label&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class&#x3D;&quot;row&quot;&gt;
+    &lt;div class&#x3D;&quot;input-field col s12&quot;&gt;
+      &lt;select materialize&#x3D;&quot;FormSelect&quot; name&#x3D;&quot;responsiblePerson&quot;&gt;
+        &lt;option *ngFor&#x3D;&quot;let person of responsiblePersons&quot;&gt;{{person.fullName}}, {{person.position}}, {{person.phone}}
+          , {{person.email}}&lt;/option&gt;
+      &lt;/select&gt;
+      &lt;label&gt;Должностное лицо &lt;span class&#x3D;&quot;red-text&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class&#x3D;&quot;row&quot;&gt;
+    &lt;button class&#x3D;&quot;waves-effect waves-light btn-small green&quot; type&#x3D;&quot;submit&quot;&gt;Сохранить&lt;/button&gt;
+    &lt;a class&#x3D;&quot;modal-trigger waves-effect waves-light btn-small green&quot; href&#x3D;&quot;#export&quot;&gt;Экспорт&lt;/a&gt;
+    &lt;a class&#x3D;&quot;modal-trigger waves-effect waves-light btn-small green&quot; href&#x3D;&quot;#addfile&quot;&gt;Прикрепить документ&lt;/a&gt;
+  &lt;/div&gt;
+
+&lt;/form&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-styleData">
+                <p class="comment">
+                    <code>./stage1.component.sass</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss"></code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><form #vmpStage1Form="ngForm" (ngSubmit)="onSubmit()" class="col s12">  <div class="row">    <div class="input-field col s12">      <select [(ngModel)]="vmpStage1.decision" [compareWith]="compareId" materialize="FormSelect" name="decision">        <option *ngFor="let decision of decisions">{{decision.id}} - {{decision.name}}</option>      </select>      <label>Принятое решение</label>    </div>  </div>  <div class="row">    <div class="input-field col s12">      <input [materializeParams]="[{format: \'dd.mm.yyyy\', i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]"             class="datepicker validate"             id="decision_date" materialize="Datepicker" required             type="text" value="{{vmpStage1.decisionDate | date: \'dd.MM.yyyy\'}}">      <label [class]="vmpStage1.decisionDate ? \'active\' : \'\'" for="decision_date">Дата принятого решения <span        class="red-text">*</span></label>      <span class="helper-text" data-error="Выберите дату"></span>    </div>  </div>  <div class="row">    <div class="input-field col s12">      <ng-select (ngModelChange)="vmpStage1.diseaseCode = $event" [items]="diseaseCodes | async"                 [loading]="diseaseCodesLoading" [ngModel]="vmpStage1 ? vmpStage1.diseaseCode : null"                 [typeahead]="diseaseCodesSearch"                 bindLabel="name"                 name="diseaseCode"                 placeholder="Диагноз по МКБ-10">        <ng-template let-item="item" ng-label-tmp>          {{item.code}} {{item.name}}        </ng-template>        <ng-template let-index="index" let-item="item" let-search="searchTerm" ng-option-tmp>          {{item.code}} {{item.name}}        </ng-template>      </ng-select>    </div>  </div>  <div class="row">    <div class="input-field col s12">      <ng-select (ngModelChange)="setProfile($event)" [items]="medicalProfiles"                 [ngModel]="vmpStage1 ? vmpStage1.medicalProfile : null" bindLabel="description"                 name="medicalProfile"                 placeholder="Профиль ВМП">        <ng-template let-item="item" ng-label-tmp>          {{item.subProfile.codeP}}.{{item.subProfile.code}} {{item.description}}        </ng-template>        <ng-template let-index="index" let-item="item" let-search="searchTerm" ng-option-tmp>          {{item.subProfile.codeP}}.{{item.subProfile.code}} {{item.description}}        </ng-template>      </ng-select>    </div>  </div>  <div class="row">    <div class="input-field col s12">      <ng-select (ngModelChange)="setGroup($event)" [items]="groups" [ngModel]="group"                 name="group"                 placeholder="Группа">      </ng-select>    </div>  </div>  <div class="row">    <div class="input-field col s12">      <ng-select (ngModelChange)="setType($event)" [disabled]="vmpTypes === null"                 [items]="vmpTypes"                 [ngModel]="vmpStage1 ? vmpStage1.vmpType : null"                 name="vmpType"                 placeholder="Вид ВМП">        <ng-template let-item="item" ng-label-tmp>          {{item.subProfile ? item.subProfile.codeP : \'\'}}.{{item.subProfile ? item.subProfile.code : \'\'}}          .{{item.code}} {{item.name}}        </ng-template>        <ng-template let-index="index" let-item="item" let-search="searchTerm" ng-option-tmp>          <div [ngOptionHighlight]="search" style="white-space: normal; line-height: 1em; margin: 1em;">            {{item.subProfile.codeP}}.{{item.subProfile.code}}.{{item.code}} {{item.name}}          </div>        </ng-template>      </ng-select>    </div>  </div>  <div class="row">    <div class="input-field col s12">      <ng-select (ngModelChange)="setModel($event)" [disabled]="diseaseModels === null"                 [items]="diseaseModels"                 [ngModel]="vmpStage1 ? vmpStage1.model : null"                 name="diseaseModel"                 placeholder="Модель">        <ng-template let-item="item" ng-label-tmp>          {{item.name}}        </ng-template>        <ng-template let-index="index" let-item="item" let-search="searchTerm" ng-option-tmp>          <div [ngOptionHighlight]="search" style="white-space: normal; line-height: 1em; margin: 1em;">            {{item.name}}          </div>        </ng-template>      </ng-select>    </div>  </div>  <div class="row">    <div class="input-field col s12">      <ng-select (ngModelChange)="vmpStage1.method = $event" [disabled]="methods === null"                 [items]="methods"                 [ngModel]="vmpStage1 ? vmpStage1.method : null"                 name="treatmentMethod"                 placeholder="Метод лечения">        <ng-template let-item="item" ng-label-tmp>          {{item.name}}        </ng-template>        <ng-template let-index="index" let-item="item" let-search="searchTerm" ng-option-tmp>          <div [ngOptionHighlight]="search" style="white-space: normal; line-height: 1em; margin: 1em;">            {{item.name}}          </div>        </ng-template>      </ng-select>    </div>  </div>  <div class="row">    <div class="input-field col s12">      <ng-select (ngModelChange)="vmpStage1.medicalInstitution = $event" [items]="medicalInstitutions | async"                 [ngModel]="vmpStage1 ? vmpStage1.medicalInstitution : null"                 name="medicalInstitution"                 placeholder="Наименование МО">        <ng-template let-item="item" ng-label-tmp>          {{item.name}}        </ng-template>        <ng-template let-index="index" let-item="item" let-search="searchTerm" ng-option-tmp>          <div [ngOptionHighlight]="search" style="white-space: normal; line-height: 1em; margin: 1em;">            {{item.code}} - {{item.name}}          </div>        </ng-template>      </ng-select>    </div>  </div>  <div class="row">    <div class="input-field col s12">      <input [materializeParams]="[{format: \'dd.mm.yyyy\', i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]"             class="datepicker validate"             id="date_napr_doc" materialize="Datepicker" required             type="text" value="{{vmpStage1.docSendDate | date: \'dd.MM.yyyy\'}}">      <label [class]="vmpStage1.docSendDate ? \'active\' : \'\'" for="decision_date">Дата направления документов в МО <span        class="red-text">*</span></label>      <span class="helper-text" data-error="Выберите дату"></span>    </div>  </div>  <div class="row">    <div class="input-field col s12">      <textarea class="materialize-textarea" data-length="120" id="comment_1"></textarea>      <label for="comment_1">Комментарий</label>    </div>  </div>  <div class="row">    <div class="input-field col s12">      <select materialize="FormSelect" name="responsiblePerson">        <option *ngFor="let person of responsiblePersons">{{person.fullName}}, {{person.position}}, {{person.phone}}          , {{person.email}}</option>      </select>      <label>Должностное лицо <span class="red-text">*</span></label>    </div>  </div>  <div class="row">    <button class="waves-effect waves-light btn-small green" type="submit">Сохранить</button>    <a class="modal-trigger waves-effect waves-light btn-small green" href="#export">Экспорт</a>    <a class="modal-trigger waves-effect waves-light btn-small green" href="#addfile">Прикрепить документ</a>  </div></form></div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'MaterializeAutocompleteComponent', 'selector': 'app-materialize-autocomplete'},{'name': 'PatientCardComponent', 'selector': 'app-patient-card'},{'name': 'PatientDocumentModalComponent', 'selector': 'app-patient-document-modal'},{'name': 'PatientHistoryModalComponent', 'selector': 'app-patient-history-modal'},{'name': 'PatientUnionModalComponent', 'selector': 'app-patient-union-modal'},{'name': 'Stage0Component', 'selector': 'app-stage0'},{'name': 'Stage1Component', 'selector': 'app-stage1'},{'name': 'Stage2Component', 'selector': 'app-stage2'},{'name': 'Stage3Component', 'selector': 'app-stage3'},{'name': 'Stage4Component', 'selector': 'app-stage4'},{'name': 'Stage5Component', 'selector': 'app-stage5'},{'name': 'Stage6Component', 'selector': 'app-stage6'},{'name': 'TalonComponent', 'selector': 'app-talon'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'Stage1Component'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'Stage1Component.html';
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

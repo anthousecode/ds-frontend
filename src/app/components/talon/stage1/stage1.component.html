@@ -1,0 +1,167 @@
+<form #vmpStage1Form="ngForm" (ngSubmit)="onSubmit()" class="col s12">
+  <div class="row">
+    <div class="input-field col s12">
+      <select [(ngModel)]="vmpStage1.decision" [compareWith]="compareId" materialize="FormSelect" name="decision">
+        <option *ngFor="let decision of decisions">{{decision.id}} - {{decision.name}}</option>
+      </select>
+      <label>Принятое решение</label>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="input-field col s12">
+      <input [materializeParams]="[{format: 'dd.mm.yyyy', i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]"
+             class="datepicker validate"
+             id="decision_date" materialize="Datepicker" required
+             type="text" value="{{vmpStage1.decisionDate | date: 'dd.MM.yyyy'}}">
+      <label [class]="vmpStage1.decisionDate ? 'active' : ''" for="decision_date">Дата принятого решения <span
+        class="red-text">*</span></label>
+      <span class="helper-text" data-error="Выберите дату"></span>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="input-field col s12">
+      <ng-select (ngModelChange)="vmpStage1.diseaseCode = $event" [items]="diseaseCodes | async"
+                 [loading]="diseaseCodesLoading" [ngModel]="vmpStage1 ? vmpStage1.diseaseCode : null"
+                 [typeahead]="diseaseCodesSearch"
+                 bindLabel="name"
+                 name="diseaseCode"
+                 placeholder="Диагноз по МКБ-10">
+        <ng-template let-item="item" ng-label-tmp>
+          {{item.code}} {{item.name}}
+        </ng-template>
+        <ng-template let-index="index" let-item="item" let-search="searchTerm" ng-option-tmp>
+          {{item.code}} {{item.name}}
+        </ng-template>
+      </ng-select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <ng-select (ngModelChange)="setProfile($event)" [items]="medicalProfiles"
+                 [ngModel]="vmpStage1 ? vmpStage1.medicalProfile : null" bindLabel="description"
+                 name="medicalProfile"
+                 placeholder="Профиль ВМП">
+        <ng-template let-item="item" ng-label-tmp>
+          {{item.subProfile.codeP}}.{{item.subProfile.code}} {{item.description}}
+        </ng-template>
+        <ng-template let-index="index" let-item="item" let-search="searchTerm" ng-option-tmp>
+          {{item.subProfile.codeP}}.{{item.subProfile.code}} {{item.description}}
+        </ng-template>
+      </ng-select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <ng-select (ngModelChange)="setGroup($event)" [items]="groups" [ngModel]="group"
+                 name="group"
+                 placeholder="Группа">
+      </ng-select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <ng-select (ngModelChange)="setType($event)" [disabled]="vmpTypes === null"
+                 [items]="vmpTypes"
+                 [ngModel]="vmpStage1 ? vmpStage1.vmpType : null"
+                 name="vmpType"
+                 placeholder="Вид ВМП">
+        <ng-template let-item="item" ng-label-tmp>
+          {{item.subProfile ? item.subProfile.codeP : ''}}.{{item.subProfile ? item.subProfile.code : ''}}
+          .{{item.code}} {{item.name}}
+        </ng-template>
+        <ng-template let-index="index" let-item="item" let-search="searchTerm" ng-option-tmp>
+          <div [ngOptionHighlight]="search" style="white-space: normal; line-height: 1em; margin: 1em;">
+            {{item.subProfile.codeP}}.{{item.subProfile.code}}.{{item.code}} {{item.name}}
+          </div>
+        </ng-template>
+      </ng-select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <ng-select (ngModelChange)="setModel($event)" [disabled]="diseaseModels === null"
+                 [items]="diseaseModels"
+                 [ngModel]="vmpStage1 ? vmpStage1.model : null"
+                 name="diseaseModel"
+                 placeholder="Модель">
+        <ng-template let-item="item" ng-label-tmp>
+          {{item.name}}
+        </ng-template>
+        <ng-template let-index="index" let-item="item" let-search="searchTerm" ng-option-tmp>
+          <div [ngOptionHighlight]="search" style="white-space: normal; line-height: 1em; margin: 1em;">
+            {{item.name}}
+          </div>
+        </ng-template>
+      </ng-select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <ng-select (ngModelChange)="vmpStage1.method = $event" [disabled]="methods === null"
+                 [items]="methods"
+                 [ngModel]="vmpStage1 ? vmpStage1.method : null"
+                 name="treatmentMethod"
+                 placeholder="Метод лечения">
+        <ng-template let-item="item" ng-label-tmp>
+          {{item.name}}
+        </ng-template>
+        <ng-template let-index="index" let-item="item" let-search="searchTerm" ng-option-tmp>
+          <div [ngOptionHighlight]="search" style="white-space: normal; line-height: 1em; margin: 1em;">
+            {{item.name}}
+          </div>
+        </ng-template>
+      </ng-select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <ng-select (ngModelChange)="vmpStage1.medicalInstitution = $event" [items]="medicalInstitutions | async"
+                 [ngModel]="vmpStage1 ? vmpStage1.medicalInstitution : null"
+                 name="medicalInstitution"
+                 placeholder="Наименование МО">
+        <ng-template let-item="item" ng-label-tmp>
+          {{item.name}}
+        </ng-template>
+        <ng-template let-index="index" let-item="item" let-search="searchTerm" ng-option-tmp>
+          <div [ngOptionHighlight]="search" style="white-space: normal; line-height: 1em; margin: 1em;">
+            {{item.code}} - {{item.name}}
+          </div>
+        </ng-template>
+      </ng-select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <input [materializeParams]="[{format: 'dd.mm.yyyy', i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]"
+             class="datepicker validate"
+             id="date_napr_doc" materialize="Datepicker" required
+             type="text" value="{{vmpStage1.docSendDate | date: 'dd.MM.yyyy'}}">
+      <label [class]="vmpStage1.docSendDate ? 'active' : ''" for="decision_date">Дата направления документов в МО <span
+        class="red-text">*</span></label>
+      <span class="helper-text" data-error="Выберите дату"></span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <textarea class="materialize-textarea" data-length="120" id="comment_1"></textarea>
+      <label for="comment_1">Комментарий</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <select materialize="FormSelect" name="responsiblePerson">
+        <option *ngFor="let person of responsiblePersons">{{person.fullName}}, {{person.position}}, {{person.phone}}
+          , {{person.email}}</option>
+      </select>
+      <label>Должностное лицо <span class="red-text">*</span></label>
+    </div>
+  </div>
+  <div class="row">
+    <button class="waves-effect waves-light btn-small green" type="submit">Сохранить</button>
+    <a class="modal-trigger waves-effect waves-light btn-small green" href="#export">Экспорт</a>
+    <a class="modal-trigger waves-effect waves-light btn-small green" href="#addfile">Прикрепить документ</a>
+  </div>
+
+</form>

@@ -1,0 +1,126 @@
+  <form class="col s12">
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="date_doc_from_ouz" materialize="Datepicker"
+               [materializeParams]="[{format: 'dd.mm.yyyy', i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]"
+                type="text" class="datepicker validate"
+                value="{{vmpStage2.documentReceiveDate | date: 'dd.MM.yyyy'}}" required>
+        <label for="date_doc_from_ouz">Дата получения документов от ОУЗ <span class="red-text">*</span></label>
+        <span class="helper-text" data-error="Выберите дату"></span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="date_registration_docs" materialize="Datepicker"
+               [materializeParams]="[{format: 'dd.mm.yyyy', i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]"
+               type="text" class="datepicker validate"
+               value="{{vmpStage2.documentRegistrationDate | date: 'dd.MM.yyyy'}}" required>
+        <label for="date_registration_docs">Дата оформления документов МО-ВМП</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <select materialize="FormSelect" [(ngModel)]="vmpStage2.decision" [compareWith]="compareId" name="decision">
+          <option *ngFor="let decision of decisions">{{decision.id}} - {{decision.name}}</option>
+        </select>
+        <label>Принятое решение</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="decis_date" materialize="Datepicker"
+               [materializeParams]="[{format: 'dd.mm.yyyy', i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]"
+               type="text" class="datepicker validate"
+               value="{{vmpStage2.decisionDate | date: 'dd.MM.yyyy'}}" required>
+        <label for="decis_date">Дата принятия решения <span class="red-text">*</span></label>
+        <span class="helper-text" data-error="Выберите дату"></span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <ng-select placeholder="Вид ВМП" name="vmpType"
+                   [disabled]="vmpTypes === null"
+                   [items]="vmpTypes"
+                   [ngModel]="vmpStage2 ? vmpStage2.vmpType : null"
+                   (ngModelChange)="vmpStage2.vmpType = $event">
+          <ng-template ng-label-tmp let-item="item">
+            {{item.subProfile ? item.subProfile.codeP : ''}}.{{item.subProfile ? item.subProfile.code : ''}}.{{item.code}} {{item.name}}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+            <div style="white-space: normal; line-height: 1em; margin: 1em;" [ngOptionHighlight]="search">
+              {{item.subProfile.codeP}}.{{item.subProfile.code}}.{{item.code}} {{item.name}}
+            </div>
+          </ng-template>
+        </ng-select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="plan_date_hosp" materialize="Datepicker"
+               [materializeParams]="[{format: 'dd.mm.yyyy', i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]"
+               type="text" class="datepicker validate"
+               value="{{vmpStage2.plannedDate | date: 'dd.MM.yyyy'}}" required>
+        <label for="plan_date_hosp">Дата планируемой госпитализации <span class="red-text">*</span></label>
+        <span class="helper-text" data-error="Выберите дату"></span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <select materialize="FormSelect" [(ngModel)]="vmpStage2.approveHospitalizationDate" name="approve_hosp_date">
+          <option value="1">Да</option>
+          <option value="2">Нет</option>
+        </select>
+        <label>Необходимо согласовать дату госпитализации</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="date_ots_gosp" materialize="Datepicker"
+               [materializeParams]="[{format: 'dd.mm.yyyy', i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]"
+               type="text" class="datepicker validate"
+               value="{{vmpStage2.delayedDate | date: 'dd.MM.yyyy'}}" required>
+        <label for="date_ots_gosp">Дата отсроченной госпитализации</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="date_send_to_ouz" materialize="Datepicker"
+               [materializeParams]="[{format: 'dd.mm.yyyy', i18n: pickerI18n, defaultDate: parent.talon.date, setDefaultDate: true}]"
+               type="text" class="datepicker validate"
+               value="{{vmpStage2.notificationDate | date: 'dd.MM.yyyy'}}" required>
+        <label for="date_send_to_ouz">Дата уведомления ОУЗ и пациента о дате госпитализации в МО <span class="red-text">*</span></label>
+        <span class="helper-text" data-error="Выберите дату"></span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <select materialize="FormSelect" [(ngModel)]="vmpStage2.noticeType" name="notice_type">
+          <option  value="1">1 - Почтой</option>
+          <option  value="2">2 - Телефонограммой</option>
+          <option selected value="2">3 - По электронной почте</option>
+        </select>
+        <label>Способ уведомления</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <textarea id="comment_2" class="materialize-textarea"></textarea>
+        <label for="comment_2">Комментарий</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <select materialize="FormSelect" name="responsiblePerson">
+          <option *ngFor="let person of responsiblePersons">{{person.fullName}}, {{person.position}}, {{person.phone}}, {{person.email}}</option>
+        </select>
+        <label>Должностное лицо <span class="red-text">*</span></label>
+      </div>
+    </div>
+    <div class="row">
+      <a onclick="M.toast({html: 'Этап сохранён'})" class="waves-effect waves-light btn-small green">Сохранить</a>
+      <a href="#export" class="modal-trigger waves-effect waves-light btn-small green">Экспорт</a>
+      <a href="#addfile" class="modal-trigger waves-effect waves-light btn-small green">Прикрепить документ</a>
+      <a href="#metka" class="modal-trigger waves-effect waves-light btn-small green">Отметить талон</a>
+      <a href="#!" class="waves-effect waves-light btn-small green">Снять метку</a>
+    </div>
+  </form>

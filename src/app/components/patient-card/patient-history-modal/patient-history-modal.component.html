@@ -1,0 +1,74 @@
+<!--suppress HtmlDeprecatedAttribute -->
+<mat-dialog-content class="mat-typography main-dialog">
+
+  <div class="modal-fixed-footer" id="card_history">
+    <div class="modal-content">
+      <h2>История изменений в карте</h2>
+      <hr>
+      <ul class="tabs tabs-fixed-width tab-demo green-text" materialize="Tabs">
+        <li class="tab"><a class="active" href="#pat_history">Пациент</a></li>
+        <li class="tab"><a href="#doc_history">Документы</a></li>
+      </ul>
+      <div class="row" id="pat_history">
+        <table>
+          <tbody>
+          <tr *ngIf="initHistory">
+            <td>{{initHistory.operationDate | date : 'dd.MM.yyyy'}} : пользователь {{initHistory.osUser}} создал карту
+            </td>
+          </tr>
+          <tr *ngFor="let patient of patientHistory">
+            <td>
+              {{patient.dateChange | date : 'dd.MM.yyyy' }}:
+              пользователь {{patient.osUser}} {{patient.operation}} {{patient.keyChange}} {{patient.fromChange}}
+              на {{patient.toChange}}
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="row" id="doc_history">
+        <ul class="collapsible" materialize="Collapsible">
+          <li *ngFor="let item of displayDocumentHistory; let index;">
+            <div class="collapsible-header"> {{item.name | json}}</div>
+            <div class="collapsible-body">
+              <table>
+                <tbody>
+                <tr>
+                  <td>
+                    {{item.historyChange[0].operationDate | date: 'dd.MM.yyyy'}} :
+                    пользователь {{item.historyChange[0].osUser}} создал {{item.historyChange[0].documentType.name}}
+                  </td>
+                </tr>
+                <ng-container *ngFor="let changedItem of item.historyChange">
+                  <tr *ngFor="let valuesChanged of changedItem.changed">
+                    <td *ngIf="valuesChanged.current else deleted">
+                      {{changedItem.operationDate | date : 'dd.MM.yyyy'}} :
+                      пользователь {{changedItem.osUser}} {{valuesChanged.name}} {{valuesChanged.operation}}
+                      c {{valuesChanged.old}}
+                      на {{valuesChanged.current}}
+                    </td>
+                    <ng-template #deleted>
+                      <td>
+                        {{changedItem.operationDate | date : 'dd.MM.yyyy'}} :
+                        пользователь {{changedItem.osUser}} удалил {{item.name}}
+                        <br>
+                        {{changedItem.number}} {{changedItem.series}},  {{changedItem.issuedBy}}
+                        , {{changedItem.issuedDate}}
+                      </td>
+                    </ng-template>
+                  </tr>
+                </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="dialog-footer">
+  <div class="modal-footer">
+    <button class="modal-close waves-effect waves-green btn-flat green text-primary" mat-dialog-close>ОК</button>
+  </div>
+</mat-dialog-actions>

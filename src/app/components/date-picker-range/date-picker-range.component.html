@@ -1,0 +1,7 @@
+<my-date-range-picker (inputFieldChanged)="onInputFieldChanged($event)" [options]="myDateRangePickerOptions"
+                      name="mydaterange"
+                      placeholder="Дата рождения"></my-date-range-picker>
+<mat-error *ngIf="!isValid && isFirst !== 1">
+  Не правильная дата!
+</mat-error>
+
