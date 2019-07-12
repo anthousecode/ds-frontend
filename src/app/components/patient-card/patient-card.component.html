@@ -1,166 +1,220 @@
 <div class="content row container">
-  <div class="row">
-    <div [ngClass]="{'push-card' : patientAddInfo}" class="z-depth-2 vmp_content col l9 s12" id="main-info">
-      <h5 style="text-align: center;">Карта пациента</h5>
-      <ng-container *ngIf="isPresentPatient">
-        <a (click)="openPatientHistory()" class="right tooltipped" data-tooltip="История изменений"
-           materialize="Tooltip"
-           style="margin-top:-40px; margin-right:45px;"><i class="material-icons small">history</i></a>
-        <a (click)="showMoreInform()" class="right tooltipped" data-tooltip="Дополнительная информация"
-           id="hide-right-info"
-           materialize="Tooltip"
-           style="margin-top:-40px; margin-right:10px;"><i class="material-icons small">info_outline</i></a>
-        <a class="right tooltipped red-text text-accent-4" data-target='double' data-tooltip="Пациент уже существует"
-           id="doubli_info"
-           materialize="Tooltip" style="margin-top:-40px; margin-right:80px;"><i
-          class="material-icons small">report</i></a>
-        <a (click)="openPatientUnion()" class="right tooltipped" data-tooltip="Объединить" id="join-info"
-           materialize="Tooltip" style="margin-top:-40px; margin-right:115px;"><i
-          class="material-icons small">group_add</i></a>
-      </ng-container>
-      <form [formGroup]="patientForm">
-        <div class="row">
-          <div class=" col l3 s12">
-            <mat-form-field>
-              <mat-label> Фамилия <span class="red-text">*</span></mat-label>
-              <input appValidateInput="name" formControlName="surname" id="last_name" matInput maxlength="50"
-                     type="text">
-              <mat-error *ngIf="isValid('surname')">
-                Фамилия заполнена некорректно
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="col l3 s12">
-            <mat-form-field>
-              <mat-label>Имя<span class="red-text">*</span></mat-label>
-              <input appValidateInput="name" formControlName="name" id="first_name" matInput maxlength="50"
-                     type="text">
-              <mat-error *ngIf="isValid('name')">
-                Имя заполнено некорректно
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="col l3 s12">
-            <mat-form-field>
-              <input appValidateInput="name" formControlName="patronymic" id="midle_name" matInput maxlength="50"
-                     placeholder="Отчество"
-                     type="text">
-            </mat-form-field>
-          </div>
-          <div class="col l3 s12">
-            <mat-form-field>
-              <mat-label>СНИЛС <span class="red-text">*</span></mat-label>
-              {{patientForm.controls['snils'].clearValidators()}}
-              {{patientForm.controls['snils'].setValidators(ValiedateSnils)}}
-              <input formControlName="snils" id="snils" mask="000-000-000-00"
-                     matInput type="text">
-              <mat-error *ngIf="isValid('snils')">
-                СНИЛС заполнен некорректно
-              </mat-error>
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col l3 s12">
-            <mat-form-field>
-              <mat-label>Пол</mat-label>
-              <mat-select formControlName="idVmpSex" id="male">
-                <mat-option [value]="1">Мужской</mat-option>
-                <mat-option [value]="2">Женский</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="col l3 s12">
-            <app-date-picker [controlName]="'birthdate'" [form]="patientForm"
-                             placeholder="Дата рождения"></app-date-picker>
-          </div>
-          <div class="col l3 s12">
-            <mat-form-field>
-              <mat-label>ИНН</mat-label>
-              <input formControlName="inn" appVaidateInput="inn" id="inn" matInput type="text">
-            </mat-form-field>
-          </div>
-        </div>
-      </form>
-      <div class="row">
-        <div class="col s12">
-          <ul class="collection with-header">
-            <li class="collection-header">
-              <h6>Документы <span class="red-text">*</span>
-                <a (click)="createPatientDoc()" *ngIf="patientForm.controls['birthdate'].valid"
-                   class="tooltipped secondary-content" data-tooltip="Добавить документ"
-                   materialize="Tooltip">
-                  <i class="material-icons">add</i>
-                </a>
-              </h6>
-            </li>
-            <li *ngFor="let item of api.state; let indexItem = index; trackBy: trackByFn;" class="collection-item">
-              <div>{{item.type.name}} {{item.series}} {{item.number}} {{item.issuedDate | date: 'dd.MM.yyyy'}} {{item.issuedBy}}
-                <a (click)="deleteState(indexItem)" class="tooltipped secondary-content" data-tooltip="Удалить документ"
-                   materialize="Tooltip">
-                  <i class="material-icons">delete</i>
-                </a>
-                <a (click)="updatePatientDoc(item)" class="tooltipped secondary-content"
-                   data-tooltip="Изменить документ"
-                   materialize="Tooltip">
-                  <i class="material-icons">edit</i>
-                </a>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="row" style="padding-left: 20px">
-
-        <button (click)="savePatientInfo()"
-                *ngIf="(patientForm.valid && (api.state.length >= 1)); else disableButton"
-                class="waves-effect waves-light btn-small green">Сохранить
-        </button>
-        <ng-template #disableButton>
-          <div class="tooltipped disabled-button-tootltip" data-tooltip="Заполните корректно все поля"
-               materialize="Tooltip">
-            <button
-              [disabled]="!(patientForm.valid && (api.state.length >= 1))"
-              class=" waves-light btn-small green">Сохранить
-            </button>
-
-          </div>
-        </ng-template>
-        <ng-container *ngIf="isPresentPatient">
-          <a class="waves-effect waves-light btn-small green" href="talon_vmp.html">Создать талон</a>
-          <a class="modal-trigger waves-effect waves-light btn-small green" href="#addfile">Прикрепить документ</a>
-          <a class="waves-effect waves-light btn-small green" onclick="M.toast({html: 'Карта заблокирована'})">Блокировать
-            карту</a>
-        </ng-container>
-      </div>
-    </div>
-    <div *ngIf="PatientFullInformation" [ngClass]="{'scale-out': patientAddInfo}"
-         class="col l3 s12 scale-transition absol"
-         id="right-info">
-      <div class="card blue-grey darken-1">
-        <div class="card-content white-text">
-          <span class="card-title">Дополнительная информация</span>
-          <label class="card_label_text">Прикрепленные файлы</label>
-          <p class="fs1">
-            <ng-container *ngFor="let item of PatientFullInformation.documents">
-              <i class="material-icons tiny middle">delete</i><a class="white-text" href="#!">
-              Справка: {{item.fileName}} -
-              {{item.date | date: 'dd.MM.yyyy'}}</a>
-              <br>
+    <div class="row">
+        <div [ngClass]="{'push-card' : patientAddInfo}" class="z-depth-2 vmp_content col l9 s12" id="main-info">
+            <h5 style="text-align: center;">Карта ребенка</h5>
+            <ng-container *ngIf="isPresentPatient">
+                <a (click)="openPatientHistory()" class="right tooltipped" data-tooltip="История изменений"
+                   materialize="Tooltip"
+                   style="margin-top:-40px; margin-right:45px;"><i class="material-icons small">history</i></a>
+                <a (click)="showMoreInform()" class="right tooltipped" data-tooltip="Дополнительная информация"
+                   id="hide-right-info"
+                   materialize="Tooltip"
+                   style="margin-top:-40px; margin-right:10px;"><i class="material-icons small">info_outline</i></a>
+                <a class="right tooltipped red-text text-accent-4" data-target='double'
+                   data-tooltip="Пациент уже существует"
+                   id="doubli_info"
+                   materialize="Tooltip" style="margin-top:-40px; margin-right:80px;"><i
+                        class="material-icons small">report</i></a>
+                <a (click)="openPatientUnion()" class="right tooltipped" data-tooltip="Объединить" id="join-info"
+                   materialize="Tooltip" style="margin-top:-40px; margin-right:115px;"><i
+                        class="material-icons small">group_add</i></a>
             </ng-container>
-            <a class="white-text" href="#!"><u>Скачать все файлы в одном архиве</u></a>
-          </p>
-          <label class="card_label_text">Талоны пациента</label>
-          <ng-container *ngFor="let item of PatientFullInformation.talons">
-            <p class="fs1">
-              <a class="yellow-text" href="#!to_talon"> <!-- Тут цвет талона в зависимости от логики -->
-                {{item.uniqNumber}}
-              </a>
-              ,{{item.medicalInstitution}}
-            </p>
-          </ng-container>
+            <form [formGroup]="patientForm">
+                <div class="row">
+                    <div class=" col l3 s12">
+                        <mat-form-field>
+                            <mat-label> Фамилия <span class="red-text">*</span></mat-label>
+                            <input appValidateInput="name" formControlName="surname" id="last_name" matInput
+                                   maxlength="50"
+                                   type="text">
+                            <mat-error *ngIf="isValid('surname')">
+                                Фамилия заполнена некорректно
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col l3 s12">
+                        <mat-form-field>
+                            <mat-label>Имя<span class="red-text">*</span></mat-label>
+                            <input appValidateInput="name" formControlName="name" id="first_name" matInput
+                                   maxlength="50"
+                                   type="text">
+                            <mat-error *ngIf="isValid('name')">
+                                Имя заполнено некорректно
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col l3 s12">
+                        <mat-form-field>
+                            <input appValidateInput="name" formControlName="patronymic" id="midle_name" matInput
+                                   maxlength="50"
+                                   placeholder="Отчество"
+                                   type="text">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col l3 s12">
+                        <mat-form-field>
+                            <mat-label>Пол</mat-label>
+                            <mat-select formControlName="idVmpSex" id="male">
+                                <mat-option [value]="1">Мужской</mat-option>
+                                <mat-option [value]="2">Женский</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col l3 s12">
+                        <app-date-picker [controlName]="'birthdate'" [form]="patientForm"
+                                         placeholder="Дата рождения"></app-date-picker>
+                    </div>
+                    <div class="col l3 s12 inline-checkbox">
+                        <mat-form-field>
+                            <mat-label>СНИЛС</mat-label>
+                            {{patientForm.controls['snils'].clearValidators()}}
+                            {{patientForm.controls['snils'].setValidators(ValiedateSnils)}}
+                            <input formControlName="snils" id="snils" mask="000-000-000-00"
+                                   matInput type="text">
+                            <mat-error *ngIf="isValid('snils')">
+                                СНИЛС заполнен некорректно
+                            </mat-error>
+                        </mat-form-field>
+                        <mat-checkbox class="align-center" formControlName="check">Нет СНИЛС!</mat-checkbox>
+                    </div>
+                </div>
+            </form>
+            <div class="row">
+                <div class="col s12">
+                    <ul class="collection with-header">
+                        <li class="collection-header">
+                            <h6>Документы <span class="red-text">*</span>
+                                <a (click)="createPatientDoc()" *ngIf="patientForm.controls['birthdate'].valid"
+                                   class="tooltipped secondary-content" data-tooltip="Добавить документ"
+                                   materialize="Tooltip">
+                                    <i class="material-icons">add</i>
+                                </a>
+                            </h6>
+                        </li>
+                        <li *ngFor="let item of api.state; let indexItem = index; trackBy: trackByFn;"
+                            class="collection-item">
+                            <div>{{item.type.name}} {{item.series}} {{item.number}} {{item.issuedDate | date: 'dd.MM.yyyy'}} {{item.issuedBy}}
+                                <a (click)="deleteState(indexItem)" class="tooltipped secondary-content"
+                                   data-tooltip="Удалить документ"
+                                   materialize="Tooltip">
+                                    <i class="material-icons">delete</i>
+                                </a>
+                                <a (click)="updatePatientDoc(item)" class="tooltipped secondary-content"
+                                   data-tooltip="Изменить документ"
+                                   materialize="Tooltip">
+                                    <i class="material-icons">edit</i>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s12">
+                    <ul class="collection with-header">
+                        <li class="collection-header">
+                            <h6>Карта осмотра <span class="red-text">*</span>
+                                <a (click)="createPatientDoc()"
+                                   class="tooltipped secondary-content" data-tooltip="Добавить документ"
+                                   materialize="Tooltip">
+                                    <i class="material-icons">add</i>
+                                </a>
+                            </h6>
+                        </li>
+
+                        <table mat-table [dataSource]="dataSource" class="mat-elevation-z0">
+
+                            <!--- Note that these columns can be defined in any order.
+                                  The actual rendered columns are set as a property on the row definition" -->
+
+                            <!-- Position Column -->
+                            <ng-container matColumnDef="card">
+                                <th mat-header-cell *matHeaderCellDef> Карта осмотра </th>
+                                <td mat-cell *matCellDef="let element"> {{element.card}} </td>
+                            </ng-container>
+
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="type_card">
+                                <th mat-header-cell *matHeaderCellDef> Тип карты </th>
+                                <td mat-cell *matCellDef="let element"> {{element.type_card}} </td>
+                            </ng-container>
+
+                            <!-- Weight Column -->
+                            <ng-container matColumnDef="status">
+
+                                <th mat-header-cell *matHeaderCellDef> Статус </th>
+                                <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+                            </ng-container>
+
+                            <!-- Symbol Column -->
+                            <ng-container matColumnDef="ageGroup">
+                                <th mat-header-cell *matHeaderCellDef> Возрастная группазщ </th>
+                                <td mat-cell *matCellDef="let element"> {{element.ageGroup}} </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row" style="padding-left: 20px">
+
+                <button (click)="savePatientInfo()"
+                        *ngIf="(patientForm.valid && (api.state.length >= 1)); else disableButton"
+                        class="waves-effect waves-light btn-small green">Сохранить
+                </button>
+                <ng-template #disableButton>
+                    <div class="tooltipped disabled-button-tootltip" data-tooltip="Заполните корректно все поля"
+                         materialize="Tooltip">
+                        <button
+                                [disabled]="!(patientForm.valid && (api.state.length >= 1))"
+                                class=" waves-light btn-small green">Сохранить
+                        </button>
+
+                    </div>
+                </ng-template>
+                <ng-container *ngIf="isPresentPatient">
+                    <a class="waves-effect waves-light btn-small green" href="talon_vmp.html">Создать талон</a>
+                    <a class="modal-trigger waves-effect waves-light btn-small green" href="#addfile">Прикрепить
+                        документ</a>
+                    <a class="waves-effect waves-light btn-small green"
+                       onclick="M.toast({html: 'Карта заблокирована'})">Блокировать
+                        карту</a>
+                </ng-container>
+            </div>
         </div>
-      </div>
+        <div *ngIf="PatientFullInformation" [ngClass]="{'scale-out': patientAddInfo}"
+             class="col l3 s12 scale-transition absol"
+             id="right-info">
+            <div class="card blue-grey darken-1">
+                <div class="card-content white-text">
+                    <span class="card-title">Дополнительная информация</span>
+                    <label class="card_label_text">Прикрепленные файлы</label>
+                    <p class="fs1">
+                        <ng-container *ngFor="let item of PatientFullInformation.documents">
+                            <i class="material-icons tiny middle">delete</i><a class="white-text" href="#!">
+                            Справка: {{item.fileName}} -
+                            {{item.date | date: 'dd.MM.yyyy'}}</a>
+                            <br>
+                        </ng-container>
+                        <a class="white-text" href="#!"><u>Скачать все файлы в одном архиве</u></a>
+                    </p>
+                    <label class="card_label_text">Талоны пациента</label>
+                    <ng-container *ngFor="let item of PatientFullInformation.talons">
+                        <p class="fs1">
+                            <a class="yellow-text" href="#!to_talon"> <!-- Тут цвет талона в зависимости от логики -->
+                                {{item.uniqNumber}}
+                            </a>
+                            ,{{item.medicalInstitution}}
+                        </p>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

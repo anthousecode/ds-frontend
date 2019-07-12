@@ -16,14 +16,14 @@ import {SnilsPipe} from './pipe/snils.pipe';
 import {MaterializeAutocompleteComponent} from './components/autocomplete/materialize-autocomplete/materialize-autocomplete.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-  MatAutocompleteModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatNativeDateModule,
-  MatSelectModule
+    DateAdapter,
+    MAT_DATE_FORMATS,
+    MAT_DATE_LOCALE,
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatNativeDateModule,
+    MatSelectModule
 } from '@angular/material';
 import {Stage2Component} from './components/talon/stage2/stage2.component';
 import {Stage3Component} from './components/talon/stage3/stage3.component';
@@ -46,65 +46,69 @@ import {DatePickerRangeComponent} from './components/date-picker-range/date-pick
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {MyDateRangePickerModule} from 'mydaterangepicker';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatTableModule} from '@angular/material/table';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    TalonComponent,
-    Stage1Component,
-    Stage0Component,
-    SnilsPipe,
-    MaterializeAutocompleteComponent,
-    Stage2Component,
-    Stage3Component,
-    Stage4Component,
-    Stage5Component,
-    Stage6Component,
-    PatientCardComponent,
-    PatientDocumentModalComponent,
-    PatientHistoryModalComponent,
-    PatientUnionModalComponent,
-    ValidationDirective,
-    SearchPatientComponent,
-    ErrorPageComponent,
-    DatePickerComponent,
-    DatePickerRangeComponent,
+    declarations: [
+        AppComponent,
+        TalonComponent,
+        Stage1Component,
+        Stage0Component,
+        SnilsPipe,
+        MaterializeAutocompleteComponent,
+        Stage2Component,
+        Stage3Component,
+        Stage4Component,
+        Stage5Component,
+        Stage6Component,
+        PatientCardComponent,
+        PatientDocumentModalComponent,
+        PatientHistoryModalComponent,
+        PatientUnionModalComponent,
+        ValidationDirective,
+        SearchPatientComponent,
+        ErrorPageComponent,
+        DatePickerComponent,
+        DatePickerRangeComponent,
 
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    HttpClientModule,
-    MatFormFieldModule,
-    MaterializeModule,
-    FormsModule,
-    MatSelectModule,
-    ReactiveFormsModule,
-    MatAutocompleteModule,
-    MatInputModule,
-    NgSelectModule,
-    MatTooltipModule,
-    MatDialogModule,
-    MatButtonModule,
-    NgxPaginationModule,
-    NgxMaskModule.forRoot(),
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MyDateRangePickerModule
-  ],
-  providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ApiWithCredentialInterceptor,
-      multi: true
-    },
-    MatDatepickerModule,
-    {provide: MAT_DATE_LOCALE, useValue: 'ru-RU'},
-    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS}],
-  bootstrap: [AppComponent],
-  entryComponents: [PatientDocumentModalComponent, PatientHistoryModalComponent, PatientUnionModalComponent]
+    ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        HttpClientModule,
+        MatFormFieldModule,
+        MaterializeModule,
+        FormsModule,
+        MatSelectModule,
+        ReactiveFormsModule,
+        MatAutocompleteModule,
+        MatInputModule,
+        NgSelectModule,
+        MatTooltipModule,
+        MatDialogModule,
+        MatButtonModule,
+        NgxPaginationModule,
+        NgxMaskModule.forRoot(),
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MyDateRangePickerModule,
+        MatCheckboxModule,
+        MatTableModule
+    ],
+    providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: ApiWithCredentialInterceptor,
+            multi: true
+        },
+        MatDatepickerModule,
+        {provide: MAT_DATE_LOCALE, useValue: 'ru-RU'},
+        {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+        {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS}],
+    bootstrap: [AppComponent],
+    entryComponents: [PatientDocumentModalComponent, PatientHistoryModalComponent, PatientUnionModalComponent]
 })
 export class AppModule {
 }
