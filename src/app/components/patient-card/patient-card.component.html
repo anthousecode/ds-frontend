@@ -93,7 +93,7 @@
                                 </a>
                             </h6>
                         </li>
-                        <li *ngFor="let item of api.state; let indexItem = index; trackBy: trackByFn;"
+                        <li *ngFor="let item of apiPatient.state; let indexItem = index; trackBy: trackByFn;"
                             class="collection-item">
                             <div>{{item.type.name}} {{item.series}} {{item.number}} {{item.issuedDate | date: 'dd.MM.yyyy'}} {{item.issuedBy}}
                                 <a (click)="deleteState(indexItem)" class="tooltipped secondary-content"
@@ -112,7 +112,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row" *ngIf="isPresentPatient">
                 <div class="col s12">
                     <ul class="collection with-header">
                         <li class="collection-header">
@@ -124,34 +124,31 @@
                                 </a>
                             </h6>
                         </li>
+                        <table mat-table [dataSource]="inspections" class="mat-elevation-z0">
 
-                        <table mat-table [dataSource]="dataSource" class="mat-elevation-z0">
 
-                            <!--- Note that these columns can be defined in any order.
-                                  The actual rendered columns are set as a property on the row definition" -->
-
-                            <!-- Position Column -->
+                            <!-- Колонка карты осмотра-->
                             <ng-container matColumnDef="card">
                                 <th mat-header-cell *matHeaderCellDef> Карта осмотра </th>
                                 <td mat-cell *matCellDef="let element"> {{element.card}} </td>
                             </ng-container>
 
-                            <!-- Name Column -->
+                            <!-- Колонка тип карты -->
                             <ng-container matColumnDef="type_card">
                                 <th mat-header-cell *matHeaderCellDef> Тип карты </th>
                                 <td mat-cell *matCellDef="let element"> {{element.type_card}} </td>
                             </ng-container>
 
-                            <!-- Weight Column -->
+                            <!-- Колонка статуса -->
                             <ng-container matColumnDef="status">
 
                                 <th mat-header-cell *matHeaderCellDef> Статус </th>
                                 <td mat-cell *matCellDef="let element"> {{element.status}} </td>
                             </ng-container>
 
-                            <!-- Symbol Column -->
+                            <!-- Колонка возростной группы-->
                             <ng-container matColumnDef="ageGroup">
-                                <th mat-header-cell *matHeaderCellDef> Возрастная группазщ </th>
+                                <th mat-header-cell *matHeaderCellDef> Возрастная группа </th>
                                 <td mat-cell *matCellDef="let element"> {{element.ageGroup}} </td>
                             </ng-container>
 
@@ -165,14 +162,14 @@
             <div class="row" style="padding-left: 20px">
 
                 <button (click)="savePatientInfo()"
-                        *ngIf="(patientForm.valid && (api.state.length >= 1)); else disableButton"
+                        *ngIf="(patientForm.valid && (apiPatient.state.length >= 1)); else disableButton"
                         class="waves-effect waves-light btn-small green">Сохранить
                 </button>
                 <ng-template #disableButton>
                     <div class="tooltipped disabled-button-tootltip" data-tooltip="Заполните корректно все поля"
                          materialize="Tooltip">
                         <button
-                                [disabled]="!(patientForm.valid && (api.state.length >= 1))"
+                                [disabled]="!(patientForm.valid && (apiPatient.state.length >= 1))"
                                 class=" waves-light btn-small green">Сохранить
                         </button>
 

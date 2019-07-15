@@ -15,19 +15,8 @@ import {DateValidator} from '../../validators/date.validator';
 import * as moment from 'moment';
 import {regexMapVal} from '../../directive/validation.directive';
 import {ValidateINN} from '../../validators/inn.validator';
-
-export interface PeriodicElement {
-    card: number;
-    type_card: string;
-    status: string;
-    ageGroup: number;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-    {card: 121321313, type_card: 'Просто отдыхает', status: 'На утверждений', ageGroup: 14},
-    {card: 22132131, type_card: 'Коксом обнюхался', status: 'Утверждена', ageGroup: 15},
-    {card: 321321321, type_card: 'Алкоголик', status: 'Не бро', ageGroup: 17},
-];
+import {Inspection} from '../../interface/inspection';
+import {InspectionService} from '../../service/inspection.service';
 
 
 @Component({
@@ -38,23 +27,23 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class PatientCardComponent implements OnInit {
     dialogConfig = new MatDialogConfig();
     patientForm: FormGroup;
-    isPresentPatient = false;
     patientHistory: PatientHistory[];
+    isPresentPatient = false;
     patientAddInfo = true;
     idPatient: number;
     ValiedateSnils = ValiedateSnilsRequired;
-    today = new Date().toJSON().split('T')[0];
     isParentDocument = true;
     lastYear = moment().subtract(1, 'years');
     PatientFullInformation: Patient;
     displayedColumns: string[] = ['card', 'type_card', 'status', 'ageGroup'];
-    dataSource = ELEMENT_DATA;
+    inspections: Inspection[];
 
     constructor(public dialog: MatDialog,
                 private mock: MockService,
                 private route: ActivatedRoute,
-                private api: PatientService,
+                private apiPatient: PatientService,
                 private fb: FormBuilder,
+                private inspectionApi: InspectionService
     ) {
     }
 
@@ -108,8 +97,8 @@ export class PatientCardComponent implements OnInit {
      * @param index нашего документа
      */
     deleteState(index: number) {
-        if ((index > -1 && this.api.state.length > 1) || !this.isPresentPatient) {
-            this.api.state.splice(index, 1);
+        if ((index > -1 && this.apiPatient.state.length > 1) || !this.isPresentPatient) {
+            this.apiPatient.state.splice(index, 1);
             M.toast({html: 'Документ удален'});
         }
     }
@@ -121,14 +110,15 @@ export class PatientCardComponent implements OnInit {
      * @param id Пациента
      */
     getPatenInfo(id: number) {
-        this.api.getPatient(id).subscribe(
+        this.apiPatient.getPatient(id).subscribe(
             (response) => {
+                this.getInspectionCard(response.id);
+                this.statusParentDocControl(response);
                 this.PatientFullInformation = response;
                 this.isPresentPatient = true;
                 this.patientForm.patchValue(response);
-                this.api.state = this.api.state.concat(response.identityDocuments);
+                this.apiPatient.state = this.apiPatient.state.concat(response.identityDocuments);
                 this.idPatient = response.id;
-                this.statusParentDocControl(response);
             }
         );
     }
@@ -141,11 +131,14 @@ export class PatientCardComponent implements OnInit {
         }
     }
 
+    /**
+     * Сохраняем пациента или делаем update
+     */
     savePatientInfo() {
-        this.patientForm.value.identityDocuments = this.api.state;
+        this.patientForm.value.identityDocuments = this.apiPatient.state;
         const sendData: Patient = this.patientForm.value;
         if (this.isPresentPatient) {
-            this.api.updatePatient(sendData).subscribe(
+            this.apiPatient.updatePatient(sendData).subscribe(
                 () => {
                     console.log('Uraa');
                 }, error => {
@@ -153,7 +146,7 @@ export class PatientCardComponent implements OnInit {
                 }
             );
         } else {
-            this.api.createPatient(sendData).subscribe(
+            this.apiPatient.createPatient(sendData).subscribe(
                 () => {
                     console.log('Save Data');
                 }, error => {
@@ -196,7 +189,7 @@ export class PatientCardComponent implements OnInit {
                 this.patientForm.controls.parentDocnum.setValue(false);
                 this.isParentDocument = true;
             }
-            this.api.MINIMUM_TIMESTAMP = new Date(value);
+            this.apiPatient.MINIMUM_TIMESTAMP = new Date(value);
         });
 
     }
@@ -211,5 +204,13 @@ export class PatientCardComponent implements OnInit {
 
     isValid(name: string) {
         return ValidationService.checkValidation(name, this.patientForm);
+    }
+
+    getInspectionCard(id) {
+        this.inspectionApi.getInspection(id).subscribe(
+            data => {
+                this.inspections = data;
+            }
+        );
     }
 }
