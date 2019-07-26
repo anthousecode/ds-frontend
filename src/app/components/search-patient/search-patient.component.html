@@ -1,268 +1,225 @@
 <div class="row content">
 
-  <div class="z-depth-2 vmp_content col s11 push-s0">
-    <h5 style="text-align: center;">Поиск пациента</h5>
-    <div class="row">
-      <div class="col s12">
-        <ul #collapsible class="collapsible">
-          <li>
-            <div class="collapsible-header">Фильтры</div>
-            <div class="collapsible-body">
-              <form [formGroup]="filterPatient">
-                <div class="row">
-                  <div class="col l3 s12">
-                    <mat-form-field>
-                      <input appValidateInput="name" formControlName="surname" id="last_name" matInput
-                             placeholder="Фамилия"
-                             type="text">
-                    </mat-form-field>
-                  </div>
-                  <div class="col l3 s12">
-                    <mat-form-field>
-                      <input appValidateInput="name" formControlName="surname" id="first_name" matInput
-                             placeholder="Имя"
-                             type="text">
-                    </mat-form-field>
-                  </div>
-                  <div class=" col l3 s12">
-                    <mat-form-field>
-                      <input appValidateInput="name" formControlName="surname" id="midle_name" matInput
-                             placeholder="Отчество"
-                             type="text">
-                    </mat-form-field>
-                  </div>
-                  <div class="col l3 s12">
-                    <mat-form-field>
-                      <input formControlName="snilsNo" id="snils" mask="000-000-000-00" matInput
-                             placeholder="СНИЛС"
-                             type="text">
-                      <mat-error *ngIf="isValid('snilsNo')">
-                        Не корректный СНИЛС
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class=" col l3 s12">
-                    <app-date-picker-range (onChanged)="onChanged($event)"></app-date-picker-range>
-                  </div>
-                  <div class="col l3 s12">
-                    <mat-form-field>
-                      <mat-label>Пол</mat-label>
-                      <mat-select formControlName="idVmpSex" id="male">
-                        <mat-option [value]="1">Мужской</mat-option>
-                        <mat-option [value]="2">Женский</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                  <div class="col l3 s12">
-                    <mat-form-field>
-                      <input formControlName="num_pol" id="num_pol" matInput placeholder="Номер страхового полиса"
-                             type="text"/>
-                    </mat-form-field>
-                  </div>
-                  <div class=" col l3 s12">
-                    <mat-form-field>
-                      <mat-label>Возростные группы</mat-label>
-                      <mat-select formControlName="ageGroup" id="ageGroup">
-                        <mat-option [value]="1">Все</mat-option>
-                        <mat-option [value]="2">Дети</mat-option>
-                        <mat-option [value]="3">Взрослые</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class=" col l3 s12">
-                    <mat-form-field>
-                      <mat-label>Медицинская организация</mat-label>
-                      <mat-select formControlName="medicalOrganisation" multiple>
-                        <mat-optgroup label="г. Москва">
-                          <mat-option value="1">МО-1</mat-option>
-                          <mat-option value="2">МО-2</mat-option>
-                        </mat-optgroup>
-                        <mat-optgroup label="Белгородская область">
-                          <mat-option value="3">МО-3</mat-option>
-                          <mat-option value="4">МО-4</mat-option>
-                        </mat-optgroup>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                  <div class=" col l3 s12">
-                    <mat-form-field>
-                      <mat-label>Страховая компания</mat-label>
-                      <mat-select formControlName="secureCompany" multiple>
-                        <mat-optgroup label="г. Москва">
-                          <mat-option value="1">СМО-1</mat-option>
-                          <mat-option value="2">СМО-2</mat-option>
-                        </mat-optgroup>
-                        <mat-optgroup label="Белгородская область">
-                          <mat-option value="3">СМО-3</mat-option>
-                          <mat-option value="4">СМО-4</mat-option>
-                        </mat-optgroup>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                  <div class=" col l3 s12">
-                    <mat-form-field>
-                      <mat-label>Дети с документами родителя <br> (для актуализации)</mat-label>
-                      <mat-select formControlName="parentDocument" id="parentDocument">
-                        <mat-option [value]="1">Да</mat-option>
-                        <mat-option [value]="2">Нет</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                  <div class=" col l3 s12">
-                    <mat-form-field>
-                      <mat-label>Заблокированные карты</mat-label>
-                      <mat-select formControlName="blockedCard" id="blockedCard">
-                        <mat-option [value]="1">Да</mat-option>
-                        <mat-option [value]="2">Нет</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class=" col l3 s12">
-                    <mat-form-field>
-                      <mat-label>Диагноз при обращении</mat-label>
-                      <mat-select formControlName="diagnosisCome" multiple>
-                        <mat-optgroup label="A15">
-                          <mat-option value="1">A15.1</mat-option>
-                          <mat-option value="2">A15.2</mat-option>
-                        </mat-optgroup>
-                        <mat-optgroup label="A16">
-                          <mat-option value="3">A16.1</mat-option>
-                          <mat-option value="4">A16.2</mat-option>
-                        </mat-optgroup>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                  <div class=" col l3 s12">
-                    <mat-form-field>
-                      <mat-label>Диагноз при обращении</mat-label>
-                      <mat-select formControlName="diagnosisOut" multiple>
-                        <mat-optgroup label="A15">
-                          <mat-option value="1">A15.1</mat-option>
-                          <mat-option value="2">A15.2</mat-option>
-                        </mat-optgroup>
-                        <mat-optgroup label="A16">
-                          <mat-option value="3">A16.1</mat-option>
-                          <mat-option value="4">A16.2</mat-option>
-                        </mat-optgroup>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                  <div class=" col l3 s12">
-
-                    <mat-form-field>
-                      <mat-label>Записей на странице</mat-label>
-                      <mat-select formControlName="recordsPage" id="recordsPage">
-                        <mat-option [value]="1">10</mat-option>
-                        <mat-option [value]="2">50</mat-option>
-                        <mat-option [value]="3">100</mat-option>
-                        <mat-option [value]="4">150</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row">
-                  <button (click)="searchPatient()" [disabled]="!filterPatient.valid" class=" btn-small green"
-                          mat-button>Найти
-                  </button>
-                  <a class=" btn-small green" href="#export" mat-button>Экспорт</a>
-                  <a (click)="clearSearch()" class="btn-small green" mat-button>Очистить</a>
-                </div>
-              </form>
+    <div class="z-depth-2 vmp_content col s11 push-s0">
+        <h5 style="text-align: center;">Поиск пациента</h5>
+        <div class="row">
+            <div class="col s12">
+                <ul #collapsible class="collapsible">
+                    <li>
+                        <div class="collapsible-header">Фильтры</div>
+                        <div class="collapsible-body">
+                            <form [formGroup]="filterPatient">
+                                <div class="row">
+                                    <div class="col l3 s12">
+                                        <mat-form-field>
+                                            <input appValidateInput="name" formControlName="surname" id="last_name"
+                                                   matInput
+                                                   placeholder="Фамилия"
+                                                   type="text">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col l3 s12">
+                                        <mat-form-field>
+                                            <input appValidateInput="name" formControlName="surname" id="first_name"
+                                                   matInput
+                                                   placeholder="Имя"
+                                                   type="text">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class=" col l3 s12">
+                                        <mat-form-field>
+                                            <input appValidateInput="name" formControlName="surname" id="midle_name"
+                                                   matInput
+                                                   placeholder="Отчество"
+                                                   type="text">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col l3 s12">
+                                        <mat-form-field>
+                                            <input formControlName="snilsNo" id="snils" mask="000-000-000-00" matInput
+                                                   placeholder="СНИЛС"
+                                                   type="text">
+                                            <mat-error *ngIf="isValid('snilsNo')">
+                                                Не корректный СНИЛС
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class=" col l3 s12">
+                                        <app-date-picker-range (onChanged)="onChanged($event)"></app-date-picker-range>
+                                    </div>
+                                    <div class="col l3 s12">
+                                        <mat-form-field>
+                                            <mat-label>Пол</mat-label>
+                                            <mat-select formControlName="idVmpSex" id="male">
+                                                <mat-option [value]="1">Мужской</mat-option>
+                                                <mat-option [value]="2">Женский</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col l3 s12">
+                                        <mat-form-field>
+                                            <input formControlName="seria_dul" id="seria_dul" mask="000-000-000-00"
+                                                   matInput
+                                                   placeholder="Серия ДУЛ"
+                                                   type="text">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col l3 s12">
+                                        <mat-form-field>
+                                            <input formControlName="num_dul" id="num_dul" mask="000-000-000-00" matInput
+                                                   placeholder="Номер ДУЛ"
+                                                   type="text">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class=" col l3 s12">
+                                        <mat-form-field>
+                                            <input formControlName="identifier" id="identifier" matInput
+                                                   placeholder="Идентификатор"
+                                                   type="text">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class=" col l3 s12">
+                                        <mat-form-field>
+                                            <mat-label>Записей на странице</mat-label>
+                                            <mat-select formControlName="recordsPage" id="recordsPage">
+                                                <mat-option [value]="1">10</mat-option>
+                                                <mat-option [value]="2">50</mat-option>
+                                                <mat-option [value]="3">100</mat-option>
+                                                <mat-option [value]="4">150</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <button class=" btn-small green"
+                                            mat-button> <i style="margin: 0 4px;" class="material-icons">add_circle</i>Добавить карту</button>
+                                    <button (click)="searchPatient()" [disabled]="!filterPatient.valid"
+                                            class=" btn-small green"
+                                            mat-button>Найти
+                                    </button>
+                                    <a class=" btn-small green" href="#export" mat-button>Экспорт</a>
+                                    <a (click)="clearSearch()" class="btn-small green" mat-button>Очистить</a>
+                                </div>
+                            </form>
+                        </div>
+                    </li>
+                </ul>
             </div>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <pagination-template #p="paginationApi"
-                         (pageChange)="config.currentPage = $event"
-                         [id]="config.id">
-      <ul class="pagination center">
-
-        <li [class.disabled]="p.isFirstPage()" class="waves-effect">
-          <a (click)="p.previous()" *ngIf="!p.isFirstPage()"><i class="material-icons">chevron_left</i></a>
-        </li>
-
-        <li *ngFor="let page of p.pages" [class.current]="p.getCurrent() === page.value">
-          <a (click)="p.setCurrent(page.value)" *ngIf="p.getCurrent() !== page.value">
-            <span>{{ page.label }}</span>
-          </a>
-          <a *ngIf="p.getCurrent() === page.value">
-            <span>{{ page.label }}</span>
-          </a>
-        </li>
-
-        <li [class.disabled]="p.isLastPage()" class="waves-effect">
-          <a (click)="p.next()" *ngIf="!p.isLastPage()"> <i class="material-icons">chevron_right</i></a>
-        </li>
-      </ul>
-
-    </pagination-template>
-    <div class="row">
-      <div class="col s12">
-        <table class="responsive-table">
-          <thead>
-          <tr>
-            <th>Идентификатор</th>
-            <th>ФИО</th>
-            <th>СНИЛС</th>
-            <th>Дата рождения</th>
-            <th>Талоны</th>
-          </tr>
-          </thead>
-
-          <tbody>
-          <tr *ngFor="let item of patientResult | paginate :config">
-            <td>{{item.id}}</td>
-            <td><a href="#to_card">{{item.surname}} {{item.name}} {{item.patronymic}}</a></td>
-            <td>{{item.snils | snils}}</td>
-            <td>{{item.birthdate | date : 'dd.MM.yyyy'}}</td>
-            <td *ngFor="let talon of item.talons">
-              <a href="#to_talon">{{talon.uniqNumber}}, Код МУ: 1229, Вид: 01.00.1.001</a>
-              <br>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <pagination-template #p="paginationApi"
-                         (pageChange)="config.currentPage = $event"
-                         [id]="config.id">
-      <ul class="pagination center">
-
-        <li [class.disabled]="p.isFirstPage()" class="waves-effect">
-          <a (click)="p.previous()" *ngIf="!p.isFirstPage()"><i class="material-icons">chevron_left</i></a>
-        </li>
-
-        <li *ngFor="let page of p.pages" [class.current]="p.getCurrent() === page.value">
-          <a (click)="p.setCurrent(page.value)" *ngIf="p.getCurrent() !== page.value">
-            <span>{{ page.label }}</span>
-          </a>
-          <a *ngIf="p.getCurrent() === page.value">
-            <span>{{ page.label }}</span>
-          </a>
-        </li>
-
-        <li [class.disabled]="p.isLastPage()" class="waves-effect">
-          <a (click)="p.next()" *ngIf="!p.isLastPage()"> <i class="material-icons">chevron_right</i></a>
-        </li>
-      </ul>
-
-    </pagination-template>
-    <div class="row">
-      <div class="col s12">
-        <a class="modal-trigger waves-effect waves-light btn-small green" href="#export">Экспорт</a>
-        <a class="dropdown-trigger tooltipped btn-floating btn-small waves-effect waves-light green right"
-           data-position="top" data-target='help' data-tooltip="Статус талона"><i
-                class="material-icons">priority_high</i></a>
-        <div *ngIf="patientResult" class="right" style="margin: 5px 5px 0 0;"><b>{{patientResult.length}} пациентов</b>
         </div>
-      </div>
+        <pagination-template #p="paginationApi" *ngIf="(patientResult$|async)?.length > 0"
+                             (pageChange)="config.currentPage = $event"
+                             [id]="config.id">
+            <ul class="pagination center">
+
+                <li [class.disabled]="p.isFirstPage()" class="waves-effect">
+                    <a (click)="p.previous()" *ngIf="!p.isFirstPage()"><i class="material-icons">chevron_left</i></a>
+                </li>
+
+                <li *ngFor="let page of p.pages" [class.current]="p.getCurrent() === page.value">
+                    <a (click)="p.setCurrent(page.value)" *ngIf="p.getCurrent() !== page.value">
+                        <span>{{ page.label }}</span>
+                    </a>
+                    <a *ngIf="p.getCurrent() === page.value">
+                        <span>{{ page.label }}</span>
+                    </a>
+                </li>
+
+                <li [class.disabled]="p.isLastPage()" class="waves-effect">
+                    <a (click)="p.next()" *ngIf="!p.isLastPage()"> <i class="material-icons">chevron_right</i></a>
+                </li>
+            </ul>
+
+        </pagination-template>
+        <div class="row" *ngIf="(patientResult$|async)?.length > 0">
+            <div class="col s12">
+                <table class="responsive-table">
+                    <thead>
+                    <tr>
+                        <th>Идентификатор</th>
+                        <th>ФИО</th>
+                        <th>Дата рождения</th>
+                        <th>Возраст</th>
+                        <th>Пол</th>
+                        <th>Карты осмотра</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr *ngFor="let item of patientResult$|async | paginate :config">
+                        <td>{{item.id}}</td>
+                        <td><a href="#to_card">{{item.surname}} {{item.name}} {{item.patronymic}}</a></td>
+                        <td>{{item.snils | snils}}</td>
+                        <td>{{item.birthdate | date : 'dd.MM.yyyy'}}</td>
+                        <td *ngFor="let talon of item.talons">
+                            <a href="#to_talon">{{talon.}}</a>
+                            <br>
+                        <td>xnj nj</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <pagination-template #p="paginationApi" *ngIf="(patientResult$|async)?.length > 0"
+                             (pageChange)="config.currentPage = $event"
+                             [id]="config.id">
+            <ul class="pagination center">
+
+                <li [class.disabled]="p.isFirstPage()" class="waves-effect">
+                    <a (click)="p.previous()" *ngIf="!p.isFirstPage()"><i class="material-icons">chevron_left</i></a>
+                </li>
+
+                <li *ngFor="let page of p.pages" [class.current]="p.getCurrent() === page.value">
+                    <a (click)="p.setCurrent(page.value)" *ngIf="p.getCurrent() !== page.value">
+                        <span>{{ page.label }}</span>
+                    </a>
+                    <a *ngIf="p.getCurrent() === page.value">
+                        <span>{{ page.label }}</span>
+                    </a>
+                </li>
+
+                <li [class.disabled]="p.isLastPage()" class="waves-effect">
+                    <a (click)="p.next()" *ngIf="!p.isLastPage()"> <i class="material-icons">chevron_right</i></a>
+                </li>
+            </ul>
+
+        </pagination-template>
+        <div class="row" *ngIf="(patientResult$|async)?.length > 0">
+            <div class="col s12">
+                <a class="modal-trigger waves-effect waves-light btn-small green" (click)="openExport()">Экспорт</a>
+                <a materialize="Dropdown" class="dropdown-trigger tooltipped btn-floating btn-small  waves-light green right" data-target='help' matTooltip="Статус талона"><i
+                        class="material-icons">priority_high</i></a>
+                <div class="right" style="margin: 5px 5px 0 0;"><b>{{(patientResult$| async)?.length}}
+                    пациентов</b>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
+
+<!-- Статус талона -->
+<div id='help' class='dropdown-content fs1'>
+    <span class="light-green-text text-accent-4"><b>№00.0000.00000.00</b></span> - Активные талоны
+    <br>
+    <span class="teal-text text-darken-4"><b>№00.0000.00000.00</b></span> - Талоны для заполнения
+    <br>
+    <span class="grey-text"><b>№00.0000.00000.00</b></span> - Заблокированные талоны
+    <br>
+    <span class="blue-text text-darken-4"><b>№00.0000.00000.00</b></span> - Талоны, направленные в МО для оказания ВМП
+    <br>
+    <span class="red-text text-accent-4"><b>№00.0000.00000.00</b></span> - Отказано в оказании ВМП
+    <br>
+    <span class="yellow-text text-darken-2"><b>№00.0000.00000.00</b></span> - Пролеченные
+    <br>
+    <span class="red-text text-lighten-2"><b>№00.0000.00000.00</b></span> - Необходимо согласовать дату госпитализации
+    <br>
+    <span class="deep-purple-text text-accent-4"><b>№00.0000.00000.00</b></span> - Дата госпитализации на согласовании
+    <br>
+    <span class="black-text"><b>№00.0000.00000.00</b></span> - Дата госпитализации согласована
+    <br>
+    <span class="teal-text text-accent-4"><b>№00.0000.00000.00</b></span> - Госпитализация отложена на следующий год
+</div>
+

@@ -48,6 +48,7 @@ import {MyDateRangePickerModule} from 'mydaterangepicker';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatTableModule} from '@angular/material/table';
+import { ExportModalComponent } from './components/export-modal/export-modal.component';
 
 @NgModule({
     declarations: [
@@ -71,6 +72,7 @@ import {MatTableModule} from '@angular/material/table';
         ErrorPageComponent,
         DatePickerComponent,
         DatePickerRangeComponent,
+        ExportModalComponent,
 
     ],
     imports: [

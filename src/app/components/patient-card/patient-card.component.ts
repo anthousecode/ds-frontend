@@ -25,18 +25,22 @@ import {InspectionService} from '../../service/inspection.service';
     styleUrls: ['./patient-card.component.sass']
 })
 export class PatientCardComponent implements OnInit {
+
     dialogConfig = new MatDialogConfig();
     patientForm: FormGroup;
     patientHistory: PatientHistory[];
+    PatientFullInformation: Patient;
+
+    ValiedateSnils = ValiedateSnilsRequired;
+    lastYear = moment().subtract(1, 'years');
+
+    displayedColumns: string[] = ['card', 'type_card', 'status', 'ageGroup'];
+    inspections: Inspection[];
+
+    isParentDocument = true;
     isPresentPatient = false;
     patientAddInfo = true;
     idPatient: number;
-    ValiedateSnils = ValiedateSnilsRequired;
-    isParentDocument = true;
-    lastYear = moment().subtract(1, 'years');
-    PatientFullInformation: Patient;
-    displayedColumns: string[] = ['card', 'type_card', 'status', 'ageGroup'];
-    inspections: Inspection[];
 
     constructor(public dialog: MatDialog,
                 private mock: MockService,
@@ -179,6 +183,16 @@ export class PatientCardComponent implements OnInit {
             talons: [null],
             check: [null, [ValidateINN]]
         });
+
+        this.patientForm.controls.check.valueChanges.subscribe(
+            data => {
+                if (data) {
+                    this.patientForm.controls.snils.disable();
+                } else {
+                    this.patientForm.controls.snils.enable();
+                }
+            }
+        );
 
         this.patientForm.controls.birthdate.valueChanges.subscribe(value => {
             if (moment() > moment(value) && this.lastYear < moment(value)) {

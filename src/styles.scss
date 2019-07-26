@@ -33,6 +33,8 @@ input {
 
 .fs1 {
   font-size: 12px;
+  width: 390px !important;
+
 }
 
 .middle {
@@ -314,12 +316,6 @@ nav .brand-logo {
   font-size: 1.3rem;
 }
 
-/*Переопределяем стандартную css*/
-
-
-.fs1 {
-  font-size: 12px;
-}
 
 .middle {
   vertical-align: middle;
