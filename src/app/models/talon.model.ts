@@ -10,8 +10,8 @@ import {
   TerritorialUnit,
   TreatmentMethod,
   VmpType
-} from './dictionary';
-import {Patient} from './patient';
+} from './dictionary.model';
+import {PatientModel} from './patient.model';
 
 export class FiasAddress {
   id: number = null;
@@ -88,7 +88,7 @@ export class Organ {
   description?: string;
 }
 
-export class Talon {
+export class TalonModel {
   static readonly APPEAL_TYPE_PRIMARY = 1;
   static readonly APPEAL_TYPE_SECONDARY = 2;
   static readonly REFERRAL_OUZ = 0;
@@ -104,8 +104,8 @@ export class Talon {
   isDeclined: boolean;
   hospNextYear: boolean;
   maxEtap?: number;
-  appealType = Talon.APPEAL_TYPE_PRIMARY;
-  referral = Talon.REFERRAL_OUZ;
+  appealType = TalonModel.APPEAL_TYPE_PRIMARY;
+  referral = TalonModel.REFERRAL_OUZ;
   organ?: Organ;
   isOMS: boolean;
   territorialUnit: TerritorialUnit;
@@ -116,7 +116,7 @@ export class Talon {
   vmpStage1: VmpStage1;
   vmpStage2: VmpStage2;
   vmpStage3: VmpStage3;
-  patient: Patient;
+  patient: PatientModel;
 }
 
 export class Access {
@@ -124,7 +124,7 @@ export class Access {
 }
 
 export class TalonResponse {
-  talon: Talon;
+  talon: TalonModel;
   access: Access;
 }
 

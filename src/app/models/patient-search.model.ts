@@ -97,7 +97,7 @@ export interface Talon {
   vmpStage2: VmpStage2;
 }
 
-export interface PatientSearch {
+export interface PatientSearchModel {
   id: number;
   idOuzSave: number;
   isEnabled: boolean;

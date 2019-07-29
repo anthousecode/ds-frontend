@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {concatMap, delay, retryWhen} from 'rxjs/operators';
 import {Observable, of, throwError} from 'rxjs';
-import {Patient, PatientDocument, PatientHistory, PatientHistoryDocument} from '../interface/patient';
+import {PatientModel, PatientDocument, PatientHistory, PatientHistoryDocument} from '../models/patient.model';
 import {environment} from '../../environments/environment';
 
 @Injectable({
@@ -22,8 +22,8 @@ export class PatientService {
    * @param id:number Пациента которого мы ищем
    * @return error - еслии евсть ошибка , если все нормально то о отдает json вида PatientCard
    */
-  getPatient(id: number): Observable<Patient> {
-    return this.http.get<Patient>(this.patientUrl + '/' + id).pipe(
+  getPatient(id: number): Observable<PatientModel> {
+    return this.http.get<PatientModel>(this.patientUrl + '/' + id).pipe(
       retryWhen(errors => errors
         .pipe(
           concatMap((error, count) => {
@@ -40,8 +40,8 @@ export class PatientService {
    * @param changeData Данные которые нужно изменить
    * @return Observable чтобы подпистаься и получить данные.
    */
-  updatePatient(changeData: Patient): Observable<Patient> {
-    return this.http.put<Patient>(this.patientUrl + '/' + changeData.id, changeData).pipe(
+  updatePatient(changeData: PatientModel): Observable<PatientModel> {
+    return this.http.put<PatientModel>(this.patientUrl + '/' + changeData.id, changeData).pipe(
       retryWhen(errors => errors
         .pipe(
           concatMap((error, count) => {
@@ -54,11 +54,11 @@ export class PatientService {
 
   /**
    * Создание Пациента если его нет в системе
-   * @param patient Обьект тип Patient
+   * @param patient Обьект тип PatientModel
    * @return Возращает статус создание
    */
-  createPatient(patient: Patient): Observable<Patient> {
-    return this.http.post<Patient>(this.patientUrl, patient).pipe(
+  createPatient(patient: PatientModel): Observable<PatientModel> {
+    return this.http.post<PatientModel>(this.patientUrl, patient).pipe(
       retryWhen(errors => errors
         .pipe(
           concatMap((error, count) => {

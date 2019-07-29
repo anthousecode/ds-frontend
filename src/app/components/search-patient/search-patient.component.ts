@@ -2,7 +2,7 @@ import {Component, ElementRef, EventEmitter, OnInit, ViewChild} from '@angular/c
 import * as M from 'materialize-css/dist/js/materialize';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {PatientSearchService} from '../../service/patient-search.service';
-import {PatientSearch} from '../../interface/patient-search';
+import {PatientSearchModel} from '../../models/patient-search.model';
 import {ValidationService} from '../../service/validation.service';
 import {ValiedateSnils} from '../../validators/snils.validator';
 import {PaginationInstance} from 'ngx-pagination';
@@ -20,7 +20,7 @@ import {ExportModalComponent} from '../export-modal/export-modal.component';
 export class SearchPatientComponent implements OnInit {
     @ViewChild('collapsible') elCollapsible: ElementRef;
     filterPatient: FormGroup;
-    patientResult$: Observable<PatientSearch[]>;
+    patientResult$: Observable<PatientSearchModel[]>;
     public config: PaginationInstance = {
         id: 'custom',
         itemsPerPage: 10,

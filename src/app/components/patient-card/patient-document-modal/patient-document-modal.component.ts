@@ -3,7 +3,7 @@ import {MockService} from '../../../service/mock.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {pickerI18n} from '../../talon/talon.component';
-import {PatientDocument, PatientDocumentType} from '../../../interface/patient';
+import {PatientDocument, PatientDocumentType} from '../../../models/patient.model';
 import {PatientService} from '../../../service/patient.service';
 import {ValidationService} from '../../../service/validation.service';
 import {DateValidator} from '../../../validators/date.validator';

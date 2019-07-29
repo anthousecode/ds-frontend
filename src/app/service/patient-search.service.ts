@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {environment} from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {PatientSearch} from '../interface/patient-search';
+import {PatientSearchModel} from '../models/patient-search.model';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +22,7 @@ export class PatientSearchService {
    * @param data - Query запрос
    * @return Возвращает список нашедших клиентов
    */
-  searchPatient(data): Observable<PatientSearch[]> {
+  searchPatient(data): Observable<PatientSearchModel[]> {
     /*  return this.http.post(this.patientSearchUrl, data).pipe(
         retryWhen(errors => errors
           .pipe(
@@ -32,7 +32,7 @@ export class PatientSearchService {
             delay(1000)
           )
         ));*/
-    return this.http.get<PatientSearch[]>(this.patientSearchUrl);
+    return this.http.get<PatientSearchModel[]>(this.patientSearchUrl);
   }
 
   getMedicalOrganizations() {

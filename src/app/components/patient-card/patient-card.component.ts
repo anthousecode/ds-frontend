@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Patient, PatientDocument, PatientHistory} from '../../interface/patient';
+import {PatientModel, PatientDocument, PatientHistory} from '../../models/patient.model';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import {PatientDocumentModalComponent} from './patient-document-modal/patient-document-modal.component';
 import {MockService} from '../../service/mock.service';
@@ -14,7 +14,7 @@ import {ValidationService} from '../../service/validation.service';
 import {DateValidator} from '../../validators/date.validator';
 import * as moment from 'moment';
 import {regexMapVal} from '../../directive/validation.directive';
-import {Inspection} from '../../interface/inspection';
+import {InspectionModel} from '../../models/inspection.model';
 import {InspectionService} from '../../service/inspection.service';
 
 
@@ -28,13 +28,13 @@ export class PatientCardComponent implements OnInit {
     dialogConfig = new MatDialogConfig();
     patientForm: FormGroup;
     patientHistory: PatientHistory[];
-    PatientFullInformation: Patient;
+    PatientFullInformation: PatientModel;
 
     ValiedateSnils = ValiedateSnilsRequired;
     lastYear = moment().subtract(1, 'years');
 
     displayedColumns: string[] = ['card', 'type_card', 'status', 'ageGroup'];
-    inspections: Inspection[];
+    inspections: InspectionModel[];
 
     isParentDocument = true;
     isPresentPatient = false;
@@ -126,7 +126,7 @@ export class PatientCardComponent implements OnInit {
         );
     }
 
-    statusParentDocControl(response: Patient) {
+    statusParentDocControl(response: PatientModel) {
         if (moment() > moment(response.birthdate) && this.lastYear < moment(response.birthdate)) {
             this.patientForm.controls.parentDocnum.enable();
         } else {
@@ -139,7 +139,7 @@ export class PatientCardComponent implements OnInit {
      */
     savePatientInfo() {
         this.patientForm.value.identityDocuments = this.apiPatient.state;
-        const sendData: Patient = this.patientForm.value;
+        const sendData: PatientModel = this.patientForm.value;
         if (this.isPresentPatient) {
             this.apiPatient.updatePatient(sendData).subscribe(
                 () => {

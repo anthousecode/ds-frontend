@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {pickerI18n, TalonComponent} from '../talon.component';
 import {DictionaryService} from '../../../service/dictionary.service';
-import {VmpStage2} from '../../../interface/talon';
-import {Decision, ResponsiblePerson, VmpType} from '../../../interface/dictionary';
+import {VmpStage2} from '../../../models/talon.model';
+import {Decision, ResponsiblePerson, VmpType} from '../../../models/dictionary.model';
 
 @Component({
     selector: 'app-stage2',

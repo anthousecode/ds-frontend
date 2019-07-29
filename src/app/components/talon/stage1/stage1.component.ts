@@ -10,8 +10,8 @@ import {
   ResponsiblePerson,
   TreatmentMethod,
   VmpType
-} from '../../../interface/dictionary';
-import {VmpStage1} from '../../../interface/talon';
+} from '../../../models/dictionary.model';
+import {VmpStage1} from '../../../models/talon.model';
 import {concat, Observable, of, Subject} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap} from 'rxjs/operators';
 
