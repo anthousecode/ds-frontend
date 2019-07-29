@@ -14,7 +14,6 @@ import {ValidationService} from '../../service/validation.service';
 import {DateValidator} from '../../validators/date.validator';
 import * as moment from 'moment';
 import {regexMapVal} from '../../directive/validation.directive';
-import {ValidateINN} from '../../validators/inn.validator';
 import {Inspection} from '../../interface/inspection';
 import {InspectionService} from '../../service/inspection.service';
 
@@ -181,7 +180,9 @@ export class PatientCardComponent implements OnInit {
             patronymic: [null],
             documents: [null],
             talons: [null],
-            check: [null, [ValidateINN]]
+            check: [false],
+            noSnilsReason: [null],
+            antotherSnilsReason: [null]
         });
 
         this.patientForm.controls.check.valueChanges.subscribe(

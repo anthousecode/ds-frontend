@@ -66,7 +66,7 @@
                         <app-date-picker [controlName]="'birthdate'" [form]="patientForm"
                                          placeholder="Дата рождения"></app-date-picker>
                     </div>
-                    <div class="col l3 s12 inline-checkbox">
+                    <div class="col l3 s12 inline-checkbox" *ngIf="!patientForm.controls.check.value">
                         <mat-form-field>
                             <mat-label>СНИЛС</mat-label>
                             {{patientForm.controls['snils'].clearValidators()}}
@@ -78,6 +78,22 @@
                             </mat-error>
                         </mat-form-field>
                         <mat-checkbox class="align-center" formControlName="check">Нет СНИЛС!</mat-checkbox>
+                    </div>
+                    <div class="col l3 s12 inline-checkbox" *ngIf="patientForm.controls.check.value">
+                        <mat-form-field *ngIf="patientForm.controls.noSnilsReason.value !== 3">
+                            <mat-label>Причина отсуствия СНИЛС</mat-label>
+                            <mat-select formControlName="noSnilsReason" id="noSnilsReason">
+                                <mat-option [value]="1">Иностранный гражданин</mat-option>
+                                <mat-option [value]="2">Новорожденный</mat-option>
+                                <mat-option [value]="3">Другое</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field *ngIf="patientForm.controls.noSnilsReason.value === 3">
+                            <mat-label>Причина отсуствия СНИЛС</mat-label>
+
+                            <input matInput type="text"
+                                   formControlName="antotherSnilsReason">
+                        </mat-form-field>
                     </div>
                 </div>
             </form>
@@ -129,26 +145,26 @@
 
                             <!-- Колонка карты осмотра-->
                             <ng-container matColumnDef="card">
-                                <th mat-header-cell *matHeaderCellDef> Карта осмотра </th>
+                                <th mat-header-cell *matHeaderCellDef> Карта осмотра</th>
                                 <td mat-cell *matCellDef="let element"> {{element.card}} </td>
                             </ng-container>
 
                             <!-- Колонка тип карты -->
                             <ng-container matColumnDef="type_card">
-                                <th mat-header-cell *matHeaderCellDef> Тип карты </th>
+                                <th mat-header-cell *matHeaderCellDef> Тип карты</th>
                                 <td mat-cell *matCellDef="let element"> {{element.type_card}} </td>
                             </ng-container>
 
                             <!-- Колонка статуса -->
                             <ng-container matColumnDef="status">
 
-                                <th mat-header-cell *matHeaderCellDef> Статус </th>
+                                <th mat-header-cell *matHeaderCellDef> Статус</th>
                                 <td mat-cell *matCellDef="let element"> {{element.status}} </td>
                             </ng-container>
 
                             <!-- Колонка возростной группы-->
                             <ng-container matColumnDef="ageGroup">
-                                <th mat-header-cell *matHeaderCellDef> Возрастная группа </th>
+                                <th mat-header-cell *matHeaderCellDef> Возрастная группа</th>
                                 <td mat-cell *matCellDef="let element"> {{element.ageGroup}} </td>
                             </ng-container>
 
