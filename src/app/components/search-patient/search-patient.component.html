@@ -96,7 +96,9 @@
                                 </div>
                                 <div class="row">
                                     <button class=" btn-small green"
-                                            mat-button> <i style="margin: 0 4px;" class="material-icons">add_circle</i>Добавить карту</button>
+                                            mat-button><i style="margin: 0 4px;" class="material-icons">add_circle</i>Добавить
+                                        карту
+                                    </button>
                                     <button (click)="searchPatient()" [disabled]="!filterPatient.valid"
                                             class=" btn-small green"
                                             mat-button>Найти
@@ -149,15 +151,15 @@
                     </thead>
 
                     <tbody>
-                    <tr *ngFor="let item of patientResult$|async | paginate :config">
-                        <td>{{item.id}}</td>
-                        <td><a href="#to_card">{{item.surname}} {{item.name}} {{item.patronymic}}</a></td>
-                        <td>{{item.snils | snils}}</td>
-                        <td>{{item.birthdate | date : 'dd.MM.yyyy'}}</td>
-                        <td *ngFor="let talon of item.talons">
-                            <a href="#to_talon">{{talon}}</a>
-                            <br>
-                        <td>xnj nj</td>
+                    <tr *ngFor="let patient of patientResult$|async | paginate :config">
+                        <td>{{patient.unqId}}</td>
+                        <td><a href="#to_card">{{patient.firstName}} {{patient.lastName}} {{patient.patronymic}}</a>
+                        </td>
+                        <td>{{patient.birthdate | date : 'dd.MM.yyyy'}}</td>
+                        <td>{{patient.birthdate | age}}</td>
+                        <td *ngIf="patient.sex === 1">Муж</td>
+                        <td *ngIf="patient.sex === 2">Жен</td>
+                        <!--<td >{{patient}}</td>-->
                     </tr>
                     </tbody>
                 </table>
@@ -190,7 +192,9 @@
         <div class="row" *ngIf="(patientResult$|async)?.length > 0">
             <div class="col s12">
                 <a class="modal-trigger waves-effect waves-light btn-small green" (click)="openExport()">Экспорт</a>
-                <a materialize="Dropdown" class="dropdown-trigger tooltipped btn-floating btn-small  waves-light green right" data-target='help' matTooltip="Статус талона"><i
+                <a materialize="Dropdown"
+                   class="dropdown-trigger tooltipped btn-floating btn-small  waves-light green right"
+                   data-target='help' matTooltip="Статус талона"><i
                         class="material-icons">priority_high</i></a>
                 <div class="right" style="margin: 5px 5px 0 0;"><b>{{(patientResult$| async)?.length}}
                     пациентов</b>

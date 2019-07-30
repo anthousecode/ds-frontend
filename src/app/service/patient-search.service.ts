@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 import {environment} from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {Observable, of, throwError} from 'rxjs';
 import {PatientSearchModel} from '../models/patient-search.model';
+import {concatMap, delay, retryWhen} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -19,11 +20,11 @@ export class PatientSearchService {
 
   /**
    * Поиск нашего клиента через доктарину
-   * @param data - Query запрос
+   * @param patient - Query запрос
    * @return Возвращает список нашедших клиентов
    */
-  searchPatient(data): Observable<PatientSearchModel[]> {
-    /*  return this.http.post(this.patientSearchUrl, data).pipe(
+  searchPatient(patient): Observable<PatientSearchModel[]> {
+         return this.http.post<PatientSearchModel[]>(this.patientSearchUrl, patient).pipe(
         retryWhen(errors => errors
           .pipe(
             concatMap((error, count) => {
@@ -31,8 +32,7 @@ export class PatientSearchService {
             }),
             delay(1000)
           )
-        ));*/
-    return this.http.get<PatientSearchModel[]>(this.patientSearchUrl);
+        ));
   }
 
   getMedicalOrganizations() {

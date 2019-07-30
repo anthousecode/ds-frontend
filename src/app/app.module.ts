@@ -49,6 +49,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatTableModule} from '@angular/material/table';
 import { ExportModalComponent } from './components/export-modal/export-modal.component';
+import { AgePipe } from './pipe/age.pipe';
 
 @NgModule({
     declarations: [
@@ -73,6 +74,7 @@ import { ExportModalComponent } from './components/export-modal/export-modal.com
         DatePickerComponent,
         DatePickerRangeComponent,
         ExportModalComponent,
+        AgePipe,
 
     ],
     imports: [
