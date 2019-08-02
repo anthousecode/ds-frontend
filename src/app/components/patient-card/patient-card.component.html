@@ -110,7 +110,7 @@
                         </li>
                         <li *ngFor="let item of apiPatient.state; let indexItem = index; trackBy: trackByFn;"
                             class="collection-item">
-                            <div>{{item.type.name}} {{item.series}} {{item.number}} {{item.issuedDate | date: 'dd.MM.yyyy'}} {{item.issuedBy}}
+                            <div>{{item.type}} {{item.documSerial}} {{item.documNumber}} {{item.createDate | date: 'dd.MM.yyyy'}} {{item.lastUserId}}
                                 <a (click)="deleteState(indexItem)" class="tooltipped secondary-content"
                                    data-tooltip="Удалить документ"
                                    materialize="Tooltip">
@@ -208,23 +208,15 @@
                     <span class="card-title">Дополнительная информация</span>
                     <label class="card_label_text">Прикрепленные файлы</label>
                     <p class="fs1">
-                        <ng-container *ngFor="let item of PatientFullInformation.documents">
+                        <ng-container *ngFor="let item of PatientFullInformation.patientDocuments">
                             <i class="material-icons tiny middle">delete</i><a class="white-text" href="#!">
-                            Справка: {{item.fileName}} -
-                            {{item.date | date: 'dd.MM.yyyy'}}</a>
+                            Справка: {{item.documSerial}} -
+                            {{item.createDate | date: 'dd.MM.yyyy'}}</a>
                             <br>
                         </ng-container>
                         <a class="white-text" href="#!"><u>Скачать все файлы в одном архиве</u></a>
                     </p>
                     <label class="card_label_text">Талоны пациента</label>
-                    <ng-container *ngFor="let item of PatientFullInformation.talons">
-                        <p class="fs1">
-                            <a class="yellow-text" href="#!to_talon"> <!-- Тут цвет талона в зависимости от логики -->
-                                {{item.uniqNumber}}
-                            </a>
-                            ,{{item.medicalInstitution}}
-                        </p>
-                    </ng-container>
                 </div>
             </div>
         </div>

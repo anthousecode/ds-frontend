@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {PatientModel, PatientDocument, PatientHistory} from '../../models/patient.model';
+import {Patient, PatientDocumentsEntity} from '../../models/patient.model';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import {PatientDocumentModalComponent} from './patient-document-modal/patient-document-modal.component';
 import {MockService} from '../../service/mock.service';
@@ -27,8 +27,8 @@ export class PatientCardComponent implements OnInit {
 
     dialogConfig = new MatDialogConfig();
     patientForm: FormGroup;
-    patientHistory: PatientHistory[];
-    PatientFullInformation: PatientModel;
+    patientHistory: any[];
+    PatientFullInformation: Patient;
 
     ValiedateSnils = ValiedateSnilsRequired;
     lastYear = moment().subtract(1, 'years');
@@ -54,7 +54,7 @@ export class PatientCardComponent implements OnInit {
         this.dialog.open(PatientDocumentModalComponent, this.dialogConfig);
     }
 
-    updatePatientDoc(item: PatientDocument) {
+    updatePatientDoc(item: PatientDocumentsEntity) {
         this.dialogConfig.data = item;
         this.dialog.open(PatientDocumentModalComponent, this.dialogConfig);
         delete this.dialogConfig.data;
@@ -126,7 +126,7 @@ export class PatientCardComponent implements OnInit {
         );
     }
 
-    statusParentDocControl(response: PatientModel) {
+    statusParentDocControl(response: Patient) {
         if (moment() > moment(response.birthdate) && this.lastYear < moment(response.birthdate)) {
             this.patientForm.controls.parentDocnum.enable();
         } else {
@@ -139,7 +139,7 @@ export class PatientCardComponent implements OnInit {
      */
     savePatientInfo() {
         this.patientForm.value.identityDocuments = this.apiPatient.state;
-        const sendData: PatientModel = this.patientForm.value;
+        const sendData: Patient = this.patientForm.value;
         if (this.isPresentPatient) {
             this.apiPatient.updatePatient(sendData).subscribe(
                 () => {

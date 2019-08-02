@@ -12,7 +12,7 @@
             <mat-select (selectionChange)="changeValueType($event.value)" [compareWith]="compareFn"
                         formControlName="type" id="type">
               <ng-container *ngFor="let document of documentsType">
-                <mat-option [value]="document">{{document.name}}</mat-option>
+                <mat-option [value]="document">{{document.type}}</mat-option>
               </ng-container>
             </mat-select>
           </mat-form-field>

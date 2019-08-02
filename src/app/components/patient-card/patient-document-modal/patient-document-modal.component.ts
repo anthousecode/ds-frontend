@@ -3,7 +3,7 @@ import {MockService} from '../../../service/mock.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {pickerI18n} from '../../talon/talon.component';
-import {PatientDocument, PatientDocumentType} from '../../../models/patient.model';
+import {PatientDocumentsEntity} from '../../../models/patient.model';
 import {PatientService} from '../../../service/patient.service';
 import {ValidationService} from '../../../service/validation.service';
 import {DateValidator} from '../../../validators/date.validator';
@@ -25,7 +25,7 @@ export class PatientDocumentModalComponent implements OnInit {
   constructor(private mock: MockService,
               private matDialogRef: MatDialogRef<PatientDocumentModalComponent>,
               private fb: FormBuilder,
-              @Inject(MAT_DIALOG_DATA) private data: PatientDocument,
+              @Inject(MAT_DIALOG_DATA) private data: PatientDocumentsEntity,
               private apiPatient: PatientService,
               private dictionary: DictionaryService,
   ) {
@@ -36,7 +36,7 @@ export class PatientDocumentModalComponent implements OnInit {
   pickerI18n = pickerI18n;
   isUnique = true;
   indexItem: number;
-  documentsType: PatientDocumentType[];
+  documentsType: PatientDocumentsEntity[];
 
   ngOnInit() {
     this.initForm();
@@ -45,7 +45,7 @@ export class PatientDocumentModalComponent implements OnInit {
         if (this.apiPatient.state.length !== 0) {
           this.documentsType = value.filter((obj) => {
             return !this.apiPatient.state.some((obj2) => {
-              return obj.code === obj2.type.code;
+              return obj.id === obj2.type.id;
             });
           });
         } else {
@@ -113,7 +113,7 @@ export class PatientDocumentModalComponent implements OnInit {
     }
   }
 
-  compareFn(c1: PatientDocument, c2: PatientDocument): boolean {
+  compareFn(c1: PatientDocumentsEntity, c2: PatientDocumentsEntity): boolean {
     return c1 && c2 ? c1.id === c2.id : c1 === c2;
   }
 }
