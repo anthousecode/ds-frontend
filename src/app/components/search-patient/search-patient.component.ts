@@ -2,7 +2,6 @@ import {Component, ElementRef, EventEmitter, OnInit, ViewChild} from '@angular/c
 import * as M from 'materialize-css/dist/js/materialize';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {PatientSearchService} from '../../service/patient-search.service';
-import {PatientSearchModel} from '../../models/patient-search.model';
 import {ValidationService} from '../../service/validation.service';
 import {ValiedateSnils} from '../../validators/snils.validator';
 import {PaginationInstance} from 'ngx-pagination';
@@ -11,6 +10,7 @@ import {Observable} from 'rxjs';
 import {MaterializeAction} from '@samuelberthe/angular2-materialize';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import {ExportModalComponent} from '../export-modal/export-modal.component';
+import {Patient} from '../../models/patient.model';
 
 @Component({
     selector: 'app-search-patient',
@@ -20,7 +20,7 @@ import {ExportModalComponent} from '../export-modal/export-modal.component';
 export class SearchPatientComponent implements OnInit {
     @ViewChild('collapsible') elCollapsible: ElementRef;
     filterPatient: FormGroup;
-    patientResult$: Observable<PatientSearchModel[]>;
+    patientResult$: Observable<Patient[]>;
     public config: PaginationInstance = {
         id: 'custom',
         itemsPerPage: 10,
@@ -36,17 +36,18 @@ export class SearchPatientComponent implements OnInit {
 
     private initForm(): void {
         this.filterPatient = this.fb.group({
-            surname: [null, Validators.pattern(regexMapVal.name)],
-            name: [null, Validators.pattern(regexMapVal.name)],
+            lastName: [null, Validators.pattern(regexMapVal.name)],
+            firstName: [null, Validators.pattern(regexMapVal.name)],
             patronymic: [null],
-            snilsNo: [null, ValiedateSnils],
-            birthdateFrom: [null],
-            birthdateTo: [null],
-            idVmpSex: [null],
+            snils: [null, ValiedateSnils],
+            birthdate_from: [null],
+            birthdate_to: [null],
+            sex: [null],
             seria_dul: [null],
             number_dul: [null],
-            identifier: [null],
-            records: [null]
+            unqId: [null],
+            pagesize: [null],
+            page: [0]
         });
     }
 
@@ -59,29 +60,29 @@ export class SearchPatientComponent implements OnInit {
     }
 
     async searchPatient() {
-        this.patientResult$ = this.api.searchPatient('search');
+        this.patientResult$ = this.api.searchPatient$(this.filterPatient.value);
         this.actions1.emit({action: 'close', params: [0]});
     }
 
 
     onChanged(event) {
-        this.filterPatient.controls.birthdateFrom.setValue(event[0]);
-        this.filterPatient.controls.birthdateTo.setValue(event[1]);
+        this.filterPatient.controls.birthdate_from.setValue(event[0]);
+        this.filterPatient.controls.birthdate_to.setValue(event[1]);
     }
 
     clearSearch() {
         this.filterPatient.patchValue({
-            surname: null,
-            name: null,
+            lastName: null,
+            firstName: null,
             patronymic: null,
-            snilsNo: null,
-            birthdateFrom: null,
-            birthdateTo: null,
-            idVmpSex: 0,
+            snils: null,
+            birthdate_from: null,
+            birthdate_to: null,
+            sex: 0,
             seria_dul: null,
             number_dul: null,
-            identifier: null,
-            records: 2
+            unqId: null,
+            pagesize: 2
         });
     }
 

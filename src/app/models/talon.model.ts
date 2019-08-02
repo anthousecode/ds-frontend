@@ -11,7 +11,7 @@ import {
   TreatmentMethod,
   VmpType
 } from './dictionary.model';
-import {PatientModel} from './patient.model';
+import {Patient} from "./patient.model";
 
 export class FiasAddress {
   id: number = null;
@@ -116,7 +116,7 @@ export class TalonModel {
   vmpStage1: VmpStage1;
   vmpStage2: VmpStage2;
   vmpStage3: VmpStage3;
-  patient: PatientModel;
+  patient: Patient;
 }
 
 export class Access {
