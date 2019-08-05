@@ -1,6 +1,5 @@
 export interface Patient {
     id: number;
-    unqId: number;
     lastName: string;
     firstName: string;
     patronymic: string;
@@ -8,23 +7,23 @@ export interface Patient {
     birthdate: Date;
     snils: string;
     withoutSnilsReason: string;
-    createDate: string;
-    lastUserId: number;
+    withoutSnilsReasonOther: string;
     patientDocuments?: (PatientDocumentsEntity)[] | null;
 }
+
 export interface PatientDocumentsEntity {
     id: number;
     documSerial: string;
     documNumber: string;
-    createDate: string;
-    lastUserId: number;
-    type: Type;
+    type: PatientDocumentType;
 }
-export interface Type {
+
+export interface PatientDocumentType {
     id: number;
     idRef: string;
     name: string;
 }
+
 export interface PatientHistoryDocument {
     id: number;
     operation: string;

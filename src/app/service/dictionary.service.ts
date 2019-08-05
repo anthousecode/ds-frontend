@@ -21,7 +21,7 @@ import {
 import {environment} from '../../environments/environment';
 import {FinancingSource, Lgota, Organ, SocialStatus} from '../models/talon.model';
 import {formatDate} from '@angular/common';
-import {PatientDocumentsEntity} from '../models/patient.model';
+import {PatientDocumentType} from '../models/patient.model';
 
 @Injectable({
   providedIn: 'root'
@@ -34,8 +34,8 @@ export class DictionaryService {
   constructor(private http: HttpClient) {
   }
 
-  getIdentityDocumentTypes(): Observable<PatientDocumentsEntity[]> {
-    return this.http.get<PatientDocumentsEntity[]>(this.dictionaryUrl + '/identity-document-types');
+  getIdentityDocumentTypes(): Observable<PatientDocumentType[]> {
+    return this.http.get<PatientDocumentType[]>(this.dictionaryUrl + '/identity-document-types');
   }
 
   getDecisions(stage: number): Observable<Decision[]> {

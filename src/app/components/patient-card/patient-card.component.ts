@@ -7,15 +7,15 @@ import {ActivatedRoute} from '@angular/router';
 import {PatientService} from '../../service/patient.service';
 import {PatientHistoryModalComponent} from './patient-history-modal/patient-history-modal.component';
 import {PatientUnionModalComponent} from './patient-union-modal/patient-union-modal.component';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import * as M from 'materialize-css/dist/js/materialize';
 import {ValiedateSnilsRequired} from '../../validators/snils.validator';
 import {ValidationService} from '../../service/validation.service';
 import {DateValidator} from '../../validators/date.validator';
-import * as moment from 'moment';
 import {regexMapVal} from '../../directive/validation.directive';
 import {InspectionModel} from '../../models/inspection.model';
 import {InspectionService} from '../../service/inspection.service';
+import * as moment from 'moment';
 
 
 @Component({
@@ -24,23 +24,27 @@ import {InspectionService} from '../../service/inspection.service';
     styleUrls: ['./patient-card.component.sass']
 })
 export class PatientCardComponent implements OnInit {
-
+    formModel: { [key in keyof Patient]?: FormControl } = {
+        id: new FormControl(null),
+        sex: new FormControl(1),
+        birthdate: new FormControl(null, [Validators.required, DateValidator]),
+        firstName: new FormControl(null, [Validators.maxLength(50), Validators.required, Validators.pattern(regexMapVal.name)]),
+        snils: new FormControl(null, [ValiedateSnilsRequired]),
+        lastName: new FormControl(null, [Validators.maxLength(50), Validators.required, Validators.pattern(regexMapVal.name)]),
+        patronymic: new FormControl(null, [Validators.pattern(regexMapVal.name), Validators.maxLength(50)]),
+        withoutSnilsReason: new FormControl(null),
+        withoutSnilsReasonOther: new FormControl(null),
+        patientDocuments: new FormControl(null, Validators.required)
+    };
     dialogConfig = new MatDialogConfig();
-    patientForm: FormGroup;
-    patientHistory: any[];
+    patientForm: FormGroup = new FormGroup(this.formModel);
     PatientFullInformation: Patient;
-
+    check = false;
     ValiedateSnils = ValiedateSnilsRequired;
-    lastYear = moment().subtract(1, 'years');
 
     displayedColumns: string[] = ['card', 'type_card', 'status', 'ageGroup'];
     inspections: InspectionModel[];
-
-    isParentDocument = true;
-    isPresentPatient = false;
     patientAddInfo = true;
-    idPatient: number;
-
     loader = false;
 
     constructor(public dialog: MatDialog,
@@ -73,7 +77,7 @@ export class PatientCardComponent implements OnInit {
         const dialogHistoryConfig = new MatDialogConfig();
         dialogHistoryConfig.width = '55%';
         dialogHistoryConfig.height = '70%';
-        dialogHistoryConfig.data = this.idPatient;
+        dialogHistoryConfig.data = this.patientForm.controls.id.value;
         dialogHistoryConfig.panelClass = 'custom-dialog-container';
         this.dialog.open(PatientHistoryModalComponent, dialogHistoryConfig);
     }
@@ -88,13 +92,20 @@ export class PatientCardComponent implements OnInit {
         if (params.has('id')) {
             this.getPatenInfo(Number(params.get('id')));
         }
-        this.initForm();
         this.dialogConfig.disableClose = false;
         this.dialogConfig.autoFocus = true;
         this.dialogConfig.hasBackdrop = true;
         this.dialogConfig.backdropClass = '';
         this.dialogConfig.width = '55%';
         this.dialogConfig.maxHeight = '70%';
+        this.patientForm.controls.withoutSnilsReason.valueChanges.subscribe(
+            data => {
+                if (data === 3) {
+                    this.patientForm.controls.withoutSnilsReasonOther.setValidators(Validators.required);
+                    this.patientForm.controls.withoutSnilsReasonOther.updateValueAndValidity();
+                }
+            }
+        );
     }
 
     /**
@@ -102,7 +113,7 @@ export class PatientCardComponent implements OnInit {
      * @param index нашего документа
      */
     deleteState(index: number) {
-        if ((index > -1 && this.apiPatient.state.length > 1) || !this.isPresentPatient) {
+        if ((index > -1 && this.apiPatient.state.length > 1) || !this.PatientFullInformation) {
             this.apiPatient.state.splice(index, 1);
             M.toast({html: 'Документ удален'});
         }
@@ -118,23 +129,13 @@ export class PatientCardComponent implements OnInit {
         this.apiPatient.getPatient(id).subscribe(
             (response) => {
                 this.getInspectionCard(response.id);
-                this.statusParentDocControl(response);
                 this.PatientFullInformation = response;
-                this.isPresentPatient = true;
                 this.patientForm.patchValue(response);
                 this.apiPatient.state = this.apiPatient.state.concat(response.patientDocuments);
-                this.idPatient = response.id;
             }
         );
     }
 
-    statusParentDocControl(response: Patient) {
-        if (moment() > moment(response.birthdate) && this.lastYear < moment(response.birthdate)) {
-            this.patientForm.controls.parentDocnum.enable();
-        } else {
-            this.patientForm.controls.parentDocnum.disable();
-        }
-    }
 
     /**
      * Сохраняем пациента или делаем update
@@ -142,10 +143,10 @@ export class PatientCardComponent implements OnInit {
     savePatientInfo() {
         this.loader = true;
 
-        this.patientForm.value.identityDocuments = this.apiPatient.state;
+        this.patientForm.value.patientDocuments = this.apiPatient.state;
         const sendData: Patient = this.patientForm.value;
 
-        if (this.isPresentPatient) {
+        if (this.PatientFullInformation) {
             this.apiPatient.updatePatient(sendData).subscribe(
                 () => {
                     console.log('Uraa');
@@ -170,56 +171,6 @@ export class PatientCardComponent implements OnInit {
         }
     }
 
-    /**
-     * Инициализация нашей реактивной формы.
-     */
-    private initForm(): void {
-        this.patientForm = this.fb.group({
-            id: [null],
-            idLoadedXml: [null],
-            idMuSave: [null],
-            idOuzSave: [null],
-            idUser: [null],
-            idVmpSex: [1],
-            isEnabled: [null],
-            sysdInput: [null],
-            birthdate: [null, [Validators.required, DateValidator]],
-            name: [null, [Validators.maxLength(50), Validators.required, Validators.pattern(regexMapVal.name)]],
-            snils: [null, [ValiedateSnilsRequired]],
-            surname: [null, [Validators.maxLength(50), Validators.required, Validators.pattern(regexMapVal.name)]],
-            parentDocnum: [{value: false, disabled: this.isParentDocument}],
-            patronymic: [null],
-            documents: [null],
-            talons: [null],
-            check: [false],
-            noSnilsReason: [null],
-            antotherSnilsReason: [null]
-        });
-
-        this.patientForm.controls.check.valueChanges.subscribe(
-            data => {
-                if (data) {
-                    this.patientForm.controls.snils.disable();
-                } else {
-                    this.patientForm.controls.snils.enable();
-                }
-            }
-        );
-
-        this.patientForm.controls.birthdate.valueChanges.subscribe(value => {
-            if (moment() > moment(value) && this.lastYear < moment(value)) {
-                this.patientForm.controls.parentDocnum.enable();
-                this.isParentDocument = false;
-            } else {
-                this.patientForm.controls.parentDocnum.disable();
-                this.patientForm.controls.parentDocnum.setValue(false);
-                this.isParentDocument = true;
-            }
-            this.apiPatient.MINIMUM_TIMESTAMP = new Date(value);
-        });
-
-    }
-
     showMoreInform() {
         this.patientAddInfo = !this.patientAddInfo;
     }
@@ -238,5 +189,20 @@ export class PatientCardComponent implements OnInit {
                 this.inspections = data;
             }
         );
+    }
+
+    changeCheckStatus() {
+        this.check = !this.check;
+        this.patientForm.controls.snils.reset();
+        this.patientForm.controls.snils.clearValidators();
+        this.patientForm.controls.snils.updateValueAndValidity();
+        this.patientForm.controls.withoutSnilsReason.reset();
+        this.patientForm.controls.withoutSnilsReason.setValidators(Validators.required);
+        this.patientForm.controls.withoutSnilsReason.updateValueAndValidity();
+    }
+
+    isRelativeDate(birthday) {
+        const lastYear = moment().subtract(1, 'years');
+        return !(moment() > moment(birthday) && lastYear < moment(birthday));
     }
 }

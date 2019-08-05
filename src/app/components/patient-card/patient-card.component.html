@@ -2,7 +2,7 @@
     <div class="row">
         <div [ngClass]="{'push-card' : patientAddInfo}" class="z-depth-2 vmp_content col l9 s12" id="main-info">
             <h5 style="text-align: center;">Карта ребенка</h5>
-            <ng-container *ngIf="isPresentPatient">
+            <ng-container *ngIf="PatientFullInformation">
                 <a (click)="openPatientHistory()" class="right tooltipped" data-tooltip="История изменений"
                    materialize="Tooltip"
                    style="margin-top:-40px; margin-right:45px;"><i class="material-icons small">history</i></a>
@@ -25,10 +25,10 @@
                     <div class=" col l3 s12">
                         <mat-form-field>
                             <mat-label> Фамилия <span class="red-text">*</span></mat-label>
-                            <input appValidateInput="name" formControlName="surname" id="last_name" matInput
+                            <input appValidateInput="name" formControlName="lastName" id="last_name" matInput
                                    maxlength="50"
                                    type="text">
-                            <mat-error *ngIf="isValid('surname')">
+                            <mat-error *ngIf="isValid('lastName')">
                                 Фамилия заполнена некорректно
                             </mat-error>
                         </mat-form-field>
@@ -36,10 +36,10 @@
                     <div class="col l3 s12">
                         <mat-form-field>
                             <mat-label>Имя<span class="red-text">*</span></mat-label>
-                            <input appValidateInput="name" formControlName="name" id="first_name" matInput
+                            <input appValidateInput="name" formControlName="firstName" id="first_name" matInput
                                    maxlength="50"
                                    type="text">
-                            <mat-error *ngIf="isValid('name')">
+                            <mat-error *ngIf="isValid('firstName')">
                                 Имя заполнено некорректно
                             </mat-error>
                         </mat-form-field>
@@ -57,7 +57,7 @@
                     <div class="col l3 s12">
                         <mat-form-field>
                             <mat-label>Пол</mat-label>
-                            <mat-select formControlName="idVmpSex" id="male">
+                            <mat-select formControlName="sex" id="male">
                                 <mat-option [value]="1">Мужской</mat-option>
                                 <mat-option [value]="2">Женский</mat-option>
                             </mat-select>
@@ -67,7 +67,7 @@
                         <app-date-picker [controlName]="'birthdate'" [form]="patientForm"
                                          placeholder="Дата рождения"></app-date-picker>
                     </div>
-                    <div class="col l3 s12 inline-checkbox" *ngIf="!patientForm.controls.check.value">
+                    <div class="col l3 s12 inline-checkbox" *ngIf="!check">
                         <mat-form-field>
                             <mat-label>СНИЛС</mat-label>
                             {{patientForm.controls['snils'].clearValidators()}}
@@ -78,21 +78,24 @@
                                 СНИЛС заполнен некорректно
                             </mat-error>
                         </mat-form-field>
-                        <mat-checkbox class="align-center" formControlName="check">Нет СНИЛС!</mat-checkbox>
+                        <mat-checkbox class="align-center" (change)="changeCheckStatus()">Нет СНИЛС!</mat-checkbox>
                     </div>
-                    <div class="col l3 s12 inline-checkbox" *ngIf="patientForm.controls.check.value">
-                        <mat-form-field *ngIf="patientForm.controls.noSnilsReason.value !== 3">
+                    <div class="col l3 s12 inline-checkbox" *ngIf="check">
+                        <mat-form-field
+                                *ngIf="patientForm.controls.withoutSnilsReason.value !== 3">
                             <mat-label>Причина отсуствия СНИЛС</mat-label>
-                            <mat-select formControlName="noSnilsReason" id="noSnilsReason">
+                            <mat-select formControlName="withoutSnilsReason" id="withoutSnilsReason">
                                 <mat-option [value]="1">Иностранный гражданин</mat-option>
-                                <mat-option [value]="2">Новорожденный</mat-option>
+                                <mat-option [disabled]="isRelativeDate(patientForm.controls.birthdate.value)"
+                                            [value]="2">Новорожденный
+                                </mat-option>
                                 <mat-option [value]="3">Другое</mat-option>
                             </mat-select>
                         </mat-form-field>
-                        <mat-form-field *ngIf="patientForm.controls.noSnilsReason.value === 3">
+                        <mat-form-field *ngIf="patientForm.controls.withoutSnilsReason.value === 3">
                             <mat-label>Причина отсуствия СНИЛС</mat-label>
                             <input matInput type="text"
-                                   formControlName="antotherSnilsReason">
+                                   formControlName="withoutSnilsReasonOther">
                         </mat-form-field>
                     </div>
                 </div>
@@ -111,7 +114,7 @@
                         </li>
                         <li *ngFor="let item of apiPatient.state; let indexItem = index; trackBy: trackByFn;"
                             class="collection-item">
-                            <div>{{item.type}} {{item.documSerial}} {{item.documNumber}} {{item.createDate | date: 'dd.MM.yyyy'}} {{item.lastUserId}}
+                            <div>{{item.type.name}} {{item.documSerial}} {{item.documNumber}}
                                 <a (click)="deleteState(indexItem)" class="tooltipped secondary-content"
                                    data-tooltip="Удалить документ"
                                    materialize="Tooltip">
@@ -128,7 +131,7 @@
                 </div>
             </div>
 
-            <div class="row" *ngIf="isPresentPatient">
+            <div class="row" *ngIf="PatientFullInformation">
                 <div class="col s12">
                     <ul class="collection with-header">
                         <li class="collection-header">
@@ -193,7 +196,7 @@
 
                     </div>
                 </ng-template>
-                <ng-container *ngIf="isPresentPatient">
+                <ng-container *ngIf="PatientFullInformation">
                     <a class="waves-effect waves-light btn-small green" href="talon_vmp.html">Создать талон</a>
                     <a class="modal-trigger waves-effect waves-light btn-small green" href="#addfile">Прикрепить
                         документ</a>
@@ -214,7 +217,7 @@
                         <ng-container *ngFor="let item of PatientFullInformation.patientDocuments">
                             <i class="material-icons tiny middle">delete</i><a class="white-text" href="#!">
                             Справка: {{item.documSerial}} -
-                            {{item.createDate | date: 'dd.MM.yyyy'}}</a>
+                            {{item.documNumber}}</a>
                             <br>
                         </ng-container>
                         <a class="white-text" href="#!"><u>Скачать все файлы в одном архиве</u></a>
