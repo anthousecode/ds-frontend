@@ -8,6 +8,7 @@
                    style="margin-top:-40px; margin-right:45px;"><i class="material-icons small">history</i></a>
                 <a (click)="showMoreInform()" class="right tooltipped" data-tooltip="Дополнительная информация"
                    id="hide-right-info"
+                   *ngIf="PatientFullInformation"
                    materialize="Tooltip"
                    style="margin-top:-40px; margin-right:10px;"><i class="material-icons small">info_outline</i></a>
                 <a class="right tooltipped red-text text-accent-4" data-target='double'
@@ -177,15 +178,17 @@
             <div class="row" style="padding-left: 20px">
 
                 <button (click)="savePatientInfo()"
+                        mat-button
                         *ngIf="(patientForm.valid && (apiPatient.state.length >= 1)); else disableButton"
-                        class="waves-effect waves-light btn-small green">Сохранить
+                        class="btn-small green">Сохранить
                 </button>
                 <ng-template #disableButton>
                     <div class="tooltipped disabled-button-tootltip" data-tooltip="Заполните корректно все поля"
                          materialize="Tooltip">
                         <button
+                                mat-button
                                 [disabled]="!(patientForm.valid && (apiPatient.state.length >= 1))"
-                                class=" waves-light btn-small green">Сохранить
+                                class=" btn-small green">Сохранить
                         </button>
 
                     </div>
@@ -222,3 +225,8 @@
         </div>
     </div>
 </div>
+
+<ng-container *ngIf="loader">
+    <mat-spinner class="spinner"></mat-spinner>
+    <div class="modal-over"></div>
+</ng-container>

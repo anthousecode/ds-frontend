@@ -67,7 +67,7 @@ export class PatientHistoryModalComponent implements OnInit {
             if (accumulator[current.documentType.id] === undefined) {
                 accumulator[current.documentType.id] = {
                     id: current.documentType.id,
-                    name: current.documentType.name,
+                    name: current.documentType.type.name,
                     historyChange: []
                 };
             }

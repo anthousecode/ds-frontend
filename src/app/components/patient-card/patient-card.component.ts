@@ -41,6 +41,8 @@ export class PatientCardComponent implements OnInit {
     patientAddInfo = true;
     idPatient: number;
 
+    loader = false;
+
     constructor(public dialog: MatDialog,
                 private mock: MockService,
                 private route: ActivatedRoute,
@@ -120,7 +122,7 @@ export class PatientCardComponent implements OnInit {
                 this.PatientFullInformation = response;
                 this.isPresentPatient = true;
                 this.patientForm.patchValue(response);
-                this.apiPatient.state = this.apiPatient.state.concat(response.identityDocuments);
+                this.apiPatient.state = this.apiPatient.state.concat(response.patientDocuments);
                 this.idPatient = response.id;
             }
         );
@@ -138,22 +140,31 @@ export class PatientCardComponent implements OnInit {
      * Сохраняем пациента или делаем update
      */
     savePatientInfo() {
+        this.loader = true;
+
         this.patientForm.value.identityDocuments = this.apiPatient.state;
         const sendData: Patient = this.patientForm.value;
+
         if (this.isPresentPatient) {
             this.apiPatient.updatePatient(sendData).subscribe(
                 () => {
                     console.log('Uraa');
+                    this.loader = false;
+
                 }, error => {
                     console.log(error);
+                    this.loader = false;
+
                 }
             );
         } else {
             this.apiPatient.createPatient(sendData).subscribe(
                 () => {
                     console.log('Save Data');
+                    this.loader = false;
                 }, error => {
                     console.log(error);
+                    this.loader = false;
                 }
             );
         }

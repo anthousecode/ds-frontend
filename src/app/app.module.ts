@@ -22,7 +22,7 @@ import {
     MatAutocompleteModule,
     MatFormFieldModule,
     MatInputModule,
-    MatNativeDateModule,
+    MatNativeDateModule, MatProgressSpinnerModule,
     MatSelectModule
 } from '@angular/material';
 import {Stage2Component} from './components/talon/stage2/stage2.component';
@@ -99,7 +99,8 @@ import { AgePipe } from './pipe/age.pipe';
         MatNativeDateModule,
         MyDateRangePickerModule,
         MatCheckboxModule,
-        MatTableModule
+        MatTableModule,
+        MatProgressSpinnerModule
     ],
     providers: [
         {

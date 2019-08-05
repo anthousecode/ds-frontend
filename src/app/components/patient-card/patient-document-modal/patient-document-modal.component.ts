@@ -42,14 +42,18 @@ export class PatientDocumentModalComponent implements OnInit {
     this.initForm();
     this.dictionary.getIdentityDocumentTypes().subscribe(
       value => {
-        if (this.apiPatient.state.length !== 0) {
-          this.documentsType = value.filter((obj) => {
-            return !this.apiPatient.state.some((obj2) => {
-              return obj.id === obj2.type.id;
-            });
-          });
-        } else {
+        if (this.data) {
           this.documentsType = value;
+        } else {
+          if (this.apiPatient.state.length !== 0) {
+            this.documentsType = value.filter((obj) => {
+              return !this.apiPatient.state.some((obj2) => {
+                return obj.type.idRef === obj2.type.idRef;
+              });
+            });
+          } else {
+            this.documentsType = value;
+          }
         }
       }
     );
