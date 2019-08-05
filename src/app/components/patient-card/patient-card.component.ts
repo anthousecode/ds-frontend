@@ -16,6 +16,7 @@ import {regexMapVal} from '../../directive/validation.directive';
 import {InspectionModel} from '../../models/inspection.model';
 import {InspectionService} from '../../service/inspection.service';
 import * as moment from 'moment';
+import {ReasonNumber, SnilsReasons} from '../../dictionary/snilsReason';
 
 
 @Component({
@@ -46,6 +47,8 @@ export class PatientCardComponent implements OnInit {
     inspections: InspectionModel[];
     patientAddInfo = true;
     loader = false;
+
+    reasons = SnilsReasons;
 
     constructor(public dialog: MatDialog,
                 private mock: MockService,
@@ -201,8 +204,11 @@ export class PatientCardComponent implements OnInit {
         this.patientForm.controls.withoutSnilsReason.updateValueAndValidity();
     }
 
-    isRelativeDate(birthday) {
-        const lastYear = moment().subtract(1, 'years');
-        return !(moment() > moment(birthday) && lastYear < moment(birthday));
+    isRelativeDate(birthday, idReason) {
+        if (idReason === ReasonNumber.NEW_BORN) {
+            const lastYear = moment().subtract(1, 'years');
+            return !(moment() > moment(birthday) && lastYear < moment(birthday));
+        }
+        return null;
     }
 }

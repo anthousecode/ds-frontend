@@ -85,11 +85,8 @@
                                 *ngIf="patientForm.controls.withoutSnilsReason.value !== 3">
                             <mat-label>Причина отсуствия СНИЛС</mat-label>
                             <mat-select formControlName="withoutSnilsReason" id="withoutSnilsReason">
-                                <mat-option [value]="1">Иностранный гражданин</mat-option>
-                                <mat-option [disabled]="isRelativeDate(patientForm.controls.birthdate.value)"
-                                            [value]="2">Новорожденный
-                                </mat-option>
-                                <mat-option [value]="3">Другое</mat-option>
+                                <mat-option *ngFor="let reason of reasons" [value]="reason.id"
+                                            [disabled]="isRelativeDate(patientForm.controls.birthdate.value, reason.id)"> {{reason.name}} </mat-option>
                             </mat-select>
                         </mat-form-field>
                         <mat-form-field *ngIf="patientForm.controls.withoutSnilsReason.value === 3">
