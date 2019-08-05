@@ -78,7 +78,7 @@
                                 СНИЛС заполнен некорректно
                             </mat-error>
                         </mat-form-field>
-                        <mat-checkbox class="align-center" (change)="changeCheckStatus()">Нет СНИЛС!</mat-checkbox>
+                        <mat-checkbox [disabled]="" class="align-center" *ngIf="noSnilsEnable" (change)="changeCheckStatus()">Нет СНИЛС!</mat-checkbox>
                     </div>
                     <div class="col l3 s12 inline-checkbox" *ngIf="check">
                         <mat-form-field

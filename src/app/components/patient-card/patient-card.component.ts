@@ -49,6 +49,7 @@ export class PatientCardComponent implements OnInit {
     loader = false;
 
     reasons = SnilsReasons;
+    noSnilsEnable = false;
 
     constructor(public dialog: MatDialog,
                 private mock: MockService,
@@ -107,6 +108,12 @@ export class PatientCardComponent implements OnInit {
                     this.patientForm.controls.withoutSnilsReasonOther.setValidators(Validators.required);
                     this.patientForm.controls.withoutSnilsReasonOther.updateValueAndValidity();
                 }
+            }
+        );
+
+        this.patientForm.controls.birthdate.valueChanges.subscribe(
+            data => {
+                this.noSnilsEnable = this.calculateAge(data);
             }
         );
     }
@@ -210,5 +217,9 @@ export class PatientCardComponent implements OnInit {
             return !(moment() > moment(birthday) && lastYear < moment(birthday));
         }
         return null;
+    }
+
+    calculateAge(birthday) {
+        return moment().diff(moment(birthday, 'YYYYMMDD').subtract(14, 'days'), 'years') < 14;
     }
 }
