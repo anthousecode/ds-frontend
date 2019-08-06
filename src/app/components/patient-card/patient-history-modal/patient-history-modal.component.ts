@@ -9,6 +9,7 @@ import {MAT_DIALOG_DATA} from '@angular/material';
 import {PatientService} from '../../../service/patient.service';
 import {DictionaryService} from '../../../service/dictionary.service';
 import {PatientDictionary} from '../../../models/dictionary.model';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-patient-history-modal',
@@ -142,6 +143,9 @@ export class PatientHistoryModalComponent implements OnInit {
     getHistory() {
         this.apiPatient.getHistoryPatient(this.idPatient).subscribe(
             (history: PatientHistory[]) => {
+                history = history.map(item => {
+                    return {...item, birthdate: moment(moment(item.birthdate)).format('DD.MM.YYYY')};
+                });
                 this.initHistory = history[0];
                 if (history.length > 1) {
                     this.displayHistory(history);

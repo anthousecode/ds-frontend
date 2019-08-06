@@ -112,12 +112,16 @@ export class PatientCardComponent implements OnInit {
                 if (this.isRelativeDate(data, ReasonNumber.NEW_BORN)) {
                     this.patientForm.controls.withoutSnilsReason.reset();
                 }
+                this.noSnilsEnable = this.calculateAge(data);
+
             }
         );
-
-        this.patientForm.controls.birthdate.valueChanges.subscribe(
+        this.patientForm.controls.withoutSnilsReason.valueChanges.subscribe(
             data => {
-                this.noSnilsEnable = this.calculateAge(data);
+                if (data === 3) {
+                    this.patientForm.controls.withoutSnilsReasonOther.setValidators(Validators.required);
+                    this.patientForm.controls.withoutSnilsReasonOther.updateValueAndValidity();
+                }
             }
         );
     }
