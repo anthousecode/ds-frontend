@@ -8,7 +8,7 @@
                    style="margin-top:-40px; margin-right:45px;"><i class="material-icons small">history</i></a>
                 <a (click)="showMoreInform()" class="right tooltipped" data-tooltip="Дополнительная информация"
                    id="hide-right-info"
-                   *ngIf="PatientFullInformation"
+                   *ngIf="PatientFullInformation && (PatientFullInformation.patientDocuments)?.length>0"
                    materialize="Tooltip"
                    style="margin-top:-40px; margin-right:10px;"><i class="material-icons small">info_outline</i></a>
                 <a class="left tooltipped red-text text-accent-4" data-target='double'
@@ -113,7 +113,7 @@
                         </li>
                         <li *ngFor="let item of apiPatient.state; let indexItem = index; trackBy: trackByFn;"
                             class="collection-item">
-                            <div>{{item.type.idRef}} - {{item.type.name}} {{item.documSerial}} {{item.documNumber}}
+                            <div>{{item.type.id}} - {{item.type.name}} {{item.documSerial}} {{item.documNumber}}
                                 <a (click)="deleteState(indexItem)" class="tooltipped secondary-content"
                                    data-tooltip="Удалить документ"
                                    materialize="Tooltip">

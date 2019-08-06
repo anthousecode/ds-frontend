@@ -1,6 +1,6 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MockService} from '../../../service/mock.service';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialogRef, MatSelect} from '@angular/material';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {pickerI18n} from '../../talon/talon.component';
 import {PatientDocumentsEntity, PatientDocumentType} from '../../../models/patient.model';
@@ -30,6 +30,8 @@ export class PatientDocumentModalComponent implements OnInit {
     ) {
     }
 
+    @ViewChild('monedaSelect') public monedaSelect: MatSelect;
+
     formModel: { [key in keyof PatientDocumentsEntity]?: FormControl } = {
         id: new FormControl(null),
         documSerial: new FormControl(null, [Validators.maxLength(50),
@@ -50,16 +52,19 @@ export class PatientDocumentModalComponent implements OnInit {
                 if (this.data) {
                     this.documentsType = value;
                     this.patientDocumentForm.patchValue(this.data);
-
+                    console.log(this.data);
                 } else {
                     if (this.apiPatient.state.length !== 0) {
                         this.documentsType = value.filter((obj) => {
                             return !this.apiPatient.state.some((obj2) => {
-                                return obj.idRef === obj2.type.idRef;
+                                return obj.id === obj2.type.id;
                             });
                         });
                     } else {
                         this.documentsType = value;
+                    }
+                    if (this.documentsType.length > 0) {
+                        this.monedaSelect._onChange(this.documentsType[0]);
                     }
                 }
             }
@@ -85,23 +90,31 @@ export class PatientDocumentModalComponent implements OnInit {
     changeValueType(event) {
         for (const itemIn of patientDocTypeRegex) {
             if (event.id === itemIn.id) {
-                this.patientDocumentForm.controls.documSerial.setValidators([Validators.pattern(itemIn.series), Validators.required]);
-                this.patientDocumentForm.controls.documNumber.setValidators([Validators.pattern(itemIn.number), Validators.required]);
+                this.patientDocumentForm.controls.documSerial.setValidators(
+                    [Validators.pattern(itemIn.series), Validators.required]
+                );
+                this.patientDocumentForm.controls.documNumber.setValidators(
+                    [Validators.pattern(itemIn.number), Validators.required]
+                );
                 this.patientDocumentForm.controls.documSerial.updateValueAndValidity();
                 this.patientDocumentForm.controls.documNumber.updateValueAndValidity();
                 break;
             } else {
                 this.patientDocumentForm.controls.documNumber.reset();
                 this.patientDocumentForm.controls.documSerial.reset();
-                this.patientDocumentForm.controls.documSerial.setValidators([Validators.pattern(patientDocTypeRegex[7].series), Validators.required]);
-                this.patientDocumentForm.controls.documNumber.setValidators([Validators.pattern(patientDocTypeRegex[7].number), Validators.required]);
+                this.patientDocumentForm.controls.documSerial.setValidators(
+                    [Validators.pattern(patientDocTypeRegex[7].series), Validators.required]
+                );
+                this.patientDocumentForm.controls.documNumber.setValidators(
+                    [Validators.pattern(patientDocTypeRegex[7].number), Validators.required]
+                );
                 this.patientDocumentForm.controls.documSerial.updateValueAndValidity();
                 this.patientDocumentForm.controls.documNumber.updateValueAndValidity();
             }
         }
     }
 
-    compareFn(c1: PatientDocumentsEntity, c2: PatientDocumentsEntity): boolean {
+    compareFn(c1, c2): boolean {
         return c1 && c2 ? c1.id === c2.id : c1 === c2;
     }
 }
