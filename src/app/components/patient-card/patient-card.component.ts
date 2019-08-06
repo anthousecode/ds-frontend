@@ -102,11 +102,15 @@ export class PatientCardComponent implements OnInit {
         this.dialogConfig.backdropClass = '';
         this.dialogConfig.width = '55%';
         this.dialogConfig.maxHeight = '70%';
-        this.patientForm.controls.withoutSnilsReason.valueChanges.subscribe(
+        this.patientForm.controls.birthdate.valueChanges.subscribe(
             data => {
-                if (data === 3) {
-                    this.patientForm.controls.withoutSnilsReasonOther.setValidators(Validators.required);
-                    this.patientForm.controls.withoutSnilsReasonOther.updateValueAndValidity();
+                if (!this.calculateAge(data)) {
+                    this.check = false;
+                    this.noSnilsEnable = false;
+                    this.changeValidationToSnils();
+                }
+                if (this.isRelativeDate(data, ReasonNumber.NEW_BORN)) {
+                    this.patientForm.controls.withoutSnilsReason.reset();
                 }
             }
         );
@@ -209,6 +213,15 @@ export class PatientCardComponent implements OnInit {
         this.patientForm.controls.withoutSnilsReason.reset();
         this.patientForm.controls.withoutSnilsReason.setValidators(Validators.required);
         this.patientForm.controls.withoutSnilsReason.updateValueAndValidity();
+    }
+
+    changeValidationToSnils() {
+        this.patientForm.controls.withoutSnilsReason.reset();
+        this.patientForm.controls.withoutSnilsReason.clearValidators();
+        this.patientForm.controls.withoutSnilsReason.updateValueAndValidity();
+        this.patientForm.controls.snils.reset();
+        this.patientForm.controls.snils.setValidators(ValiedateSnilsRequired);
+        this.patientForm.controls.snils.updateValueAndValidity();
     }
 
     isRelativeDate(birthday, idReason) {

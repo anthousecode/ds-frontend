@@ -11,13 +11,13 @@
                    *ngIf="PatientFullInformation"
                    materialize="Tooltip"
                    style="margin-top:-40px; margin-right:10px;"><i class="material-icons small">info_outline</i></a>
-                <a class="right tooltipped red-text text-accent-4" data-target='double'
+                <a class="left tooltipped red-text text-accent-4" data-target='double'
                    data-tooltip="Пациент уже существует"
                    id="doubli_info"
-                   materialize="Tooltip" style="margin-top:-40px; margin-right:80px;"><i
+                   materialize="Tooltip" style="margin-top:-40px;"><i
                         class="material-icons small">report</i></a>
-                <a (click)="openPatientUnion()" class="right tooltipped" data-tooltip="Объединить" id="join-info"
-                   materialize="Tooltip" style="margin-top:-40px; margin-right:115px;"><i
+                <a (click)="openPatientUnion()" class="left tooltipped" data-tooltip="Объединить" id="join-info"
+                   materialize="Tooltip" style="margin-top:-40px; margin-left:35px;"><i
                         class="material-icons small">group_add</i></a>
             </ng-container>
             <form [formGroup]="patientForm">
