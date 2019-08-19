@@ -17,11 +17,11 @@ import {
   TreatmentMethod,
   VmpType,
   VmpTypeGroup
-} from '../interface/dictionary';
+} from '../models/dictionary.model';
 import {environment} from '../../environments/environment';
-import {FinancingSource, Lgota, Organ, SocialStatus} from '../interface/talon';
+import {FinancingSource, Lgota, Organ, SocialStatus} from '../models/talon.model';
 import {formatDate} from '@angular/common';
-import {PatientDocumentType} from '../interface/patient';
+import {PatientDocumentType} from '../models/patient.model';
 
 @Injectable({
   providedIn: 'root'

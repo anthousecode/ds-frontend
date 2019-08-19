@@ -1,7 +1,7 @@
 import {Component, EventEmitter, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Location} from '@angular/common';
-import {Access, Talon} from '../../interface/talon';
+import {Access, TalonModel} from '../../models/talon.model';
 import {TalonService} from '../../service/talon.service';
 
 export const pickerI18n = {
@@ -24,10 +24,10 @@ export const pickerI18n = {
 })
 export class TalonComponent implements OnInit {
 
-  talon: Talon;
+  talon: TalonModel;
   access: Access;
 
-  onTalonChange: EventEmitter<Talon> = new EventEmitter();
+  onTalonChange: EventEmitter<TalonModel> = new EventEmitter();
 
   constructor(
     private route: ActivatedRoute,
@@ -40,7 +40,7 @@ export class TalonComponent implements OnInit {
   ngOnInit() {
     const params = this.route.snapshot.paramMap;
 
-    this.talon = new Talon();
+    this.talon = new TalonModel();
 
     console.log(this.talon, 'here');
 

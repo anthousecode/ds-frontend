@@ -60,7 +60,7 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/app/talon.ts</code>
+            <code>src/app/talon.model.ts</code>
         </p>
 
 
@@ -127,7 +127,7 @@
 
 
             <section>
-    
+
         <h3 id="inputs">
             Properties
         </h3>
@@ -151,7 +151,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="61" class="link-to-prism">src/app/talon.ts:61</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="61" class="link-to-prism">src/app/talon.model.ts:61</a></div>
                             </td>
                         </tr>
 
@@ -178,7 +178,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="62" class="link-to-prism">src/app/talon.ts:62</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="62" class="link-to-prism">src/app/talon.model.ts:62</a></div>
                             </td>
                         </tr>
 
@@ -205,7 +205,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="56" class="link-to-prism">src/app/talon.ts:56</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="56" class="link-to-prism">src/app/talon.model.ts:56</a></div>
                             </td>
                         </tr>
 
@@ -232,7 +232,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="55" class="link-to-prism">src/app/talon.ts:55</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="55" class="link-to-prism">src/app/talon.model.ts:55</a></div>
                             </td>
                         </tr>
 
@@ -259,7 +259,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">src/app/talon.ts:60</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">src/app/talon.model.ts:60</a></div>
                             </td>
                         </tr>
 
@@ -286,7 +286,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="57" class="link-to-prism">src/app/talon.ts:57</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="57" class="link-to-prism">src/app/talon.model.ts:57</a></div>
                             </td>
                         </tr>
 
@@ -313,7 +313,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="59" class="link-to-prism">src/app/talon.ts:59</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="59" class="link-to-prism">src/app/talon.model.ts:59</a></div>
                             </td>
                         </tr>
 
@@ -340,7 +340,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="64" class="link-to-prism">src/app/talon.ts:64</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="64" class="link-to-prism">src/app/talon.model.ts:64</a></div>
                             </td>
                         </tr>
 
@@ -367,7 +367,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="63" class="link-to-prism">src/app/talon.ts:63</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="63" class="link-to-prism">src/app/talon.model.ts:63</a></div>
                             </td>
                         </tr>
 
@@ -394,7 +394,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/app/talon.ts:54</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/app/talon.model.ts:54</a></div>
                             </td>
                         </tr>
 
@@ -421,7 +421,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="58" class="link-to-prism">src/app/talon.ts:58</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="58" class="link-to-prism">src/app/talon.model.ts:58</a></div>
                             </td>
                         </tr>
 
@@ -450,7 +450,7 @@
     TerritorialUnit, TreatmentMethod,
     VmpType
 } from &#x27;./dictionary&#x27;;
-import {Patient} from &#x27;./patient&#x27;;
+import {PatientModel} from &#x27;./patient&#x27;;
 
 export class FiasAddress {
     id: number &#x3D; null;
@@ -527,7 +527,7 @@ export class Organ {
     description?: string;
 }
 
-export class Talon {
+export class TalonModel {
     static readonly APPEAL_TYPE_PRIMARY &#x3D; 1;
     static readonly APPEAL_TYPE_SECONDARY &#x3D; 2;
     static readonly REFERRAL_OUZ &#x3D; 0;
@@ -543,8 +543,8 @@ export class Talon {
     isDeclined: boolean;
     hospNextYear: boolean;
     maxEtap?: number;
-    appealType &#x3D; Talon.APPEAL_TYPE_PRIMARY;
-    referral &#x3D; Talon.REFERRAL_OUZ;
+    appealType &#x3D; TalonModel.APPEAL_TYPE_PRIMARY;
+    referral &#x3D; TalonModel.REFERRAL_OUZ;
     organ?: Organ;
     isOMS: boolean;
     territorialUnit: TerritorialUnit;
@@ -555,7 +555,7 @@ export class Talon {
     vmpStage1: VmpStage1;
     vmpStage2: VmpStage2;
     vmpStage3: VmpStage3;
-    patient: Patient;
+    patient: PatientModel;
 }
 
 export class Access {
@@ -563,7 +563,7 @@ export class Access {
 }
 
 export class TalonResponse {
-    talon: Talon;
+    talon: TalonModel;
     access: Access;
 }
 

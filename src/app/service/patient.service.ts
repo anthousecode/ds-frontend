@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {concatMap, delay, retryWhen} from 'rxjs/operators';
 import {Observable, of, throwError} from 'rxjs';
-import {Patient, PatientDocument, PatientHistory, PatientHistoryDocument} from '../interface/patient';
 import {environment} from '../../environments/environment';
+import {Patient, PatientDocumentsEntity} from '../models/patient.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class PatientService {
   constructor(private http: HttpClient) {
   }
 
-  public state: PatientDocument[] = [];
+  public state: PatientDocumentsEntity[] = [];
   public MINIMUM_TIMESTAMP: Date;
   private patientUrl = environment.apiUrl + '/api/patients';
 
@@ -54,7 +54,7 @@ export class PatientService {
 
   /**
    * Создание Пациента если его нет в системе
-   * @param patient Обьект тип Patient
+   * @param patient Обьект тип PatientModel
    * @return Возращает статус создание
    */
   createPatient(patient: Patient): Observable<Patient> {
@@ -73,8 +73,8 @@ export class PatientService {
    * Для получение историй пациента
    * @param id - идинтификатор пользователя
    */
-  getHistoryPatient(id: number): Observable<PatientHistory[]> {
-    return this.http.get<PatientHistory[]>(this.patientUrl + '/' + id + '/change-log').pipe(
+  getHistoryPatient(id: number): Observable<any[]> {
+    return this.http.get<any[]>(this.patientUrl + '/' + id + '/change-log').pipe(
       retryWhen(errors => errors
         .pipe(
           concatMap((error, count) => {
@@ -90,8 +90,8 @@ export class PatientService {
    * @param id - пациента
    * @return Возвращает список историю изменений
    */
-  getHistoryPatientDocument(id: number): Observable<PatientHistoryDocument[]> {
-    return this.http.get<PatientHistoryDocument[]>(this.patientUrl + '/' + id + '/identity-document-change-log').pipe(
+  getHistoryPatientDocument(id: number): Observable<any[]> {
+    return this.http.get<any[]>(this.patientUrl + '/' + id + '/identity-document-change-log').pipe(
       retryWhen(errors => errors
         .pipe(
           concatMap((error, count) => {

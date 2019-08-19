@@ -33,6 +33,8 @@ input {
 
 .fs1 {
   font-size: 12px;
+  width: 390px !important;
+
 }
 
 .middle {
@@ -66,10 +68,11 @@ input {
 
 
 @media only screen and (min-width: 993px) {
-  .row .col.push-card{
+  .row .col.push-card {
     left: 12.5%;
   }
 }
+
 /*Переопределяем стандартную css*/
 .blue-grey.darken-1 {
   background-color: #62899c !important;
@@ -125,7 +128,7 @@ i.tiny {
   background-color: #1b988173 !important;
 }
 
-.mat-calendar-body-end-range:not(.mat-calendar-body-begin-range){
+.mat-calendar-body-end-range:not(.mat-calendar-body-begin-range) {
   background-color: #1b988173 !important;
 }
 
@@ -207,9 +210,10 @@ nav .brand-logo {
   font-size: 13px;
   border-radius: 0 !important;
 }
+
 /*Переопределяем стандартную css*/
-.blue-grey.darken-1{
-  background-color:#62899c !important;
+.blue-grey.darken-1 {
+  background-color: #62899c !important;
 }
 
 .green {
@@ -311,42 +315,36 @@ select:focus {
 nav .brand-logo {
   font-size: 1.3rem;
 }
-/*Переопределяем стандартную css*/
 
 
-
-.fs1{
-  font-size: 12px;
-}
-
-.middle{
+.middle {
   vertical-align: middle;
 }
 
-.ias_footer{
-  background-color:#3B3D3F;
+.ias_footer {
+  background-color: #3B3D3F;
   height: 80px;
 }
 
-.card_label_text{
+.card_label_text {
   color: black;
   font-size: 14px;
 }
 
 
 @media only screen and (min-width: 993px) {
-  .row .col.push-card{
+  .row .col.push-card {
     left: 12.5%;
   }
 }
 
-.logo-egisz{
+.logo-egisz {
   height: 50px;
   padding-top: 10px;
   padding-left: 5px;
 }
 
-.return-menu{
+.return-menu {
   width: 16%;
   margin-top: -6px;
   margin-right: 5px;
@@ -360,11 +358,11 @@ nav .brand-logo {
   width: 400px !important;
 }
 
-.md-drppicker.shown.drops-down-right{
+.md-drppicker.shown.drops-down-right {
   display: inline-flex;
 }
 
-.mydrp, .mydrp .headerclearbtn, .mydrp .headerokbtn{
+.mydrp, .mydrp .headerclearbtn, .mydrp .headerokbtn {
   border: none !important;
   margin-top: 24px;
 }
@@ -382,7 +380,7 @@ nav .brand-logo {
   color: #757575;
 }
 
-.example-tooltip{
+.example-tooltip {
   padding: 10px 8px;
   font-size: 1rem;
   z-index: 2000;
@@ -393,4 +391,8 @@ nav .brand-logo {
   line-height: 120%;
   max-width: calc(100% - 4px);
   background-color: #323232;
+}
+
+.mat-form-field .mat-select {
+  padding-top: 5px;
 }

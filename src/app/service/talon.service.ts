@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable} from 'rxjs';
 import { map} from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import {Talon, TalonResponse} from '../interface/talon';
+import {TalonModel, TalonResponse} from '../models/talon.model';
 
 @Injectable({
     providedIn: 'root'
@@ -27,7 +27,7 @@ export class TalonService {
             );
     }
 
-    putTalon(talon: Talon): Observable<any> {
+    putTalon(talon: TalonModel): Observable<any> {
         return this.http.put(this.talonUrl + '/' + talon.id, {talon});
     }
 }

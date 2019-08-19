@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {VmpStage3} from '../../../interface/talon';
-import {Decision} from '../../../interface/dictionary';
+import {VmpStage3} from '../../../models/talon.model';
+import {Decision} from '../../../models/dictionary.model';
 import {DictionaryService} from '../../../service/dictionary.service';
 import {TalonComponent} from '../talon.component';
 
