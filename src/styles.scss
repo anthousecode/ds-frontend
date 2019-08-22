@@ -6,7 +6,7 @@ body {
   background-color: beige
 }
 
-a {
+i {
   cursor: pointer;
 }
 
@@ -19,7 +19,7 @@ input {
 }
 
 .content {
-  min-height: calc(100vh - 176px);
+  min-height: calc(100vh - 161px);
   margin-left: auto;
   margin-right: auto;
 }
@@ -29,12 +29,6 @@ input {
   border-radius: 2px;
   margin-left: auto;
   margin-right: auto;
-}
-
-.fs1 {
-  font-size: 12px;
-  width: 390px !important;
-
 }
 
 .middle {
@@ -64,12 +58,16 @@ input {
 @import "~@ng-select/ng-select/themes/material.theme.css";
 .mat-dialog-content {
   max-height: initial !important;
+  height: calc(100% - 56px);
 }
 
 
 @media only screen and (min-width: 993px) {
   .row .col.push-card {
     left: 12.5%;
+  }
+  .row .col.push-l0 {
+    left: 4.1666666666%;
   }
 }
 
@@ -78,26 +76,9 @@ input {
   background-color: #62899c !important;
 }
 
-.green {
-  background-color: #1b9881 !important;
-}
-
-.green-text {
-  color: #1b9881 !important;
-}
 
 a {
   color: #1b9881;
-}
-
-i.tiny {
-  font-size: 1.1rem;
-}
-
-@media only screen and (min-width: 993px) {
-  .container {
-    width: 75%;
-  }
 }
 
 @media only screen and (min-width: 993px) {
@@ -107,54 +88,6 @@ i.tiny {
     left: auto;
     right: auto;
   }
-}
-
-.card .card-title {
-  color: black;
-  font-size: 17px;
-  font-weight: 400;
-}
-
-.tabs .tab a {
-  color: #1b9881;
-}
-
-.mat-calendar-body-selected {
-  background-color: #1b9881 !important;
-}
-
-
-.mat-calendar-cell-semi-selected {
-  background-color: #1b988173 !important;
-}
-
-.mat-calendar-body-end-range:not(.mat-calendar-body-begin-range) {
-  background-color: #1b988173 !important;
-}
-
-.mat-calendar-body-begin-range:not(.mat-calendar-body-end-range) {
-  background-color: #1b988173 !important;
-}
-
-.mat-calendar-cell-semi-selected .tabs .tab a:focus, .tabs .tab a:focus.active {
-  background-color: #e0f2f1;
-}
-
-.tabs .tab.disabled a,
-.tabs .tab.disabled a:hover {
-  color: #1b9881;
-}
-
-.tabs .indicator {
-  background-color: #1b9881;
-}
-
-.dropdown-content li > a, .dropdown-content li > span {
-  color: #1b9881;
-}
-
-.dropdown-content li {
-  min-height: 3rem;
 }
 
 select:focus {
@@ -194,7 +127,53 @@ nav .brand-logo {
   font-size: 1.3rem;
 }
 
-/*Переопределяем стандартную css*/
+.fs1 {
+  font-size: 12px;
+}
+
+.dropdown-content {
+  width: 400px !important;
+}
+
+.card_label_text {
+  color: black;
+  font-size: 14px;
+}
+
+.logo-egisz {
+  height: 50px;
+  padding-top: 10px;
+  padding-left: 5px;
+}
+
+.return-menu {
+  width: 16%;
+  margin-top: -6px;
+  margin-right: 5px;
+}
+
+.row .col.push-s0 {
+  left: 4.1666666666%;
+}
+
+.double-width {
+  width: 370px !important;
+}
+
+@media only screen and (max-width: 993px) {
+  .container {
+    width: 100%;
+  }
+  .mobile_margin {
+    margin-bottom: 0;
+  }
+
+  .btn-small {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+}
+
 
 .btn-small {
   margin: 4px !important;
@@ -209,11 +188,6 @@ nav .brand-logo {
   line-height: 32.4px !important;
   font-size: 13px;
   border-radius: 0 !important;
-}
-
-/*Переопределяем стандартную css*/
-.blue-grey.darken-1 {
-  background-color: #62899c !important;
 }
 
 .green {
@@ -259,7 +233,7 @@ i.tiny {
 }
 
 .tabs .tab a:focus, .tabs .tab a:focus.active {
-  background-color: mediumaquamarine;
+  background-color: #e8f5e9;
 }
 
 .tabs .tab a:hover, .tabs .tab a.active {
@@ -275,10 +249,6 @@ i.tiny {
   background-color: #1b9881;
 }
 
-.dropdown-content li > a, .dropdown-content li > span {
-  color: #1b9881;
-}
-
 select:focus {
   outline: 1px solid #1b9881;
 }
@@ -290,10 +260,6 @@ select:focus {
 .input-field > label:not(.label-icon).active {
   -webkit-transform: translateY(-16px) scale(0.9);
   transform: translateY(-16px) scale(0.9);
-}
-
-.select-wrapper input.select-dropdown {
-  margin: 0;
 }
 
 .select-wrapper + label {
@@ -317,26 +283,11 @@ nav .brand-logo {
 }
 
 
-.middle {
-  vertical-align: middle;
-}
-
 .ias_footer {
   background-color: #3B3D3F;
   height: 80px;
 }
 
-.card_label_text {
-  color: black;
-  font-size: 14px;
-}
-
-
-@media only screen and (min-width: 993px) {
-  .row .col.push-card {
-    left: 12.5%;
-  }
-}
 
 .logo-egisz {
   height: 50px;
@@ -382,7 +333,7 @@ nav .brand-logo {
 
 .example-tooltip {
   padding: 10px 8px;
-  font-size: 1rem;
+  font-size: 0.8rem;
   z-index: 2000;
   background-color: transparent;
   border-radius: 2px;
@@ -393,6 +344,27 @@ nav .brand-logo {
   background-color: #323232;
 }
 
+
 .mat-form-field .mat-select {
   padding-top: 5px;
+}
+
+.mydrp .selection {
+  pointer-events: none;
+}
+
+.mat-progress-spinner circle, .mat-spinner circle {
+  stroke: #1b9881;
+}
+
+.mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar {
+  background-color: #1b9881;
+}
+
+.md-drppicker .btn.btn-default {
+  margin: 4px;
+}
+
+.md-drppicker {
+  width: 255px !important;
 }
