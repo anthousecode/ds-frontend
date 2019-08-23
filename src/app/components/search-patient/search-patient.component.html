@@ -152,7 +152,7 @@
 
                     <tbody>
                     <tr *ngFor="let patient of patientResult$|async | paginate :config">
-                        <td>{{patient.unqId}}</td>
+                        <td>{{patient.id}}</td>
                         <td><a href="#to_card">{{patient.firstName}} {{patient.lastName}} {{patient.patronymic}}</a>
                         </td>
                         <td>{{patient.birthdate | date : 'dd.MM.yyyy'}}</td>

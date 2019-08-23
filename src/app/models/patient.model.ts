@@ -6,7 +6,7 @@ export interface Patient {
     sex: number;
     birthdate: Date;
     snils: string;
-    withoutSnilsReason: string;
+    withoutSnilsReason: WithoutSnilsReasonType;
     withoutSnilsReasonOther: string;
     patientDocuments?: (PatientDocumentsEntity)[] | null;
 }
@@ -16,6 +16,11 @@ export interface PatientDocumentsEntity {
     documSerial: string;
     documNumber: string;
     type: PatientDocumentType;
+}
+
+export interface WithoutSnilsReasonType {
+    id: number;
+    name: string;
 }
 
 export interface PatientDocumentType {
@@ -55,9 +60,9 @@ export interface PatientHistoryDisplay {
                     old: string,
                     operation: string
                 }
-                ]
+            ]
         }
-        ];
+    ];
 }
 
 export interface PatientHistory {
@@ -97,7 +102,7 @@ export interface PatientHistoryDocumentDisplay {
                     old: string,
                     operation: string
                 }
-                ]
+            ]
         }
-        ];
+    ];
 }

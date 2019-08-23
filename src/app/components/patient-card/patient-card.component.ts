@@ -16,7 +16,8 @@ import {regexMapVal} from '../../directive/validation.directive';
 import {InspectionModel} from '../../models/inspection.model';
 import {InspectionService} from '../../service/inspection.service';
 import * as moment from 'moment';
-import {ReasonNumber, SnilsReasons} from '../../dictionary/snilsReason';
+import {ReasonNumber} from '../../dictionary/snilsReason';
+import {DictionaryService} from '../../service/dictionary.service';
 
 
 @Component({
@@ -48,13 +49,14 @@ export class PatientCardComponent implements OnInit {
     patientAddInfo = true;
     loader = false;
 
-    reasons = SnilsReasons;
+    reasons$ = this.apiDictionary.getWithoutSnilsReasonType();
     noSnilsEnable = false;
 
     constructor(public dialog: MatDialog,
                 private mock: MockService,
                 private route: ActivatedRoute,
                 private apiPatient: PatientService,
+                private apiDictionary: DictionaryService,
                 private fb: FormBuilder,
                 private inspectionApi: InspectionService
     ) {

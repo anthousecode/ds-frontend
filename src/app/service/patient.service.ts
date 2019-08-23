@@ -91,7 +91,7 @@ export class PatientService {
    * @return Возвращает список историю изменений
    */
   getHistoryPatientDocument(id: number): Observable<any[]> {
-    return this.http.get<any[]>(this.patientUrl + '/' + id + '/identity-document-change-log').pipe(
+    return this.http.get<any[]>(this.patientUrl + '/' + id + '/patient-document-change-log').pipe(
       retryWhen(errors => errors
         .pipe(
           concatMap((error, count) => {
