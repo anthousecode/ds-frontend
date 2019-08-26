@@ -14,7 +14,7 @@
                             <mat-label>СНИЛС</mat-label>
                             {{patientForm.controls['snils'].clearValidators()}}
                             {{patientForm.controls['snils'].setValidators(ValiedateSnils)}}
-                            <input formControlName="snils" id="snils" mask="000-000-000-00"
+                            <input [formControl]="formModel.snils" id="snils" mask="000-000-000-00"
                                    matInput type="text">
                             <mat-error *ngIf="isValid('snils')">
                                 СНИЛС заполнен некорректно
@@ -26,17 +26,17 @@
                     </div>
                     <div class="col l4 s12 inline-checkbox" *ngIf="check">
                         <mat-form-field
-                                *ngIf="patientForm.controls.withoutSnilsReason.value !== 3">
+                                *ngIf="patientForm.controls.withoutSnilsReason.value?.id !== 3">
                             <mat-label>Причина отсуствия СНИЛС</mat-label>
-                            <mat-select formControlName="withoutSnilsReason" id="withoutSnilsReason">
+                            <mat-select [formControl]="formModel.withoutSnilsReason" id="withoutSnilsReason">
                                 <mat-option *ngFor="let reason of reasons$| async" [value]="reason"
                                             [disabled]="isRelativeDate(patientForm.controls.birthdate.value, reason.id)"> {{reason.name}} </mat-option>
                             </mat-select>
                         </mat-form-field>
-                        <mat-form-field *ngIf="patientForm.controls.withoutSnilsReason.value === 3">
+                        <mat-form-field *ngIf="patientForm.controls.withoutSnilsReason.value?.id === 3">
                             <mat-label>Причина отсуствия СНИЛС</mat-label>
                             <input matInput type="text"
-                                   formControlName="withoutSnilsReasonOther">
+                                   [formControl]="formModel.withoutSnilsReasonOther">
                         </mat-form-field>
                     </div>
                 </div>
@@ -167,7 +167,6 @@
             </div>
 
             <div class="row" style="padding-left: 20px">
-
                 <button (click)="savePatientInfo()"
                         mat-button
                         *ngIf="(patientForm.valid && (apiPatient.state.length >= 1)); else disableButton"
@@ -181,7 +180,6 @@
                                 [disabled]="!(patientForm.valid && (apiPatient.state.length >= 1))"
                                 class=" btn-small green">Сохранить
                         </button>
-
                     </div>
                 </ng-template>
                 <ng-container *ngIf="PatientFullInformation">

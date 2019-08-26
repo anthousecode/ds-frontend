@@ -106,3 +106,7 @@ export interface PatientHistoryDocumentDisplay {
         }
     ];
 }
+
+export interface PatientSendAPI {
+    patient: Patient;
+}

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Patient, PatientDocumentsEntity} from '../../models/patient.model';
+import {Patient, PatientDocumentsEntity, PatientSendAPI} from '../../models/patient.model';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import {PatientDocumentModalComponent} from './patient-document-modal/patient-document-modal.component';
 import {MockService} from '../../service/mock.service';
@@ -36,7 +36,7 @@ export class PatientCardComponent implements OnInit {
         patronymic: new FormControl(null, [Validators.pattern(regexMapVal.name), Validators.maxLength(50)]),
         withoutSnilsReason: new FormControl(null),
         withoutSnilsReasonOther: new FormControl(null),
-        patientDocuments: new FormControl(null, Validators.required)
+        patientDocuments: new FormControl(null)
     };
     dialogConfig = new MatDialogConfig();
     patientForm: FormGroup = new FormGroup(this.formModel);
@@ -162,10 +162,8 @@ export class PatientCardComponent implements OnInit {
      */
     savePatientInfo() {
         this.loader = true;
-
         this.patientForm.value.patientDocuments = this.apiPatient.state;
-        const sendData: Patient = this.patientForm.value;
-
+        const sendData: PatientSendAPI = {patient: this.patientForm.value};
         if (this.PatientFullInformation) {
             this.apiPatient.updatePatient(sendData).subscribe(
                 () => {
@@ -191,10 +189,6 @@ export class PatientCardComponent implements OnInit {
         }
     }
 
-    showMoreInform() {
-        this.patientAddInfo = !this.patientAddInfo;
-    }
-
     trackByFn(index, item) {
         return item.id;
     }
@@ -216,9 +210,7 @@ export class PatientCardComponent implements OnInit {
         this.patientForm.controls.snils.reset();
         this.patientForm.controls.snils.clearValidators();
         this.patientForm.controls.snils.updateValueAndValidity();
-        this.patientForm.controls.withoutSnilsReason.reset();
-        this.patientForm.controls.withoutSnilsReason.setValidators(Validators.required);
-        this.patientForm.controls.withoutSnilsReason.updateValueAndValidity();
+        console.log(this.patientForm.controls.snils);
     }
 
     changeValidationToSnils() {

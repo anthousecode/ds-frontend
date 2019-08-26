@@ -40,7 +40,7 @@
                 <tr>
                   <td>
                     {{item.historyChange[0].operationDate | date: 'dd.MM.yyyy'}} :
-                    пользователь {{item.historyChange[0].osUser}} создал {{item.historyChange[0].documentType.name}}
+                    пользователь {{item.historyChange[0].osUser}} создал {{item.historyChange[0].documentType.type.name}}
                   </td>
                 </tr>
                 <ng-container *ngFor="let changedItem of item.historyChange">
