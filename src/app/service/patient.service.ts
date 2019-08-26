@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {concatMap, delay, retryWhen} from 'rxjs/operators';
 import {Observable, of, throwError} from 'rxjs';
 import {environment} from '../../environments/environment';
-import {Patient, PatientDocumentsEntity} from '../models/patient.model';
+import {Patient, PatientDocumentsEntity, PatientSendAPI} from '../models/patient.model';
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +40,7 @@ export class PatientService {
    * @param changeData Данные которые нужно изменить
    * @return Observable чтобы подпистаься и получить данные.
    */
-  updatePatient(changeData: Patient): Observable<Patient> {
+  updatePatient(changeData: PatientSendAPI): Observable<Patient> {
     return this.http.put<Patient>(this.patientUrl + '/' + changeData.id, changeData).pipe(
       retryWhen(errors => errors
         .pipe(
@@ -57,7 +57,7 @@ export class PatientService {
    * @param patient Обьект тип PatientModel
    * @return Возращает статус создание
    */
-  createPatient(patient: Patient): Observable<Patient> {
+  createPatient(patient: PatientSendAPI): Observable<Patient> {
     return this.http.post<Patient>(this.patientUrl, patient).pipe(
       retryWhen(errors => errors
         .pipe(
