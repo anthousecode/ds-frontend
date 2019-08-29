@@ -26,29 +26,16 @@ import {DictionaryService} from '../../service/dictionary.service';
     styleUrls: ['./patient-card.component.sass']
 })
 export class PatientCardComponent implements OnInit {
-    formModel: { [key in keyof Patient]?: FormControl } = {
-        id: new FormControl(null),
-        sex: new FormControl(1),
-        birthdate: new FormControl(null, [Validators.required, DateValidator]),
-        firstName: new FormControl(null, [Validators.maxLength(50), Validators.required, Validators.pattern(regexMapVal.name)]),
-        snils: new FormControl(null, [ValiedateSnilsRequired]),
-        lastName: new FormControl(null, [Validators.maxLength(50), Validators.required, Validators.pattern(regexMapVal.name)]),
-        patronymic: new FormControl(null, [Validators.pattern(regexMapVal.name), Validators.maxLength(50)]),
-        withoutSnilsReason: new FormControl(null),
-        withoutSnilsReasonOther: new FormControl(null),
-        patientDocuments: new FormControl(null)
-    };
+    formModel: { [key in keyof Patient]?: FormControl };
     dialogConfig = new MatDialogConfig();
-    patientForm: FormGroup = new FormGroup(this.formModel);
+    patientForm: FormGroup;
     PatientFullInformation: Patient;
     check = false;
     ValiedateSnils = ValiedateSnilsRequired;
-
     displayedColumns: string[] = ['card', 'type_card', 'status', 'ageGroup'];
     inspections: InspectionModel[];
     patientAddInfo = true;
     loader = false;
-
     reasons$ = this.apiDictionary.getWithoutSnilsReasonType();
     noSnilsEnable = false;
 
@@ -94,16 +81,36 @@ export class PatientCardComponent implements OnInit {
      * Инициализация реактивной формы.
      */
     ngOnInit() {
+        this.initForm();
         const params = this.route.snapshot.paramMap;
         if (params.has('id')) {
             this.getPatenInfo(Number(params.get('id')));
         }
+
         this.dialogConfig.disableClose = false;
         this.dialogConfig.autoFocus = true;
         this.dialogConfig.hasBackdrop = true;
         this.dialogConfig.backdropClass = '';
         this.dialogConfig.width = '55%';
         this.dialogConfig.maxHeight = '70%';
+
+
+    }
+
+    initForm() {
+        this.formModel = {
+            id: new FormControl(null),
+            sex: new FormControl(1),
+            birthdate: new FormControl(null, [Validators.required, DateValidator]),
+            firstName: new FormControl(null, [Validators.maxLength(50), Validators.required, Validators.pattern(regexMapVal.name)]),
+            snils: new FormControl(null, [ValiedateSnilsRequired]),
+            lastName: new FormControl(null, [Validators.maxLength(50), Validators.required, Validators.pattern(regexMapVal.name)]),
+            patronymic: new FormControl(null, [Validators.pattern(regexMapVal.name), Validators.maxLength(50)]),
+            withoutSnilsReason: new FormControl(null),
+            withoutSnilsReasonOther: new FormControl(null),
+            patientDocuments: new FormControl(null)
+        };
+        this.patientForm = new FormGroup(this.formModel);
         this.patientForm.controls.birthdate.valueChanges.subscribe(
             data => {
                 if (!this.calculateAge(data)) {
@@ -126,6 +133,7 @@ export class PatientCardComponent implements OnInit {
                 }
             }
         );
+
     }
 
     /**
@@ -151,6 +159,12 @@ export class PatientCardComponent implements OnInit {
                 this.getInspectionCard(response.id);
                 this.PatientFullInformation = response;
                 this.patientForm.patchValue(response);
+                if (!response.snils) {
+                    this.check = true;
+                    this.patientForm.controls.snils.reset();
+                    this.patientForm.controls.snils.clearValidators();
+                    this.patientForm.controls.snils.updateValueAndValidity();
+                }
                 this.apiPatient.state = this.apiPatient.state.concat(response.patientDocuments);
             }
         );
@@ -210,7 +224,6 @@ export class PatientCardComponent implements OnInit {
         this.patientForm.controls.snils.reset();
         this.patientForm.controls.snils.clearValidators();
         this.patientForm.controls.snils.updateValueAndValidity();
-        console.log(this.patientForm.controls.snils);
     }
 
     changeValidationToSnils() {
@@ -232,5 +245,9 @@ export class PatientCardComponent implements OnInit {
 
     calculateAge(birthday) {
         return moment().diff(moment(birthday, 'YYYYMMDD').subtract(14, 'days'), 'years') < 14;
+    }
+
+    compareFn(c1, c2): boolean {
+        return c1 && c2 ? c1.id === c2.id : c1 === c2;
     }
 }
