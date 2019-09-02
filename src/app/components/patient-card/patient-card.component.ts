@@ -3,7 +3,7 @@ import {Patient, PatientDocumentsEntity, PatientSendAPI} from '../../models/pati
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import {PatientDocumentModalComponent} from './patient-document-modal/patient-document-modal.component';
 import {MockService} from '../../service/mock.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {PatientService} from '../../service/patient.service';
 import {PatientHistoryModalComponent} from './patient-history-modal/patient-history-modal.component';
 import {PatientUnionModalComponent} from './patient-union-modal/patient-union-modal.component';
@@ -45,7 +45,8 @@ export class PatientCardComponent implements OnInit {
                 private apiPatient: PatientService,
                 private apiDictionary: DictionaryService,
                 private fb: FormBuilder,
-                private inspectionApi: InspectionService
+                private inspectionApi: InspectionService,
+                private router: Router
     ) {
     }
 
@@ -180,8 +181,9 @@ export class PatientCardComponent implements OnInit {
         const sendData: PatientSendAPI = {patient: this.patientForm.value};
         if (this.PatientFullInformation) {
             this.apiPatient.updatePatient(sendData).subscribe(
-                () => {
+                (patient) => {
                     console.log('Uraa');
+                    this.router.navigateByUrl(this.router.createUrlTree(['patient-card', patient.id]));
                     this.loader = false;
 
                 }, error => {
@@ -192,9 +194,11 @@ export class PatientCardComponent implements OnInit {
             );
         } else {
             this.apiPatient.createPatient(sendData).subscribe(
-                () => {
+                (patient) => {
                     console.log('Save Data');
                     this.loader = false;
+                    this.apiPatient.state = [];
+                    this.router.navigateByUrl(this.router.createUrlTree(['patient-card', patient.id]));
                 }, error => {
                     console.log(error);
                     this.loader = false;

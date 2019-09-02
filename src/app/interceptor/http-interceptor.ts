@@ -18,13 +18,6 @@ export class ApiWithCredentialInterceptor implements HttpInterceptor {
         req = req.clone({
             withCredentials: true
         });
-        return next.handle(req).pipe((err: any) => {
-            if (err instanceof HttpErrorResponse) {
-                if (err.status === 401) {
-                    this.router.navigate(['auth']);
-                }
-            }
-            return Observable.throw(err);
-        });
+        return next.handle(req);
     }
 }

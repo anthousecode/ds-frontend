@@ -32,27 +32,20 @@ export class PatientDocumentModalComponent implements OnInit {
 
     @ViewChild('monedaSelect') public monedaSelect: MatSelect;
 
-    formModel: { [key in keyof PatientDocumentsEntity]?: FormControl } = {
-        id: new FormControl(null),
-        documSerial: new FormControl(null, [Validators.maxLength(50),
-            Validators.required, Validators.pattern(patientDocTypeRegex[7].series)]),
-        documNumber: new FormControl(null, [Validators.maxLength(50),
-            Validators.required, Validators.pattern(patientDocTypeRegex[7].number)]),
-        type: new FormControl(null, Validators.required)
-    };
-    patientDocumentForm: FormGroup = new FormGroup(this.formModel);
+    formModel: { [key in keyof PatientDocumentsEntity]?: FormControl };
+    patientDocumentForm: FormGroup;
     pickerI18n = pickerI18n;
     isUnique = true;
     indexItem: number;
     documentsType: PatientDocumentType[];
 
     ngOnInit() {
+        this.initForm();
         this.dictionary.getIdentityDocumentTypes().subscribe(
             value => {
                 if (this.data) {
                     this.documentsType = value;
                     this.patientDocumentForm.patchValue(this.data);
-                    console.log(this.data);
                 } else {
                     if (this.apiPatient.state.length !== 0) {
                         this.documentsType = value.filter((obj) => {
@@ -85,6 +78,24 @@ export class PatientDocumentModalComponent implements OnInit {
             this.apiPatient.state[this.indexItem] = this.patientDocumentForm.value;
         }
         this.matDialogRef.close();
+    }
+
+
+    private initForm(): void {
+        this.formModel = {
+            id: new FormControl(null),
+            documSerial: new FormControl(null, [Validators.maxLength(50),
+                Validators.required, Validators.pattern(patientDocTypeRegex[7].series)]),
+            documNumber: new FormControl(null, [Validators.maxLength(50),
+                Validators.required, Validators.pattern(patientDocTypeRegex[7].number)]),
+            type: new FormControl(null, Validators.required)
+        };
+        this.patientDocumentForm = new FormGroup(this.formModel);
+        if (this.data) {
+            this.isUnique = false;
+            this.patientDocumentForm.patchValue(this.data);
+            this.indexItem = this.apiPatient.state.indexOf(this.data);
+        }
     }
 
     changeValueType(event) {
