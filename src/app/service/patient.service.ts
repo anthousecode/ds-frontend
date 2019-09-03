@@ -14,7 +14,6 @@ export class PatientService {
   }
 
   public state: PatientDocumentsEntity[] = [];
-  public MINIMUM_TIMESTAMP: Date;
   private patientUrl = environment.apiUrl + '/api/patients';
 
   /**
@@ -41,7 +40,7 @@ export class PatientService {
    * @return Observable чтобы подпистаься и получить данные.
    */
   updatePatient(changeData: PatientSendAPI): Observable<Patient> {
-    return this.http.put<Patient>(this.patientUrl + '/' + changeData.id, changeData).pipe(
+    return this.http.put<Patient>(this.patientUrl + '/' + changeData.patient.id, changeData).pipe(
       retryWhen(errors => errors
         .pipe(
           concatMap((error, count) => {

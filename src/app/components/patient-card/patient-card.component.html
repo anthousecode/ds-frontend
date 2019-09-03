@@ -20,15 +20,13 @@
                                 СНИЛС заполнен некорректно
                             </mat-error>
                         </mat-form-field>
-                        <mat-checkbox [disabled]="" class="align-center" *ngIf="noSnilsEnable"
-                                      (change)="changeCheckStatus()">Нет СНИЛС!
-                        </mat-checkbox>
                     </div>
                     <div class="col l4 s12 inline-checkbox" *ngIf="check">
                         <mat-form-field
                                 *ngIf="patientForm.controls.withoutSnilsReason.value?.id !== 3">
                             <mat-label>Причина отсуствия СНИЛС</mat-label>
-                            <mat-select [formControl]="formModel.withoutSnilsReason" id="withoutSnilsReason">
+                            <mat-select [formControl]="formModel.withoutSnilsReason" id="withoutSnilsReason"
+                                        [compareWith]="compareFn">
                                 <mat-option *ngFor="let reason of reasons$| async" [value]="reason"
                                             [disabled]="isRelativeDate(patientForm.controls.birthdate.value, reason.id)"> {{reason.name}} </mat-option>
                             </mat-select>
@@ -39,6 +37,9 @@
                                    [formControl]="formModel.withoutSnilsReasonOther">
                         </mat-form-field>
                     </div>
+                    <mat-checkbox class="align-center"
+                                  (change)="changeCheckStatus()">Нет СНИЛС!
+                    </mat-checkbox>
                 </div>
                 <div class="row">
                     <div class=" col l4 s12">
@@ -123,9 +124,9 @@
                 <div class="col s12">
                     <ul class="collection with-header">
                         <li class="collection-header">
-                            <h6>Карта осмотра <span class="red-text">*</span>
+                            <h6>Карта осмотра
                                 <a (click)="createPatientDoc()"
-                                   class="tooltipped secondary-content" data-tooltip="Добавить документ"
+                                   class="tooltipped secondary-content" data-tooltip="Добавить осмотр"
                                    materialize="Tooltip">
                                     <i class="material-icons">add</i>
                                 </a>
