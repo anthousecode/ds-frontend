@@ -11,7 +11,7 @@
             </mat-label>
             <mat-select #monedaSelect  (selectionChange)="changeValueType($event.value)" [compareWith]="compareFn"
                         formControlName="type" id="type">
-                <mat-option  *ngFor="let document of documentsType" [value]="document">{{document.idRef}} - {{document.name}}</mat-option>
+                <mat-option  *ngFor="let document of documentsType" [value]="document">{{document.code}} - {{document.name}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
