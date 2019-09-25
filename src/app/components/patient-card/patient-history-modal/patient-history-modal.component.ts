@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Inject, OnInit} from '@angular/core';
 import {
     PatientHistory,
     PatientHistoryDisplay,
@@ -10,6 +10,7 @@ import {PatientService} from '../../../service/patient.service';
 import {DictionaryService} from '../../../service/dictionary.service';
 import {PatientDictionary} from '../../../models/dictionary.model';
 import * as moment from 'moment';
+import {MaterializeAction} from '@samuelberthe/angular2-materialize';
 
 @Component({
     selector: 'app-patient-history-modal',
@@ -17,7 +18,7 @@ import * as moment from 'moment';
     styleUrls: ['./patient-history-modal.component.sass']
 })
 
-export class PatientHistoryModalComponent implements OnInit {
+export class PatientHistoryModalComponent implements OnInit, AfterViewInit {
 
     constructor(@Inject(MAT_DIALOG_DATA) public idPatient: number,
                 private apiPatient: PatientService, private apiDictionary: DictionaryService) {
@@ -28,12 +29,17 @@ export class PatientHistoryModalComponent implements OnInit {
     patientDictionary: PatientDictionary[];
     patientDocumentHistory: PatientHistoryDocumentDisplay[];
     initHistory: PatientHistory;
+    tabActions = new EventEmitter<string|MaterializeAction>();
 
     static convertDate(date) {
         return new Date(date).toLocaleString().split(',')[0];
     }
 
     ngOnInit() {
+    }
+
+    ngAfterViewInit(): void {
+        this.tabActions.emit({action: 'updateTabIndicator', params: []});
     }
 
     getPatientHistoryDocument(id: number) {
@@ -49,6 +55,7 @@ export class PatientHistoryModalComponent implements OnInit {
                     }
                 }
                 this.displayHistoryDocument(response);
+                this.tabActions.emit({action: 'updateTabIndicator', params: []});
             }
         );
     }

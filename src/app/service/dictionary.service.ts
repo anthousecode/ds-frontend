@@ -13,7 +13,7 @@ import {
     MedicalInstitution,
     MedicalProfile,
     PatientDictionary,
-    ResponsiblePerson,
+    ResponsiblePerson, Sex,
     TreatmentMethod,
     VmpType,
     VmpTypeGroup
@@ -135,6 +135,10 @@ export class DictionaryService {
 
     getTranslations(): Observable<PatientDictionary[]> {
         return this.http.get<PatientDictionary[]>(this.localDictionaryUrl);
+    }
+
+    getSexes(): Sex[] {
+        return [new Sex(1, 'Мужской'), new Sex(2, 'Женский')];
     }
 
     /**

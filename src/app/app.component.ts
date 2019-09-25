@@ -7,8 +7,7 @@ import { Title } from '@angular/platform-browser';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-    title = 'Система мониторинга реализации государственного задания по оказанию высокотехнологичной' +
-        ' медицинской помощи за счет средств федерального бюджета';
+    title = 'Система мониторинга проведения диспансеризации детей-сирот и детей, находящихся в трудной жизненной ситуации';
 
     constructor(private titleService: Title) {}
 

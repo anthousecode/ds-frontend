@@ -1,9 +1,11 @@
+import {Sex} from './dictionary.model';
+
 export interface Patient {
     id: number;
     lastName: string;
     firstName: string;
     patronymic: string;
-    sex: number;
+    sex: Sex;
     birthdate: Date;
     snils: string;
     withoutSnilsReason: WithoutSnilsReasonType;

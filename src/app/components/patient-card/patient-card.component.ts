@@ -8,7 +8,7 @@ import {PatientService} from '../../service/patient.service';
 import {PatientHistoryModalComponent} from './patient-history-modal/patient-history-modal.component';
 import {PatientUnionModalComponent} from './patient-union-modal/patient-union-modal.component';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import * as M from 'materialize-css/dist/js/materialize';
+import * as M from '@samuelberthe/angular2-materialize';
 import {ValiedateSnilsRequired} from '../../validators/snils.validator';
 import {ValidationService} from '../../service/validation.service';
 import {DateValidator} from '../../validators/date.validator';
@@ -18,6 +18,7 @@ import {InspectionService} from '../../service/inspection.service';
 import * as moment from 'moment';
 import {ReasonNumber} from '../../dictionary/snilsReason';
 import {DictionaryService} from '../../service/dictionary.service';
+import {Sex} from "../../models/dictionary.model";
 
 
 @Component({
@@ -37,6 +38,7 @@ export class PatientCardComponent implements OnInit {
     patientAddInfo = true;
     loader = false;
     reasons$ = this.apiDictionary.getWithoutSnilsReasonType();
+    sexes: Sex[] = this.apiDictionary.getSexes();
     noSnilsEnable = false;
 
     constructor(public dialog: MatDialog,
@@ -234,7 +236,6 @@ export class PatientCardComponent implements OnInit {
         this.patientForm.controls.withoutSnilsReason.reset();
         this.patientForm.controls.withoutSnilsReason.clearValidators();
         this.patientForm.controls.withoutSnilsReason.updateValueAndValidity();
-        this.patientForm.controls.snils.reset();
         this.patientForm.controls.snils.setValidators(ValiedateSnilsRequired);
         this.patientForm.controls.snils.updateValueAndValidity();
     }
