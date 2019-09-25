@@ -38,7 +38,7 @@ export class PatientCardComponent implements OnInit {
     patientAddInfo = true;
     loader = false;
     reasons$ = this.apiDictionary.getWithoutSnilsReasonType();
-    sexes: Sex[] = [new Sex(1, 'Мужской'), new Sex(2, 'Женский')];
+    sexes: Sex[] = this.apiDictionary.getSexes();
     noSnilsEnable = false;
 
     constructor(public dialog: MatDialog,
