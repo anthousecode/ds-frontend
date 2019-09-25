@@ -34,18 +34,14 @@ export interface PatientDocumentType {
 export interface PatientHistoryDocument {
     id: number;
     operation: string;
+    operationDate: string;
+    lastUserSave: string;
     username: string;
     osUser: string;
-    machine: string;
-    program: string;
-    operationDate: string;
-    patientId: number;
-    series: string;
-    number: string;
-    issuedBy: string;
-    issuedDate: string;
+    documSerial: string;
+    documNumber: string;
     isEnabled: boolean;
-    documentType: PatientDocumentsEntity;
+    type: PatientDocumentType;
     changed: any[];
 }
 

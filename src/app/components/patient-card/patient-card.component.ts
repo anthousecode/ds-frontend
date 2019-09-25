@@ -13,12 +13,10 @@ import {ValiedateSnilsRequired} from '../../validators/snils.validator';
 import {ValidationService} from '../../service/validation.service';
 import {DateValidator} from '../../validators/date.validator';
 import {regexMapVal} from '../../directive/validation.directive';
-import {InspectionModel} from '../../models/inspection.model';
-import {InspectionService} from '../../service/inspection.service';
 import * as moment from 'moment';
 import {ReasonNumber} from '../../dictionary/snilsReason';
 import {DictionaryService} from '../../service/dictionary.service';
-import {Sex} from "../../models/dictionary.model";
+import {Sex} from '../../models/dictionary.model';
 
 
 @Component({
@@ -34,7 +32,6 @@ export class PatientCardComponent implements OnInit {
     check = false;
     ValiedateSnils = ValiedateSnilsRequired;
     displayedColumns: string[] = ['card', 'type_card', 'status', 'ageGroup'];
-    inspections: InspectionModel[];
     patientAddInfo = true;
     loader = false;
     reasons$ = this.apiDictionary.getWithoutSnilsReasonType();
@@ -47,7 +44,6 @@ export class PatientCardComponent implements OnInit {
                 private apiPatient: PatientService,
                 private apiDictionary: DictionaryService,
                 private fb: FormBuilder,
-                private inspectionApi: InspectionService,
                 private router: Router
     ) {
     }
@@ -159,7 +155,6 @@ export class PatientCardComponent implements OnInit {
     getPatenInfo(id: number) {
         this.apiPatient.getPatient(id).subscribe(
             (response) => {
-                this.getInspectionCard(response.id);
                 this.PatientFullInformation = response;
                 this.patientForm.patchValue(response);
                 if (!response.snils) {
@@ -215,14 +210,6 @@ export class PatientCardComponent implements OnInit {
 
     isValid(name: string) {
         return ValidationService.checkValidation(name, this.patientForm);
-    }
-
-    getInspectionCard(id) {
-        this.inspectionApi.getInspection(id).subscribe(
-            data => {
-                this.inspections = data;
-            }
-        );
     }
 
     changeCheckStatus() {
