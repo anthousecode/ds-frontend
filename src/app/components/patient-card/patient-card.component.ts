@@ -36,7 +36,8 @@ export class PatientCardComponent implements OnInit {
     loader = false;
     reasons$ = this.apiDictionary.getWithoutSnilsReasonType();
     sexes: Sex[] = this.apiDictionary.getSexes();
-    noSnilsEnable = false;
+    noSnilsEnable = true;
+    minDate = moment('1900-01-01').unix();
 
     constructor(public dialog: MatDialog,
                 private mock: MockService,
@@ -112,16 +113,20 @@ export class PatientCardComponent implements OnInit {
         this.patientForm = new FormGroup(this.formModel);
         this.patientForm.controls.birthdate.valueChanges.subscribe(
             data => {
-                if (!this.calculateAge(data)) {
-                    this.check = false;
-                    this.noSnilsEnable = false;
-                    this.changeValidationToSnils();
+                if (data !== null && data.unix() > this.minDate) {
+                    const snilsMandatory = this.isSnilsMandatory(data);
+                    const isNewborn = !this.isRelativeDate(data, ReasonNumber.NEW_BORN);
+                    if (snilsMandatory) {
+                        this.check = false;
+                        this.noSnilsEnable = false;
+                        this.changeValidationToSnils();
+                    } else {
+                        if (!isNewborn && this.isReasonSelected(ReasonNumber.NEW_BORN)) {
+                            this.patientForm.controls.withoutSnilsReason.reset();
+                        }
+                    }
+                    this.noSnilsEnable = !snilsMandatory;
                 }
-                if (this.isRelativeDate(data, ReasonNumber.NEW_BORN)) {
-                    this.patientForm.controls.withoutSnilsReason.reset();
-                }
-                this.noSnilsEnable = this.calculateAge(data);
-
             }
         );
         this.patientForm.controls.withoutSnilsReason.valueChanges.subscribe(
@@ -179,7 +184,6 @@ export class PatientCardComponent implements OnInit {
         if (this.PatientFullInformation) {
             this.apiPatient.updatePatient(sendData).subscribe(
                 (patient) => {
-                    console.log('Uraa');
                     this.router.navigateByUrl(this.router.createUrlTree(['patient-card', patient.id]));
                     this.loader = false;
 
@@ -192,7 +196,6 @@ export class PatientCardComponent implements OnInit {
         } else {
             this.apiPatient.createPatient(sendData).subscribe(
                 (patient) => {
-                    console.log('Save Data');
                     this.loader = false;
                     this.apiPatient.state = [];
                     this.router.navigateByUrl(this.router.createUrlTree(['patient-card', patient.id]));
@@ -235,8 +238,13 @@ export class PatientCardComponent implements OnInit {
         return null;
     }
 
-    calculateAge(birthday) {
-        return moment().diff(moment(birthday, 'YYYYMMDD').subtract(14, 'days'), 'years') < 14;
+    isSnilsMandatory(birthday) {
+        return moment().diff(moment(birthday, 'YYYYMMDD').subtract(14, 'days'), 'years') >= 14;
+    }
+
+    isReasonSelected(selectedReason: number): boolean {
+        const reason = this.patientForm.controls.withoutSnilsReason.value;
+        return reason !== null && reason.id === selectedReason;
     }
 
     compareFn(c1, c2): boolean {
