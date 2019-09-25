@@ -39,7 +39,7 @@
                         </mat-form-field>
                     </div>
                     <mat-checkbox class="align-center"
-                        [checked]="check"
+                        [checked]="check" [disabled]="!noSnilsEnable"
                         (change)="changeCheckStatus()">Нет СНИЛС!
                     </mat-checkbox>
                 </div>

@@ -88,7 +88,7 @@ export class PatientDocumentModalComponent implements OnInit {
                 Validators.required, Validators.pattern(patientDocTypeRegex[7].series)]),
             documNumber: new FormControl(null, [Validators.maxLength(50),
                 Validators.required, Validators.pattern(patientDocTypeRegex[7].number)]),
-            type: new FormControl(null, Validators.required)
+            type: new FormControl({disabled: !!this.data}, Validators.required)
         };
         this.patientDocumentForm = new FormGroup(this.formModel);
         if (this.data) {
