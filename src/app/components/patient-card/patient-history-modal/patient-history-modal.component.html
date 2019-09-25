@@ -37,30 +37,35 @@
             <div class="collapsible-body">
               <table>
                 <tbody>
-                <tr>
-                  <td>
-                    {{item.historyChange[0].operationDate | date: 'dd.MM.yyyy'}} :
-                    пользователь {{item.historyChange[0].osUser}} создал {{item.historyChange[0].documentType.type.name}}
-                  </td>
-                </tr>
                 <ng-container *ngFor="let changedItem of item.historyChange">
-                  <tr *ngFor="let valuesChanged of changedItem.changed">
-                    <td *ngIf="valuesChanged.current else deleted">
-                      {{changedItem.operationDate | date : 'dd.MM.yyyy'}} :
-                      пользователь {{changedItem.osUser}} {{valuesChanged.name}} {{valuesChanged.operation}}
-                      c {{valuesChanged.old}}
-                      на {{valuesChanged.current}}
-                    </td>
-                    <ng-template #deleted>
+                  <ng-container *ngIf="changedItem.operation === 'i'">
+                    <tr>
+                      <td>
+                        {{item.historyChange[0].operationDate | date: 'dd.MM.yyyy'}} :
+                        пользователь {{item.historyChange[0].lastUserSave}} создал {{item.historyChange[0].type.name}}
+                      </td>
+                    </tr>
+                  </ng-container>
+                  <ng-container *ngIf="changedItem.operation === 'u'">
+                    <tr *ngFor="let valuesChanged of changedItem.changed">
+                      <td>
+                        {{changedItem.operationDate | date : 'dd.MM.yyyy'}} :
+                        пользователь {{changedItem.lastUserSave}} {{valuesChanged.operation}} поле {{valuesChanged.name}}
+                        c {{valuesChanged.old}}
+                        на {{valuesChanged.current}}
+                      </td>
+                    </tr>
+                  </ng-container>
+                  <ng-container *ngIf="changedItem.operation === 'd'">
+                    <tr>
                       <td>
                         {{changedItem.operationDate | date : 'dd.MM.yyyy'}} :
                         пользователь {{changedItem.osUser}} удалил {{item.name}}
                         <br>
-                        {{changedItem.number}} {{changedItem.series}},  {{changedItem.issuedBy}}
-                        , {{changedItem.issuedDate}}
+                        {{changedItem.documNumber}} {{changedItem.documSerial}}
                       </td>
-                    </ng-template>
-                  </tr>
+                    </tr>
+                  </ng-container>
                 </ng-container>
                 </tbody>
               </table>

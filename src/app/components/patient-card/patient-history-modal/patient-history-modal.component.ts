@@ -45,15 +45,6 @@ export class PatientHistoryModalComponent implements OnInit, AfterViewInit {
     getPatientHistoryDocument(id: number) {
         this.apiPatient.getHistoryPatientDocument(id).subscribe(
             response => {
-                for (const item of response) {
-                    if (item.issuedDate === null) {
-                        item.issuedDate = 'не указано';
-                    } else if (item.issuedBy == null) {
-                        item.issuedBy = 'не указано';
-                    } else {
-                        item.issuedDate = PatientHistoryModalComponent.convertDate(item.issuedDate);
-                    }
-                }
                 this.displayHistoryDocument(response);
                 this.tabActions.emit({action: 'updateTabIndicator', params: []});
             }
@@ -71,22 +62,22 @@ export class PatientHistoryModalComponent implements OnInit, AfterViewInit {
      */
     displayHistoryDocument(history: PatientHistoryDocument[]) {
         const changedHistory = history.reduce((accumulator, current) => {
-            const fields = ['series', 'number', 'issuedBy', 'issuedDate', 'isEnabled'];
-            if (accumulator[current.documentType.id] === undefined) {
-                accumulator[current.documentType.id] = {
-                    id: current.documentType.id,
-                    name: current.documentType.type.name,
+            const fields = {documSerial: 'Серия', documNumber: 'Номер', isEnabled: 'Активный'};
+            if (accumulator[current.type.id] === undefined) {
+                accumulator[current.type.id] = {
+                    id: current.id,
+                    name: current.type.name,
                     historyChange: []
                 };
             }
-            const historyChange = accumulator[current.documentType.id].historyChange;
+            const historyChange = accumulator[current.type.id].historyChange;
             const previous = historyChange.length > 0 ? historyChange[historyChange.length - 1] : null;
             if (previous !== null) {
                 const changed = [];
-                for (const field of fields) {
+                for (const field in fields) {
                     if (previous[field] !== current[field]) {
                         const translate = {
-                            name: field,
+                            name: fields[field],
                             current: current[field],
                             old: previous[field],
                             operation: current.operation
@@ -96,10 +87,11 @@ export class PatientHistoryModalComponent implements OnInit, AfterViewInit {
                 }
                 current.changed = changed;
             }
-            accumulator[current.documentType.id].historyChange.push(current);
+            accumulator[current.type.id].historyChange.push(current);
             return accumulator;
         }, {});
         this.patientDocumentHistory = Object.values(changedHistory);
+        console.log(this.patientDocumentHistory);
     }
 
     displayHistory(history: PatientHistory[]) {

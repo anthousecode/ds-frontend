@@ -18,7 +18,7 @@ export class PatientService {
 
   /**
    *  Get запрос для получениие данных об пациенте
-   * @param id:number Пациента которого мы ищем
+   * @param id:documNumber Пациента которого мы ищем
    * @return error - еслии евсть ошибка , если все нормально то о отдает json вида PatientCard
    */
   getPatient(id: number): Observable<Patient> {
