@@ -101,7 +101,7 @@ export class PatientCardComponent implements OnInit {
         this.formModel = {
             id: new FormControl(null),
             sex: new FormControl(this.sexes[0]),
-            birthdate: new FormControl(null, [Validators.required, DateValidator]),
+            birthdate: new FormControl(null, {validators: [Validators.required, DateValidator], updateOn: 'blur'}),
             firstName: new FormControl(null, [Validators.maxLength(50), Validators.required, Validators.pattern(regexMapVal.name)]),
             snils: new FormControl(null, [ValiedateSnilsRequired]),
             lastName: new FormControl(null, [Validators.maxLength(50), Validators.required, Validators.pattern(regexMapVal.name)]),
