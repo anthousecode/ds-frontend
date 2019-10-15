@@ -8,6 +8,7 @@ import {
 } from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Router} from '@angular/router';
+import {tap} from 'rxjs/operators';
 
 @Injectable()
 export class ApiWithCredentialInterceptor implements HttpInterceptor {
@@ -18,6 +19,15 @@ export class ApiWithCredentialInterceptor implements HttpInterceptor {
         req = req.clone({
             withCredentials: true
         });
-        return next.handle(req);
+        return next.handle(req).pipe(tap(
+            (event) => {
+                console.log('http event', event);
+            },
+            (error: any) => {
+                if (error instanceof HttpErrorResponse && error.status === 401) {
+                    window.location.href = '/saml/login';
+                }
+            }
+        ));
     }
 }
