@@ -27,7 +27,7 @@ export class PatientService {
         .pipe(
           concatMap((error, count) => {
             this.handleError(error);
-            return count < 5 && (error.status === 400 || error.status === 0) ? of(error.status) : throwError(error);
+            return count < 5 && (error.status === 500 || error.status === 0) ? of(error.status) : throwError(error);
           }),
           delay(1000)
         )
@@ -45,7 +45,7 @@ export class PatientService {
         .pipe(
           concatMap((error, count) => {
             this.handleError(error);
-            return count < 5 && (error.status === 400 || error.status === 0) ? of(error.status) : throwError(error);
+            return count < 5 && (error.status === 500 || error.status === 0) ? of(error.status) : throwError(error);
           }),
           delay(1000)
         )));
@@ -62,7 +62,7 @@ export class PatientService {
         .pipe(
           concatMap((error, count) => {
             this.handleError(error);
-            return count < 5 && (error.status === 400 || error.status === 0) ? of(error.status) : throwError(error);
+            return count < 5 && (error.status === 500 || error.status === 0) ? of(error.status) : throwError(error);
           }),
           delay(1000)
         )));
@@ -78,7 +78,7 @@ export class PatientService {
         .pipe(
           concatMap((error, count) => {
             this.handleError(error);
-            return count < 5 && (error.status === 400 || error.status === 0) ? of(error.status) : throwError(error);
+            return count < 5 && (error.status === 500 || error.status === 0) ? of(error.status) : throwError(error);
           }),
           delay(1000)
         )));
@@ -95,7 +95,7 @@ export class PatientService {
         .pipe(
           concatMap((error, count) => {
             this.handleError(error);
-            return count < 5 && (error.status === 400 || error.status === 0) ? of(error.status) : throwError(error);
+            return count < 5 && (error.status === 500 || error.status === 0) ? of(error.status) : throwError(error);
           }),
           delay(1000)
         )));
