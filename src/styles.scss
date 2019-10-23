@@ -39,6 +39,12 @@ input {
   width: 100% !important;
 }
 
+.spinner-center {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
 .mat-form-field .mat-form-field-label {
   left: 0 !important;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif !important;
@@ -47,6 +53,9 @@ input {
 
 .mat-form-field .mat-select {
   width: 100% !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .mat-form-field .mat-input-element {

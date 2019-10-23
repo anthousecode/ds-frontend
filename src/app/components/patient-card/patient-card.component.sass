@@ -7,11 +7,21 @@
 .inline-checkbox
   display: inline-flex
 
-.align-center
-  margin: auto
-  padding-left: 24px
-  font-size: 1.2rem
+/deep/ .mat-checkbox-checked .mat-checkbox-background, .mat-checkbox-indeterminate .mat-checkbox-background
+  background-color: #1b9881 !important
 
+/deep/ .mat-checkbox:not(.mat-checkbox-disabled) .mat-checkbox-ripple .mat-ripple-element
+  background-color: #1b9881 !important
+
+.checkbox-center
+  height: 74px
+  display: flex
+  align-items: center
+  font-size: 1.2rem
+  padding-left: 24px
+
+  @media screen and (max-width: 993px)
+    padding-left: 0.75rem
 
 .modal-over
   width: 100%

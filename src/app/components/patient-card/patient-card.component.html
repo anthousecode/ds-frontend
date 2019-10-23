@@ -38,10 +38,11 @@
                                    [formControl]="formModel.withoutSnilsReasonOther">
                         </mat-form-field>
                     </div>
-                    <mat-checkbox class="align-center"
-                        [checked]="check" [disabled]="!noSnilsEnable"
-                        (change)="changeCheckStatus()">Нет СНИЛС!
-                    </mat-checkbox>
+                    <div class="col checkbox-center">
+                        <mat-checkbox [checked]="check" [disabled]="!noSnilsEnable"
+                                      (change)="changeCheckStatus()">Нет СНИЛС!
+                        </mat-checkbox>
+                    </div>
                 </div>
                 <div class="row">
                     <div class=" col l4 s12">

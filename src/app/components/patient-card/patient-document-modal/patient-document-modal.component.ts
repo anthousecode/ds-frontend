@@ -9,6 +9,8 @@ import {ValidationService} from '../../../service/validation.service';
 import {DictionaryService} from '../../../service/dictionary.service';
 import {patientDocTypeRegex} from '../../../validators/documents.validator';
 
+const RF_PASSPORT_ID = 14;
+
 @Component({
     selector: 'app-patient-document-modal',
     templateUrl: './patient-document-modal.component.html',
@@ -38,11 +40,13 @@ export class PatientDocumentModalComponent implements OnInit {
     isUnique = true;
     indexItem: number;
     documentsType: PatientDocumentType[];
+    loading = true;
 
     ngOnInit() {
         this.initForm();
         this.dictionary.getIdentityDocumentTypes().subscribe(
             value => {
+                this.loading = false;
                 if (this.data) {
                     this.documentsType = value;
                     this.patientDocumentForm.patchValue(this.data);
@@ -57,7 +61,10 @@ export class PatientDocumentModalComponent implements OnInit {
                         this.documentsType = value;
                     }
                     if (this.documentsType.length > 0) {
-                        this.monedaSelect._onChange(this.documentsType[0]);
+                        this.documentsType.sort((a, b) => a.id > b.id ? 1 : -1);
+                        const doc = this.documentsType.find(a => a.id === RF_PASSPORT_ID) || this.documentsType[0];
+                        this.monedaSelect._onChange(doc);
+                        this.changeValueType(doc);
                     }
                 }
             }
@@ -82,15 +89,14 @@ export class PatientDocumentModalComponent implements OnInit {
 
 
     private initForm(): void {
-        this.formModel = {
-            id: new FormControl(null),
-            documSerial: new FormControl(null, [Validators.maxLength(50),
-                Validators.required, Validators.pattern(patientDocTypeRegex[7].series)]),
-            documNumber: new FormControl(null, [Validators.maxLength(50),
-                Validators.required, Validators.pattern(patientDocTypeRegex[7].number)]),
-            type: new FormControl({disabled: !!this.data}, Validators.required)
-        };
-        this.patientDocumentForm = new FormGroup(this.formModel);
+        this.patientDocumentForm = this.fb.group({
+            id: [null],
+            documSerial: [null, [Validators.maxLength(50),
+                Validators.required, Validators.pattern(patientDocTypeRegex[7].series)]],
+            documNumber: [null, [Validators.maxLength(50),
+                Validators.required, Validators.pattern(patientDocTypeRegex[7].number)]],
+            type: [{disabled: !!this.data}, Validators.required]
+        });
         if (this.data) {
             this.isUnique = false;
             this.patientDocumentForm.patchValue(this.data);
