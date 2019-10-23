@@ -29,6 +29,7 @@ export interface PatientDocumentType {
     id: number;
     idRef: string;
     name: string;
+    code: number;
 }
 
 export interface PatientHistoryDocument {

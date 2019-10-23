@@ -39,6 +39,12 @@ input {
   width: 100% !important;
 }
 
+.spinner-center {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
 .mat-form-field .mat-form-field-label {
   left: 0 !important;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif !important;
@@ -47,6 +53,9 @@ input {
 
 .mat-form-field .mat-select {
   width: 100% !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .mat-form-field .mat-input-element {
@@ -131,9 +140,6 @@ nav .brand-logo {
   font-size: 12px;
 }
 
-.dropdown-content {
-  width: 400px !important;
-}
 
 .card_label_text {
   color: black;
@@ -285,7 +291,8 @@ nav .brand-logo {
 
 .ias_footer {
   background-color: #3B3D3F;
-  height: 80px;
+  height: 65px;
+  line-height: 1.15;
 }
 
 
@@ -367,4 +374,13 @@ nav .brand-logo {
 
 .md-drppicker {
   width: 255px !important;
+}
+
+.alink_logo {
+  color: white;
+  transition: 0.1s linear;
+
+  &:hover {
+    color: #2196f3;
+  }
 }

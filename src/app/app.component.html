@@ -1,46 +1,42 @@
 <!-- user_bar -->
 <ul class='dropdown-content' id='user'>
-  <li><a href="#!"><i class="material-icons">info</i>Пользователь</a></li>
-  <li><a href="#!"><i class="material-icons">email</i>Уведомления</a></li>
+  <li><a href="#!"><i class="material-icons">email</i><span class="right new badge green" data-badge-caption="4"></span>Уведомления</a></li>
   <li><a href="#!"><i class="material-icons">exit_to_app</i>Выйти</a></li>
 </ul>
 <ul class='dropdown-content' id='user-mobile'>
-  <li><a href="#!">Пользователь</a></li>
-  <li><a href="#!">Уведомления</a></li>
+  <li><a href="#!"><span class="right new badge green" data-badge-caption="4"></span>Уведомления</a></li>
   <li><a href="#!">Выйти</a></li>
 </ul>
 <!-- lech_bar -->
 <ul class='dropdown-content' id='lech'>
-  <li class="active"><a routerLink="/patient-card">Карта пациента</a></li>
-  <li><a routerLink="/search-patient">Поиск пациента</a></li>
-  <li><a href="#!">Поиск заявки</a></li>
-  <li><a href="#!">Справочная информация</a></li>
+  <li class="active"><a routerLink="/patient-card">Карта ребенка</a></li>
+  <li><a routerLink="/search-patient">Поиск карты обследования</a></li>
+  <li><a href="#!">Поиск ребенка</a></li>
 </ul>
 <ul class='dropdown-content' id='lech-mobile'>
-  <li class="active"><a href="card_sk.html">Карта пациента</a></li>
-  <li><a routerLink="/patient-card">Поиск пациента</a></li>
-  <li><a routerLink="/search-patient">Поиск заявки</a></li>
-  <li><a href="#!">Справочная информация</a></li>
+  <li class="active"><a routerLink="/patient-card">Карта ребенка</a></li>
+  <li><a routerLink="/search-patient">Поиск карты обследования</a></li>
+  <li><a href="#!">Поиск ребенка</a></li>
 </ul>
 
 <nav class="green" style="margin-bottom: 12px">
   <div class="nav-wrapper">
     <a class="sidenav-trigger" data-target="mobile-nav" href="#"><i class="material-icons">menu</i></a>
     <a href="">
-      <div class="tooltipped brand-logo right" data-tooltip="Cистема мониторинга санаторно-курортного лечения">
+      <div class="alink_logo tooltipped brand-logo right" materialize="Tooltip" data-tooltip="Подсистема мониторинга проведения диспансеризации<br> детей-сирот и детей, находящихся в трудной жизненной ситуации">
         <span>ЕГИСЗ</span>
-        <img class="right logo-egisz" src="img/logo-langing.png">
+        <img class="right logo-egisz" src="assets/logo-langing.png">
       </div>
     </a>
     <ul class="left hide-on-med-and-down">
-      <li style="width: 210px"><a class="dropdown-trigger" data-target="user" materialize="Dropdown" href="#!"><i class="material-icons left">account_box</i>ЦЕНТР
+      <li><a class="dropdown-trigger" data-target="user" materialize="Dropdown" href="#!" [materializeParams]="[{ constrainWidth: false }]"><i class="material-icons left">account_box</i>ЦЕНТР
         Т.П. <i class="material-icons right">arrow_drop_down</i></a></li>
-      <li style="width: 210px"><a class="dropdown-trigger" data-target="lech" materialize="Dropdown" href="#!">ЛЕЧЕНИЕ<i
+      <li><a class="dropdown-trigger" data-target="lech" materialize="Dropdown" href="#!" [materializeParams]="[{ constrainWidth: false }]">ОБСЛЕДОВАНИЕ<i
         class="material-icons right">arrow_drop_down</i></a></li>
       <li><a href="">МОНИТОРИНГ</a></li>
-      <li><a href=""><i class="material-icons tooltipped" data-tooltip="АДМИНИСТРИРОВАНИЕ">settings</i></a></li>
+      <li><a href=""><i class="material-icons tooltipped" data-tooltip="АДМИНИСТРИРОВАНИЕ" materialize="Tooltip">settings</i></a></li>
       <li><a class="tooltipped" data-tooltip="ФОРУМ" href="https://portal.egisz.rosminzdrav.ru/forum/"
-             target="_blank"><i class="material-icons small">forum</i></a></li>
+             target="_blank" materialize="Tooltip"><i class="material-icons small">forum</i></a></li>
     </ul>
   </div>
 </nav>

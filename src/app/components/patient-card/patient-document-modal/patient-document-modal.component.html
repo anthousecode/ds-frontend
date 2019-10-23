@@ -2,7 +2,7 @@
 <mat-dialog-content class="mat-typography">
 
   <hr>
-  <div class="row">
+  <div class="row" [hidden]="loading">
     <form [formGroup]="patientDocumentForm" class="col s12">
       <div class="row">
         <div class=" col l4 s12">
@@ -38,22 +38,19 @@
     </form>
   </div>
 </mat-dialog-content>
-<mat-dialog-actions align="end">
+<mat-dialog-actions align="end" *ngIf="!loading">
   <div class="modal-footer">
     <button class="modal-close waves-effect btn-small waves-green btn-flat green text-primary" mat-dialog-close>Отмена
     </button>
-    <ng-template [ngIfElse]="update" [ngIf]="!data">
-      <button (click)="saveData()" [disabled]="!patientDocumentForm.valid"
-              class="modal-close btn-small waves-effect waves-green btn-flat green text-primary"
-              onclick="M.toast({html: 'Документ добавлен'})">ОК
-      </button>
-    </ng-template>
-
-    <ng-template #update>
-      <button (click)="saveData()" [disabled]="!patientDocumentForm.valid"
-              class="modal-close btn-small waves-effect waves-green btn-flat green text-primary"
-              onclick="M.toast({html: 'Документ изменен'})">ОК
-      </button>
-    </ng-template>
+    <button (click)="saveData()" [disabled]="!patientDocumentForm.valid"
+            class="modal-close btn-small waves-effect waves-green btn-flat green text-primary"
+            onclick="M.toast({html: !data ? 'Документ добавлен' : 'Документ изменен'}) ">ОК
+    </button>
   </div>
 </mat-dialog-actions>
+
+<ng-container *ngIf="loading">
+  <div class="col s12 spinner-center">
+    <mat-spinner class="spinner"></mat-spinner>
+  </div>
+</ng-container>

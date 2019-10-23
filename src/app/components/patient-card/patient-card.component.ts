@@ -158,8 +158,10 @@ export class PatientCardComponent implements OnInit {
      * @param id Пациента
      */
     getPatenInfo(id: number) {
+        this.loader = true;
         this.apiPatient.getPatient(id).subscribe(
             (response) => {
+                this.loader = false;
                 this.PatientFullInformation = response;
                 this.patientForm.patchValue(response);
                 if (!response.snils) {
