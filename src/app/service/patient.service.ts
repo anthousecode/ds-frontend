@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import {concatMap, delay, retryWhen} from 'rxjs/operators';
 import {Observable, of, throwError} from 'rxjs';
 import {environment} from '../../environments/environment';
-import {Patient, PatientDocumentsEntity, PatientSendAPI} from '../models/patient.model';
+import { Patient, PatientDocumentsEntity, PatientSearchResult, PatientSendAPI } from '../models/patient.model';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +33,10 @@ export class PatientService {
         )
       ));
   }
+
+    searchPatient$(params: HttpParams): Observable<PatientSearchResult> {
+        return this.http.get<PatientSearchResult>(this.patientUrl, {params});
+    }
 
   /**
    * Для обновление данных

@@ -1,5 +1,4 @@
-import {Component, ElementRef, EventEmitter, OnInit, ViewChild} from '@angular/core';
-import * as M from 'materialize-css/dist/js/materialize';
+import { Component, ElementRef, EventEmitter, Inject, OnInit, ViewChild } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {PatientSearchService} from '../../service/patient-search.service';
 import {ValidationService} from '../../service/validation.service';
@@ -28,9 +27,12 @@ export class SearchPatientComponent implements OnInit {
     };
     actions1 = new EventEmitter<string | MaterializeAction>();
 
-    constructor(private fb: FormBuilder,
-                private dialog: MatDialog,
-                private api: PatientSearchService) {
+    constructor(
+        private fb: FormBuilder,
+        private dialog: MatDialog,
+        private api: PatientSearchService,
+        @Inject('M') private M: any,
+    ) {
         this.initForm();
     }
 
@@ -56,7 +58,7 @@ export class SearchPatientComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        const instanceCollapsible = new M.Collapsible(this.elCollapsible.nativeElement, {});
+        const instanceCollapsible = new this.M.Collapsible(this.elCollapsible.nativeElement, {});
     }
 
     async searchPatient() {

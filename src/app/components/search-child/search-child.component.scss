@@ -1,0 +1,30 @@
+.float-btn_container {
+  position: relative;
+  height: 70px;
+
+  &-click {
+    position: absolute;
+    margin-right: 0;
+  }
+
+  &-transform {
+    opacity: 0;
+    transform: scale(0.4) translateY(0px) translateX(0px);
+  }
+}
+
+.current {
+  background-color: #1b9881;
+
+  a {
+    color: #fff;
+  }
+}
+
+tbody {
+  tr {
+    &:hover {
+      background: #e0f2f1
+    }
+  }
+}
