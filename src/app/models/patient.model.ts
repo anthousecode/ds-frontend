@@ -2,6 +2,7 @@ import {Sex} from './dictionary.model';
 
 export interface Patient {
     id: number;
+    unqId: number;
     lastName: string;
     firstName: string;
     patronymic: string;
@@ -108,4 +109,9 @@ export interface PatientHistoryDocumentDisplay {
 
 export interface PatientSendAPI {
     patient: Patient;
+}
+
+export class PatientSearchResult {
+    count: number;
+    patients: Patient[];
 }

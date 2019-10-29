@@ -1,0 +1,239 @@
+<div class="content row mobile_margin">
+    <div class="z-depth-2 vmp_content col s11 push-s0">
+        <h5 style="text-align: center;">Поиск карты обследования</h5>
+        <div class="row">
+            <div class="col s12">
+                <ul materialize="Collapsible" class="collapsible" #collapsible
+                    [materializeActions]="collapsibleClose">
+                    <li>
+                        <div class="collapsible-header">Фильтры</div>
+                        <div class="collapsible-body">
+                            <form [formGroup]="patientForm">
+                                <div class="row">
+                                    <div class="col s12 l3">
+                                        <mat-form-field>
+                                            <mat-label>Идентификатор</mat-label>
+                                            <input appValidateInput="inn" formControlName="unqId" id="identificator"
+                                                   matInput
+                                                   maxlength="50"
+                                                   type="text">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 l3">
+                                        <mat-form-field>
+                                            <mat-label>Фамилия</mat-label>
+                                            <input appValidateInput="name" formControlName="lastName" id="last-name"
+                                                   matInput
+                                                   maxlength="50"
+                                                   type="text">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col s12 l3">
+                                        <mat-form-field>
+                                            <mat-label>Имя</mat-label>
+                                            <input appValidateInput="name" formControlName="firstName" id="first_name"
+                                                   matInput
+                                                   maxlength="50"
+                                                   type="text">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col s12 l3">
+                                        <mat-form-field>
+                                            <mat-label>Отчество</mat-label>
+                                            <input appValidateInput="name" formControlName="patronymic" id="patronymic"
+                                                   matInput
+                                                   maxlength="50"
+                                                   type="text">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col l3 s12">
+                                        <mat-form-field>
+                                            <mat-label>Пол</mat-label>
+                                            <mat-select formControlName="sex" id="male">
+                                                <mat-option [value]="null">Все</mat-option>
+                                                <mat-option [value]="sex.id"
+                                                            *ngFor="let sex of sexes">{{sex.name}}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col l3 s12">
+                                        <app-date-picker-range
+                                                [showError]="false"
+                                                (onChanged)="onChanged($event)"></app-date-picker-range>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col l3 s12">
+                                        <mat-form-field>
+                                            <mat-label>Серия ДУЛ</mat-label>
+                                            <input class="validate" formControlName="documSerial" id="ser_doc"
+                                                   matInput type="text">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col l3 s12">
+                                        <mat-form-field>
+                                            <mat-label>Номер ДУЛ</mat-label>
+                                            <input class="validate" formControlName="documNumber" id="num_doc"
+                                                   matInput type="text">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col l3 s12">
+                                        <mat-form-field>
+                                            <mat-label>СНИЛС</mat-label>
+                                            <input formControlName="snils" id="snils" mask="000-000-000-00"
+                                                   matInput type="text">
+                                            <mat-error *ngIf="isValid('snils')">
+                                                СНИЛС заполнен не полностью
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <a (click)="clearForm()" class="waves-effect waves-light btn-small green">Очистить</a>
+                                </div>
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+                <div class="row">
+                    <div class="col s12 l11">
+                        <a routerLink="/patient-card" class="waves-effect waves-light btn-small green" target="_blank">Добавить
+                            карту</a>
+                        <button (click)="searchPatient()" *ngIf="patientForm.valid; else disableButton" class="waves-effect waves-light btn-small green">Найти
+                        </button>
+                        <ng-template #disableButton>
+                                <button data-tooltip="Заполните корректно все поля"
+                                        materialize="Tooltip"
+                                        [disabled]="!patientForm.valid"
+                                        class="tooltipped disabled-button-tootltip waves-effect waves-light btn-small green">Найти</button>
+                        </ng-template>
+                        <a (click)="openExport()" class="waves-effect waves-light btn-small green">Экспорт</a>
+                    </div>
+                    <div class="col s12 l1">
+                        <div class="float-btn_container">
+                            <div #floating class="fixed-action-btn click-to-toggle direction-top direction-left right float-btn_container-click">
+                                <a class="btn-floating btn-large green">{{ pagesize }}</a>
+                                <ul>
+                                    <li (click)="pagesize = 50">
+                                        <a class="btn-floating green center float-btn_container-transform">50</a>
+                                    </li>
+                                    <li (click)="pagesize = 30">
+                                        <a class="btn-floating green center float-btn_container-transform">30</a>
+                                    </li>
+                                    <li (click)="pagesize = 10">
+                                        <a class="btn-floating green center float-btn_container-transform">10</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <pagination-template #p="paginationApi" *ngIf="patientResult?.count > 0 && !loading"
+                             (pageChange)="searchPatient($event)"
+                             [id]="config.id">
+            <ul class="pagination center">
+
+                <li [class.disabled]="p.isFirstPage()" class="waves-effect">
+                    <a (click)="p.previous()" *ngIf="!p.isFirstPage()"><i class="material-icons">chevron_left</i></a>
+                </li>
+
+                <li *ngFor="let page of p.pages" [class.current]="p.getCurrent() === page.value">
+                    <a (click)="p.setCurrent(page.value)" *ngIf="p.getCurrent() !== page.value">
+                        <span>{{ page.label }}</span>
+                    </a>
+                    <a *ngIf="p.getCurrent() === page.value">
+                        <span>{{ page.label }}</span>
+                    </a>
+                </li>
+
+                <li [class.disabled]="p.isLastPage()" class="waves-effect">
+                    <a (click)="p.next()" *ngIf="!p.isLastPage()"> <i class="material-icons">chevron_right</i></a>
+                </li>
+            </ul>
+
+        </pagination-template>
+        <div *ngIf="!loading" class="row center-align">
+            <h6 *ngIf="!patientResult"><b>Выберите параметры для поиска</b></h6>
+            <!-- Или если нет результатов: -->
+            <h6 *ngIf="patientResult?.count == 0"><b>Нет результатов, удовлетворяющих параметрам поиска</b></h6>
+        </div>
+        <div class="row" *ngIf="patientResult?.count > 0 && !loading">
+            <div class="col s12">
+                <table class="responsive-table">
+                    <thead>
+                    <tr style="cursor: pointer">
+                        <th>Идентификатор</th>
+                        <th>ФИО</th>
+                        <th>Дата рождения</th>
+                        <th>Возраст</th>
+                        <th>Пол</th>
+                        <th>Карты осмотра</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr *ngFor="let item of patientResult.patients | paginate :config">
+                        <td>{{item.unqId}}</td>
+                        <td><a routerLink="/patient-card/{{item.id}}" target="_blank">{{item.lastName}} {{item.firstName}} {{item.patronymic}}</a></td>
+                        <td>{{item.birthdate | date : 'dd.MM.yyyy'}}</td>
+                        <td>{{ item.sex.name }}</td>
+                        <td>{{ item.birthdate | age }}</td>
+                        <td>Карты досмотра</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <pagination-template #p="paginationApi" *ngIf="patientResult?.count > 0 && !loading"
+                             (pageChange)="searchPatient($event)"
+                             [id]="config.id">
+            <ul class="pagination center">
+
+                <li [class.disabled]="p.isFirstPage()" class="waves-effect">
+                    <a (click)="p.previous()" *ngIf="!p.isFirstPage()"><i class="material-icons">chevron_left</i></a>
+                </li>
+
+                <li *ngFor="let page of p.pages" [class.current]="p.getCurrent() === page.value">
+                    <a (click)="p.setCurrent(page.value)" *ngIf="p.getCurrent() !== page.value">
+                        <span>{{ page.label }}</span>
+                    </a>
+                    <a *ngIf="p.getCurrent() === page.value">
+                        <span>{{ page.label }}</span>
+                    </a>
+                </li>
+
+                <li [class.disabled]="p.isLastPage()" class="waves-effect">
+                    <a (click)="p.next()" *ngIf="!p.isLastPage()"> <i class="material-icons">chevron_right</i></a>
+                </li>
+            </ul>
+
+        </pagination-template>
+        <div class="row" *ngIf="patientResult?.count > 0 && !loading">
+            <div class="col s12">
+                <a class="modal-trigger waves-effect waves-light btn-small green" (click)="openExport()">Экспорт</a>
+                <div class="right" style="margin: 5px 5px 0 0;" [ngPlural]="patientResult?.count"> <b>{{ patientResult?.count }}</b>
+                    <ng-template ngPluralCase="=1"><b> пациент</b></ng-template>
+                    <ng-template ngPluralCase="=2"><b> пациента</b></ng-template>
+                    <ng-template ngPluralCase="many"><b> пациентов</b></ng-template>
+                    <ng-template ngPluralCase="other"><b> пациентов</b></ng-template>
+                </div>
+            </div>
+        </div>
+        <div class="row center-align">
+            <ng-container *ngIf="loading">
+                <div class="col s12 spinner-center">
+                    <mat-spinner class="spinner"></mat-spinner>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>
+

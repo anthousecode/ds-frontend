@@ -2,6 +2,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {NgxMaskModule} from 'ngx-mask';
+import * as M from 'materialize-css/dist/js/materialize';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -36,7 +37,6 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {PatientHistoryModalComponent} from './components/patient-card/patient-history-modal/patient-history-modal.component';
 import {PatientUnionModalComponent} from './components/patient-card/patient-union-modal/patient-union-modal.component';
 import {ValidationDirective} from './directive/validation.directive';
-import {SearchPatientComponent} from './components/search-patient/search-patient.component';
 import {ErrorPageComponent} from './components/error-page/error-page.component';
 import {MatButtonModule} from '@angular/material/button';
 import {NgxPaginationModule} from 'ngx-pagination';
@@ -50,6 +50,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatTableModule} from '@angular/material/table';
 import { ExportModalComponent } from './components/export-modal/export-modal.component';
 import { AgePipe } from './pipe/age.pipe';
+import { SearchChildComponent } from './components/search-child/search-child.component';
 
 @NgModule({
     declarations: [
@@ -69,12 +70,12 @@ import { AgePipe } from './pipe/age.pipe';
         PatientHistoryModalComponent,
         PatientUnionModalComponent,
         ValidationDirective,
-        SearchPatientComponent,
         ErrorPageComponent,
         DatePickerComponent,
         DatePickerRangeComponent,
         ExportModalComponent,
         AgePipe,
+        SearchChildComponent,
 
     ],
     imports: [
@@ -108,12 +109,19 @@ import { AgePipe } from './pipe/age.pipe';
             useClass: ApiWithCredentialInterceptor,
             multi: true
         },
+        { provide: 'M', useValue: M },
         MatDatepickerModule,
-        {provide: MAT_DATE_LOCALE, useValue: 'ru-RU'},
-        {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-        {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS}],
+        { provide: MAT_DATE_LOCALE, useValue: 'ru-RU' },
+        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+        { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS }
+        ],
     bootstrap: [AppComponent],
-    entryComponents: [PatientDocumentModalComponent, PatientHistoryModalComponent, PatientUnionModalComponent]
+    entryComponents: [
+        PatientDocumentModalComponent,
+        PatientHistoryModalComponent,
+        PatientUnionModalComponent,
+        ExportModalComponent
+    ]
 })
 export class AppModule {
 }
