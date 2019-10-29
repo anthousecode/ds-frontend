@@ -37,7 +37,6 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {PatientHistoryModalComponent} from './components/patient-card/patient-history-modal/patient-history-modal.component';
 import {PatientUnionModalComponent} from './components/patient-card/patient-union-modal/patient-union-modal.component';
 import {ValidationDirective} from './directive/validation.directive';
-import {SearchPatientComponent} from './components/search-patient/search-patient.component';
 import {ErrorPageComponent} from './components/error-page/error-page.component';
 import {MatButtonModule} from '@angular/material/button';
 import {NgxPaginationModule} from 'ngx-pagination';
@@ -71,7 +70,6 @@ import { SearchChildComponent } from './components/search-child/search-child.com
         PatientHistoryModalComponent,
         PatientUnionModalComponent,
         ValidationDirective,
-        SearchPatientComponent,
         ErrorPageComponent,
         DatePickerComponent,
         DatePickerRangeComponent,
