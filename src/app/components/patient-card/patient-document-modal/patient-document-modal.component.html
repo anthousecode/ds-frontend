@@ -1,8 +1,8 @@
-<h6 mat-dialog-title>Документ, удостоверяющий личность</h6>
+<h6 mat-dialog-title>{{ documentsEmpty ? 'Вы добавили все документы' : 'Документ, удостоверяющий личность' }}</h6>
 <mat-dialog-content class="mat-typography">
 
   <hr>
-  <div class="row" [hidden]="loading">
+  <div class="row" [hidden]="loading || documentsEmpty" >
     <form [formGroup]="patientDocumentForm" class="col s12">
       <div class="row">
         <div class=" col l4 s12">

@@ -1,13 +1,13 @@
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {MockService} from '../../../service/mock.service';
-import {MAT_DIALOG_DATA, MatDialogRef, MatSelect} from '@angular/material';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {pickerI18n} from '../../talon/talon.component';
-import {PatientDocumentsEntity, PatientDocumentType} from '../../../models/patient.model';
-import {PatientService} from '../../../service/patient.service';
-import {ValidationService} from '../../../service/validation.service';
-import {DictionaryService} from '../../../service/dictionary.service';
-import {patientDocTypeRegex} from '../../../validators/documents.validator';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { MockService } from '../../../service/mock.service';
+import { MAT_DIALOG_DATA, MatDialogRef, MatSelect } from '@angular/material';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { pickerI18n } from '../../talon/talon.component';
+import { PatientDocumentsEntity, PatientDocumentType } from '../../../models/patient.model';
+import { PatientService } from '../../../service/patient.service';
+import { ValidationService } from '../../../service/validation.service';
+import { DictionaryService } from '../../../service/dictionary.service';
+import { patientDocTypeRegex } from '../../../validators/documents.validator';
 
 const RF_PASSPORT_ID = 14;
 
@@ -41,16 +41,20 @@ export class PatientDocumentModalComponent implements OnInit {
     isUnique = true;
     indexItem: number;
     documentsType: PatientDocumentType[];
+    allDocumentsType: PatientDocumentType[];
     loading = true;
+    documentsEmpty = false;
 
     ngOnInit() {
         this.initForm();
         this.dictionary.getIdentityDocumentTypes().subscribe(
             value => {
+                this.allDocumentsType = value;
                 this.loading = false;
                 if (this.data) {
                     this.documentsType = value;
                     this.patientDocumentForm.patchValue(this.data);
+                    this.changeValueType(this.data.type, true);
                     if (this.data.id !== null) {
                         this.patientDocumentForm.controls.type.disable();
                     }
@@ -69,6 +73,8 @@ export class PatientDocumentModalComponent implements OnInit {
                         const doc = this.documentsType.find(a => a.id === RF_PASSPORT_ID) || this.documentsType[0];
                         this.monedaSelect._onChange(doc);
                         this.changeValueType(doc);
+                    } else {
+                        this.documentsEmpty = true;
                     }
                 }
             }
@@ -109,31 +115,28 @@ export class PatientDocumentModalComponent implements OnInit {
         }
     }
 
-    changeValueType(event) {
-        for (const itemIn of patientDocTypeRegex) {
-            if (event.id === itemIn.id) {
-                this.patientDocumentForm.controls.documSerial.setValidators(
-                    [Validators.pattern(itemIn.series), Validators.required]
-                );
-                this.patientDocumentForm.controls.documNumber.setValidators(
-                    [Validators.pattern(itemIn.number), Validators.required]
-                );
-                this.patientDocumentForm.controls.documSerial.updateValueAndValidity();
-                this.patientDocumentForm.controls.documNumber.updateValueAndValidity();
-                break;
-            } else {
-                this.patientDocumentForm.controls.documNumber.reset();
-                this.patientDocumentForm.controls.documSerial.reset();
-                this.patientDocumentForm.controls.documSerial.setValidators(
-                    [Validators.pattern(patientDocTypeRegex[7].series), Validators.required]
-                );
-                this.patientDocumentForm.controls.documNumber.setValidators(
-                    [Validators.pattern(patientDocTypeRegex[7].number), Validators.required]
-                );
-                this.patientDocumentForm.controls.documSerial.updateValueAndValidity();
-                this.patientDocumentForm.controls.documNumber.updateValueAndValidity();
-            }
+    /**
+     *  @param isOutputDocument - то, что тип документа был взят из сущности пациента
+     *  @param event - тип документа пациента
+     */
+    changeValueType(event: PatientDocumentType, isOutputDocument: boolean = false) {
+        if (isOutputDocument) {
+            const doc = this.allDocumentsType.filter(value => value.id === event.id);
+            doc.length > 0 ? event = doc[0] : event.documSerial = true;
         }
+        if (event.documSerial) {
+            this.patientDocumentForm.controls.documSerial.enable();
+            this.patientDocumentForm.controls.documSerial.setValidators(
+                [Validators.pattern(event.validationSerial), Validators.required]
+            );
+            this.patientDocumentForm.controls.documSerial.updateValueAndValidity();
+        } else {
+            this.patientDocumentForm.controls.documSerial.disable();
+        }
+        this.patientDocumentForm.controls.documNumber.setValidators(
+            [Validators.pattern(event.validationNumber), Validators.required]
+        );
+        this.patientDocumentForm.controls.documNumber.updateValueAndValidity();
     }
 
     compareFn(c1, c2): boolean {
