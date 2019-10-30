@@ -52,19 +52,16 @@ export class PatientDocumentModalComponent implements OnInit {
                 this.allDocumentsType = value;
                 this.loading = false;
                 if (this.data) {
-                    this.documentsType = value;
-                    this.patientDocumentForm.patchValue(this.data);
-                    this.changeValueType(this.data.type, true);
                     if (this.data.id !== null) {
                         this.patientDocumentForm.controls.type.disable();
                     }
+                    this.documentsTypeFilter(value);
+                    this.documentsType.push(this.data.type);
+                    this.patientDocumentForm.patchValue(this.data);
+                    this.changeValueType(this.data.type, true);
                 } else {
                     if (this.apiPatient.state.length !== 0) {
-                        this.documentsType = value.filter((obj) => {
-                            return !this.apiPatient.state.some((obj2) => {
-                                return obj.id === obj2.type.id;
-                            });
-                        });
+                        this.documentsTypeFilter(value);
                     } else {
                         this.documentsType = value;
                     }
@@ -79,6 +76,14 @@ export class PatientDocumentModalComponent implements OnInit {
                 }
             }
         );
+    }
+
+    documentsTypeFilter(value: PatientDocumentType[]) {
+        this.documentsType = value.filter((obj) => {
+            return !this.apiPatient.state.some((obj2) => {
+                return obj.id === obj2.type.id;
+            });
+        });
     }
 
     checkValid(nameFormControl: string) {
