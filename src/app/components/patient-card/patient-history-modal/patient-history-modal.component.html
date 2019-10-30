@@ -1,82 +1,92 @@
 <!--suppress HtmlDeprecatedAttribute -->
-<mat-dialog-content class="mat-typography main-dialog">
+<ng-container *ngIf="loading">
+  <div class="col s12 spinner-center" style="height: 100%; align-items: center">
+    <mat-spinner class="spinner"></mat-spinner>
+  </div>
+</ng-container>
+<mat-dialog-content class="mat-typography main-dialog" *ngIf="!loading">
 
   <div class="modal-fixed-footer" id="card_history">
     <div class="modal-content">
       <h2>История изменений в карте</h2>
       <hr>
-      <ul class="tabs tabs-fixed-width tab-demo green-text" materialize="Tabs" [materializeActions]="tabActions">
-        <li class="tab"><a class="active" href="#pat_history">Пациент</a></li>
-        <li class="tab"><a href="#doc_history">Документы</a></li>
-      </ul>
-      <div class="row" id="pat_history">
-        <table>
-          <tbody>
-          <tr *ngIf="initHistory">
-            <td>{{initHistory.operationDate | date : 'dd.MM.yyyy'}} : пользователь {{initHistory.osUser}} создал карту
-            </td>
-          </tr>
-          <ng-container *ngFor="let patient of patientHistory">
-            <ng-container *ngFor="let historyChange of patient.historyChange">
-              <tr *ngFor="let history of historyChange.changed">
-                <td>
-                  {{historyChange.operationDate | date : 'dd.MM.yyyy' }}:
-                  пользователь {{historyChange.osUser}} {{history.operation}} {{history.name}} {{history.old}}
-                  на {{history.current}}
+      <mat-tab-group mat-stretch-tabs>
+        <mat-tab label="Пациент">
+          <div class="row" id="pat_history">
+            <table>
+              <tbody>
+              <tr *ngIf="initHistory">
+                <td>{{initHistory.operationDate | date : 'dd.MM.yyyy'}} :
+                  пользователь {{initHistory.osUser}} создал карту
                 </td>
               </tr>
-            </ng-container>
-          </ng-container>
-          </tbody>
-        </table>
-      </div>
-      <div class="row" id="doc_history">
-        <ul class="collapsible" materialize="Collapsible">
-          <li *ngFor="let item of patientDocumentHistory; let index;">
-            <div class="collapsible-header"> {{item.name | json}}</div>
-            <div class="collapsible-body">
-              <table>
-                <tbody>
-                <ng-container *ngFor="let changedItem of item.historyChange">
-                  <ng-container *ngIf="changedItem.operation === 'i'">
-                    <tr>
-                      <td>
-                        {{item.historyChange[0].operationDate | date: 'dd.MM.yyyy'}} :
-                        пользователь {{item.historyChange[0].lastUserSave}} создал {{item.historyChange[0].type.name}}
-                      </td>
-                    </tr>
-                  </ng-container>
-                  <ng-container *ngIf="changedItem.operation === 'u'">
-                    <tr *ngFor="let valuesChanged of changedItem.changed">
-                      <td>
-                        {{changedItem.operationDate | date : 'dd.MM.yyyy'}} :
-                        пользователь {{changedItem.lastUserSave}} {{valuesChanged.operation}} поле {{valuesChanged.name}}
-                        c {{valuesChanged.old}}
-                        на {{valuesChanged.current}}
-                      </td>
-                    </tr>
-                  </ng-container>
-                  <ng-container *ngIf="changedItem.operation === 'd'">
-                    <tr>
-                      <td>
-                        {{changedItem.operationDate | date : 'dd.MM.yyyy'}} :
-                        пользователь {{changedItem.osUser}} удалил {{item.name}}
-                        <br>
-                        {{changedItem.documNumber}} {{changedItem.documSerial}}
-                      </td>
-                    </tr>
-                  </ng-container>
+              <ng-container *ngFor="let patient of patientHistory">
+                <ng-container *ngFor="let historyChange of patient.historyChange">
+                  <tr *ngFor="let history of historyChange.changed">
+                    <td>
+                      {{historyChange.operationDate | date : 'dd.MM.yyyy' }}:
+                      пользователь {{historyChange.osUser}} {{history.operation}} {{history.name}} {{history.old}}
+                      на {{history.current}}
+                    </td>
+                  </tr>
                 </ng-container>
-                </tbody>
-              </table>
-            </div>
-          </li>
-        </ul>
-      </div>
+              </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </mat-tab>
+        <mat-tab label="Документы">
+          <div class="row" id="doc_history">
+            <ul class="collapsible" materialize="Collapsible">
+              <li *ngFor="let item of patientDocumentHistory; let index;">
+                <div class="collapsible-header"> {{item.name | json}}</div>
+                <div class="collapsible-body">
+                  <table>
+                    <tbody>
+                    <ng-container *ngFor="let changedItem of item.historyChange">
+                      <ng-container *ngIf="changedItem.operation === 'i'">
+                        <tr>
+                          <td>
+                            {{item.historyChange[0].operationDate | date: 'dd.MM.yyyy'}} :
+                            пользователь {{item.historyChange[0].lastUserSave}}
+                            создал {{item.historyChange[0].type.name}}
+                          </td>
+                        </tr>
+                      </ng-container>
+                      <ng-container *ngIf="changedItem.operation === 'u'">
+                        <tr *ngFor="let valuesChanged of changedItem.changed">
+                          <td>
+                            {{changedItem.operationDate | date : 'dd.MM.yyyy'}} :
+                            пользователь {{changedItem.lastUserSave}} {{valuesChanged.operation}}
+                            поле {{valuesChanged.name}}
+                            c {{valuesChanged.old}}
+                            на {{valuesChanged.current}}
+                          </td>
+                        </tr>
+                      </ng-container>
+                      <ng-container *ngIf="changedItem.operation === 'd'">
+                        <tr>
+                          <td>
+                            {{changedItem.operationDate | date : 'dd.MM.yyyy'}} :
+                            пользователь {{changedItem.osUser}} удалил {{item.name}}
+                            <br>
+                            {{changedItem.documNumber}} {{changedItem.documSerial}}
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
     </div>
   </div>
 </mat-dialog-content>
-<mat-dialog-actions align="end" class="dialog-footer">
+<mat-dialog-actions align="end" class="dialog-footer" *ngIf="!loading" >
   <div class="modal-footer">
     <button class="modal-close waves-effect waves-green btn-flat green text-primary" mat-dialog-close>ОК</button>
   </div>

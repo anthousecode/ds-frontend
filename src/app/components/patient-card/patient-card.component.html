@@ -1,5 +1,5 @@
-<div class="content row container">
-    <div class="row">
+<div class="content row container mobile_margin">
+    <div class="row mobile_margin">
         <div [ngClass]="{'push-card' : patientAddInfo}" class="z-depth-2 vmp_content col l9 s12" id="main-info">
             <h5 style="text-align: center;">Карта ребенка</h5>
             <ng-container *ngIf="PatientFullInformation">
@@ -7,7 +7,39 @@
                    materialize="Tooltip"
                    style="margin-top:-40px;"><i class="material-icons small">history</i></a>
             </ng-container>
+            <div class="left" style="margin-top:-40px;">
+                <div *ngIf="duplicate"
+                     class="dropdown-trigger inline-display"
+                     data-target='double'
+                     materialize="Dropdown"
+                     [materializeParams]="[{ constrainWidth: false }]">
+                    <a class="text-accent-4 red-text" materialize="Tooltip" data-tooltip="Пациент уже существует">
+                        <i class="material-icons small">report</i>
+                    </a>
+                </div>
+                <div *ngIf="possibleDuplicate && !duplicate"
+                     class="dropdown-trigger inline-display"
+                     data-target='double'
+                     materialize="Dropdown"
+                     [materializeParams]="[{ constrainWidth: false }]">
+                    <a class="text-accent-4 yellow-text" materialize="Tooltip" data-tooltip="Возможно, данный пациент уже существует в системе">
+                        <i class="tooltipped material-icons small">report</i>
+                    </a>
+                </div>
+            </div>
+            <!-- Инфо о дубле -->
+            <div id='double' class='double-width dropdown-content'>
+                <span *ngIf="duplicate">Пациент с данным СНИЛС уже существует в системе:</span>
+                <span *ngIf="possibleDuplicate && !duplicate">Возможно, данный пациент уже существует в системе:</span>
+                <ng-container *ngFor="let duplicatePatient of duplicate ? duplicatePatients : possibleDuplicate ? possibleDuplicatePatients : []">
+                    <br>
+                    <a routerLink="/patient-card/{{duplicatePatient.id}}" target="_blank">{{ duplicatePatient?.firstName }} {{ duplicatePatient?.lastName }} {{ duplicatePatient?.patronymic }} <span *ngIf="duplicatePatient?.snils">({{ duplicatePatient?.snils | snils }})</span> ,{{ duplicatePatient?.birthdate | date: 'dd.MM.yyyy' }}</a>
+                </ng-container>
+            </div>
             <form [formGroup]="patientForm">
+                <div class="card-panel red lighten-4" *ngIf="serverErrors">
+                    <div *ngFor="let errorMessage of serverErrors">{{ errorMessage }}</div>
+                </div>
                 <div class="row">
                     <div class="col l4 s12 inline-checkbox" *ngIf="!check">
                         <mat-form-field>
@@ -170,26 +202,28 @@
                 </div>
             </div>
 
-            <div class="row" style="padding-left: 20px">
-                <button (click)="savePatientInfo()"
-                        mat-button
-                        *ngIf="(patientForm.valid && (apiPatient.state.length >= 1)); else disableButton"
-                        class="btn-small green">Сохранить
-                </button>
-                <ng-template #disableButton>
-                    <div class="tooltipped disabled-button-tootltip" data-tooltip="Заполните корректно все поля"
-                         materialize="Tooltip">
-                        <button
-                                mat-button
-                                [disabled]="!(patientForm.valid && (apiPatient.state.length >= 1))"
-                                class=" btn-small green">Сохранить
-                        </button>
-                    </div>
-                </ng-template>
-                <ng-container *ngIf="PatientFullInformation">
-                    <a class="waves-effect waves-light btn-small green">Новая карта</a>
-                    <a class="waves-effect waves-light btn-small green">Удалить</a>
-                </ng-container>
+            <div class="row">
+                <div class="col s12">
+                    <button (click)="savePatientInfo()"
+                            mat-button
+                            *ngIf="(patientForm.valid && (apiPatient.state.length >= 1)); else disableButton"
+                            class="btn-small green">Сохранить
+                    </button>
+                    <ng-template #disableButton>
+                        <div class="tooltipped disabled-button-tootltip" data-tooltip="Заполните корректно все поля"
+                             materialize="Tooltip">
+                            <button
+                                    mat-button
+                                    [disabled]="!(patientForm.valid && (apiPatient.state.length >= 1))"
+                                    class=" btn-small green">Сохранить
+                            </button>
+                        </div>
+                    </ng-template>
+                    <ng-container *ngIf="PatientFullInformation">
+                        <a routerLink="/patient-card" target="_blank" class="waves-effect waves-light btn-small green">Новая карта</a>
+                        <a (click)="openDeletePatient()" class="waves-effect waves-light btn-small green">Удалить</a>
+                    </ng-container>
+                </div>
             </div>
         </div>
         <div *ngIf="PatientFullInformation" [ngClass]="{'scale-out': patientAddInfo}"
