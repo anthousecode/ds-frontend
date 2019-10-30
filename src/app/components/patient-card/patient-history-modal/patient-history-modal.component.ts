@@ -11,6 +11,7 @@ import {DictionaryService} from '../../../service/dictionary.service';
 import {PatientDictionary} from '../../../models/dictionary.model';
 import * as moment from 'moment';
 import {MaterializeAction} from '@samuelberthe/angular2-materialize';
+import { finalize } from 'rxjs/operators';
 
 @Component({
     selector: 'app-patient-history-modal',
@@ -30,6 +31,7 @@ export class PatientHistoryModalComponent implements OnInit, AfterViewInit {
     patientDocumentHistory: PatientHistoryDocumentDisplay[];
     initHistory: PatientHistory;
     tabActions = new EventEmitter<string|MaterializeAction>();
+    loading = true;
 
     static convertDate(date) {
         return new Date(date).toLocaleString().split(',')[0];
@@ -91,7 +93,6 @@ export class PatientHistoryModalComponent implements OnInit, AfterViewInit {
             return accumulator;
         }, {});
         this.patientDocumentHistory = Object.values(changedHistory);
-        console.log(this.patientDocumentHistory);
     }
 
     displayHistory(history: PatientHistory[]) {
@@ -140,7 +141,9 @@ export class PatientHistoryModalComponent implements OnInit, AfterViewInit {
     }
 
     getHistory() {
-        this.apiPatient.getHistoryPatient(this.idPatient).subscribe(
+        this.apiPatient.getHistoryPatient(this.idPatient)
+            .pipe(finalize(() => this.loading = false))
+            .subscribe(
             (history: PatientHistory[]) => {
                 history = history.map(item => {
                     return {...item, birthdate: moment(moment(item.birthdate)).format('DD.MM.YYYY')};

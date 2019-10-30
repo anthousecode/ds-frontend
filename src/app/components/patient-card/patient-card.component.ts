@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {Patient, PatientDocumentsEntity, PatientSendAPI} from '../../models/patient.model';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { Patient, PatientDocumentsEntity, PatientSendAPI } from '../../models/patient.model';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import {PatientDocumentModalComponent} from './patient-document-modal/patient-document-modal.component';
 import {MockService} from '../../service/mock.service';
@@ -8,7 +8,6 @@ import {PatientService} from '../../service/patient.service';
 import {PatientHistoryModalComponent} from './patient-history-modal/patient-history-modal.component';
 import {PatientUnionModalComponent} from './patient-union-modal/patient-union-modal.component';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import * as M from '@samuelberthe/angular2-materialize';
 import {ValiedateSnilsRequired} from '../../validators/snils.validator';
 import {ValidationService} from '../../service/validation.service';
 import {DateValidator} from '../../validators/date.validator';
@@ -17,6 +16,11 @@ import * as moment from 'moment';
 import {ReasonNumber} from '../../dictionary/snilsReason';
 import {DictionaryService} from '../../service/dictionary.service';
 import {Sex} from '../../models/dictionary.model';
+import { isPlatformBrowser } from '@angular/common';
+import { catchError, distinctUntilChanged, finalize, takeUntil } from 'rxjs/operators';
+import { HttpParams } from '@angular/common/http';
+import { merge, Subject } from 'rxjs';
+import { PatientDeleteModalComponent } from './patient-delete-modal/patient-delete-modal.component';
 
 
 @Component({
@@ -24,7 +28,7 @@ import {Sex} from '../../models/dictionary.model';
     templateUrl: './patient-card.component.html',
     styleUrls: ['./patient-card.component.sass']
 })
-export class PatientCardComponent implements OnInit {
+export class PatientCardComponent implements OnInit, OnDestroy {
     formModel: { [key in keyof Patient]?: FormControl };
     dialogConfig = new MatDialogConfig();
     patientForm: FormGroup;
@@ -38,14 +42,26 @@ export class PatientCardComponent implements OnInit {
     sexes: Sex[] = this.apiDictionary.getSexes();
     noSnilsEnable = true;
     minDate = moment('1900-01-01').unix();
+    serverErrors: string[] = null;
+    isBrowser: boolean = isPlatformBrowser(this.platformId);
+    isMobile: boolean;
+    private destroy$: Subject<any> = new Subject();
+    duplicate = false;
+    duplicatePatients: Patient[];
+    possibleDuplicate = false;
+    possibleDuplicatePatients: Patient[];
+    snils: string;
 
-    constructor(public dialog: MatDialog,
-                private mock: MockService,
-                private route: ActivatedRoute,
-                private apiPatient: PatientService,
-                private apiDictionary: DictionaryService,
-                private fb: FormBuilder,
-                private router: Router
+    constructor(
+        public dialog: MatDialog,
+        private mock: MockService,
+        private route: ActivatedRoute,
+        private apiPatient: PatientService,
+        private apiDictionary: DictionaryService,
+        private fb: FormBuilder,
+        private router: Router,
+        @Inject('M') private M: any,
+        @Inject(PLATFORM_ID) private platformId: any
     ) {
     }
 
@@ -59,6 +75,16 @@ export class PatientCardComponent implements OnInit {
         delete this.dialogConfig.data;
     }
 
+    openDeletePatient() {
+        const dialogRef = this.dialog.open(PatientDeleteModalComponent, this.dialogConfig);
+        dialogRef.afterClosed()
+            .subscribe(isDelete => {
+                if (isDelete) {
+                    this.deletePatient();
+                }
+            });
+    }
+
     openPatientUnion() {
         this.dialog.open(PatientUnionModalComponent, this.dialogConfig);
     }
@@ -68,8 +94,9 @@ export class PatientCardComponent implements OnInit {
      */
     openPatientHistory() {
         const dialogHistoryConfig = new MatDialogConfig();
-        dialogHistoryConfig.width = '55%';
-        dialogHistoryConfig.height = '70%';
+        dialogHistoryConfig.width = this.isMobile ? '100%' : '55%';
+        dialogHistoryConfig.height = this.isMobile ? '90%' : '70%';
+        dialogHistoryConfig.maxWidth = this.isMobile ? '100vm' : '80vm';
         dialogHistoryConfig.data = this.patientForm.controls.id.value;
         dialogHistoryConfig.panelClass = 'custom-dialog-container';
         this.dialog.open(PatientHistoryModalComponent, dialogHistoryConfig);
@@ -87,12 +114,17 @@ export class PatientCardComponent implements OnInit {
             this.getPatenInfo(Number(params.get('id')));
         }
 
+        if (this.isBrowser) {
+            this.isMobile = window.innerWidth <= 993;
+        }
+
         this.dialogConfig.disableClose = false;
         this.dialogConfig.autoFocus = true;
         this.dialogConfig.hasBackdrop = true;
         this.dialogConfig.backdropClass = '';
-        this.dialogConfig.width = '55%';
-        this.dialogConfig.maxHeight = '70%';
+        this.dialogConfig.width = this.isMobile ? '100%' : '55%';
+        this.dialogConfig.maxWidth = this.isMobile ? '100vm' : '80vm';
+        this.dialogConfig.maxHeight = this.isMobile ? '90%' : '70%';
 
 
     }
@@ -138,6 +170,59 @@ export class PatientCardComponent implements OnInit {
             }
         );
 
+        this.patientForm.controls.snils.valueChanges
+            .pipe(distinctUntilChanged())
+            .subscribe( () => {
+                if (this.loader) { return; }
+
+                if (this.patientForm.controls.snils.valid) {
+                    const params = new HttpParams().set('snils', this.patientForm.controls.snils.value);
+
+                    this.snils = this.patientForm.controls.snils.value;
+
+                    this.apiPatient.searchPatient$(params)
+                        .pipe(takeUntil(this.destroy$))
+                        .subscribe(result => {
+                            this.duplicatePatients = Object.values(result.patients).filter(
+                                patient => !this.PatientFullInformation || this.PatientFullInformation.unqId !== patient.unqId);
+                            this.duplicate = this.duplicatePatients.length > 0;
+                        });
+                }
+
+            });
+
+        merge(
+            this.patientForm.controls.firstName.valueChanges,
+            this.patientForm.controls.lastName.valueChanges,
+            this.patientForm.controls.birthdate.valueChanges,
+            this.patientForm.controls.sex.valueChanges
+        ).subscribe(
+            () => {
+                if (this.loader) { return; }
+
+                if (
+                    this.patientForm.controls.firstName.valid
+                    && this.patientForm.controls.lastName.valid
+                    && this.patientForm.controls.birthdate.valid
+                    && this.patientForm.controls.sex.value !== null
+                ) {
+                    const params = new HttpParams()
+                        .set('firstName', this.patientForm.controls.firstName.value)
+                        .set('lastName', this.patientForm.controls.lastName.value)
+                        .set('birthdate', moment(this.patientForm.controls.birthdate.value).format('YYYY-MM-DD'))
+                        .set('sex', this.patientForm.controls.sex.value.id);
+
+                    this.apiPatient.searchPatient$(params)
+                        .pipe(takeUntil(this.destroy$))
+                        .subscribe(result => {
+                            this.possibleDuplicatePatients = Object.values(result.patients).filter(
+                                patient => !this.PatientFullInformation || this.PatientFullInformation.unqId !== patient.unqId);
+                            this.possibleDuplicate = this.possibleDuplicatePatients.length > 0;
+                        });
+                }
+            }
+        );
+
     }
 
     /**
@@ -147,7 +232,7 @@ export class PatientCardComponent implements OnInit {
     deleteState(index: number) {
         if ((index > -1 && this.apiPatient.state.length > 1) || !this.PatientFullInformation) {
             this.apiPatient.state.splice(index, 1);
-            M.toast({html: 'Документ удален'});
+            this.M.toast({html: 'Документ удален'});
         }
     }
 
@@ -181,18 +266,23 @@ export class PatientCardComponent implements OnInit {
      */
     savePatientInfo() {
         this.loader = true;
+        this.serverErrors = null;
+        this.snilsControlsReset();
         this.patientForm.value.patientDocuments = this.apiPatient.state;
         const sendData: PatientSendAPI = {patient: this.patientForm.value};
         if (this.PatientFullInformation) {
             this.apiPatient.updatePatient(sendData).subscribe(
                 (patient) => {
+                    this.PatientFullInformation = patient;
+                    this.M.toast({html: 'Карта изменена'});
+                    this.apiPatient.state = patient.patientDocuments;
                     this.router.navigateByUrl(this.router.createUrlTree(['patient-card', patient.id]));
                     this.loader = false;
 
                 }, error => {
-                    console.log(error);
                     this.loader = false;
-
+                    this.serverErrors = this.getErrorMessage(error);
+                    this.M.toast({html: 'Ошибка при сохранении карты'});
                 }
             );
         } else {
@@ -200,12 +290,26 @@ export class PatientCardComponent implements OnInit {
                 (patient) => {
                     this.loader = false;
                     this.apiPatient.state = [];
+                    this.M.toast({html: 'Карта создана'});
                     this.router.navigateByUrl(this.router.createUrlTree(['patient-card', patient.id]));
                 }, error => {
-                    console.log(error);
                     this.loader = false;
+                    this.serverErrors = this.getErrorMessage(error);
+                    this.M.toast({html: 'Ошибка при сохранении карты'});
                 }
             );
+        }
+    }
+
+    snilsControlsReset() {
+        if (this.check) {
+            this.patientForm.controls.snils.reset();
+            this.patientForm.controls.snils.clearValidators();
+            this.patientForm.controls.snils.updateValueAndValidity();
+        } else {
+            this.patientForm.controls.withoutSnilsReason.reset();
+            this.patientForm.controls.withoutSnilsReason.clearValidators();
+            this.patientForm.controls.withoutSnilsReason.updateValueAndValidity();
         }
     }
 
@@ -217,11 +321,35 @@ export class PatientCardComponent implements OnInit {
         return ValidationService.checkValidation(name, this.patientForm);
     }
 
+    getErrorMessage(error) {
+        if (error.error.errors && error.error.errors.errors) {
+            return error.error.errors.errors;
+        } else {
+            if (error.error.message) {
+                return [error.error.message];
+            } else {
+                return error.error;
+            }
+        }
+    }
+
     changeCheckStatus() {
         this.check = !this.check;
-        this.patientForm.controls.snils.reset();
-        this.patientForm.controls.snils.clearValidators();
-        this.patientForm.controls.snils.updateValueAndValidity();
+        if (this.check) {
+            this.patientForm.controls.snils.reset();
+            this.patientForm.controls.snils.clearValidators();
+            this.patientForm.controls.snils.updateValueAndValidity();
+            this.duplicate = false;
+            this.duplicatePatients = null;
+            this.patientForm.controls.withoutSnilsReason.setValidators(Validators.required);
+            this.patientForm.controls.withoutSnilsReason.updateValueAndValidity();
+        } else {
+            this.patientForm.controls.withoutSnilsReason.clearValidators();
+            this.patientForm.controls.withoutSnilsReason.updateValueAndValidity();
+            this.patientForm.controls.snils.setValidators(ValiedateSnilsRequired);
+            this.patientForm.controls.snils.setValue(this.snils);
+            this.patientForm.controls.snils.updateValueAndValidity();
+        }
     }
 
     changeValidationToSnils() {
@@ -251,5 +379,22 @@ export class PatientCardComponent implements OnInit {
 
     compareFn(c1, c2): boolean {
         return c1 && c2 ? c1.id === c2.id : c1 === c2;
+    }
+
+    deletePatient() {
+        this.loader = true;
+        this.apiPatient.deletePatient(this.PatientFullInformation.id)
+            .pipe(finalize(() => this.loader = false))
+            .pipe(catchError(err => this.getErrorMessage(err)))
+            .subscribe(() => {
+                this.apiPatient.state = [];
+                this.M.toast({html: 'Карта удалена'});
+                this.router.navigate(['patient-card']);
+            });
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

@@ -24,7 +24,7 @@ import {
     MatFormFieldModule,
     MatInputModule,
     MatNativeDateModule, MatProgressSpinnerModule,
-    MatSelectModule
+    MatSelectModule, MatTabsModule
 } from '@angular/material';
 import {Stage2Component} from './components/talon/stage2/stage2.component';
 import {Stage3Component} from './components/talon/stage3/stage3.component';
@@ -51,6 +51,7 @@ import {MatTableModule} from '@angular/material/table';
 import { ExportModalComponent } from './components/export-modal/export-modal.component';
 import { AgePipe } from './pipe/age.pipe';
 import { SearchChildComponent } from './components/search-child/search-child.component';
+import { PatientDeleteModalComponent } from './components/patient-card/patient-delete-modal/patient-delete-modal.component';
 
 @NgModule({
     declarations: [
@@ -76,7 +77,7 @@ import { SearchChildComponent } from './components/search-child/search-child.com
         ExportModalComponent,
         AgePipe,
         SearchChildComponent,
-
+        PatientDeleteModalComponent,
     ],
     imports: [
         BrowserModule,
@@ -101,6 +102,7 @@ import { SearchChildComponent } from './components/search-child/search-child.com
         MyDateRangePickerModule,
         MatCheckboxModule,
         MatTableModule,
+        MatTabsModule,
         MatProgressSpinnerModule
     ],
     providers: [
@@ -120,7 +122,8 @@ import { SearchChildComponent } from './components/search-child/search-child.com
         PatientDocumentModalComponent,
         PatientHistoryModalComponent,
         PatientUnionModalComponent,
-        ExportModalComponent
+        ExportModalComponent,
+        PatientDeleteModalComponent
     ]
 })
 export class AppModule {

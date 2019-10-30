@@ -72,6 +72,10 @@ export class PatientService {
         )));
   }
 
+    deletePatient(patientId: number) {
+        return this.http.delete(this.patientUrl + `/${patientId}`);
+    }
+
   /**
    * Для получение историй пациента
    * @param id - идинтификатор пользователя

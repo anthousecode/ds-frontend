@@ -177,16 +177,16 @@ nav .brand-logo {
   .mobile_margin {
     margin-bottom: 0;
   }
-
-  .btn-small {
-    width: 100%;
-    margin-bottom: 5px;
-  }
 }
 
 
 .btn-small {
   margin: 4px !important;
+
+  @media only screen and (max-width: 993px) {
+    width: 100%;
+    margin: 4px 0 5px !important;
+  }
 }
 
 .custom-dialog-container .mat-dialog-container {
@@ -386,5 +386,14 @@ nav .brand-logo {
 
   &:hover {
     color: #2196f3;
+  }
+}
+
+.alink {
+  transition: 0.1s linear;
+
+  &:hover {
+    color: #2196f3;
+    transition: 0.1s linear;
   }
 }

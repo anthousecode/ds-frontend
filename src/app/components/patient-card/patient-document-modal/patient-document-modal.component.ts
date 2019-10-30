@@ -23,12 +23,13 @@ const RF_PASSPORT_ID = 14;
  * Модальное окно из подсистемы patient-card
  */
 export class PatientDocumentModalComponent implements OnInit {
-    constructor(private mock: MockService,
-                private matDialogRef: MatDialogRef<PatientDocumentModalComponent>,
-                private fb: FormBuilder,
-                @Inject(MAT_DIALOG_DATA) private data: PatientDocumentsEntity,
-                private apiPatient: PatientService,
-                private dictionary: DictionaryService,
+    constructor(
+        private mock: MockService,
+        private matDialogRef: MatDialogRef<PatientDocumentModalComponent>,
+        private fb: FormBuilder,
+        @Inject(MAT_DIALOG_DATA) private data: PatientDocumentsEntity,
+        private apiPatient: PatientService,
+        private dictionary: DictionaryService,
     ) {
     }
 
@@ -50,6 +51,9 @@ export class PatientDocumentModalComponent implements OnInit {
                 if (this.data) {
                     this.documentsType = value;
                     this.patientDocumentForm.patchValue(this.data);
+                    if (this.data.id !== null) {
+                        this.patientDocumentForm.controls.type.disable();
+                    }
                 } else {
                     if (this.apiPatient.state.length !== 0) {
                         this.documentsType = value.filter((obj) => {
@@ -82,6 +86,7 @@ export class PatientDocumentModalComponent implements OnInit {
         if (this.isUnique) {
             this.apiPatient.state.push(this.patientDocumentForm.value);
         } else {
+            this.patientDocumentForm.controls.type.enable();
             this.apiPatient.state[this.indexItem] = this.patientDocumentForm.value;
         }
         this.matDialogRef.close();
