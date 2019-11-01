@@ -163,8 +163,11 @@ export class PatientCardComponent implements OnInit, OnDestroy {
         );
         this.patientForm.controls.withoutSnilsReason.valueChanges.subscribe(
             data => {
-                if (data === 3) {
+                if (data && data.id === 3) {
                     this.patientForm.controls.withoutSnilsReasonOther.setValidators(Validators.required);
+                    this.patientForm.controls.withoutSnilsReasonOther.updateValueAndValidity();
+                } else {
+                    this.patientForm.controls.withoutSnilsReasonOther.setValidators(null);
                     this.patientForm.controls.withoutSnilsReasonOther.updateValueAndValidity();
                 }
             }
@@ -209,8 +212,10 @@ export class PatientCardComponent implements OnInit, OnDestroy {
                     const params = new HttpParams()
                         .set('firstName', this.patientForm.controls.firstName.value)
                         .set('lastName', this.patientForm.controls.lastName.value)
-                        .set('birthdate', moment(this.patientForm.controls.birthdate.value).format('YYYY-MM-DD'))
-                        .set('sex', this.patientForm.controls.sex.value.id);
+                        .set('birthdate_from', moment(this.patientForm.controls.birthdate.value).format('YYYY-MM-DD'))
+                        .set('birthdate_to', moment(this.patientForm.controls.birthdate.value).format('YYYY-MM-DD'))
+                        .set('sex', this.patientForm.controls.sex.value.id)
+                        .set('strict_names', 'true');
 
                     this.apiPatient.searchPatient$(params)
                         .pipe(takeUntil(this.destroy$))
@@ -244,7 +249,8 @@ export class PatientCardComponent implements OnInit, OnDestroy {
      */
     getPatenInfo(id: number) {
         this.loader = true;
-        this.apiPatient.getPatient(id).subscribe(
+        this.apiPatient.getPatient(id)
+            .subscribe(
             (response) => {
                 this.loader = false;
                 this.PatientFullInformation = response;
@@ -254,10 +260,11 @@ export class PatientCardComponent implements OnInit, OnDestroy {
                     this.patientForm.controls.snils.reset();
                     this.patientForm.controls.snils.clearValidators();
                     this.patientForm.controls.snils.updateValueAndValidity();
+                    this.patientForm.controls.withoutSnilsReason.setValidators(Validators.required);
+                    this.patientForm.controls.withoutSnilsReason.updateValueAndValidity();
                 }
                 this.apiPatient.state = this.apiPatient.state.concat(response.patientDocuments);
-            }
-        );
+            }, () => this.router.navigate(['404']));
     }
 
 

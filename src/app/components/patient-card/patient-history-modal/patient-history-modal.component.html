@@ -25,7 +25,7 @@
                   <tr *ngFor="let history of historyChange.changed">
                     <td>
                       {{historyChange.operationDate | date : 'dd.MM.yyyy' }}:
-                      пользователь {{historyChange.osUser}} {{history.operation}} {{history.name}} {{history.old}}
+                      пользователь {{historyChange.osUser}} {{history.operation}} {{history.name}} с {{history.old}}
                       на {{history.current}}
                     </td>
                   </tr>
@@ -37,9 +37,9 @@
         </mat-tab>
         <mat-tab label="Документы">
           <div class="row" id="doc_history">
-            <ul class="collapsible" materialize="Collapsible">
+            <ul *ngIf="patientDocumentHistory && patientDocumentHistory.length > 0" class="collapsible" materialize="Collapsible">
               <li *ngFor="let item of patientDocumentHistory; let index;">
-                <div class="collapsible-header"> {{item.name | json}}</div>
+                <div class="collapsible-header">{{ item.id }} - {{item.name | json}}</div>
                 <div class="collapsible-body">
                   <table>
                     <tbody>
@@ -80,6 +80,9 @@
                 </div>
               </li>
             </ul>
+            <div class="col s12 center-align" style="margin-top: 10px">
+              <h2 *ngIf="!patientDocumentHistory || patientDocumentHistory.length === 0">Изменений нет</h2>
+            </div>
           </div>
         </mat-tab>
       </mat-tab-group>

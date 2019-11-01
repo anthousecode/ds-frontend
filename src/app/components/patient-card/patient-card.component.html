@@ -43,7 +43,7 @@
                 <div class="row">
                     <div class="col l4 s12 inline-checkbox" *ngIf="!check">
                         <mat-form-field>
-                            <mat-label>СНИЛС</mat-label>
+                            <mat-label>СНИЛС  <span class="red-text">*</span></mat-label>
                             {{patientForm.controls['snils'].clearValidators()}}
                             {{patientForm.controls['snils'].setValidators(ValiedateSnils)}}
                             <input [formControl]="formModel.snils" id="snils" mask="000-000-000-00"
@@ -55,7 +55,7 @@
                     </div>
                     <div class="col l4 s12 inline-checkbox" *ngIf="check">
                         <mat-form-field>
-                            <mat-label>Причина отсуствия СНИЛС</mat-label>
+                            <mat-label>Причина отсуствия СНИЛС  <span class="red-text">*</span></mat-label>
                             <mat-select [formControl]="formModel.withoutSnilsReason" id="withoutSnilsReason"
                                         [compareWith]="compareFn">
                                 <mat-option *ngFor="let reason of reasons$| async" [value]="reason"
@@ -65,7 +65,7 @@
                     </div>
                     <div class="col l4 s12 inline-checkbox" *ngIf="check && patientForm.controls.withoutSnilsReason.value?.id === 3">
                         <mat-form-field>
-                            <mat-label>Другая причина</mat-label>
+                            <mat-label>Другая причина  <span class="red-text">*</span></mat-label>
                             <input matInput type="text"
                                    [formControl]="formModel.withoutSnilsReasonOther">
                         </mat-form-field>
@@ -206,7 +206,7 @@
                 <div class="col s12">
                     <button (click)="savePatientInfo()"
                             mat-button
-                            *ngIf="(patientForm.valid && (apiPatient.state.length >= 1)); else disableButton"
+                            *ngIf="(patientForm.valid && (apiPatient.state.length >= 1)) && !duplicate; else disableButton"
                             class="btn-small green">Сохранить
                     </button>
                     <ng-template #disableButton>
@@ -214,7 +214,7 @@
                              materialize="Tooltip">
                             <button
                                     mat-button
-                                    [disabled]="!(patientForm.valid && (apiPatient.state.length >= 1))"
+                                    [disabled]="!(patientForm.valid && (apiPatient.state.length >= 1)) || duplicate "
                                     class=" btn-small green">Сохранить
                             </button>
                         </div>
@@ -226,7 +226,7 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="PatientFullInformation" [ngClass]="{'scale-out': patientAddInfo}"
+        <div *ngIf="PatientFullInformation && PatientFullInformation.patientDocuments && PatientFullInformation.patientDocuments.length > 0" [ngClass]="{'scale-out': patientAddInfo}"
              class="col l3 s12 scale-transition absol"
              id="right-info">
             <div class="card blue-grey darken-1">
