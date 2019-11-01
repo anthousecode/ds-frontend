@@ -135,11 +135,11 @@
                                 </a>
                             </h6>
                         </li>
-                        <li *ngFor="let item of apiPatient.state; let indexItem = index; trackBy: trackByFn;"
+                        <li *ngFor="let item of patientDocuments; let indexItem = index; trackBy: trackByFn;"
                             class="collection-item">
                             <div>{{item.type.id}} - {{item.type.name}} {{item.documSerial}} {{item.documNumber}}
                                 <a (click)="deleteState(indexItem)" class="tooltipped secondary-content"
-                                   *ngIf="this.apiPatient.state.length > 1"
+                                   *ngIf="this.patientDocuments.length > 1"
                                    data-tooltip="Удалить документ"
                                    materialize="Tooltip">
                                     <i class="material-icons">delete</i>
@@ -206,7 +206,7 @@
                 <div class="col s12">
                     <button (click)="savePatientInfo()"
                             mat-button
-                            *ngIf="(patientForm.valid && (apiPatient.state.length >= 1)) && !duplicate; else disableButton"
+                            *ngIf="(patientForm.valid && (patientDocuments.length >= 1)) && !duplicate; else disableButton"
                             class="btn-small green">Сохранить
                     </button>
                     <ng-template #disableButton>
@@ -214,7 +214,7 @@
                              materialize="Tooltip">
                             <button
                                     mat-button
-                                    [disabled]="!(patientForm.valid && (apiPatient.state.length >= 1)) || duplicate "
+                                    [disabled]="!(patientForm.valid && (patientDocuments.length >= 1)) || duplicate "
                                     class=" btn-small green">Сохранить
                             </button>
                         </div>

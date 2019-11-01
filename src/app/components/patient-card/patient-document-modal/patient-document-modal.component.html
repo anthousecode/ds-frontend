@@ -42,7 +42,7 @@
   <div class="modal-footer">
     <button class="modal-close waves-effect btn-small waves-green btn-flat green text-primary" mat-dialog-close>Отмена
     </button>
-    <ng-template [ngIfElse]="update" [ngIf]="!data">
+    <ng-template [ngIfElse]="update" [ngIf]="!data.updateDoc">
       <button (click)="saveData()" [disabled]="!patientDocumentForm.valid"
               class="modal-close btn-small waves-effect waves-green btn-flat green text-primary"
               onclick="M.toast({html: 'Документ добавлен'})">ОК

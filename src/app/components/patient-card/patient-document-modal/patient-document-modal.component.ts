@@ -11,6 +11,11 @@ import { patientDocTypeRegex } from '../../../validators/documents.validator';
 
 const RF_PASSPORT_ID = 14;
 
+export interface ModalDocumentsData {
+    documents: PatientDocumentsEntity[];
+    updateDoc: PatientDocumentsEntity;
+}
+
 @Component({
     selector: 'app-patient-document-modal',
     templateUrl: './patient-document-modal.component.html',
@@ -27,7 +32,7 @@ export class PatientDocumentModalComponent implements OnInit {
         private mock: MockService,
         private matDialogRef: MatDialogRef<PatientDocumentModalComponent>,
         private fb: FormBuilder,
-        @Inject(MAT_DIALOG_DATA) private data: PatientDocumentsEntity,
+        @Inject(MAT_DIALOG_DATA) private data: ModalDocumentsData,
         private apiPatient: PatientService,
         private dictionary: DictionaryService,
     ) {
@@ -42,25 +47,29 @@ export class PatientDocumentModalComponent implements OnInit {
     indexItem: number;
     documentsType: PatientDocumentType[];
     allDocumentsType: PatientDocumentType[];
+    documents: PatientDocumentsEntity[];
     loading = true;
     documentsEmpty = false;
 
     ngOnInit() {
+
+        this.documents = this.data.documents;
+
         this.initForm();
         this.dictionary.getIdentityDocumentTypes().subscribe(
             value => {
                 this.allDocumentsType = value;
                 this.loading = false;
-                if (this.data) {
-                    if (this.data.id !== null) {
+                if (this.data.updateDoc) {
+                    if (this.data.updateDoc.id !== null) {
                         this.patientDocumentForm.controls.type.disable();
                     }
                     this.documentsTypeFilter(value);
-                    this.documentsType.push(this.data.type);
+                    this.documentsType.push(this.data.updateDoc.type);
                     this.patientDocumentForm.patchValue(this.data);
-                    this.changeValueType(this.data.type, true);
+                    this.changeValueType(this.data.updateDoc.type, true);
                 } else {
-                    if (this.apiPatient.state.length !== 0) {
+                    if (this.documents.length !== 0) {
                         this.documentsTypeFilter(value);
                     } else {
                         this.documentsType = value;
@@ -80,7 +89,7 @@ export class PatientDocumentModalComponent implements OnInit {
 
     documentsTypeFilter(value: PatientDocumentType[]) {
         this.documentsType = value.filter((obj) => {
-            return !this.apiPatient.state.some((obj2) => {
+            return !this.documents.some((obj2) => {
                 return obj.id === obj2.type.id;
             });
         });
@@ -95,12 +104,12 @@ export class PatientDocumentModalComponent implements OnInit {
      */
     saveData() {
         if (this.isUnique) {
-            this.apiPatient.state.push(this.patientDocumentForm.value);
+            this.documents.push(this.patientDocumentForm.value);
         } else {
             this.patientDocumentForm.controls.type.enable();
-            this.apiPatient.state[this.indexItem] = this.patientDocumentForm.value;
+            this.documents[this.indexItem] = this.patientDocumentForm.value;
         }
-        this.matDialogRef.close();
+        this.matDialogRef.close({ documents: this.documents });
     }
 
 
@@ -111,12 +120,12 @@ export class PatientDocumentModalComponent implements OnInit {
                 Validators.required, Validators.pattern(patientDocTypeRegex[7].series)]],
             documNumber: [null, [Validators.maxLength(50),
                 Validators.required, Validators.pattern(patientDocTypeRegex[7].number)]],
-            type: [{disabled: !!this.data}, Validators.required]
+            type: [{disabled: !!this.data.updateDoc}, Validators.required]
         });
-        if (this.data) {
+        if (this.data.updateDoc) {
             this.isUnique = false;
-            this.patientDocumentForm.patchValue(this.data);
-            this.indexItem = this.apiPatient.state.indexOf(this.data);
+            this.patientDocumentForm.patchValue(this.data.updateDoc);
+            this.indexItem = this.documents.indexOf(this.data.updateDoc);
         }
     }
 

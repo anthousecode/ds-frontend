@@ -51,6 +51,7 @@ export class PatientCardComponent implements OnInit, OnDestroy {
     possibleDuplicate = false;
     possibleDuplicatePatients: Patient[];
     snils: string;
+    patientDocuments: PatientDocumentsEntity[] = [];
 
     constructor(
         public dialog: MatDialog,
@@ -65,14 +66,24 @@ export class PatientCardComponent implements OnInit, OnDestroy {
     ) {
     }
 
+    openDocumentDialog(updateDoc: PatientDocumentsEntity) {
+        this.dialogConfig.data = { documents: this.patientDocuments, updateDoc };
+        const docDialogRef = this.dialog.open(PatientDocumentModalComponent, this.dialogConfig);
+        delete this.dialogConfig.data;
+        docDialogRef.afterClosed()
+            .subscribe(value => {
+                if (value && value.documents) {
+                    this.patientDocuments = value.documents;
+                }
+            });
+    }
+
     createPatientDoc() {
-        this.dialog.open(PatientDocumentModalComponent, this.dialogConfig);
+        this.openDocumentDialog(null);
     }
 
     updatePatientDoc(item: PatientDocumentsEntity) {
-        this.dialogConfig.data = item;
-        this.dialog.open(PatientDocumentModalComponent, this.dialogConfig);
-        delete this.dialogConfig.data;
+        this.openDocumentDialog(item);
     }
 
     openDeletePatient() {
@@ -235,8 +246,8 @@ export class PatientCardComponent implements OnInit, OnDestroy {
      * @param index нашего документа
      */
     deleteState(index: number) {
-        if ((index > -1 && this.apiPatient.state.length > 1) || !this.PatientFullInformation) {
-            this.apiPatient.state.splice(index, 1);
+        if ((index > -1 && this.patientDocuments.length > 1) || !this.PatientFullInformation) {
+            this.patientDocuments.splice(index, 1);
             this.M.toast({html: 'Документ удален'});
         }
     }
@@ -263,7 +274,7 @@ export class PatientCardComponent implements OnInit, OnDestroy {
                     this.patientForm.controls.withoutSnilsReason.setValidators(Validators.required);
                     this.patientForm.controls.withoutSnilsReason.updateValueAndValidity();
                 }
-                this.apiPatient.state = this.apiPatient.state.concat(response.patientDocuments);
+                this.patientDocuments = response.patientDocuments;
             }, () => this.router.navigate(['404']));
     }
 
@@ -275,14 +286,14 @@ export class PatientCardComponent implements OnInit, OnDestroy {
         this.loader = true;
         this.serverErrors = null;
         this.snilsControlsReset();
-        this.patientForm.value.patientDocuments = this.apiPatient.state;
+        this.patientForm.value.patientDocuments = this.patientDocuments;
         const sendData: PatientSendAPI = {patient: this.patientForm.value};
         if (this.PatientFullInformation) {
             this.apiPatient.updatePatient(sendData).subscribe(
                 (patient) => {
                     this.PatientFullInformation = patient;
                     this.M.toast({html: 'Карта изменена'});
-                    this.apiPatient.state = patient.patientDocuments;
+                    this.patientDocuments = patient.patientDocuments;
                     this.router.navigateByUrl(this.router.createUrlTree(['patient-card', patient.id]));
                     this.loader = false;
 
@@ -296,7 +307,7 @@ export class PatientCardComponent implements OnInit, OnDestroy {
             this.apiPatient.createPatient(sendData).subscribe(
                 (patient) => {
                     this.loader = false;
-                    this.apiPatient.state = [];
+                    this.patientDocuments = [];
                     this.M.toast({html: 'Карта создана'});
                     this.router.navigateByUrl(this.router.createUrlTree(['patient-card', patient.id]));
                 }, error => {
@@ -394,7 +405,6 @@ export class PatientCardComponent implements OnInit, OnDestroy {
             .pipe(finalize(() => this.loader = false))
             .pipe(catchError(err => this.getErrorMessage(err)))
             .subscribe(() => {
-                this.apiPatient.state = [];
                 this.M.toast({html: 'Карта удалена'});
                 this.router.navigate(['patient-card']);
             });
