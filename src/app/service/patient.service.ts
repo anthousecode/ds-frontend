@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import {concatMap, delay, retryWhen} from 'rxjs/operators';
 import {Observable, of, throwError} from 'rxjs';
 import {environment} from '../../environments/environment';
-import { Patient, PatientDocumentsEntity, PatientSearchResult, PatientSendAPI } from '../models/patient.model';
+import { Patient, PatientSearchResult, PatientSendAPI } from '../models/patient.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,6 @@ export class PatientService {
   constructor(private http: HttpClient) {
   }
 
-  public state: PatientDocumentsEntity[] = [];
   private patientUrl = environment.apiUrl + '/api/patients';
 
   /**

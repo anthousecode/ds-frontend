@@ -65,14 +65,14 @@ export class PatientHistoryModalComponent implements OnInit, AfterViewInit {
     displayHistoryDocument(history: PatientHistoryDocument[]) {
         const changedHistory = history.reduce((accumulator, current) => {
             const fields = {documSerial: 'Серия', documNumber: 'Номер', isEnabled: 'Активный'};
-            if (accumulator[current.type.id] === undefined) {
-                accumulator[current.type.id] = {
+            if (accumulator[current.id] === undefined) {
+                accumulator[current.id] = {
                     id: current.id,
                     name: current.type.name,
                     historyChange: []
                 };
             }
-            const historyChange = accumulator[current.type.id].historyChange;
+            const historyChange = accumulator[current.id].historyChange;
             const previous = historyChange.length > 0 ? historyChange[historyChange.length - 1] : null;
             if (previous !== null) {
                 const changed = [];
@@ -89,7 +89,7 @@ export class PatientHistoryModalComponent implements OnInit, AfterViewInit {
                 }
                 current.changed = changed;
             }
-            accumulator[current.type.id].historyChange.push(current);
+            accumulator[current.id].historyChange.push(current);
             return accumulator;
         }, {});
         this.patientDocumentHistory = Object.values(changedHistory);
@@ -97,7 +97,7 @@ export class PatientHistoryModalComponent implements OnInit, AfterViewInit {
 
     displayHistory(history: PatientHistory[]) {
         const changedHistory = history.reduce((accumulator, current) => {
-            const fields = ['name', 'surname', 'patronymic', 'snils', 'birthdate', 'isParentDocument'];
+            const fields = ['firstName', 'lastName', 'patronymic', 'snils', 'birthdate', 'isParentDocument'];
             if (accumulator[current.id] === undefined) {
                 accumulator[current.id] = {
                     id: current.id,
@@ -113,8 +113,8 @@ export class PatientHistoryModalComponent implements OnInit, AfterViewInit {
                     if (previous[field] !== current[field]) {
                         const translate = {
                             name: field,
-                            current: current[field],
-                            old: previous[field],
+                            current: current[field] || 'пусто',
+                            old: previous[field] || 'пусто',
                             operation: current.operation,
                         };
                         changed.push(this.converterText(translate));
