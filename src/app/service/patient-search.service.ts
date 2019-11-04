@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
 import {environment} from '../../environments/environment';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import {Observable, of, throwError} from 'rxjs';
-import {concatMap, delay, retryWhen} from 'rxjs/operators';
+import { concatMap, delay, map, retryWhen } from 'rxjs/operators';
 import {Patient} from '../models/patient.model';
 import {SearchQuery} from '../models/patient-search.model';
+import * as FileSaver from 'file-saver';
 
 @Injectable({
     providedIn: 'root'
@@ -15,8 +16,11 @@ import {SearchQuery} from '../models/patient-search.model';
  */
 export class PatientSearchService {
     private patientSearchUrl = environment.apiUrl + '/api/patient';
+    private patientExportUrl = environment.apiUrl + '/api/patients-export';
 
-    constructor(private http: HttpClient) {
+    constructor(
+        private http: HttpClient,
+    ) {
     }
 
     /**
@@ -36,6 +40,15 @@ export class PatientSearchService {
             ));
     }
 
+    getExport(params: HttpParams, format: string): Observable<HttpResponse<Blob>> {
+        params = params.set('format', format);
+        return this.http.get(this.patientExportUrl, {params, observe: 'response', responseType: 'blob'})
+            .pipe(map( value => {
+                FileSaver.saveAs(value.body, this.filenameSlice(value.headers.get('Content-Disposition'), format));
+                return value;
+            }));
+    }
+
     getMedicalOrganizations() {
         return this.http.get('');
     }
@@ -46,6 +59,15 @@ export class PatientSearchService {
 
     getDiagnosis() {
         return this.http.get('');
+    }
+
+    filenameSlice(header: string, format: string) {
+        if (header && header.includes('filename')) {
+            const result = header.split(';')[1].trim().split('=')[1];
+            return decodeURI(result.replace(/"/g, ''));
+        } else {
+            return 'Список детей.' + format;
+        }
     }
 
 }

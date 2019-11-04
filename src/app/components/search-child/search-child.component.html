@@ -1,6 +1,6 @@
 <div class="content row mobile_margin">
     <div class="z-depth-2 vmp_content col s11 push-s0">
-        <h5 style="text-align: center;">Поиск карты обследования</h5>
+        <h5 style="text-align: center;">Поиск ребенка</h5>
         <div class="row">
             <div class="col s12">
                 <ul materialize="Collapsible" class="collapsible" #collapsible
@@ -17,6 +17,16 @@
                                                    matInput
                                                    maxlength="50"
                                                    type="text">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col s12 l3">
+                                        <mat-form-field>
+                                            <mat-label>СНИЛС</mat-label>
+                                            <input formControlName="snils" id="snils" mask="000-000-000-00"
+                                                   matInput type="text">
+                                            <mat-error *ngIf="isValid('snils')">
+                                                СНИЛС заполнен не полностью
+                                            </mat-error>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -85,17 +95,17 @@
                                 <div class="row">
                                     <div class="col l3 s12">
                                         <mat-form-field>
-                                            <mat-label>СНИЛС</mat-label>
-                                            <input formControlName="snils" id="snils" mask="000-000-000-00"
-                                                   matInput type="text">
-                                            <mat-error *ngIf="isValid('snils')">
-                                                СНИЛС заполнен не полностью
-                                            </mat-error>
+                                            <mat-label>Записей на странице</mat-label>
+                                            <mat-select formControlName="pagesize" id="records">
+                                                <mat-option [value]="10">10</mat-option>
+                                                <mat-option [value]="30">30</mat-option>
+                                                <mat-option [value]="50">50</mat-option>
+                                            </mat-select>
                                         </mat-form-field>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <a (click)="clearForm()" class="waves-effect waves-light btn-small green">Очистить</a>
+                                    <a (click)="clearForm()" class="right waves-effect waves-light btn-small green">Очистить</a>
                                 </div>
                             </form>
                         </div>
@@ -103,8 +113,6 @@
                 </ul>
                 <div class="row">
                     <div class="col s12 l11">
-                        <a routerLink="/patient-card" class="waves-effect waves-light btn-small green" target="_blank">Добавить
-                            карту</a>
                         <button (click)="searchPatient()" *ngIf="patientForm.valid; else disableButton" class="waves-effect waves-light btn-small green">Найти
                         </button>
                         <ng-template #disableButton>
@@ -114,24 +122,8 @@
                                         class="tooltipped disabled-button-tootltip waves-effect waves-light btn-small green">Найти</button>
                         </ng-template>
                         <a (click)="openExport()" class="waves-effect waves-light btn-small green">Экспорт</a>
-                    </div>
-                    <div class="col s12 l1">
-                        <div class="float-btn_container">
-                            <div #floating class="fixed-action-btn click-to-toggle direction-top direction-left right float-btn_container-click">
-                                <a class="btn-floating btn-large green">{{ pagesize }}</a>
-                                <ul>
-                                    <li (click)="pagesize = 50">
-                                        <a class="btn-floating green center float-btn_container-transform">50</a>
-                                    </li>
-                                    <li (click)="pagesize = 30">
-                                        <a class="btn-floating green center float-btn_container-transform">30</a>
-                                    </li>
-                                    <li (click)="pagesize = 10">
-                                        <a class="btn-floating green center float-btn_container-transform">10</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        <a routerLink="/patient-card" class="waves-effect waves-light btn-small green" target="_blank">Добавить
+                            карту</a>
                     </div>
                 </div>
             </div>
@@ -184,8 +176,8 @@
                         <td>{{item.unqId}}</td>
                         <td><a routerLink="/patient-card/{{item.id}}" target="_blank">{{item.lastName}} {{item.firstName}} {{item.patronymic}}</a></td>
                         <td>{{item.birthdate | date : 'dd.MM.yyyy'}}</td>
-                        <td>{{ item.sex.name }}</td>
                         <td>{{ item.birthdate | age }}</td>
+                        <td>{{ item.sex.name }}</td>
                         <td>Карты досмотра</td>
                     </tr>
                     </tbody>

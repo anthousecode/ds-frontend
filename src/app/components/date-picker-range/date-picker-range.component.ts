@@ -30,6 +30,7 @@ export class DatePickerRangeComponent implements OnInit {
     showSelectDateText: false,
     maxYear: moment().year(),
     minYear: 1900,
+    selectionTxtFontSize: '16px',
     disableSince: {year: moment().year(), month: moment().month() + 1, day: moment().date() + 1},
     dayLabels: {su: 'Вос.', mo: 'Пон.', tu: 'Вт.', we: 'Ср.', th: 'Чт.', fr: 'Пят.', sa: 'Суб.'},
     width: '100%',

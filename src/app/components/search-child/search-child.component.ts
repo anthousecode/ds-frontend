@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { Sex } from '../../models/dictionary.model';
 import { DictionaryService } from '../../service/dictionary.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -14,19 +14,19 @@ import { DatePickerRangeComponent } from '../date-picker-range/date-picker-range
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { ExportModalComponent } from '../export-modal/export-modal.component';
 import { finalize } from 'rxjs/operators';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
     selector: 'app-search-child',
     templateUrl: './search-child.component.html',
     styleUrls: ['./search-child.component.scss']
 })
-export class SearchChildComponent implements OnInit, AfterViewInit {
+export class SearchChildComponent implements OnInit {
 
     sexes: Sex[] = this.apiDictionary.getSexes();
     collapsibleClose = new EventEmitter<string | MaterializeAction>();
     patientForm: FormGroup;
     patientResult: PatientSearchResult;
-    pagesize = 30;
     loading = false;
     public config: PaginationInstance = {
         id: 'custom',
@@ -34,8 +34,10 @@ export class SearchChildComponent implements OnInit, AfterViewInit {
         currentPage: 1
     };
 
+    isBrowser: boolean = isPlatformBrowser(this.platformId);
+    isMobile: boolean;
+
     @ViewChild(DatePickerRangeComponent) child: DatePickerRangeComponent;
-    @ViewChild('floating') floating: ElementRef;
 
     constructor(
         private apiDictionary: DictionaryService,
@@ -43,23 +45,25 @@ export class SearchChildComponent implements OnInit, AfterViewInit {
         private patientService: PatientService,
         @Inject('M') private M: any,
         private dialog: MatDialog,
+        @Inject(PLATFORM_ID) private platformId: any,
     ) {
     }
 
     ngOnInit() {
         this.initForm();
-    }
 
-    ngAfterViewInit() {
-        const instanceFloating = new this.M.FloatingActionButton(this.floating.nativeElement, {
-            direction: 'left',
-            hoverEnabled: false
-        });
+        if (this.isBrowser) {
+            this.isMobile = window.innerWidth <= 993;
+        }
     }
 
     openExport() {
         const dialogExport = new MatDialogConfig();
-        dialogExport.width = '55%';
+        dialogExport.width = this.isMobile ? '100%' : '55%';
+        dialogExport.maxWidth = this.isMobile ? '100vm' : '80vm';
+        dialogExport.hasBackdrop = true;
+        const params = new HttpParams();
+        dialogExport.data = this.getParamsFromValue({ ...this.patientForm.value }, params);
         dialogExport.maxHeight = '70%';
         this.dialog.open(ExportModalComponent, dialogExport);
     }
@@ -77,6 +81,7 @@ export class SearchChildComponent implements OnInit, AfterViewInit {
             documSerial: [null, Validators.maxLength(50)],
             documNumber: [null, Validators.maxLength(50)],
             sexs: [null],
+            pagesize: [30],
         });
     }
 
@@ -113,7 +118,6 @@ export class SearchChildComponent implements OnInit, AfterViewInit {
                 params = params.set(key, values[key]);
             }
         }
-        params = params.set('pagesize', this.pagesize + '');
         return params;
     }
 
@@ -125,7 +129,7 @@ export class SearchChildComponent implements OnInit, AfterViewInit {
     paginationConfigChange(page: number, totalItems: number) {
         this.config.currentPage = page || 1;
         this.config.totalItems = totalItems;
-        this.config.itemsPerPage = this.pagesize;
+        this.config.itemsPerPage = this.patientForm.value.pagesize;
     }
 
 }
