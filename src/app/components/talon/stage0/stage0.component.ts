@@ -79,7 +79,7 @@ export class Stage0Component implements OnInit {
     }
 
     findInsuranceCompany(query: string) {
-        this.dictionaryService.getInsuranceCompanies(query).subscribe(response => {
+        this.dictionaryService.getInsuranceCompanies(1, 30, query).subscribe(response => {
             this.filteredInsuranceCompanies = response;
         });
     }
