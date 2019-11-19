@@ -1,28 +1,59 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
-import {Observable, of} from 'rxjs';
-import {catchError} from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import {
+    AbsenceReason,
+    AgeGroup,
+    CardType,
+    ChildCategory,
     Country,
+    CurrentLocation,
     Decision,
+    DevelopmentDisorder,
     DiseaseCode,
     DiseaseModel,
+    DispensaryObservation,
+    DoctorForConclusion,
+    DoctorForExamination,
+    EducationalOrganization,
+    Examination,
+    HealthDisorder,
+    HealthGroup,
     InsuranceCompany,
+    InvalidDisease, InvalidType,
     MedicalInstitution,
     MedicalProfile,
+    MenstrualCharacteristic,
+    Mkb10,
+    Organization,
     PatientDictionary,
-    ResponsiblePerson, Sex,
+    PayOmsStatus,
+    ReabilitationStatus,
+    ReasonMissed,
+    RefSex,
+    ResponsiblePerson,
+    Sex,
+    SportGroup,
+    StationaryOrganization,
+    Territory,
+    TreatmentCondition,
     TreatmentMethod,
+    TreatmentOrganizationType,
+    UserOrganType,
+    VaccinationStatus,
+    Vaccine,
+    VmpNecessity,
     VmpType,
     VmpTypeGroup
 } from '../models/dictionary.model';
-import {environment} from '../../environments/environment';
-import {FinancingSource, Lgota, Organ, SocialStatus} from '../models/talon.model';
-import {formatDate} from '@angular/common';
-import {PatientDocumentType} from '../models/patient.model';
-import {NoSnilsReasonModel} from '../models/noSnilsReason.model';
+import { environment } from '../../environments/environment';
+import { FinancingSource, Lgota, Organ, SocialStatus } from '../models/talon.model';
+import { formatDate } from '@angular/common';
+import { PatientDocumentType } from '../models/patient.model';
+import { NoSnilsReasonModel } from '../models/noSnilsReason.model';
 
 @Injectable({
     providedIn: 'root'
@@ -50,8 +81,10 @@ export class DictionaryService {
             );
     }
 
-    getInsuranceCompanies(name?: string): Observable<InsuranceCompany[]> {
-        return this.http.get<InsuranceCompany[]>(this.dictionaryUrl + '/insurance-companies' + (name ? '?name=' + name : ''));
+    getInsuranceCompanies(page = 1, pagesize: number, name?: string): Observable<InsuranceCompany[]> {
+        const params = this.getParamsForPaginationArguments(page, pagesize, name);
+
+        return this.http.get<InsuranceCompany[]>(this.dictionaryUrl + '/insurance-companies', {params});
     }
 
     getCountries(): Observable<Country[]> {
@@ -139,6 +172,151 @@ export class DictionaryService {
 
     getSexes(): Sex[] {
         return [new Sex(1, 'Мужской'), new Sex(2, 'Женский')];
+    }
+
+    getUserOrganTypes(): Observable<UserOrganType[]> {
+        return this.http.get<UserOrganType[]>(this.dictionaryUrl + '/user-organ-types');
+    }
+
+    getRefSex(): Observable<RefSex[]> {
+        return this.http.get<RefSex[]>(this.dictionaryUrl + '/ref-sex');
+    }
+
+    getCardTypes(): Observable<CardType[]> {
+        return this.http.get<CardType[]>(this.dictionaryUrl + '/card-types');
+    }
+
+    getTerritories(): Observable<Territory[]> {
+        return this.http.get<Territory[]>(this.dictionaryUrl + '/territories');
+    }
+
+    getAgeGroups(): Observable<AgeGroup[]> {
+        return this.http.get<AgeGroup[]>(this.dictionaryUrl + '/age-groups');
+    }
+
+    getChildCategories(): Observable<ChildCategory[]> {
+        return this.http.get<ChildCategory[]>(this.dictionaryUrl + '/child-categories');
+    }
+
+    getOrganizations(page = 1, pagesize: number, name?: string): Observable<Organization[]> {
+        const params = this.getParamsForPaginationArguments(page, pagesize, name);
+
+        return this.http.get<Organization[]>(this.dictionaryUrl + '/organizations', {params});
+    }
+
+    getEducationalOrganizations(page = 1, pagesize: number, name?: string): Observable<EducationalOrganization[]> {
+        const params = this.getParamsForPaginationArguments(page, pagesize, name);
+
+        return this.http.get<EducationalOrganization[]>(this.dictionaryUrl + '/educational-organizations', {params});
+    }
+
+    getStationaryOrganizations(page = 1, pagesize: number, name?: string): Observable<StationaryOrganization[]> {
+        const params = this.getParamsForPaginationArguments(page, pagesize, name);
+
+        return this.http.get<StationaryOrganization[]>(this.dictionaryUrl + '/stationary-organizations', {params});
+    }
+
+    getDevelopmentDisorders(): Observable<DevelopmentDisorder[]> {
+        return this.http.get<DevelopmentDisorder[]>(this.dictionaryUrl + '/development-disorders');
+    }
+
+    getMenstrualCharacteristics(): Observable<MenstrualCharacteristic[]> {
+        return this.http.get<MenstrualCharacteristic[]>(this.dictionaryUrl + '/menstrual-characteristics');
+    }
+
+    getHealthGroups(): Observable<HealthGroup[]> {
+        return this.http.get<HealthGroup[]>(this.dictionaryUrl + '/health-groups');
+    }
+
+    getSportGroups(): Observable<SportGroup[]> {
+        return this.http.get<SportGroup[]>(this.dictionaryUrl + '/sport-groups');
+    }
+
+    getDispensaryObservations(): Observable<DispensaryObservation[]> {
+        return this.http.get<DispensaryObservation[]>(this.dictionaryUrl + '/dispensary-observations');
+    }
+
+    getTreatmentConditions(): Observable<TreatmentCondition[]> {
+        return this.http.get<TreatmentCondition[]>(this.dictionaryUrl + '/treatment-conditions');
+    }
+
+    getMissedReasons(): Observable<ReasonMissed[]> {
+        return this.http.get<ReasonMissed[]>(this.dictionaryUrl + '/missed-reasons');
+    }
+
+    getAbsenceReasons(): Observable<AbsenceReason[]> {
+        return this.http.get<AbsenceReason[]>(this.dictionaryUrl + '/absence-reasons');
+    }
+
+    getInvalidTypes(): Observable<InvalidType[]> {
+        return this.http.get<InvalidType[]>(this.dictionaryUrl + '/invalid-types');
+    }
+
+
+    getVmpNecessities(): Observable<VmpNecessity[]> {
+        return this.http.get<VmpNecessity[]>(this.dictionaryUrl + '/vmp-necessities');
+    }
+
+    getMkb10s(page = 1, pagesize: number, name?: string): Observable<Mkb10[]> {
+        const params = this.getParamsForPaginationArguments(page, pagesize, name);
+
+        return this.http.get<Mkb10[]>(this.dictionaryUrl + '/mkb10s', {params});
+    }
+
+    getReabilitationStatuses(): Observable<ReabilitationStatus[]> {
+        return this.http.get<ReabilitationStatus[]>(this.dictionaryUrl + '/reabilitation-statuses');
+    }
+
+    getHealthDisorders(): Observable<HealthDisorder[]> {
+        return this.http.get<HealthDisorder[]>(this.dictionaryUrl + '/health-disorders');
+    }
+
+    getInvalidDiseases(): Observable<InvalidDisease[]> {
+        return this.http.get<InvalidDisease[]>(this.dictionaryUrl + '/invalid-diseases');
+    }
+
+    getExaminations(page = 1, pagesize: number, name?: string): Observable<Examination[]> {
+        const params = this.getParamsForPaginationArguments(page, pagesize, name);
+
+        return this.http.get<Examination[]>(this.dictionaryUrl + '/examinations', {params});
+    }
+
+    getVaccinationStatuses(): Observable<VaccinationStatus[]> {
+        return this.http.get<VaccinationStatus[]>(this.dictionaryUrl + '/vaccination-statuses');
+    }
+
+    getVaccines(): Observable<Vaccine[]> {
+        return this.http.get<Vaccine[]>(this.dictionaryUrl + '/vaccines');
+    }
+
+    getOmsPaymentStatuses(): Observable<PayOmsStatus[]> {
+        return this.http.get<PayOmsStatus[]>(this.dictionaryUrl + '/oms-payment-statuses');
+    }
+
+    getCurrentLocations(): Observable<CurrentLocation[]> {
+        return this.http.get<CurrentLocation[]>(this.dictionaryUrl + '/current-locations');
+    }
+
+    getTreatmentOrganizationTypes(): Observable<TreatmentOrganizationType[]> {
+        return this.http.get<TreatmentOrganizationType[]>(this.dictionaryUrl + '/treatment-organization-types');
+    }
+
+    getDoctorsForConslusion(): Observable<DoctorForConclusion[]> {
+        return this.http.get<DoctorForConclusion[]>(this.dictionaryUrl + '/doctors-for-conslusion');
+    }
+
+    getDoctorsForExamination(): Observable<DoctorForExamination[]> {
+        return this.http.get<DoctorForExamination[]>(this.dictionaryUrl + '/doctors-for-examination');
+    }
+
+
+
+    getParamsForPaginationArguments(page: number, pagesize: number, name?: string): HttpParams {
+        let params = new HttpParams();
+        if (page) { params = params.set('page', page.toString()); }
+        if (pagesize) { params = params.set('pagesize', pagesize.toString()); }
+        if (name) { params = params.set('name', name); }
+        return params;
     }
 
     /**

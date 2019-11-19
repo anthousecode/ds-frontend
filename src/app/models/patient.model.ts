@@ -28,9 +28,12 @@ export interface WithoutSnilsReasonType {
 
 export interface PatientDocumentType {
     id: number;
-    idRef: string;
+    documSerial: boolean;
+    enabled: boolean;
     name: string;
     code: number;
+    validationNumber: string;
+    validationSerial: string;
 }
 
 export interface PatientHistoryDocument {
