@@ -52,6 +52,8 @@ import { ExportModalComponent } from './components/export-modal/export-modal.com
 import { AgePipe } from './pipe/age.pipe';
 import { SearchChildComponent } from './components/search-child/search-child.component';
 import { PatientDeleteModalComponent } from './components/patient-card/patient-delete-modal/patient-delete-modal.component';
+import {OAuthModule} from 'angular-oauth2-oidc';
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
     declarations: [
@@ -78,6 +80,7 @@ import { PatientDeleteModalComponent } from './components/patient-card/patient-d
         AgePipe,
         SearchChildComponent,
         PatientDeleteModalComponent,
+        HomeComponent
     ],
     imports: [
         BrowserModule,
@@ -103,7 +106,8 @@ import { PatientDeleteModalComponent } from './components/patient-card/patient-d
         MatCheckboxModule,
         MatTableModule,
         MatTabsModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        OAuthModule.forRoot()
     ],
     providers: [
         {
