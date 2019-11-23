@@ -6,18 +6,38 @@ import {
     HttpInterceptor,
     HttpRequest
 } from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {Router} from '@angular/router';
 import {tap} from 'rxjs/operators';
+import {OAuthService} from 'angular-oauth2-oidc';
 
 @Injectable()
 export class ApiWithCredentialInterceptor implements HttpInterceptor {
-    constructor(private router: Router) {
+    constructor(private router: Router, private oauthService: OAuthService) {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        if (!req.url.startsWith(this.oauthService.issuer)) {
+            if (!this.oauthService.hasValidAccessToken()) {
+                if (this.oauthService.getRefreshToken()) {
+                    this.oauthService.refreshToken();
+                } else {
+                    this.oauthService.tryLogin();
+                }
+            } else {
+                return this.processRequest(req, next);
+            }
+        } else {
+            return next.handle(req);
+        }
+    }
+
+    processRequest(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         req = req.clone({
-            withCredentials: true
+            withCredentials: true,
+            setHeaders: {
+                Authorization: `Bearer ${this.oauthService.getAccessToken()}`
+            }
         });
         return next.handle(req).pipe(tap(
             (event) => {
@@ -25,7 +45,7 @@ export class ApiWithCredentialInterceptor implements HttpInterceptor {
             },
             (error: any) => {
                 if (error instanceof HttpErrorResponse && error.status === 401) {
-                    window.location.href = '/saml/login';
+                    this.oauthService.tryLogin();
                 }
             }
         ));
