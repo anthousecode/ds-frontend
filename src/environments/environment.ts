@@ -4,7 +4,10 @@
 
 export const environment = {
     production: false,
-    apiUrl: 'http://192.168.132.250:3000'
+    apiUrl: 'http://localhost:8082',
+    oidcIssuer: 'https://ia-test.egisz.rosminzdrav.ru/realms/dev',
+    oidcClientId: 'ds-local-OIDC',
+    oidcClientSecret: 'd66903da-0073-454d-81df-cd4dce10bcb8'
 };
 
 /*

@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {DictionaryService} from '../../../service/dictionary.service';
 import {pickerI18n, TalonComponent} from '../talon.component';
-import {FinancingSource, Lgota, Organ, SocialStatus, VmpStage0} from '../../../interface/talon';
+import {FinancingSource, Lgota, Organ, SocialStatus, VmpStage0} from '../../../models/talon.model';
 import {Observable} from 'rxjs';
 import {FormControl} from '@angular/forms';
-import {InsuranceCompany} from '../../../interface/dictionary';
+import {InsuranceCompany} from '../../../models/dictionary.model';
 import {debounceTime} from 'rxjs/operators';
 
 declare var M: any;
@@ -79,7 +79,7 @@ export class Stage0Component implements OnInit {
     }
 
     findInsuranceCompany(query: string) {
-        this.dictionaryService.getInsuranceCompanies(query).subscribe(response => {
+        this.dictionaryService.getInsuranceCompanies(1, 30, query).subscribe(response => {
             this.filteredInsuranceCompanies = response;
         });
     }

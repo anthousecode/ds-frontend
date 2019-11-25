@@ -138,15 +138,15 @@
                                         <tbody>
                                                 <tr>
                                                         <td>http</td>
-                                                  
+
                                                         <td>
                                                                         <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
                                                         </td>
-                                                  
+
                                                     <td>
                                                             No
                                                     </td>
-                                                    
+
                                                 </tr>
                                         </tbody>
                                     </table>
@@ -158,7 +158,7 @@
 </section>
 
             <section>
-    
+
     <h3 id="methods">
         Methods
     </h3>
@@ -226,7 +226,7 @@
 
                     </div>
                     <div class="io-description">
-                        
+
                     </div>
                 </td>
             </tr>
@@ -247,7 +247,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>putTalon(talon: <a href="../classes/Talon.html">Talon</a>)</code>
+<code>putTalon(talon: <a href="../classes/Talon.html">TalonModel</a>)</code>
                 </td>
             </tr>
 
@@ -277,7 +277,7 @@
                                 <tr>
                                     <td>talon</td>
                                     <td>
-                                                <code><a href="../classes/Talon.html" target="_self" >Talon</a></code>
+                                                <code><a href="../classes/Talon.html" target="_self" >TalonModel</a></code>
                                     </td>
 
                                     <td>
@@ -296,7 +296,7 @@
 
                     </div>
                     <div class="io-description">
-                        
+
                     </div>
                 </td>
             </tr>
@@ -304,7 +304,7 @@
     </table>
 </section>
             <section>
-    
+
         <h3 id="inputs">
             Properties
         </h3>
@@ -346,7 +346,7 @@ import { HttpClient } from &#x27;@angular/common/http&#x27;;
 import { Observable, of } from &#x27;rxjs&#x27;;
 import { catchError, debounceTime, map, tap } from &#x27;rxjs/operators&#x27;;
 import { environment } from &#x27;../../environments/environment&#x27;;
-import {Talon, TalonResponse} from &#x27;../talon&#x27;;
+import {TalonModel, TalonResponse} from &#x27;../talon&#x27;;
 
 @Injectable({
     providedIn: &#x27;root&#x27;
@@ -370,7 +370,7 @@ export class TalonService {
             );
     }
 
-    putTalon(talon: Talon): Observable&lt;any&gt; {
+    putTalon(talon: TalonModel): Observable&lt;any&gt; {
         return this.http.put(this.talonUrl + &#x27;/&#x27; + talon.id, {talon});
     }
 }

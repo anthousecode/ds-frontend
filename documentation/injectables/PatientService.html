@@ -144,15 +144,15 @@
                                         <tbody>
                                                 <tr>
                                                         <td>http</td>
-                                                  
+
                                                         <td>
                                                                         <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
                                                         </td>
-                                                  
+
                                                     <td>
                                                             No
                                                     </td>
-                                                    
+
                                                 </tr>
                                         </tbody>
                                     </table>
@@ -164,7 +164,7 @@
 </section>
 
             <section>
-    
+
     <h3 id="methods">
         Methods
     </h3>
@@ -241,7 +241,7 @@
 
                     </div>
                     <div class="io-description">
-                        
+
                     </div>
                 </td>
             </tr>
@@ -314,7 +314,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../classes/Patient.html" target="_self" >Observable&lt;Patient&gt;</a></code>
+                        <b>Returns : </b>        <code><a href="../classes/Patient.html" target="_self" >Observable&lt;PatientModel&gt;</a></code>
 
                     </div>
                     <div class="io-description">
@@ -428,7 +428,7 @@
 
                     </div>
                     <div class="io-description">
-                        
+
                     </div>
                 </td>
             </tr>
@@ -449,7 +449,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>updatePatient(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, changeData: <a href="../classes/Patient.html">Patient</a>)</code>
+<code>updatePatient(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, changeData: <a href="../classes/Patient.html">PatientModel</a>)</code>
                 </td>
             </tr>
 
@@ -498,7 +498,7 @@
                                 <tr>
                                     <td>changeData</td>
                                     <td>
-                                                <code><a href="../classes/Patient.html" target="_self" >Patient</a></code>
+                                                <code><a href="../classes/Patient.html" target="_self" >PatientModel</a></code>
                                     </td>
 
                                     <td>
@@ -517,11 +517,11 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../classes/Patient.html" target="_self" >Observable&lt;Patient&gt;</a></code>
+                        <b>Returns : </b>        <code><a href="../classes/Patient.html" target="_self" >Observable&lt;PatientModel&gt;</a></code>
 
                     </div>
                     <div class="io-description">
-                        
+
                     </div>
                 </td>
             </tr>
@@ -529,7 +529,7 @@
     </table>
 </section>
             <section>
-    
+
         <h3 id="inputs">
             Properties
         </h3>
@@ -569,7 +569,7 @@
 import {HttpClient} from &#x27;@angular/common/http&#x27;;
 import {concatMap, delay, retryWhen} from &#x27;rxjs/operators&#x27;;
 import {Observable, of, throwError} from &#x27;rxjs&#x27;;
-import {Patient, PatientHistory} from &#x27;../patient&#x27;;
+import {PatientModel, PatientHistory} from &#x27;../patient&#x27;;
 import {environment} from &#x27;../../environments/environment&#x27;;
 
 @Injectable({
@@ -587,8 +587,8 @@ export class PatientService {
    *
    * @return error - еслии евсть ошибка , если все нормально то о отдает json вида PatientCard
    */
-  getPatient(id: number): Observable&lt;Patient&gt; {
-    return this.http.get&lt;Patient&gt;(this.apiUrl + &#x27;-&#x27; + id).pipe(
+  getPatient(id: number): Observable&lt;PatientModel&gt; {
+    return this.http.get&lt;PatientModel&gt;(this.apiUrl + &#x27;-&#x27; + id).pipe(
       retryWhen(errors &#x3D;&gt; errors
         .pipe(
           concatMap((error, count) &#x3D;&gt; {
@@ -605,8 +605,8 @@ export class PatientService {
    * @param id Пациента
    * @param changeData Данные которые нужно изменить
    */
-  updatePatient(id: number, changeData: Patient): Observable&lt;Patient&gt; {
-    return this.http.put&lt;Patient&gt;(this.apiUrl + &#x27;-&#x27; + id, changeData).pipe(
+  updatePatient(id: number, changeData: PatientModel): Observable&lt;PatientModel&gt; {
+    return this.http.put&lt;PatientModel&gt;(this.apiUrl + &#x27;-&#x27; + id, changeData).pipe(
       retryWhen(errors &#x3D;&gt; errors
         .pipe(
           concatMap((error, count) &#x3D;&gt; {

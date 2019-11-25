@@ -36,11 +36,11 @@
     "value": "СНИЛС"
   },
   {
-    "name": "surname",
+    "name": "lastName",
     "value": "фамилия"
   },
   {
-    "name": "name",
+    "name": "firstName",
     "value": "имя"
   },
   {

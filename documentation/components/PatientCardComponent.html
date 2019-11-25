@@ -223,51 +223,51 @@
                                         <tbody>
                                                 <tr>
                                                         <td>dialog</td>
-                                                  
+
                                                         <td>
                                                                     <code>MatDialog</code>
                                                         </td>
-                                                  
+
                                                     <td>
                                                             No
                                                     </td>
-                                                    
+
                                                 </tr>
                                                 <tr>
                                                         <td>mock</td>
-                                                  
+
                                                         <td>
                                                                         <code><a href="../injectables/MockService.html" target="_self" >MockService</a></code>
                                                         </td>
-                                                  
+
                                                     <td>
                                                             No
                                                     </td>
-                                                    
+
                                                 </tr>
                                                 <tr>
                                                         <td>route</td>
-                                                  
+
                                                         <td>
                                                                         <code><a href="https://angular.io/api/router/ActivatedRoute" target="_blank" >ActivatedRoute</a></code>
                                                         </td>
-                                                  
+
                                                     <td>
                                                             No
                                                     </td>
-                                                    
+
                                                 </tr>
                                                 <tr>
                                                         <td>patientApi</td>
-                                                  
+
                                                         <td>
                                                                         <code><a href="../injectables/PatientService.html" target="_self" >PatientService</a></code>
                                                         </td>
-                                                  
+
                                                     <td>
                                                             No
                                                     </td>
-                                                    
+
                                                 </tr>
                                         </tbody>
                                     </table>
@@ -283,7 +283,7 @@
 
 
     <section>
-    
+
     <h3 id="methods">
         Methods
     </h3>
@@ -351,7 +351,7 @@
 
                     </div>
                     <div class="io-description">
-                        
+
                     </div>
                 </td>
             </tr>
@@ -421,7 +421,7 @@
 
                     </div>
                     <div class="io-description">
-                        
+
                     </div>
                 </td>
             </tr>
@@ -624,7 +624,7 @@
     </table>
 </section>
     <section>
-    
+
         <h3 id="inputs">
             Properties
         </h3>
@@ -723,7 +723,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                            <i>Default value : </i><code>new Patient()</code>
+                            <i>Default value : </i><code>new PatientModel()</code>
                         </td>
                     </tr>
                         <tr>
@@ -795,7 +795,7 @@
     <div class="tab-pane fade  tab-source-code" id="c-source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {Component, OnInit} from &#x27;@angular/core&#x27;;
 import {pickerI18n} from &#x27;../../app/talon/talon.component&#x27;;
-import {Patient, PatientDocument} from &#x27;./../patient&#x27;;
+import {PatientModel, PatientDocument} from &#x27;./../patient&#x27;;
 import {MatDialog, MatDialogConfig} from &#x27;@angular/material&#x27;;
 import {PatientDocumentModalComponent} from &#x27;./patient-document-modal/patient-document-modal.component&#x27;;
 import {MockService} from &#x27;../service/mock.service&#x27;;
@@ -811,7 +811,7 @@ import {PatientUnionModalComponent} from &#x27;./patient-union-modal/patient-uni
 })
 export class PatientCardComponent implements OnInit {
   pickerI18n &#x3D; pickerI18n;
-  patientInform &#x3D; new Patient();
+  patientInform &#x3D; new PatientModel();
   documents: PatientDocument[];
   dialogConfig &#x3D; new MatDialogConfig();
   showEnableInfo &#x3D; false;
@@ -1045,7 +1045,7 @@ export class PatientCardComponent implements OnInit {
         </div>
     </div>
 
-    
+
 </div>
 
 <script src="../js/libs/vis.min.js"></script>

@@ -1,5 +1,5 @@
 // @ts-ignore
-import { PatientDocumentTypeRegex } from '../interface/dictionary';
+import { PatientDocumentTypeRegex } from '../models/dictionary.model';
 
 export const patientDocTypeRegex: PatientDocumentTypeRegex[] = [
   {

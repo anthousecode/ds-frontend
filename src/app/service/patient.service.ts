@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import {concatMap, delay, retryWhen} from 'rxjs/operators';
 import {Observable, of, throwError} from 'rxjs';
-import {Patient, PatientDocument, PatientHistory, PatientHistoryDocument} from '../interface/patient';
 import {environment} from '../../environments/environment';
+import { Patient, PatientSearchResult, PatientSendAPI } from '../models/patient.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +13,11 @@ export class PatientService {
   constructor(private http: HttpClient) {
   }
 
-  public state: PatientDocument[] = [];
-  public MINIMUM_TIMESTAMP: Date;
   private patientUrl = environment.apiUrl + '/api/patients';
 
   /**
    *  Get запрос для получениие данных об пациенте
-   * @param id:number Пациента которого мы ищем
+   * @param id:documNumber Пациента которого мы ищем
    * @return error - еслии евсть ошибка , если все нормально то о отдает json вида PatientCard
    */
   getPatient(id: number): Observable<Patient> {
@@ -28,25 +26,29 @@ export class PatientService {
         .pipe(
           concatMap((error, count) => {
             this.handleError(error);
-            return count < 5 && (error.status === 400 || error.status === 0) ? of(error.status) : throwError(error);
+            return count < 5 && (error.status === 500 || error.status === 0) ? of(error.status) : throwError(error);
           }),
           delay(1000)
         )
       ));
   }
 
+    searchPatient$(params: HttpParams): Observable<PatientSearchResult> {
+        return this.http.get<PatientSearchResult>(this.patientUrl, {params});
+    }
+
   /**
    * Для обновление данных
    * @param changeData Данные которые нужно изменить
    * @return Observable чтобы подпистаься и получить данные.
    */
-  updatePatient(changeData: Patient): Observable<Patient> {
-    return this.http.put<Patient>(this.patientUrl + '/' + changeData.id, changeData).pipe(
+  updatePatient(changeData: PatientSendAPI): Observable<Patient> {
+    return this.http.put<Patient>(this.patientUrl + '/' + changeData.patient.id, changeData).pipe(
       retryWhen(errors => errors
         .pipe(
           concatMap((error, count) => {
             this.handleError(error);
-            return count < 5 && (error.status === 400 || error.status === 0) ? of(error.status) : throwError(error);
+            return count < 5 && (error.status === 500 || error.status === 0) ? of(error.status) : throwError(error);
           }),
           delay(1000)
         )));
@@ -54,32 +56,36 @@ export class PatientService {
 
   /**
    * Создание Пациента если его нет в системе
-   * @param patient Обьект тип Patient
+   * @param patient Обьект тип PatientModel
    * @return Возращает статус создание
    */
-  createPatient(patient: Patient): Observable<Patient> {
+  createPatient(patient: PatientSendAPI): Observable<Patient> {
     return this.http.post<Patient>(this.patientUrl, patient).pipe(
       retryWhen(errors => errors
         .pipe(
           concatMap((error, count) => {
             this.handleError(error);
-            return count < 5 && (error.status === 400 || error.status === 0) ? of(error.status) : throwError(error);
+            return count < 5 && (error.status === 500 || error.status === 0) ? of(error.status) : throwError(error);
           }),
           delay(1000)
         )));
   }
 
+    deletePatient(patientId: number) {
+        return this.http.delete(this.patientUrl + `/${patientId}`);
+    }
+
   /**
    * Для получение историй пациента
    * @param id - идинтификатор пользователя
    */
-  getHistoryPatient(id: number): Observable<PatientHistory[]> {
-    return this.http.get<PatientHistory[]>(this.patientUrl + '/' + id + '/change-log').pipe(
+  getHistoryPatient(id: number): Observable<any[]> {
+    return this.http.get<any[]>(this.patientUrl + '/' + id + '/change-log').pipe(
       retryWhen(errors => errors
         .pipe(
           concatMap((error, count) => {
             this.handleError(error);
-            return count < 5 && (error.status === 400 || error.status === 0) ? of(error.status) : throwError(error);
+            return count < 5 && (error.status === 500 || error.status === 0) ? of(error.status) : throwError(error);
           }),
           delay(1000)
         )));
@@ -90,13 +96,13 @@ export class PatientService {
    * @param id - пациента
    * @return Возвращает список историю изменений
    */
-  getHistoryPatientDocument(id: number): Observable<PatientHistoryDocument[]> {
-    return this.http.get<PatientHistoryDocument[]>(this.patientUrl + '/' + id + '/identity-document-change-log').pipe(
+  getHistoryPatientDocument(id: number): Observable<any[]> {
+    return this.http.get<any[]>(this.patientUrl + '/' + id + '/patient-document-change-log').pipe(
       retryWhen(errors => errors
         .pipe(
           concatMap((error, count) => {
             this.handleError(error);
-            return count < 5 && (error.status === 400 || error.status === 0) ? of(error.status) : throwError(error);
+            return count < 5 && (error.status === 500 || error.status === 0) ? of(error.status) : throwError(error);
           }),
           delay(1000)
         )));

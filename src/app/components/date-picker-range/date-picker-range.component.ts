@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import * as moment from 'moment';
-import {IMyDrpOptions, IMyInputFieldChanged} from 'mydaterangepicker';
+import { IMyDateRange, IMyDateRangeModel, IMyDrpOptions, IMyInputFieldChanged } from 'mydaterangepicker';
 
 moment.locale('ru');
 
@@ -18,9 +18,11 @@ export class DatePickerRangeComponent implements OnInit {
   // tslint:disable-next-line:no-output-on-prefix
   @Output() onChanged = new EventEmitter<string[]>();
   @Input() public control: any = null;
+  @Input() public showError = true;
 
   isValid = true;
   isFirst = 0;
+  selectedDateRange: string | IMyDateRange =  '';
   myDateRangePickerOptions: IMyDrpOptions = {
     dateFormat: 'dd.mm.yyyy',
     indicateInvalidDateRange: true,
@@ -28,7 +30,8 @@ export class DatePickerRangeComponent implements OnInit {
     showSelectDateText: false,
     maxYear: moment().year(),
     minYear: 1900,
-    disableSince: {year: moment().year(), month: moment().month(), day: moment().day()},
+    selectionTxtFontSize: '16px',
+    disableSince: {year: moment().year(), month: moment().month() + 1, day: moment().date() + 1},
     dayLabels: {su: 'Вос.', mo: 'Пон.', tu: 'Вт.', we: 'Ср.', th: 'Чт.', fr: 'Пят.', sa: 'Суб.'},
     width: '100%',
     monthLabels: {
@@ -60,7 +63,6 @@ export class DatePickerRangeComponent implements OnInit {
   onInputFieldChanged(event: IMyInputFieldChanged) {
     this.isValid = event.valid;
     const first = event.value.split(' - ');
-    console.log(first);
     if (event.valid) {
       if (DatePickerRangeComponent.checkValid(first[0]) && DatePickerRangeComponent.checkValid(first[1])) {
         this.onChanged.emit(first);
@@ -68,6 +70,16 @@ export class DatePickerRangeComponent implements OnInit {
         this.isValid = false;
       }
     }
+  }
+
+  onDateRangeChanged(event: IMyDateRangeModel): void {
+    if (event.beginDate.year !== 0 && event.endDate.year !== 0 ) {
+      this.selectedDateRange  = { beginDate: event.beginDate, endDate : event.endDate };
+    }
+  }
+
+  clearDateRange(): void {
+    this.selectedDateRange = '';
   }
 
   ngOnInit() {

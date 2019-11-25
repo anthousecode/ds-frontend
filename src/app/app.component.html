@@ -1,54 +1,50 @@
 <!-- user_bar -->
 <ul class='dropdown-content' id='user'>
-  <li><a href="#!"><i class="material-icons">info</i>Пользователь</a></li>
-  <li><a href="#!"><i class="material-icons">email</i>Уведомления</a></li>
+  <li><a href="#!"><i class="material-icons">email</i><span class="right new badge green" data-badge-caption="4"></span>Уведомления</a></li>
   <li><a href="#!"><i class="material-icons">exit_to_app</i>Выйти</a></li>
 </ul>
 <ul class='dropdown-content' id='user-mobile'>
-  <li><a href="#!">Пользователь</a></li>
-  <li><a href="#!">Уведомления</a></li>
+  <li><a href="#!"><span class="right new badge green" data-badge-caption="4"></span>Уведомления</a></li>
   <li><a href="#!">Выйти</a></li>
 </ul>
 <!-- lech_bar -->
 <ul class='dropdown-content' id='lech'>
-  <li class="active"><a href="card_sk.html">Карта пациента</a></li>
-  <li><a href="#!">Поиск пациента</a></li>
-  <li><a href="#!">Поиск заявки</a></li>
-  <li><a href="#!">Справочная информация</a></li>
+  <li class="active"><a routerLink="/patient-card">Карта ребенка</a></li>
+  <li><a routerLink="/search-child">Поиск ребенка</a></li>
+  <li><a routerLink="/search-patient">Поиск карты обследования</a></li>
 </ul>
 <ul class='dropdown-content' id='lech-mobile'>
-  <li class="active"><a href="card_sk.html">Карта пациента</a></li>
-  <li><a href="#!">Поиск пациента</a></li>
-  <li><a href="#!">Поиск заявки</a></li>
-  <li><a href="#!">Справочная информация</a></li>
+  <li class="active"><a routerLink="/patient-card">Карта ребенка</a></li>
+  <li><a routerLink="/search-child">Поиск ребенка</a></li>
+  <li><a routerLink="/search-patient">Поиск карты обследования</a></li>
 </ul>
 
 <nav class="green" style="margin-bottom: 12px">
   <div class="nav-wrapper">
     <a class="sidenav-trigger" data-target="mobile-nav" href="#"><i class="material-icons">menu</i></a>
     <a href="">
-      <div class="tooltipped brand-logo right" data-tooltip="Cистема мониторинга санаторно-курортного лечения">
+      <div class="alink_logo tooltipped brand-logo right" materialize="Tooltip" data-tooltip="Подсистема мониторинга проведения диспансеризации<br> детей-сирот и детей, находящихся в трудной жизненной ситуации">
         <span>ЕГИСЗ</span>
-        <img class="right logo-egisz" src="img/logo-langing.png">
+        <img class="right logo-egisz" src="assets/logo-langing.png">
       </div>
     </a>
     <ul class="left hide-on-med-and-down">
-      <li style="width: 210px"><a class="dropdown-trigger" data-target="user" href="#!"><i class="material-icons left">account_box</i>ЦЕНТР
+      <li><a class="dropdown-trigger" data-target="user" materialize="Dropdown" href="#!" [materializeParams]="[{ constrainWidth: false }]"><i class="material-icons left">account_box</i>ЦЕНТР
         Т.П. <i class="material-icons right">arrow_drop_down</i></a></li>
-      <li style="width: 210px"><a class="dropdown-trigger" data-target="lech" href="#!">ЛЕЧЕНИЕ<i
+      <li><a class="dropdown-trigger" data-target="lech" materialize="Dropdown" href="#!" [materializeParams]="[{ constrainWidth: false }]">ОБСЛЕДОВАНИЕ<i
         class="material-icons right">arrow_drop_down</i></a></li>
       <li><a href="">МОНИТОРИНГ</a></li>
-      <li><a href=""><i class="material-icons tooltipped" data-tooltip="АДМИНИСТРИРОВАНИЕ">settings</i></a></li>
+      <li><a href=""><i class="material-icons tooltipped" data-tooltip="АДМИНИСТРИРОВАНИЕ" materialize="Tooltip">settings</i></a></li>
       <li><a class="tooltipped" data-tooltip="ФОРУМ" href="https://portal.egisz.rosminzdrav.ru/forum/"
-             target="_blank"><i class="material-icons small">forum</i></a></li>
+             target="_blank" materialize="Tooltip"><i class="material-icons small">forum</i></a></li>
     </ul>
   </div>
 </nav>
 
-<ul class="sidenav" id="mobile-nav">
-  <li><a class="dropdown-trigger" data-target="user-mobile" href="#!">ЦЕНТР Т.П.<i class="material-icons right">arrow_drop_down</i></a>
+<ul class="sidenav" id="mobile-nav" materialize="Sidenav">
+  <li><a class="dropdown-trigger" data-target="user-mobile" materialize="Dropdown" href="#!">ЦЕНТР Т.П.<i class="material-icons right">arrow_drop_down</i></a>
   </li>
-  <li><a class="dropdown-trigger" data-target="lech-mobile" href="#!">ЛЕЧЕНИЕ<i class="material-icons right">arrow_drop_down</i></a>
+  <li><a class="dropdown-trigger" data-target="lech-mobile" materialize="Dropdown" href="#!">ЛЕЧЕНИЕ<i class="material-icons right">arrow_drop_down</i></a>
   </li>
   <li><a href="">МОНИТОРИНГ</a></li>
   <li><a href="">АДМИНИСТРИРОВАНИЕ</a></li>
@@ -58,20 +54,29 @@
 <router-outlet></router-outlet>
 
 
-<div class="ias_footer">
+<div class="ias_footer hide-on-med-and-down">
   <div>
-    <div>
-      <div style="padding:5px; text-align: right;">
-            <span class="white-text fs1">
+    <div class="row" style="margin-bottom: 0">
+      <div class="col s6 right" style="text-align: right; margin: auto">
+            <span class="white-text" style="vertical-align: middle">
               Служба поддержки: 8-800-500-74-78 (по России)<br>
               Обращение в тех. поддержку:
-              <a href="mailto:egisz@rt-eu.ru">
+              <a class="alink" href="mailto:egisz@rt-eu.ru">
               egisz@rt-eu.ru
               </a>  |
-              <a href="https://support.egisz.rosminzdrav.ru" target="_blank">
+              <a class="alink" href="https://support.egisz.rosminzdrav.ru" target="_blank">
                 ЕГИСЗ.РФ
               </a>
-              <br> © 2016-2018 Министерство здравоохранения Российской Федерации
+              <br> © 2016-2019 Министерство здравоохранения Российской Федерации
+            </span>
+      </div>
+      <div class="col s6">
+            <span style="vertical-align:middle">
+              <a href="https://support.egisz.rosminzdrav.ru/index.php?/Knowledge/List/Index/66" target="_blank" class="alink">Описание системы</a>
+              <br>
+              <a href="https://support.egisz.rosminzdrav.ru/index.php?/Knowledge/List/Index/70" target="_blank" class="alink">Часто задаваемые вопросы</a>
+              <br>
+              <a href="https://portal.egisz.rosminzdrav.ru/materials" target="_blank" class="alink">Нормативно-правовые документы и руководства пользователя</a>
             </span>
       </div>
     </div>
