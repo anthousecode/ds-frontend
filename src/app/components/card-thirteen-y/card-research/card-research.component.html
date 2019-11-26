@@ -1,0 +1,99 @@
+<form [formGroup]="researchFormGroup">
+  <p class="mandatory-studies__title">Обязательные исследования</p>
+  <p class="mandatory-studies__subtitle">Анализ крови</p>
+  <div class="mandatory-studies__fields" formGroupName="bloodAnalysis">
+    <mat-form-field class="mandatory-studies__date" floatLabel="auto">
+      <input matInput [matDatepicker]="bloodDatepicker" placeholder="Дата" formControlName="dateBegin" [max]="maxDate"
+             (click)="openDatepicker('bloodDatepicker')"
+             matTooltip="Допустимый интервал: от даты рождения ребенка до текущей даты" required>
+      <mat-error *ngIf="cardThirteenYService.getControls(researchFormGroup, 'bloodAnalysis').dateBegin.invalid">
+        Выберите дату
+      </mat-error>
+      <mat-datepicker class="__mainbar-header" #bloodDatepicker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field class="mandatory-studies__result" floatLabel="auto">
+      <textarea matInput placeholder="Результат" formControlName="result"
+                matTooltip="Укажите результат исследования" matTextareaAutosize required>
+
+      </textarea>
+      <mat-error *ngIf="cardThirteenYService.getControls(researchFormGroup,'bloodAnalysis').result.invalid">
+        Укажите результат исследования
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <p class="mandatory-studies__subtitle">Анализ мочи</p>
+  <div class="mandatory-studies__fields" formGroupName="urineAnalysis">
+    <mat-form-field class="mandatory-studies__date" floatLabel="auto">
+      <input matInput [matDatepicker]="urineDatepicker" placeholder="Дата" formControlName="dateBegin"
+             [max]="maxDate"
+             (click)="openDatepicker('urineDatepicker')"
+             matTooltip="Допустимый интервал: от даты рождения ребенка до текущей даты" required>
+      <mat-error *ngIf="cardThirteenYService.getControls(researchFormGroup, 'urineAnalysis').dateBegin.invalid">
+        Выберите дату
+      </mat-error>
+      <mat-datepicker class="__mainbar-header" #urineDatepicker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field class="mandatory-studies__result" floatLabel="auto">
+      <textarea matInput placeholder="Результат" formControlName="result" matTooltip="Укажите результат исследования"
+                matTextareaAutosize required>
+      <mat-error *ngIf="cardThirteenYService.getControls(researchFormGroup,'urineAnalysis').result.invalid">
+        Укажите результат исследования
+      </mat-error>
+      </textarea>
+    </mat-form-field>
+  </div>
+  <p class="mandatory-studies__subtitle">Исследования глюкозы в крови</p>
+  <div class="mandatory-studies__fields" formGroupName="bloodGlucoseTests">
+    <mat-form-field class="mandatory-studies__date" floatLabel="auto">
+      <input matInput [matDatepicker]="glucoseDatepicker" placeholder="Дата" formControlName="dateBegin" [max]="maxDate"
+             (click)="openDatepicker('glucoseDatepicker')"
+             matTooltip="Допустимый интервал: от даты рождения ребенка до текущей даты" required>
+      <mat-error *ngIf="cardThirteenYService.getControls(researchFormGroup, 'bloodGlucoseTests').dateBegin.invalid">
+        Выберите дату
+      </mat-error>
+      <mat-datepicker class="__mainbar-header" #glucoseDatepicker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field class="mandatory-studies__result" floatLabel="auto">
+      <textarea matInput placeholder="Результат" formControlName="result" matTooltip="Укажите результат исследования"
+                matTextareaAutosize
+                required>
+      </textarea>
+      <mat-error *ngIf="cardThirteenYService.getControls(researchFormGroup,'bloodGlucoseTests').result.invalid">
+        Укажите результат исследования
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <p class="mandatory-studies__title">Дополнительные исследования</p>
+
+  <p class="health-status__add-diagnosis" (click)="addStudy()">
+    Добавить исследование
+  </p>
+  <div class="health-status__before-ex-diagnoses">
+    <table class="health-status__diagnoses-table">
+      <thead class="health-status__diagnoses-table-header">
+      <tr>
+        <th>Исследование</th>
+        <th>Дата</th>
+        <th>Результат</th>
+        <th>Удалить</th>
+      </tr>
+      </thead>
+      <tbody class="health-status__diagnoses-table-body">
+      <tr *ngFor="let ar of additionalResearch | async"
+          (click)="editStudy(ar, $event)">
+        <td>{{ar.study}}</td>
+        <td>{{ar.date}}</td>
+        <td>{{ar.result}}</td>
+        <td class="__delete-diagnosis">
+          <div class="health-status__diagnoses-delete"
+               matTooltip="Нажмите для удаления диагноза"
+               (click)="deleteStudy()">
+            <mat-icon svgIcon="delete" class="__s18 __white"></mat-icon>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</form>

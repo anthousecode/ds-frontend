@@ -1,0 +1,43 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 250px;
+}
+
+.export-card {
+  &__main {
+    padding: 24px 24px 0 24px;
+  }
+
+  &__title {
+    padding-bottom: 3px;
+    border-bottom: 1px solid rgba(#000000, .87);
+    font-size: 18px;
+    color: rgba(#000000, .87);
+  }
+
+  &__button-block {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin: 0 10px 10px 10px;
+  }
+
+  &__button-item {
+    height: 32px;
+    padding: 0 16px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 2px;
+    text-transform: uppercase;
+    font-size: 14px;
+    background-color: #1b9881;
+    color: #ffffff;
+    cursor: pointer;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}

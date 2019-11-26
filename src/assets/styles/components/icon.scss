@@ -1,0 +1,95 @@
+$icon-sizes: 10, 11, 12, 14, 16, 18, 20, 24, 25, 29, 30, 40;
+$icon-widths: 32;
+$icon-heights: 26;
+$icon-colors: (
+  "white": #ffffff,
+  "black": #000000,
+  "grey": #757575
+);
+$icon-margin-left: 0, 5, 10;
+$icon-margin-right: 4, 10, 12, 25, 32;
+$icon-margin-top: -6, 0, 1, 2;
+$opacity-list: 10, 30, 70;
+
+.mat-icon {
+  flex-shrink: 0;
+
+  @each $size in $icon-sizes {
+    &.__s#{$size} {
+      width: #{$size}px !important;
+      height: #{$size}px !important;
+      font-size: #{$size}px;
+      line-height: #{$size}px;
+    }
+  }
+
+  @each $width in $icon-widths {
+    &.__w#{$width} {
+      width: #{$width}px !important;
+    }
+  }
+
+  @each $height in $icon-heights {
+    &.__h#{$height} {
+      height: #{$height}px !important;
+    }
+  }
+
+  @each $name, $color in $icon-colors {
+    &.__#{$name} {
+      color: #{$color};
+    }
+  }
+
+  @each $indent in $icon-margin-left {
+    &.__ml#{$indent} {
+      margin-left: #{$indent}px;
+    }
+  }
+
+  @each $indent in $icon-margin-right {
+    &.__mr#{$indent} {
+      margin-right: #{$indent}px;
+    }
+  }
+
+  @each $indent in $icon-margin-top {
+    &.__mt#{$indent} {
+      margin-top: #{$indent}px;
+    }
+  }
+
+  @each $opacity in $opacity-list {
+    &.__op#{$opacity} {
+      opacity: $opacity / 100;
+    }
+  }
+
+  &.__rotate-left-45 {
+     transform: rotate(-45deg);
+  }
+
+  &.__rotate-right-45 {
+    transform: rotate(45deg);
+  }
+
+  &.__rotate-90 {
+    transform: rotate(-90deg);
+  }
+
+  &.__rotate-180 {
+    transform: rotate(-180deg);
+  }
+
+  &.__pointer {
+    cursor: pointer;
+  }
+
+  &.__disabled {
+    color: gray;
+    &:hover {
+      color: gray !important;
+      cursor: not-allowed;
+    }
+  }
+}

@@ -29,9 +29,9 @@ export class AppComponent implements OnInit {
         private userService: UserService,
         private oauthService: OAuthService
     ) {
-        this.oauthService.configure(authConfig);
-        this.oauthService.setStorage(sessionStorage);
-        this.oauthService.loadDiscoveryDocumentAndLogin();
+        // this.oauthService.configure(authConfig);
+        // this.oauthService.setStorage(sessionStorage);
+        // this.oauthService.loadDiscoveryDocumentAndLogin();
     }
 
     ngOnInit() {
@@ -39,7 +39,7 @@ export class AppComponent implements OnInit {
 
         this.route.events.subscribe((val) => {
             if (val instanceof NavigationEnd) {
-                this.userService.getUserInfo();
+                // this.userService.getUserInfo();
             }
         });
     }

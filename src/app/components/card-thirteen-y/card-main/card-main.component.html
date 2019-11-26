@@ -1,0 +1,258 @@
+<form class="card-main__wrapper"
+      [formGroup]="mainForm">
+  <div class="card-main__general-info"
+       formGroupName="generalInfo">
+    <p class="card-main__general-info-title">Общая информация</p>
+    <div class="card-main__general-info-main">
+      <div class="card-main__general-info-date">
+        <mat-form-field floatLabel="auto"
+                        class="card-main__date-begin">
+          <input matInput
+                 [matDatepicker]="datepicker"
+                 placeholder="Дата начала обследования"
+                 formControlName="dateBegin"
+                 [max]="maxDate"
+                 (click)="openDatepicker('datepicker')"
+                 required>
+          <mat-error *ngIf="cardThirteenYService.getControls(mainForm, 'generalInfo').dateBegin.invalid">
+            Выберите дату
+          </mat-error>
+          <mat-datepicker class="__mainbar-header" #datepicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <mat-form-field floatLabel="auto"
+                      class="card-main__place-of-stay">
+        <input matInput
+               placeholder="Место постоянного пребывания"
+               formControlName="placeOfStay"
+               [matAutocomplete]="auto"
+               required>
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let city of citiesList$ | async;"
+                      [value]="city.fullAddress">
+            {{city.fullAddress}}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="cardThirteenYService.getControls(mainForm,'generalInfo').placeOfStay.invalid">
+          Укажите место постоянного пребывания
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="card-main__oms-info"
+       formGroupName="omsInfo">
+    <p class="card-main__oms-info-title">Информация ОМС</p>
+    <mat-form-field floatLabel="auto"
+                    class="card-main__hospital-name">
+      <input matInput
+             placeholder="Страховая медицинская организация"
+             [matAutocomplete]="autoHospital"
+             formControlName="hospitalName"
+             required>
+      <mat-autocomplete #autoHospital="matAutocomplete">
+        <mat-option *ngFor="let hospital of hospitalList"
+                    [value]="hospital.name">
+          {{hospital.name}}
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngIf="cardThirteenYService.getControls(mainForm,'omsInfo').hospitalName.invalid">
+        Выберите страховую медицинскую организацию
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field floatLabel="auto"
+                    class="card-main__policy-type">
+      <mat-label>Тип полиса</mat-label>
+      <mat-select formControlName="policyType"
+                  required>
+        <mat-option *ngFor="let type of policyType"
+                    [value]="type.id">
+          {{type.label}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div class="card-main__oms-info-policy">
+      <mat-form-field floatLabel="auto"
+                      class="card-main__policy-series">
+        <input matInput
+               placeholder="Серия полиса"
+               formControlName="policySeries"
+               required>
+        <mat-error *ngIf="cardThirteenYService.getControls(mainForm,'omsInfo').policySeries.invalid">
+          {{getPolicySeriesError()}}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field floatLabel="auto"
+                      class="card-main__policy-number">
+        <input matInput
+               (blur)="setPolicyTypeRule()"
+               placeholder="Номер полиса"
+               formControlName="policyNumber"
+               required>
+        <mat-error *ngIf="cardThirteenYService.getControls(mainForm, 'omsInfo').policyNumber.invalid">
+          {{getPolicyNumberError()}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="card-main__oms-payment">
+      <label class="card-main__oms-payment-label"
+             id="oms-payment-label">
+        Оплата ОМС
+      </label>
+      <mat-radio-group aria-labelledby="oms-payment-label"
+                       class="card-main__oms-payment-block"
+                       formControlName="omsPayment">
+        <mat-radio-button *ngFor="let omsPaymentItem of omsPaymentValues"
+                          class="card-main__oms-payment-item"
+                          [value]="omsPaymentItem.id"
+                          [checked]="omsPaymentItem.id === 1">
+          {{omsPaymentItem.label}}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </div>
+  <div class="card-main__medical-organization"
+       formGroupName="medicalOrganization">
+    <p class="card-main__medical-organization-title">Медицинская организация для получения ПМСП</p>
+    <mat-form-field floatLabel="auto"
+                    class="card-main__med-organization-name">
+      <input matInput
+             placeholder="Наименование организации"
+             [matAutocomplete]="autoOrganization"
+             formControlName="organizationName"
+             (blur)="setControlInfo('medicalOrganization', 'organization')"
+             required>
+      <mat-autocomplete #autoOrganization="matAutocomplete">
+        <mat-option *ngFor="let organization of organizationList"
+                    [value]="organization.shortName">
+          {{organization.shortName}}
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngIf="cardThirteenYService.getControls(mainForm, 'medicalOrganization').organizationName.invalid">
+        Выберите медицинскую организацию
+      </mat-error>
+    </mat-form-field>
+    <mat-expansion-panel class="card-main__med-organization-more">
+      <mat-expansion-panel-header expandedHeight="48px">
+        <mat-panel-title>
+          <mat-icon svgIcon="dehaze"></mat-icon>
+          <p class="card-main__med-organization-more-title">Подробнее</p>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <p class="card-main__med-organization-more-text"
+         *ngIf="!organizationInfo">
+        Подробная информация о медицинской организации
+      </p>
+      <div class="card-main__med-organization-more-text"
+           *ngIf="organizationInfo">
+        <p *ngIf="organizationInfo.address">Адрес: {{organizationInfo.address}}</p>
+        <p *ngIf="organizationInfo.fullName">Название: {{organizationInfo.fullName}}</p>
+      </div>
+    </mat-expansion-panel>
+  </div>
+  <div class="card-main__education"
+       formGroupName="education">
+    <p class="card-main__education-title">Образование</p>
+    <mat-form-field floatLabel="auto"
+                    class="card-main__education-name">
+      <input matInput
+             placeholder="Образовательное учреждение"
+             [matAutocomplete]="autoEducation"
+             (blur)="setControlInfo('education', 'education')"
+             formControlName="educationName"
+             required>
+      <mat-autocomplete #autoEducation="matAutocomplete">
+        <mat-option *ngFor="let education of educationList"
+                    [value]="education.shortName">
+          {{education.shortName}}
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngIf="cardThirteenYService.getControls(mainForm, 'education').educationName.invalid">
+        Выберите образовательное учреждение
+      </mat-error>
+    </mat-form-field>
+    <mat-expansion-panel class="card-main__education-more">
+      <mat-expansion-panel-header expandedHeight="48px">
+        <mat-panel-title>
+          <mat-icon svgIcon="dehaze"></mat-icon>
+          <p class="card-main__education-more-title">Подробнее</p>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <p class="card-main__education-more-text"
+         *ngIf="!educationInfo">
+        Подробная информация об образовательном учреждении
+      </p>
+      <div class="card-main__education-more-text"
+           *ngIf="educationInfo">
+        <p *ngIf="educationInfo.address">Адрес: {{educationInfo.address}}</p>
+        <p *ngIf="educationInfo.fullName">Название: {{educationInfo.fullName}}</p>
+      </div>
+    </mat-expansion-panel>
+  </div>
+  <div class="card-main__location"
+       formGroupName="location">
+    <p class="card-main__location-title">Местонахождение</p>
+    <div class="card-main__location-block">
+      <mat-form-field floatLabel="auto"
+                      class="card-main__location-place">
+        <mat-label>Текущее местонахождение ребёнка</mat-label>
+        <mat-select formControlName="locationPlace"
+                    required>
+          <mat-option *ngFor="let location of locationList$ | async"
+                      [value]="location.id">
+            {{location.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field floatLabel="auto"
+                      class="card-main__location-date">
+        <input matInput
+               [matDatepicker]="datepickerLocation"
+               placeholder="Дата поступления в текущее местонахождение ребенка"
+               formControlName="locationDate"
+               [max]="maxDate"
+               (click)="openDatepicker('datepickerLocation')"
+               required>
+        <mat-error *ngIf="cardThirteenYService.getControls(mainForm, 'location').locationDate.invalid">
+          Выберите дату
+        </mat-error>
+        <mat-datepicker class="__mainbar-header" #datepickerLocation></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <mat-form-field floatLabel="auto"
+                    class="card-main__location-institution">
+      <input matInput
+             placeholder="Наименование стационарного учреждения"
+             [matAutocomplete]="autoInstitution"
+             (blur)="setControlInfo('location', 'institution')"
+             formControlName="institutionName"
+             required>
+      <mat-autocomplete #autoInstitution="matAutocomplete">
+        <mat-option *ngFor="let institution of institutionList"
+                    [value]="institution.shortName">
+          {{institution.shortName}}
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngIf="cardThirteenYService.getControls(mainForm, 'location').institutionName.invalid">
+        Выберите стационарное учреждение
+      </mat-error>
+    </mat-form-field>
+    <mat-expansion-panel class="card-main__location-institution-more">
+      <mat-expansion-panel-header expandedHeight="48px">
+        <mat-panel-title>
+          <mat-icon svgIcon="dehaze"></mat-icon>
+          <p class="card-main__location-institution-more-title">Подробнее</p>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <p class="card-main__location-institution-more-text"
+         *ngIf="!institutionInfo">
+        Подробная информация о стационарном учреждении
+      </p>
+      <div class="card-main__location-institution-more-text"
+           *ngIf="institutionInfo">
+        <p *ngIf="institutionInfo.address">Адрес: {{institutionInfo.address}}</p>
+        <p *ngIf="institutionInfo.fullName">Название: {{institutionInfo.fullName}}</p>
+      </div>
+    </mat-expansion-panel>
+  </div>
+</form>

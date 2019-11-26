@@ -1,0 +1,74 @@
+.dialogs .mat-dialog-container {
+  height: 70vh;
+  width: 55vw;
+
+  @media (max-width: 992px) {
+    height: 70vh;
+    width: 100vw;
+  }
+}
+
+.__add-diagnosis-before,
+.__add-diagnosis-after,
+.__changes-history,
+.__export-card {
+  width: 75%;
+  max-width: 950px !important;
+}
+
+.__add-diagnosis-before,
+.__add-diagnosis-after {
+  @media (max-width: 992px) {
+    width: 94%;
+  }
+
+  .mat-dialog-container {
+    padding: 24px 0;
+  }
+}
+
+.__export-card {
+  .mat-dialog-container {
+    padding: 0;
+  }
+}
+
+.__changes-history {
+  height: 75%;
+
+  .mat-dialog-container {
+    padding-top: 24px;
+    padding-bottom: 0;
+    background-color: #fafafa;
+  }
+}
+
+.__additional-dialog {
+  .mat-dialog-container {
+    width: 400px;
+    padding: 0;
+    background: #62899c;
+
+    app-additional-information {
+      width: 100%;
+      margin: 0;
+      box-shadow: none;
+    }
+  }
+}
+
+.__save-confirm,
+.__delete-confirm {
+  .mat-dialog-container {
+    width: 500px;
+    padding: 24px;
+  }
+}
+
+.__done-card,
+.__block-card {
+  .mat-dialog-container {
+    width: 600px;
+    padding: 24px;
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "1",
+  "result": [
+    {
+      "id": "important",
+      "name": "Важные",
+      "unread": 2
+    },
+    {
+      "id": "system",
+      "name": "Системные"
+    }
+  ],
+  "jsonrpc": "2.0"
+}

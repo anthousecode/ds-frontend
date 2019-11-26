@@ -1,0 +1,171 @@
+.assessment {
+  &__title {
+    font-size: 17px;
+    font-weight: bold;
+    color: #000000;
+  }
+
+  &__section {
+    border-top: 1px solid lightgray;
+  }
+
+  &__no-border-top {
+    border-top: none;
+  }
+
+  &__field-block {
+    display: flex;
+    justify-content: flex-start;
+    padding: 1.5rem 0;
+
+    @media (max-width: 992px) {
+      flex-wrap: wrap;
+    }
+  }
+
+  &__input-field {
+    padding: 0 1.5rem 0 0;
+  }
+
+  &__columns {
+    display: flex;
+    flex-direction: column;
+
+    .assessment__column {
+      display: flex;
+
+      @media (max-width: 992px) {
+        flex-direction: column;
+      }
+
+      .development-disruption__label {
+        min-width: 40px;
+      }
+
+      .characteristic__label {
+        min-width: 120px;
+      }
+    }
+  }
+
+  &__checkbox {
+    min-width: 200px;
+  }
+
+  &__items {
+    display: flex;
+
+    @media (max-width: 992px) {
+      flex-direction: column;
+    }
+  }
+}
+
+.assessment__psycho-dev-kid {
+  width: 100%;
+}
+
+.assessment__psycho-dev-teen {
+  display: flex;
+  flex-direction: column;
+}
+
+.psycho-dev-kid {
+  &__row {
+    display: flex;
+
+    @media (max-width: 992px) {
+      flex-direction: column;
+    }
+
+    mat-radio-button {
+      min-width: 120px;
+    }
+
+    mat-radio-group {
+      mat-radio-button {
+        padding: 2px;
+      }
+
+      @media (max-width: 992px) {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
+
+  &__label {
+    min-width: 300px;
+  }
+}
+
+.assessment__radio-btn {
+  padding: 0 20px 0 0;
+}
+
+.psycho-label {
+  padding: 0 25px 0 0;
+}
+
+.required-symbol {
+  color: #ff0000;
+}
+
+.assessment__gender {
+  display: flex;
+  padding: 1rem 0;
+  align-items: baseline;
+
+  @media (max-width: 992px) {
+    flex-direction: column;
+  }
+
+  .assessment__input-fields {
+    display: flex;
+    align-items: baseline;
+    width: 100%;
+
+    .fields__label {
+      margin-right: 20px;
+    }
+  }
+
+  .assessment__input-field {
+    width: 8.3333333333% !important;
+    vertical-align: baseline;
+
+    .assessment__input {
+      vertical-align: baseline;
+    }
+  }
+}
+
+.gender-label {
+  min-width: 33.3333333333%;
+  height: 100%;
+}
+
+.gender__input-field {
+  width: 10% !important;
+  padding: 0 20px;
+
+  @media (max-width: 992px) {
+    width: 100% !important;
+    padding: 0;
+  }
+}
+
+.scarce {
+  display: flex;
+  align-items: center;
+}
+
+.gender-select-block {
+  display: flex;
+  align-items: baseline;
+  padding: 1.5rem 0;
+
+  @media (max-width: 992px) {
+    flex-direction: column;
+  }
+}

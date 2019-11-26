@@ -1,0 +1,24 @@
+{
+  "id": "1",
+  "result": [
+    {
+      "diagnosis": "Холера",
+      "mkb_10": "A00",
+      "observation": "Да",
+      "treatment": "",
+      "rehabilitation": "",
+      "consultations": "",
+      "vmp": ""
+    },
+    {
+      "diagnosis": "Инфекции",
+      "mkb_10": "B00",
+      "observation": "Нет",
+      "treatment": "",
+      "rehabilitation": "",
+      "consultations": "",
+      "vmp": ""
+    }
+  ],
+  "jsonrpc": "2.0"
+}

@@ -1,0 +1,60 @@
+<div class="card-13y__main-block">
+  <div class="card-13y__header">
+    <h5 class="card-13y__header-title"
+        matTooltip="Номер карты обследования">
+      Карта №141902.000000.000229.002
+    </h5>
+    <div class="card-13y__header-icons">
+      <mat-icon svgIcon="history"
+                matTooltip="История изменений"
+                class="card-13y__header-icon-item __s30"
+                (click)="openChangesHistory()">
+      </mat-icon>
+      <mat-icon svgIcon="info"
+                matTooltip="Дополнительная информация"
+                class="card-13y__header-icon-item __s29"
+                (click)="toggleAdditionalInfo()">
+      </mat-icon>
+    </div>
+  </div>
+  <div class="card-13y__menu">
+    <p class="card-13y__menu-item"
+       *ngFor="let item of menuItems"
+       [ngClass]="{'__active': item.key === activeTabKey}"
+       (click)="changeTab(item.key)">
+      {{item.name}}
+    </p>
+  </div>
+  <div [ngSwitch]="activeTabKey"
+       class="card-13y__body-wrapper">
+    <app-card-main *ngSwitchCase="'main'"
+                   class="__old __card-main">
+    </app-card-main>
+    <app-card-development-assessment class="__old"
+                                     *ngSwitchCase="'development-assessment'">
+    </app-card-development-assessment>
+    <app-card-health-status *ngSwitchCase="'health-status'"
+                            class="__old __health-status">
+    </app-card-health-status>
+    <app-card-research *ngSwitchCase="'research'" class="__old">
+    </app-card-research>
+    <app-card-vaccination *ngSwitchCase="'vaccination'">
+    </app-card-vaccination>
+    <app-card-conclusion *ngSwitchCase="'conclusion'"
+                         class="__old">
+    </app-card-conclusion>
+  </div>
+  <div class="card-13y__buttons">
+    <button class="card-13y__buttons-item"
+            (click)="saveCard()"
+            [ngClass]="{'__disabled': ((activeTabInitValuesModified) === activeTabCurrentValuesModified) || !activeTabCurrentValues}">
+      Сохранить
+    </button>
+    <button class="card-13y__buttons-item" (click)="exportCard()">Экспорт</button>
+    <button class="card-13y__buttons-item" (click)="doneCard()">Выполнено</button>
+    <button class="card-13y__buttons-item" (click)="blockCard()">Заблокировать</button>
+  </div>
+</div>
+<app-additional-information *ngIf="isAdditionalInfoVisible"
+                            [@fadeInOut]>
+</app-additional-information>

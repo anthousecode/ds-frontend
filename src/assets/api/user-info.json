@@ -1,0 +1,14 @@
+{
+  "id": "1",
+  "result": {
+    "id": 1,
+    "surname": "Месси",
+    "name": "Лионель",
+    "patronymic": "Петрович",
+    "entryDate": 1571127853000,
+    "snils": 99988877703,
+    "organization": "Samsung",
+    "send_important_message": true
+  },
+  "jsonrpc": "2.0"
+}

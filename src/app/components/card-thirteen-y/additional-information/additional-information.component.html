@@ -1,0 +1,17 @@
+<p class="additional-info__title">Дополнительная информация</p>
+<div class="additional-info__block"
+     *ngFor="let blockItem of additionalInfoData | async">
+  <p class="additional-info__block-title">{{blockItem.title}}</p>
+  <p class="additional-info__block-general-info"
+     matTooltip="Перейти к карту ребёнка"
+     (click)="toPatientCard()"
+     *ngIf="blockItem.generalInfo">
+    {{blockItem.generalInfo}}
+  </p>
+  <div class="additional-info__block-item"
+       *ngFor="let item of blockItem.blockInfo">
+    <p class="additional-info__item-label">{{item.label}}:
+      <span class="additional-info__item-value">{{item.value}}</span>
+    </p>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+{
+  "id": "1",
+  "result": [
+    {
+      "id": "important",
+      "name": "Важные",
+      "unread": 2
+    },
+    {
+      "id": "system",
+      "name": "Системные"
+    },
+    {
+      "id": 1,
+      "name": "Группа 1",
+      "organization": "Apple",
+      "unread": 4
+    },
+    {
+      "id": "new",
+      "name": "Новая группа"
+    }
+  ],
+  "jsonrpc": "2.0"
+}

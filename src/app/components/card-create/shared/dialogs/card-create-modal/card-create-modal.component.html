@@ -1,0 +1,67 @@
+<form class="card-create-wrapper __old" [formGroup]="cardCreateForm">
+  <h6>Создание карты осмотра</h6>
+  <div class="card-create-radio">
+    <label class="accounting-form_label" id="accounting-form_label">Учетная форма <span class="red-text">*</span>
+    </label>
+    <mat-radio-group class="card-main__oms-payment-block" aria-labelledby="accounting-form_label"
+                     formControlName="accountingFormControl">
+      <div class="card-create-radio_buttons">
+        <mat-radio-button class="card-create-radio_button" name="name"
+                          *ngFor="let accountingFormValue of accountingFormValues" [value]="accountingFormValue.id"
+                          [disabled]="accountingFormValue.id === 1 && childCategoryControl.value == 4">
+          {{accountingFormValue.name}}
+        </mat-radio-button>
+      </div>
+    </mat-radio-group>
+    <label class="child-category_label" id="child-category_label">Категория ребенка <span
+      class="red-text">*</span></label>
+    <mat-radio-group class="card-main__oms-payment-block" aria-labelledby="child-category_label"
+                     formControlName="childCategoryControl">
+      <div class="card-create-radio_buttons">
+        <mat-radio-button class="card-create-radio_button" *ngFor="let childCategoryValue of childCategoryValues"
+                          [value]="childCategoryValue.id"
+                          [disabled]="childCategoryValue.id === 4 && accountingFormControl.value == 1">
+          {{childCategoryValue.categoryName}}
+        </mat-radio-button>
+      </div>
+    </mat-radio-group>
+  </div>
+  <label class="age-group_label">
+    Возрастная группа <span class="red-text">*</span>
+    <mat-icon svgIcon="info" matTooltip="Для выбора доступны возрастные группы, по которым еще нет карт обследования"
+              class="age-group__icon-item __s29">
+    </mat-icon>
+  </label>
+  <mat-form-field class="age-group">
+    <mat-select class="age-group_select" formControlName="ageGroupControl">
+      <mat-option *ngFor="let ageGroupValue of ageGroupValues" [value]="ageGroupValue.id">
+        {{ageGroupValue.name}}
+      </mat-option>
+    </mat-select>
+    <mat-hint>{{cardCreateForm.get('ageGroupControl').value?.lab}}</mat-hint>
+  </mat-form-field>
+  <label class="survey-start-date__label">Дата начала обследования <span class="red-text">*</span>
+    <mat-icon svgIcon="info"
+              matTooltip="Из доступного временного периода исключены даты года, в котором уже есть карта обследования"
+              class="age-group__icon-item __s29">
+    </mat-icon>
+  </label>
+  <mat-form-field class="survey-start-date" floatLabel="auto">
+    <input matInput [matDatepicker]="surveyStartDateDatepicker" formControlName="surveyStartDateControl" [max]="maxDate"
+           (click)="openDatepicker('surveyStartDateDatepicker')"
+           matTooltip="Допустимый интервал: от начала предыдущего года до текущей даты" required>
+    <mat-error *ngIf="surveyStartDateControl.invalid">
+      Выберите дату
+    </mat-error>
+    <mat-datepicker class="__mainbar-header" #surveyStartDateDatepicker></mat-datepicker>
+  </mat-form-field>
+</form>
+<mat-dialog-actions>
+  <div class="card-create-footer">
+    <button class="card-create-footer_button" mat-dialog-close>Отмена</button>
+    <button class="card-create-footer_button" [disabled]="cardCreateForm.invalid"
+            [ngClass]="{'__disabled': cardCreateForm.invalid}"
+            mat-dialog-close (click)="createCard()">Создать
+    </button>
+  </div>
+</mat-dialog-actions>

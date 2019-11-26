@@ -1,0 +1,90 @@
+:host {
+  display: block;
+}
+
+.add-study {
+  padding: 0 24px;
+
+  &__title {
+    width: 100%;
+    height: 30px;
+    border-bottom: 1px solid rgba(#000000, .87);
+    font-size: 17px;
+    color: rgba(#000000, .87);
+  }
+
+  &__base-info {
+    display: flex;
+
+    @media (max-width: 992px) {
+      flex-direction: column;
+    }
+  }
+
+  &__date {
+    width: 20% !important;
+
+    @media (max-width: 992px) {
+      width: 100% !important;
+    }
+  }
+
+  .row {
+    display: flex;
+  }
+
+  &__date,
+  &__name,
+  &__result {
+    margin: 0 15px;
+
+    @media (max-width: 992px) {
+      margin: 0;
+    }
+  }
+
+  &__result {
+
+    textarea {
+      resize: none;
+      min-height: 30px;
+      max-height: 30px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      &:focus {
+        max-height: 100vh;
+        white-space: normal;
+      }
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    width: 100%;
+    height: 50px;
+    padding: 0 24px;
+    border-top: 1px solid rgba(#000000, .1);
+  }
+
+  &__button {
+    height: 32px;
+    padding: 0 16px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 2px;
+    text-transform: uppercase;
+    font-size: 13px;
+    background-color: #1b9881;
+    color: #ffffff;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .12), 0 1px 5px 0 rgba(0, 0, 0, .2);
+    cursor: pointer;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}

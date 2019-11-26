@@ -1,0 +1,39 @@
+<form class="add-study __old" [formGroup]="addStudyForm">
+  <h6 class="add-study__title">Добавить исследование</h6>
+
+  <div class="add-study__base-info">
+    <mat-form-field class="add-study__date" floatLabel="auto">
+      <input matInput [matDatepicker]="addStudyDatepicker" placeholder="Дата" formControlName="date" [max]="maxDate"
+             (click)="openDatepicker('addStudyDatepicker')"
+             matTooltip="Допустимый интервал: от даты рождения ребенка до текущей даты" required>
+      <mat-error *ngIf="addStudyForm.get('date').invalid">
+        Выберите дату
+      </mat-error>
+      <mat-datepicker class="__mainbar-header" #addStudyDatepicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field class="add-study__name" floatLabel="auto">
+      <input matInput placeholder="Наименование" formControlName="name" matTooltip="Укажите наименование исследования"
+             required>
+      <mat-error *ngIf="addStudyForm.get('name').invalid">
+        Укажите наименование исследования
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field class="add-study__result" floatLabel="auto">
+      <textarea matInput placeholder="Результат" formControlName="result" matTooltip="Укажите результат исследования"
+                matTextareaAutosize
+                required>
+      </textarea>
+      <mat-error *ngIf="addStudyForm.get('result').invalid">
+        Укажите результат исследования
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div class="add-study__buttons">
+    <button class="add-study__button" mat-dialog-close>Отмена</button>
+    <button class="add-study__button" (click)="saveAndClose()" mat-dialog-close>Сохранить</button>
+  </div>
+</form>

@@ -1,0 +1,42 @@
+.mat-form-field {
+  &.__header-search {
+    position: relative;
+    width: calc(100% - 35px);
+
+    @media (max-width: 1000px) {
+      width: calc(100% - 85px);
+    }
+
+    input {
+      height: 22px !important;
+      margin: 0 !important;
+      border-bottom: none !important;
+      box-shadow: none !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+      color: #000000;
+    }
+
+    .mat-form-field-label {
+      margin-top: 5px;
+      color: #000000;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    }
+
+    .mat-form-field-underline {
+      background-color: #000000;
+    }
+
+    &.mat-focused {
+      color: #ffffff;
+
+      .mat-form-field-label {
+        color: #ffffff;
+      }
+
+      .mat-form-field-ripple {
+        height: 1px;
+        background-color: #ffffff;
+      }
+    }
+  }
+}

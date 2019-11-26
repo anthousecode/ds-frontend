@@ -1,0 +1,62 @@
+@import "../variables";
+
+.card-main__med-organization-more,
+.card-main__education-more,
+.card-main__location-institution-more {
+  margin-top: 10px !important;
+
+  &.mat-expanded {
+    .mat-expansion-panel-body {
+      padding: 20px;
+    }
+  }card-main__med-organization-more
+
+  .mat-expansion-panel-header {
+    &.mat-expanded {
+      border-bottom: 1px solid #dddddd;
+    }
+  }
+
+  &-title,
+  &-text {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-size: 14.5px;
+    color: rgba(#000000, .87);
+  }
+
+  &-title {
+    margin-left: 20px;
+  }
+
+  .mat-expansion-indicator {
+    display: none;
+  }
+}
+
+.changes-history__info {
+  &-item {
+    box-shadow: none !important;
+    border-bottom: 1px solid #dddddd;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .mat-expansion-panel-body {
+      padding: 0 !important;
+    }
+
+    &.mat-expanded {
+      margin: 0;
+
+      .mat-expansion-panel-header {
+        border-bottom: 1px solid #dddddd;
+      }
+    }
+
+    .mat-expansion-indicator {
+      display: none;
+    }
+  }
+}
+

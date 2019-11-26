@@ -1,0 +1,119 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 24px;
+}
+
+h6 {
+  font-size: 1.15rem;
+  line-height: 110%;
+  border-bottom: 1px solid black;
+  padding-bottom: 7.5px;
+  margin: 0.7666666667rem 0 0.46rem 0;
+}
+
+.card-create-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.accounting-form,
+.child-category {
+  &_label {
+    margin: 10px 0;
+    line-height: 110%;
+    font-size: 1.15rem;
+    width: auto;
+  }
+}
+
+.card-create-radio {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0.75rem;
+
+  label {
+    color: rgba(#000000, .87);
+  }
+
+  &_buttons {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    margin: 15px 0;
+  }
+
+  &_button {
+    cursor: pointer;
+    font-size: 1rem;
+  }
+}
+
+.age-group {
+  margin: 0 0.75rem;
+  width: 50%;
+  font-size: 1.15rem;
+
+  @media (max-width: 992px) {
+    width: auto;
+  }
+
+  &_label {
+    margin: 0 0.75rem;
+    line-height: 110%;
+    font-size: 1.15rem;
+    width: auto;
+    color: rgba(#000000, .87);
+  }
+
+  &__icon-item {
+    color: #1b9881;
+    cursor: pointer;
+
+    &:first-child {
+      margin-right: 5px;
+    }
+  }
+}
+
+.survey-start-date {
+  margin: 0 0.75rem;
+
+  &__label {
+    margin: 0 0.75rem;
+    line-height: 110%;
+    font-size: 1.15rem;
+    width: auto;
+    color: rgba(#000000, .87);
+  }
+}
+
+.card-create-footer {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+
+  @media (max-width: 992px) {
+    justify-content: center;
+  }
+
+  &_button {
+    font-size: 14px;
+    color: #fff;
+    background-color: #1B9881;
+    text-transform: uppercase;
+    border-style: none;
+    border-radius: 2px;
+    padding: 0 16px;
+    height: 36px;
+    line-height: 36px;
+    margin-left: 6px;
+    cursor: pointer;
+
+    &.__disabled {
+      background-color: lightgray;
+    }
+  }
+}

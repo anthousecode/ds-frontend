@@ -5,6 +5,8 @@ import {PatientCardComponent} from './components/patient-card/patient-card.compo
 import {ErrorPageComponent} from './components/error-page/error-page.component';
 import { SearchChildComponent } from './components/search-child/search-child.component';
 import {HomeComponent} from './components/home/home.component';
+import {CardCreateComponent} from './components/card-create/card-create.component';
+import {CardThirteenYComponent} from './components/card-thirteen-y/card-thirteen-y.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -13,6 +15,8 @@ const routes: Routes = [
   {path: 'patient-card', component: PatientCardComponent},
   {path: 'patient-card/:id', component: PatientCardComponent},
   {path: 'search-child', component: SearchChildComponent},
+  {path: 'card-create', component: CardCreateComponent},
+  {path: 'card-13y', component: CardThirteenYComponent},
   {path: '404', component: ErrorPageComponent},
   {path: '**', redirectTo: '/404'}
 ];

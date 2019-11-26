@@ -1,0 +1,205 @@
+<form class="__old"
+      [formGroup]="addDiagnosisAfterForm">
+  <div class="add-diagnosis-after__wrapper">
+    <p class="add-diagnosis-after__title">Добавить диагноз</p>
+    <div class="add-diagnosis-after__info"
+         formGroupName="diagnosisInfo">
+      <div class="add-diagnosis-after__info-block">
+        <mat-checkbox formControlName="almostHealthy"
+                      class="add-diagnosis-after__almost-healthy">
+          Практически здоров
+        </mat-checkbox>
+        <mat-form-field floatLabel="auto"
+                        class="add-diagnosis-after__diagnosis-name">
+          <input matInput
+                 placeholder="Диагноз"
+                 [matAutocomplete]="autoDiagnosis"
+                 (blur)="setControlInfo('diagnosisInfo', 'diagnosis', 'name')"
+                 formControlName="diagnosisName"
+                 required>
+          <mat-autocomplete #autoDiagnosis="matAutocomplete">
+            <mat-option *ngFor="let diagnosis of diagnosisList"
+                        [value]="diagnosis.name">
+              {{diagnosis.name}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error
+            *ngIf="cardThirteenYService.getControls(addDiagnosisAfterForm,'diagnosisInfo').diagnosisName.invalid">
+            Введите диагноз
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <mat-checkbox formControlName="diagnosisFirstTime"
+                    class="add-diagnosis-after__diagnosis-first-time">
+        Диагноз установлен впервые
+      </mat-checkbox>
+    </div>
+    <div class="add-diagnosis-after__observation">
+      <label class="add-diagnosis-after__observation-title"
+             id="add-diagnosis-after__observation">Диспансерное наблюдение</label>
+      <mat-radio-group aria-labelledby="add-diagnosis-after__observation"
+                       class="add-diagnosis-after__observation-block"
+                       formControlName="dispensaryObservation">
+        <mat-radio-button *ngFor="let observationItem of diagnosticObservationValues"
+                          class="add-diagnosis-after__observation-item"
+                          [value]="observationItem.id">
+          {{observationItem.name}}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <div class="add-diagnosis-after__treatment"
+         formGroupName="treatmentPrescribed">
+      <p class="add-diagnosis-after__treatment-title">
+        Лечение назначено
+        <span>*</span>
+      </p>
+      <div class="add-diagnosis-after__treatment-block">
+        <mat-form-field floatLabel="auto"
+                        class="add-diagnosis-after__treatment-item">
+          <mat-label>Амбулаторные условия</mat-label>
+          <mat-select formControlName="ambulatoryConditions"
+                      required>
+            <mat-option *ngFor="let option of treatmentCondition"
+                        [value]="option.id">
+              {{option.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field floatLabel="auto"
+                        *ngIf="medOrganizationTypeVisible"
+                        class="add-diagnosis-after__treatment-item">
+          <mat-label>Выберите тип медицинской организации</mat-label>
+          <mat-select formControlName="medOrganizationType"
+                      required>
+            <mat-option *ngFor="let org of treatmentOrganizationTypes"
+                        [value]="org.id">
+              {{org.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="add-diagnosis-after__additional"
+         formGroupName="additionalConsultationsAppointed">
+      <p class="add-diagnosis-after__additional-title">
+        Дополнительные консультации и исследования назначены
+        <span>*</span>
+      </p>
+      <div class="add-diagnosis-after__additional-block">
+        <mat-form-field floatLabel="auto"
+                        class="add-diagnosis-after__additional-item">
+          <mat-label>Выберите ответ</mat-label>
+          <mat-select formControlName="isAdditionalConsultation"
+                      required>
+            <mat-option *ngFor="let option of treatmentCondition"
+                        [value]="option.id">
+              {{option.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field floatLabel="auto"
+                        class="add-diagnosis-after__additional-item"
+                        *ngIf="medOrgTypeAppointedVisible">
+          <mat-label>Выберите тип медицинской организации</mat-label>
+          <mat-select formControlName="medOrgTypeAppointed"
+                      required>
+            <mat-option *ngFor="let org of treatmentOrganizationTypes"
+                        [value]="org.id">
+              {{org.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="add-diagnosis-after__additional"
+         formGroupName="additionalConsultationsDone">
+      <p class="add-diagnosis-after__additional-title">
+        Дополнительные консультации и исследования выполнены
+        <span>*</span>
+      </p>
+      <div class="add-diagnosis-after__additional-block">
+        <mat-form-field floatLabel="auto"
+                        class="add-diagnosis-after__additional-item">
+          <mat-label>Выберите ответ</mat-label>
+          <mat-select formControlName="isAdditionalConsultation"
+                      required>
+            <mat-option *ngFor="let option of treatmentCondition"
+                        [value]="option.id">
+              {{option.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field floatLabel="auto"
+                        class="add-diagnosis-after__additional-item"
+                        *ngIf="medOrgTypeDoneVisible">
+          <mat-label>Выберите тип медицинской организации</mat-label>
+          <mat-select formControlName="medOrgTypeDone"
+                      required>
+            <mat-option *ngFor="let org of treatmentOrganizationTypes"
+                        [value]="org.id">
+              {{org.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="add-diagnosis-after__skl"
+         formGroupName="medSklPrescribed">
+      <p class="add-diagnosis-after__skl-title">
+        Медицинская реабилитация/санаторно-курортное лечение были назначены
+        <span>*</span>
+      </p>
+      <div class="add-diagnosis-after__skl-block">
+        <mat-form-field floatLabel="auto"
+                        class="add-diagnosis-after__skl-item">
+          <mat-label>Амбулаторные условия</mat-label>
+          <mat-select formControlName="sklPrescribedAmbulatoryConditions"
+                      required>
+            <mat-option *ngFor="let option of treatmentCondition"
+                        [value]="option.id">
+              {{option.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field floatLabel="auto"
+                        *ngIf="sklPrescribedMedTypeVisible"
+                        class="add-diagnosis-after__skl-item">
+          <mat-label>Выберите тип медицинской организации</mat-label>
+          <mat-select formControlName="sklPrescribedMedType"
+                      required>
+            <mat-option *ngFor="let org of treatmentOrganizationTypes"
+                        [value]="org.id">
+              {{org.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="add-diagnosis-after__med-help">
+      <p class="add-diagnosis-after__med-help-title">
+        Высокотехнологичная медицинская помощь
+        <span>*</span>
+      </p>
+      <div class="add-diagnosis-after__med-help-block">
+        <p class="add-diagnosis-after__med-help-block-text">Не рекомендована</p>
+        <mat-slide-toggle formControlName="medicalHelp"></mat-slide-toggle>
+        <p class="add-diagnosis-after__med-help-block-text">Рекомендована</p>
+      </div>
+    </div>
+    <div class="add-diagnosis-after__recommendations">
+      <p class="add-diagnosis-after__recommendations-title">
+        Рекомендации
+        <span>*</span>
+      </p>
+      <textarea matInput
+                formControlName="recommendations"
+                class="materialize-textarea add-diagnosis-after__recommendations-textarea"
+                placeholder="Рекомендации по диспансерному наблюдению, лечению, медицинской реабилитации и СКЛ">
+      </textarea>
+    </div>
+  </div>
+  <div class="add-diagnosis-after__buttons">
+    <button class="add-diagnosis-after__buttons-item" mat-dialog-close>Отмена</button>
+    <button class="add-diagnosis-after__buttons-item" (click)="saveAndClose()">Сохранить</button>
+  </div>
+</form>

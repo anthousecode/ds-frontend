@@ -1,0 +1,46 @@
+<div class="changes-history__main">
+  <p class="changes-history__title">История изменений в карте</p>
+  <div class="changes-history__menu">
+    <p class="changes-history__menu-item"
+       *ngFor="let item of historyMenu"
+       [ngClass]="{'__active': item.key === activeTabKey}"
+       (click)="changeTab(item.key)">
+      {{item.name}}
+    </p>
+  </div>
+  <ng-container [ngSwitch]="activeTabKey">
+    <div *ngSwitchCase="'info'"
+         class="changes-history__info">
+      <mat-accordion class="changes-history__info-accordion">
+        <mat-expansion-panel *ngFor="let infoItem of infoData"
+                             class="changes-history__info-item">
+          <mat-expansion-panel-header expandedHeight="48px">
+            <mat-panel-title>
+              {{infoItem.title}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="changes-history__info-content"
+               [ngClass]="{'__alone': infoItem.changes.length === 1}">
+            <p *ngFor="let changesItem of infoItem.changes"
+               class="changes-history__info-changes-item">
+              {{changesItem}}
+            </p>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+    <div *ngSwitchCase="'status'"
+         class="changes-history__status">
+      <p class="changes-history__status-item"
+         *ngFor="let statusItem of statusData">
+        {{statusItem}}
+      </p>
+    </div>
+  </ng-container>
+</div>
+<div class="changes-history__button-block">
+  <button mat-dialog-close
+          class="changes-history__button">
+    Ок
+  </button>
+</div>

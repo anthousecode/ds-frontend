@@ -1,0 +1,35 @@
+@import "../variables";
+
+.card-main__oms-payment-block,
+.add-diagnosis__observation-block,
+.add-diagnosis-after__observation-block,
+.assessment__psycho-radio-group {
+  .mat-radio-button {
+    &.mat-radio-checked {
+      .mat-radio-outer-circle,
+      .mat-radio-inner-circle {
+        border-color: #26a69a;
+      }
+
+      .mat-radio-inner-circle {
+        background-color: #26a69a;
+      }
+    }
+  }
+  .mat-radio-label-content {
+    font-size: 15px;
+    color: #9e9e9e;
+  }
+}
+
+.add-diagnosis__observation-block,
+.add-diagnosis-after__observation-block {
+  .mat-radio-label-content {
+    margin-left: 15px;
+  }
+}
+
+.mat-radio-label {
+  white-space: normal !important;
+  align-items: start !important;
+}

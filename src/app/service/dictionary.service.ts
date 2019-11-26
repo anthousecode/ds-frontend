@@ -59,7 +59,8 @@ import { NoSnilsReasonModel } from '../models/noSnilsReason.model';
     providedIn: 'root'
 })
 export class DictionaryService {
-    private dictionaryUrl = environment.apiUrl + '/api/dictionary';
+    // private dictionaryUrl = environment.apiUrl + '/api/dictionary';
+    private dictionaryUrl = 'http://ds-dev.rt-eu.ru/api/dictionary';
     private localDictionaryUrl = '../../assets/dictionary.json';
     responsiblePersons: Observable<ResponsiblePerson[]>;
 

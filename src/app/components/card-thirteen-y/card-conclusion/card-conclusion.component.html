@@ -1,0 +1,243 @@
+<form class="conclusion__form-wrapper"
+      [formGroup]="conclusionForm"
+      (ngSubmit)="onSubmit(conclusionForm.value)">
+  <div class="conclusion__section conclusion__no-border-top"
+       formGroupName="inspectionForm">
+    <p class="conclusion__title">Осмотры врачей</p>
+    <div class="conclusion__field-block">
+      <div class="conclusion__field-block-doctors">
+        <div class="conclusion__date">
+          <p class="conclusion__label">
+            Ортопед
+          </p>
+          <mat-form-field floatLabel="auto"
+                          class="conclusion__date-field">
+            <input matInput
+                   matTooltip="Допустимый интервал: от даты рождения ребенка до текущей даты"
+                   [matDatepicker]="datepickerOrthopedist"
+                   placeholder="Дата осмотра"
+                   formControlName="orthopedist"
+                   [max]="maxDate"
+                   autocomplete="off"
+                   (click)="openDatepicker('datepickerOrthopedist')"
+                   required>
+            <mat-error *ngIf="cardThirteenYService.getControls(conclusionForm, 'inspectionForm').orthopedist.invalid">
+              Выберите дату
+            </mat-error>
+            <mat-datepicker class="__mainbar-header" #datepickerOrthopedist></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="conclusion__date">
+          <p class="conclusion__label">
+            Детский врач
+          </p>
+          <mat-form-field floatLabel="auto"
+                          class="conclusion__date-field">
+            <input matInput
+                   matTooltip="Допустимый интервал: от даты рождения ребенка до текущей даты"
+                   [matDatepicker]="datepickerChildren"
+                   placeholder="Дата осмотра"
+                   formControlName="children"
+                   [max]="maxDate"
+                   autocomplete="off"
+                   (click)="openDatepicker('datepickerChildren')"
+                   required>
+            <mat-error *ngIf="cardThirteenYService.getControls(conclusionForm, 'inspectionForm').children.invalid">
+              Выберите дату
+            </mat-error>
+            <mat-datepicker class="__mainbar-header" #datepickerChildren></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="conclusion__date">
+          <p class="conclusion__label">
+            Стоматолог
+          </p>
+          <mat-form-field floatLabel="auto"
+                          class="conclusion__date-field">
+            <input matInput
+                   matTooltip="Допустимый интервал: от даты рождения ребенка до текущей даты"
+                   [matDatepicker]="datepickerDentist"
+                   placeholder="Дата осмотра"
+                   formControlName="dentist"
+                   [max]="maxDate"
+                   autocomplete="off"
+                   (click)="openDatepicker('datepickerDentist')"
+                   required>
+            <mat-error *ngIf="cardThirteenYService.getControls(conclusionForm, 'inspectionForm').dentist.invalid">
+              Выберите дату
+            </mat-error>
+            <mat-datepicker class="__mainbar-header" #datepickerDentist></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="conclusion__date">
+          <p class="conclusion__label">
+            Педиатр
+          </p>
+          <mat-form-field floatLabel="auto"
+                          class="conclusion__date-field">
+            <input matInput
+                   matTooltip="Допустимый интервал: от даты рождения ребенка до текущей даты"
+                   [matDatepicker]="datepickerPediatrician"
+                   placeholder="Дата осмотра"
+                   formControlName="pediatrician"
+                   [max]="maxDate"
+                   autocomplete="off"
+                   (click)="openDatepicker('datepickerPediatrician')"
+                   required>
+            <mat-error *ngIf="cardThirteenYService.getControls(conclusionForm, 'inspectionForm').pediatrician.invalid">
+              Выберите дату
+            </mat-error>
+            <mat-datepicker class="__mainbar-header" #datepickerPediatrician></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="conclusion__date">
+          <p class="conclusion__label">
+            Окулист
+          </p>
+          <mat-form-field floatLabel="auto"
+                          class="conclusion__date-field">
+            <input matInput
+                   matTooltip="Допустимый интервал: от даты рождения ребенка до текущей даты"
+                   [matDatepicker]="datepickerOculist"
+                   placeholder="Дата осмотра"
+                   formControlName="oculist"
+                   [max]="maxDate"
+                   autocomplete="off"
+                   (click)="openDatepicker('datepickerOculist')"
+                   required>
+            <mat-error *ngIf="cardThirteenYService.getControls(conclusionForm, 'inspectionForm').oculist.invalid">
+              Выберите дату
+            </mat-error>
+            <mat-datepicker class="__mainbar-header" #datepickerOculist></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="conclusion__date">
+          <p class="conclusion__label">
+            Хирург
+          </p>
+          <mat-form-field floatLabel="auto"
+                          class="conclusion__date-field">
+            <input matInput
+                   matTooltip="Допустимый интервал: от даты рождения ребенка до текущей даты"
+                   [matDatepicker]="datepickerSurgeon"
+                   placeholder="Дата осмотра"
+                   formControlName="surgeon"
+                   [max]="maxDate"
+                   autocomplete="off"
+                   (click)="openDatepicker('datepickerSurgeon')"
+                   required>
+            <mat-error *ngIf="cardThirteenYService.getControls(conclusionForm, 'inspectionForm').surgeon.invalid">
+              Выберите дату
+            </mat-error>
+            <mat-datepicker class="__mainbar-header" #datepickerSurgeon></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="conclusion__section"
+       formGroupName="opinionForm">
+    <p class="conclusion__title">Заключение</p>
+    <div class="conclusion__field-block">
+      <div class="conclusion__field-block-opinion">
+        <div class="conclusion__health-group">
+          <mat-form-field floatLabel="auto"
+                          class="conclusion__input-field">
+            <mat-label id="health-group-label">Группа здоровья</mat-label>
+            <mat-select formControlName="healthGroup"
+                        aria-labelledby="health-group-label"
+                        required>
+              <mat-option *ngFor="let group of healthGroup"
+                          [value]="group.id">
+                {{group.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div class="conclusion__date">
+            <mat-form-field floatLabel="auto"
+                            class="conclusion__date-field">
+              <input matInput
+                     [matDatepicker]="datepickerDate"
+                     placeholder="Дата заключения"
+                     formControlName="date"
+                     matTooltip="Допустимый интервал: от даты начала обследования до текущей даты"
+                     [max]="maxDate"
+                     autocomplete="off"
+                     (click)="openDatepicker('datepickerDate')"
+                     required>
+              <mat-error *ngIf="cardThirteenYService.getControls(conclusionForm, 'opinionForm').date.invalid">
+                Выберите дату
+              </mat-error>
+              <mat-datepicker class="__mainbar-header" #datepickerDate></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+        <mat-form-field floatLabel="auto"
+                        class="conclusion__input-field">
+          <input matInput
+                 placeholder="Лицо, давшее заключение. Начните вводить ФИО врача"
+                 formControlName="doctor"
+                 required>
+        </mat-form-field>
+        <mat-form-field floatLabel="auto"
+                        class="conclusion__input-field">
+          <input matInput
+                 placeholder="Рекомендации по формированию здорового образа жизни, режиму дня,
+                              питанию, физическому развитию, иммунопрофилактике, занятиям физической культурой"
+                 formControlName="recommendation"
+                 required>
+        </mat-form-field>
+        <div class="conclusion__exam-failed-chbox">
+          <mat-checkbox #medicalExamination
+                        formControlName="medicalExamination"
+                        (change)="isDisabledMedicalExamination($event.checked)">
+            Диспансеризация не выполнена
+          </mat-checkbox>
+        </div>
+        <div class="conclusion__reasons">
+          <mat-form-field floatLabel="auto"
+                          class="conclusion__input-field">
+            <mat-label id="missedReasons-label">Выберите причину невыполнения</mat-label>
+            <mat-select formControlName="missedReasons"
+                        aria-labelledby="missedReasons-label"
+                        (selectionChange)="isDisabledMissedReasons($event)"
+                        required="medicalExamination.checked">
+              <mat-option *ngFor="let reason of missedReasons"
+                          [value]="reason.id">
+                {{reason.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field floatLabel="auto"
+                          class="conclusion__input-field">
+            <mat-label id="absence-label">Выберите причину отсутствия</mat-label>
+            <mat-select formControlName="absence"
+                        aria-labelledby="absence-label"
+                        required>
+              <mat-option *ngFor="let reason of reasonsAbsence" [value]="reason.value">
+                {{reason.value}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <mat-form-field floatLabel="auto"
+                        class="conclusion__input-field">
+          <textarea matInput
+                    placeholder="Укажите иную причину"
+                    formControlName="nonExecutionTextarea"
+                    cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize"
+                    cdkAutosizeMinRows="1"
+                    required>
+          </textarea>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</form>

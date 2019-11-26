@@ -54,6 +54,28 @@ import { SearchChildComponent } from './components/search-child/search-child.com
 import { PatientDeleteModalComponent } from './components/patient-card/patient-delete-modal/patient-delete-modal.component';
 import {OAuthModule} from 'angular-oauth2-oidc';
 import { HomeComponent } from './components/home/home.component';
+import {BlockCardComponent} from './components/card-thirteen-y/shared/dialogs/block-card/block-card.component';
+import {DoneCardComponent} from './components/card-thirteen-y/shared/dialogs/done-card/done-card.component';
+import {CardCreateModalComponent} from './components/card-create/shared/dialogs/card-create-modal/card-create-modal.component';
+import {CardCreateComponent} from './components/card-create/card-create.component';
+import {DeleteConfirmComponent} from './components/card-thirteen-y/shared/dialogs/delete-confirm/delete-confirm.component';
+import {AddStudyComponent} from './components/card-thirteen-y/shared/dialogs/add-study/add-study.component';
+import {SaveConfirmComponent} from './components/card-thirteen-y/shared/dialogs/save-confirm/save-confirm.component';
+import {ExportCardComponent} from './components/card-thirteen-y/shared/dialogs/export-card/export-card.component';
+import {ChangesHistoryComponent} from './components/card-thirteen-y/shared/dialogs/changes-history/changes-history.component';
+import {AdditionalInformationComponent} from './components/card-thirteen-y/additional-information/additional-information.component';
+import {AddDiagnosisAfterComponent} from './components/card-thirteen-y/shared/dialogs/add-diagnosis-after/add-diagnosis-after.component';
+import {AddDiagnosisComponent} from './components/card-thirteen-y/shared/dialogs/add-diagnosis/add-diagnosis.component';
+import {CardConclusionComponent} from './components/card-thirteen-y/card-conclusion/card-conclusion.component';
+import {CardVaccinationComponent} from './components/card-thirteen-y/card-vaccination/card-vaccination.component';
+import {CardResearchComponent} from './components/card-thirteen-y/card-research/card-research.component';
+import {CardHealthStatusComponent} from './components/card-thirteen-y/card-health-status/card-health-status.component';
+import {CardDevelopmentAssessmentComponent} from './components/card-thirteen-y/card-development-assessment/card-development-assessment.component';
+import {CardMainComponent} from './components/card-thirteen-y/card-main/card-main.component';
+import {CardThirteenYComponent} from './components/card-thirteen-y/card-thirteen-y.component';
+import {MaterialModule} from './ui/shared/material.module';
+import {CoreModule} from './@core/core.module';
+import {CardThirteenYService} from './components/card-thirteen-y/card-thirteen-y.service';
 
 @NgModule({
     declarations: [
@@ -80,9 +102,30 @@ import { HomeComponent } from './components/home/home.component';
         AgePipe,
         SearchChildComponent,
         PatientDeleteModalComponent,
-        HomeComponent
+        HomeComponent,
+        CardThirteenYComponent,
+        CardMainComponent,
+        CardDevelopmentAssessmentComponent,
+        CardHealthStatusComponent,
+        CardResearchComponent,
+        CardVaccinationComponent,
+        CardConclusionComponent,
+        AddDiagnosisComponent,
+        AddDiagnosisAfterComponent,
+        AdditionalInformationComponent,
+        ChangesHistoryComponent,
+        ExportCardComponent,
+        SaveConfirmComponent,
+        AddStudyComponent,
+        DeleteConfirmComponent,
+        CardCreateComponent,
+        CardCreateModalComponent,
+        DoneCardComponent,
+        BlockCardComponent
     ],
     imports: [
+        CoreModule,
+        MaterialModule,
         BrowserModule,
         BrowserAnimationsModule,
         AppRoutingModule,
@@ -119,7 +162,8 @@ import { HomeComponent } from './components/home/home.component';
         MatDatepickerModule,
         { provide: MAT_DATE_LOCALE, useValue: 'ru-RU' },
         { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-        { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS }
+        { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+        CardThirteenYService
         ],
     bootstrap: [AppComponent],
     entryComponents: [
@@ -127,7 +171,18 @@ import { HomeComponent } from './components/home/home.component';
         PatientHistoryModalComponent,
         PatientUnionModalComponent,
         ExportModalComponent,
-        PatientDeleteModalComponent
+        PatientDeleteModalComponent,
+        AddDiagnosisComponent,
+        AddDiagnosisAfterComponent,
+        AdditionalInformationComponent,
+        ChangesHistoryComponent,
+        ExportCardComponent,
+        SaveConfirmComponent,
+        AddStudyComponent,
+        DeleteConfirmComponent,
+        CardCreateModalComponent,
+        DoneCardComponent,
+        BlockCardComponent
     ]
 })
 export class AppModule {
