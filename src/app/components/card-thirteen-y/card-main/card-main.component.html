@@ -120,7 +120,7 @@
              placeholder="Наименование организации"
              [matAutocomplete]="autoOrganization"
              formControlName="organizationName"
-             (blur)="setControlInfo('medicalOrganization', 'organization')"
+             (blur)="setControlInfo('medicalOrganization', 'organization', 'organizationPmsp', 'oid')"
              required>
       <mat-autocomplete #autoOrganization="matAutocomplete">
         <mat-option *ngFor="let organization of organizationList"
@@ -158,7 +158,7 @@
       <input matInput
              placeholder="Образовательное учреждение"
              [matAutocomplete]="autoEducation"
-             (blur)="setControlInfo('education', 'education')"
+             (blur)="setControlInfo('education', 'education', 'educationalOrganization', 'id')"
              formControlName="educationName"
              required>
       <mat-autocomplete #autoEducation="matAutocomplete">
@@ -224,7 +224,7 @@
       <input matInput
              placeholder="Наименование стационарного учреждения"
              [matAutocomplete]="autoInstitution"
-             (blur)="setControlInfo('location', 'institution')"
+             (blur)="setControlInfo('location', 'institution', 'stationaryOrganization', 'id')"
              formControlName="institutionName"
              required>
       <mat-autocomplete #autoInstitution="matAutocomplete">
