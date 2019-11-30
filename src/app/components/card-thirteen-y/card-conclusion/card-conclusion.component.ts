@@ -105,7 +105,7 @@ export class CardConclusionComponent implements OnInit {
         // console.log('data', data);
         if (data.conclusion) {
             this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').healthGroup
-                .setValue(data.conclusion.healthGroup.name, {emitEvent: false});
+                .setValue(data.conclusion.healthGroup.id, {emitEvent: false});
             this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').recommendation
                 .setValue(data.conclusion.recommend, {emitEvent: false});
             if (data.conclusion.person) {
@@ -118,11 +118,11 @@ export class CardConclusionComponent implements OnInit {
             this.conditionMedicalExaminationValue(data.conclusion.dispanserizationFail);
             if (data.conclusion.failReason) {
                 this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').missedReasons
-                    .setValue(data.conclusion.failReason.name, {emitEvent: false});
+                    .setValue(data.conclusion.failReason.id, {emitEvent: false});
             }
             if (data.conclusion.absenceReason) {
                 this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').absence
-                    .setValue(data.conclusion.absenceReason.name, {emitEvent: false});
+                    .setValue(data.conclusion.absenceReason.id, {emitEvent: false});
             }
             if (data.conclusion.failReasonOther) {
                 this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').nonExecutionTextarea
