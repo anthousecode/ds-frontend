@@ -172,7 +172,7 @@ export class CardMainComponent implements OnInit {
         this.cardThirteenYService.getControls(this.mainForm, 'location').locationDate.valueChanges.subscribe(date => {
             const locationDateObj = {
                 ...this.formValues,
-                currentLocationDate: date.toISOString()
+                currentLocationDate: date.format()
             };
             this.cardThirteenYService.setTabCurrentValues(locationDateObj);
         });
