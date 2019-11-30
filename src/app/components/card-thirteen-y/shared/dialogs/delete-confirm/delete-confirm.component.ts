@@ -1,6 +1,6 @@
-import {Component, ChangeDetectionStrategy} from '@angular/core';
-import {CardThirteenYService} from '../../../card-thirteen-y.service';
-import {MatDialogRef, MatSnackBar} from '@angular/material';
+import { Component, ChangeDetectionStrategy, Inject, ChangeDetectorRef } from '@angular/core';
+import { CardThirteenYService } from '../../../card-thirteen-y.service';
+import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-delete-confirm',
@@ -12,10 +12,17 @@ export class DeleteConfirmComponent {
 
   constructor(private cardThirteenYService: CardThirteenYService,
               private dialogRef: MatDialogRef<DeleteConfirmComponent>,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              @Inject(MAT_DIALOG_DATA) public additionalExaminationsData: any,
+              private cdRef: ChangeDetectorRef
+  ) {
   }
 
   deleteData() {
+    this.additionalExaminationsData.additionalExaminations.splice(this.additionalExaminationsData.i, 1);
+    this.additionalExaminationsData.formValues.additionalExaminations = this.additionalExaminationsData.additionalExaminations;
+    this.cardThirteenYService.setTabCurrentValues(this.additionalExaminationsData.formValues);
+    this.additionalExaminationsData.cdRef.detectChanges();
     this.dialogRef.close();
     this.snackBar.open('Диагноз удалён', 'ОК', {
       duration: 5000

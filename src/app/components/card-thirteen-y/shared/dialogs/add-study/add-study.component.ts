@@ -1,8 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewChild, Inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ViewChild, Inject, ChangeDetectorRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDatepicker, MatSnackBar } from '@angular/material';
 import { CardThirteenYService } from '../../../card-thirteen-y.service';
-import { AdditionalResearch } from '../../interfaces/additional-research.interface';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-add-study',
@@ -13,21 +13,25 @@ import { AdditionalResearch } from '../../interfaces/additional-research.interfa
 export class AddStudyComponent implements OnInit {
   addStudyForm!: FormGroup;
   maxDate = new Date();
+  additionalExamination: any;
 
   @ViewChild('addStudyDatepicker') addStudyDatepicker!: MatDatepicker<any>;
 
   constructor(
     public cardThirteenYService: CardThirteenYService,
-    @Inject(MAT_DIALOG_DATA) public additionalResearchData: AdditionalResearch,
-    private snackBar: MatSnackBar
+    @Inject(MAT_DIALOG_DATA) public additionalExaminationsData: any,
+    private snackBar: MatSnackBar,
+    private cdRef: ChangeDetectorRef
   ) {
   }
 
   ngOnInit() {
     this.createFormGroups();
-    if (this.additionalResearchData) {
-      this.setAdditionalResearchData();
+    if (this.additionalExaminationsData.exam) {
+      this.initAdditionalResearchData();
     }
+
+    this.checkAdditionalResearchDataChanges();
   }
 
   createFormGroups() {
@@ -38,13 +42,22 @@ export class AddStudyComponent implements OnInit {
     });
   }
 
-  setAdditionalResearchData() {
-    this.addStudyForm.get('name')
-      .setValue(this.additionalResearchData.study);
-    this.addStudyForm.get('date')
-      .setValue(this.additionalResearchData.date);
-    this.addStudyForm.get('result')
-      .setValue(this.additionalResearchData.result);
+  initAdditionalResearchData() {
+    console.log(this.additionalExaminationsData.exam.date);
+    this.addStudyForm.controls.date.setValue(moment(this.additionalExaminationsData.exam.date), {emitEvent: false});
+    this.addStudyForm.controls.name.setValue(this.additionalExaminationsData.exam.name, {emitEvent: false});
+    this.addStudyForm.controls.result.setValue(this.additionalExaminationsData.exam.result, {emitEvent: false});
+  }
+
+  checkAdditionalResearchDataChanges() {
+    this.addStudyForm.valueChanges.subscribe(res => {
+      let studyObject = res;
+      studyObject = {
+        ...studyObject,
+        date: moment(studyObject.date).format()
+      };
+      this.additionalExamination = studyObject;
+    });
   }
 
   openDatepicker(name: string) {
@@ -52,6 +65,23 @@ export class AddStudyComponent implements OnInit {
   }
 
   saveAndClose() {
+    if (this.additionalExaminationsData.exam) {
+      this.additionalExaminationsData.additionalExaminations[this.additionalExaminationsData.i] = {
+        ...this.addStudyForm.value,
+        date: moment(this.addStudyForm.value.date).format()
+      };
+
+      this.additionalExaminationsData.formValues.additionalExaminations = this.additionalExaminationsData.additionalExaminations;
+      this.cardThirteenYService.setTabCurrentValues(this.additionalExaminationsData.formValues);
+      console.log(this.additionalExaminationsData.formValues);
+    } else {
+      this.additionalExaminationsData.additionalExaminations.push(this.additionalExamination);
+      this.additionalExaminationsData.formValues.additionalExaminations = this.additionalExaminationsData.additionalExaminations;
+      this.cardThirteenYService.setTabCurrentValues(this.additionalExaminationsData.formValues);
+      console.log(this.additionalExaminationsData.formValues);
+    }
+
+    this.additionalExaminationsData.cdRef.detectChanges();
     this.snackBar.open('Исследование добавлено', 'ОК', {
       duration: 5000
     });
