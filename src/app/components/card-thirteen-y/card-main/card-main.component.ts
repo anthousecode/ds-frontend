@@ -271,9 +271,7 @@ export class CardMainComponent implements OnInit {
             .pipe(debounceTime(500))
             .subscribe((data) => {
                 if (this.citiesList) {
-                    const cityObject = this.citiesList.find(item => {
-                        return item.fullAddress === data;
-                    });
+                    const cityObject = this.citiesList.find(item => item.fullAddress === data);
                     if (cityObject) {
                         const formObjectValues = {
                             ...this.formValues,
@@ -296,9 +294,7 @@ export class CardMainComponent implements OnInit {
                 this.hospitalList = list;
                 this.cdRef.detectChanges();
                 if (this.hospitalList) {
-                    const hospitalObject = this.hospitalList.find(item => {
-                        return item.name === data;
-                    });
+                    const hospitalObject = this.hospitalList.find(item => item.name === data);
                     if (hospitalObject) {
                         this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').hospitalId.setValue(hospitalObject.id);
                     }
