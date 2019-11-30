@@ -111,7 +111,7 @@ export class CardConclusionComponent implements OnInit {
             if (data.conclusion.person) {
                 this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').doctor
                 // tslint:disable-next-line:max-line-length
-                    .setValue(`${data.conclusion.person.surname} + '' + ${data.conclusion.person.name} + '' + ${data.conclusion.person.lastname}`, {emitEvent: false});
+                .setValue(`${data.conclusion.person.surname} + '' + ${data.conclusion.person.name} + '' + ${data.conclusion.person.lastname}`, {emitEvent: false});
             }
             this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').medicalExamination
                 .setValue(data.conclusion.dispanserizationFail, {emitEvent: false});
