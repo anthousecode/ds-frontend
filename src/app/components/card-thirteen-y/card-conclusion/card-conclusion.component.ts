@@ -7,7 +7,6 @@ import {debounceTime, skip} from 'rxjs/operators';
 import {DictionaryService} from '../../../service/dictionary.service';
 import {AbsenceReason, DoctorForConclusion, DoctorForExamination, HealthGroup, ReasonMissed} from '../../../models/dictionary.model';
 import * as moment from 'moment';
-import {pipe} from 'rxjs';
 
 @Component({
     selector: 'app-card-conclusion',
@@ -16,14 +15,6 @@ import {pipe} from 'rxjs';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CardConclusionComponent implements OnInit {
-
-    // @ViewChild('datepickerOrthopedist') datepickerOrthopedist: MatDatepicker<any>;
-    // @ViewChild('datepickerChildren') datepickerChildren: MatDatepicker<any>;
-    // @ViewChild('datepickerDentist') datepickerDentist: MatDatepicker<any>;
-    // @ViewChild('datepickerPediatrician') datepickerPediatrician: MatDatepicker<any>;
-    // @ViewChild('datepickerOculist') datepickerOculist: MatDatepicker<any>;
-    // @ViewChild('datepickerSurgeon') datepickerSurgeon: MatDatepicker<any>;
-    // @ViewChild('datepickerDate') datepickerDate: MatDatepicker<any>;
 
     private conclusionForm: FormGroup;
     private healthGroup: HealthGroup[];
@@ -44,11 +35,6 @@ export class CardConclusionComponent implements OnInit {
             .subscribe(data => {
                 this.formValues = data;
             });
-
-        // this.validatorsData = {
-        //   birthday: AbstractControl,
-        //   examDate: AbstractControl,
-        // };
     }
 
     get doctorExaminations() {
@@ -114,9 +100,9 @@ export class CardConclusionComponent implements OnInit {
         if (data.conclusion) {
             this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').healthGroup
                 .setValue(data.conclusion.healthGroup.name, {emitEvent: false});
-            this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').doctor
-            // tslint:disable-next-line:max-line-length
-                .setValue(`${data.conclusion.person.surname} + '' + ${data.conclusion.person.name} + '' + ${data.conclusion.person.lastname}`, {emitEvent: false});
+            // this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').doctor
+            // // tslint:disable-next-line:max-line-length
+            //     .setValue(`${data.conclusion.person.surname} + '' + ${data.conclusion.person.name} + '' + ${data.conclusion.person.lastname}`, {emitEvent: false});
             this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').recommendation
                 .setValue(data.recommend, {emitEvent: false});
             this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').medicalExamination
@@ -189,11 +175,11 @@ export class CardConclusionComponent implements OnInit {
                         id: val.healthGroup,
                     },
                     recommend: val.recommendation,
-                    person: {
-                        surname: val.surname,
-                        name: val.name,
-                        lastname: val.lastname,
-                    },
+                    // person: {
+                    //     surname: val.surname,
+                    //     name: val.name,
+                    //     lastname: val.lastname,
+                    // },
                     date: this.getDoctorDateFormat(val.date),
                     dispanserizationFail: val.medicalExamination,
                     failReason: {
