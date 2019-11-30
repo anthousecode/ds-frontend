@@ -14,12 +14,15 @@
   }
 
   &__field-block {
+    display: flex;
+    flex-wrap: wrap;
     padding: 20px 0;
 
     &-doctors {
       display: flex;
+      width: 30%;
       flex-wrap: wrap;
-      margin: 0 0 2rem 0;
+      margin: 1rem 0.5rem;
     }
   }
 

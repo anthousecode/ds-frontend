@@ -237,9 +237,9 @@ export class CardMainComponent implements OnInit {
                 .setValue(data.currentLocationDate, {emitEvent: false});
         }
         if (data.stationaryOrganization) {
-            this.cardThirteenYService.getControls(this.mainForm, 'location').locationId
+            this.cardThirteenYService.getControls(this.mainForm, 'location').institutionId
                 .setValue(data.stationaryOrganization.id, {emitEvent: false});
-            this.cardThirteenYService.getControls(this.mainForm, 'location').locationName
+            this.cardThirteenYService.getControls(this.mainForm, 'location').institutionName
                 .setValue(data.stationaryOrganization.shortName, {emitEvent: false});
             this.institutionInfo = {
                 address: data.stationaryOrganization.address,
