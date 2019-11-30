@@ -40,14 +40,15 @@ export class CardThirteenYComponent implements OnInit {
     activeTabKey: string;
     isAdditionalInfoVisible = false;
     private innerWidth!: number;
-    activeTabInitValues!: AbstractControl;
-    activeTabInitValuesModified!: string;
-    activeTabCurrentValues!: AbstractControl;
-    activeTabCurrentValuesModified!: string;
+    selectedTabInitValues!: AbstractControl;
+    selectedTabInitValuesModified!: string;
+    selectedTabCurrentValues!: AbstractControl;
+    selectedTabCurrentValuesModified!: string;
     cardId = 696;
     cardInfo!: any;
     token = TOKEN;
     formValues!: any;
+    isTabValid!: boolean;
 
     constructor(@Inject(DOCUMENT) private document: Document,
                 private cardThirteenYService: CardThirteenYService,
@@ -57,10 +58,6 @@ export class CardThirteenYComponent implements OnInit {
                 private cardService: CardService,
                 private cdRef: ChangeDetectorRef,
                 private eventManager: EventManager) {
-        this.cardThirteenYService.getCardInfo(this.cardId).subscribe(data => {
-            this.cardInfo = data;
-            this.cardThirteenYService.setTabInitValues(data);
-        });
         this.eventManager.addGlobalEventListener('window', 'resize', () => {
             this.innerWidth = this.document.body.offsetWidth;
             if (this.innerWidth <= 1300) {
@@ -68,19 +65,39 @@ export class CardThirteenYComponent implements OnInit {
                 this.cdRef.detectChanges();
             }
         });
-        this.cardThirteenYService.activeTabCurrentValues
-            .pipe(skip(1))
-            .subscribe(data => {
-                this.formValues = data;
-            });
+        this.getCardInfo();
+        this.getActiveCardCurrentValues();
+        this.getValidState();
     }
 
     ngOnInit() {
         localStorage.setItem('token', this.token);
         this.innerWidth = this.document.body.offsetWidth;
         this.checkActiveTab();
-        this.checkActiveTabInitValues();
-        this.checkActiveTabCurrentValues();
+        this.checkSelectedTabInitValues();
+        this.checkSelectedTabCurrentValues();
+    }
+
+    getValidState() {
+        this.cardThirteenYService.isActiveTabValid.subscribe(state => {
+            this.isTabValid = state;
+            this.cdRef.detectChanges();
+        });
+    }
+
+    getCardInfo() {
+        this.cardThirteenYService.getCardInfo(this.cardId).subscribe(data => {
+            this.cardInfo = data;
+            this.cardThirteenYService.setTabInitValues(data);
+        });
+    }
+
+    getActiveCardCurrentValues() {
+        this.cardThirteenYService.activeTabCurrentValues
+            .pipe(skip(1))
+            .subscribe(data => {
+                this.formValues = data;
+            });
     }
 
     checkActiveTab() {
@@ -90,22 +107,22 @@ export class CardThirteenYComponent implements OnInit {
         });
     }
 
-    checkActiveTabInitValues() {
-        this.cardThirteenYService.activeTabInitValues
+    checkSelectedTabInitValues() {
+        this.cardThirteenYService.selectedTabInitValues
             .subscribe(data => {
-                this.activeTabInitValues = data;
-                this.activeTabInitValuesModified = JSON.stringify(data);
+                this.selectedTabInitValues = data;
+                this.selectedTabInitValuesModified = JSON.stringify(data);
                 this.cdRef.detectChanges();
             });
     }
 
-    checkActiveTabCurrentValues() {
-        this.cardThirteenYService.activeTabCurrentValues.subscribe(data => {
+    checkSelectedTabCurrentValues() {
+        this.cardThirteenYService.selectedTabCurrentValues.subscribe(data => {
             if (data) {
-                this.activeTabCurrentValues = data;
-                this.activeTabCurrentValuesModified = JSON.stringify(data);
+                this.selectedTabCurrentValues = data;
+                this.selectedTabCurrentValuesModified = JSON.stringify(data);
             } else {
-                this.activeTabCurrentValues = null;
+                this.selectedTabCurrentValues = null;
             }
             this.cdRef.detectChanges();
         });
@@ -113,7 +130,7 @@ export class CardThirteenYComponent implements OnInit {
 
     changeTab(tabKey: string) {
         if (tabKey !== this.activeTabKey) {
-            if ((JSON.stringify(this.activeTabInitValues) === JSON.stringify(this.activeTabCurrentValues)) || !this.activeTabCurrentValues) {
+            if ((JSON.stringify(this.selectedTabInitValues) === JSON.stringify(this.selectedTabCurrentValues)) || !this.selectedTabCurrentValues) {
                 this.cardThirteenYService.setActiveTab(tabKey);
             } else {
                 this.dialog.open(SaveConfirmComponent, {panelClass: '__save-confirm'}).afterClosed()
@@ -137,13 +154,12 @@ export class CardThirteenYComponent implements OnInit {
     }
 
     saveCard() {
-        // this.cardThirteenYService.setTabInitValues(this.activeTabCurrentValues);
         this.cardThirteenYService.saveCard(this.formValues)
             .subscribe(data => {
+                this.cardThirteenYService.setTabInitValues(data);
+                this.cardThirteenYService.setSelectedTabCurrentValues(null);
                 console.log(data);
-                this.snackBar.open('Сохранено', 'ОК', {
-                    duration: 5000
-                });
+                this.snackBar.open('Сохранено', 'ОК', {duration: 5000});
             });
     }
 

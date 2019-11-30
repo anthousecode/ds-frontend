@@ -45,9 +45,9 @@ export class CardConclusionComponent implements OnInit {
     this.createConclusionForm();
     this.initHealthGroup();
     this.initMissedReasons();
-    this.cardThirteenYService.setTabInitValues(this.conclusionForm.value);
-    this.cardThirteenYService.setTabCurrentValues(null);
-    this.checkFormChanges();
+    // this.cardThirteenYService.setTabInitValues(this.conclusionForm.value);
+    // this.cardThirteenYService.setTabCurrentValues(null);
+    // this.checkFormChanges();
   }
 
   createConclusionForm() {

@@ -47,7 +47,7 @@
   <div class="card-13y__buttons">
     <button class="card-13y__buttons-item"
             (click)="saveCard()"
-            [ngClass]="{'__disabled': ((activeTabInitValuesModified) === activeTabCurrentValuesModified) || !activeTabCurrentValues}">
+            [ngClass]="{'__disabled': !isTabValid || ((selectedTabInitValuesModified) === selectedTabCurrentValuesModified) || !selectedTabCurrentValues}">
       Сохранить
     </button>
     <button class="card-13y__buttons-item" (click)="exportCard()">Экспорт</button>
