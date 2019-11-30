@@ -6,16 +6,13 @@ import {CardThirteenYService} from '../card-thirteen-y.service';
 import {ILabelId} from '../shared/interfaces/label-id.interface';
 import {CARD_MAIN_OMS_PAYMENT} from '../shared/data/card-main-oms-payment';
 import {Observable} from 'rxjs';
-import {ICardMainCities, ICardMainCityInfo} from '../shared/interfaces/card-main-cities.interface';
-// import {ICardMainLocationPlace} from '../shared/interfaces/card-main-location-place.interface';
+import {ICardMainCities} from '../shared/interfaces/card-main-cities.interface';
 import {POLICY_TYPE} from '../shared/data/policy-type';
 import {
     DEFAULT_POLICY_NUMBER_VALIDATORS,
     NEW_POLICY_NUMBER_VALIDATORS,
     OLD_POLICY_NUMBER_VALIDATORS
 } from '../shared/data/policy-number-validators';
-// import {IHospitalInfo} from '../shared/interfaces/hospital-info.interface';
-// import {ICardMainControlBaseInfo} from '../shared/interfaces/card-main-control-base-info.interface';
 import {DictionaryService} from '../../../service/dictionary.service';
 import {
     CurrentLocation,
@@ -24,6 +21,7 @@ import {
     Organization,
     StationaryOrganization
 } from '../../../models/dictionary.model';
+import {IPolicyType} from '../shared/interfaces/policy-type.interface';
 
 @Component({
     selector: 'app-card-main',
@@ -39,8 +37,8 @@ export class CardMainComponent implements OnInit {
     citiesList$: Observable<ICardMainCities[]>;
     citiesList: ICardMainCities[];
     omsPaymentValues: ILabelId[] = CARD_MAIN_OMS_PAYMENT;
-    policyType: ILabelId[] = POLICY_TYPE;
-    selectedPolicyType: string | number;
+    policyType: IPolicyType[] = POLICY_TYPE;
+    selectedPolicyType: number;
     selectedPolicyValue: string;
     policySeriesError!: any;
     policyNumberError!: any;
@@ -64,31 +62,42 @@ export class CardMainComponent implements OnInit {
             .subscribe(data => {
                 this.formValues = data;
             });
+        this.cardThirteenYService.setActiveTabValid(true);
     }
 
     ngOnInit() {
         this.initFormGroups();
         this.getInitValues();
-        // this.cardThirteenYService.setTabInitValues(this.mainForm.value);
-        // this.cardThirteenYService.setTabCurrentValues(null);
-        // this.checkFormChanges();
+        this.checkIsFormValid();
+        this.cardThirteenYService.setSelectedTabCurrentValues(null);
         this.getCitiesList();
-        this.citiesList$.subscribe(list => {
-            this.citiesList = list;
-        });
+        this.citiesList$.subscribe(list => this.citiesList = list);
         this.setCityCode();
-        this.checkPolicySeriesError();
         this.setActivePolicyType();
+        this.checkPolicySeriesError();
         this.checkPolicyNumberError();
         this.getHospitalList();
         this.getOrganizationList();
         this.getEducationList();
         this.locationList$ = this.dictionaryService.getCurrentLocations();
         this.getInstitutionList();
-
         this.setOmsInfoData();
         this.setLocationDateData();
         this.setLocationPlaceData();
+
+        this.checkFormChanges();
+    }
+
+    checkFormChanges() {
+        this.mainForm.valueChanges.subscribe(data => {
+            this.cardThirteenYService.setSelectedTabCurrentValues(data);
+        });
+    }
+
+    checkIsFormValid() {
+        this.mainForm.valueChanges.subscribe(() => {
+            this.cardThirteenYService.setActiveTabValid(this.mainForm.valid);
+        });
     }
 
     initFormGroups() {
@@ -108,12 +117,8 @@ export class CardMainComponent implements OnInit {
                     Validators.maxLength(6),
                     Validators.pattern('^[0-9a-zA-Zа-яА-Я]+$')
                 ]),
-                policyNumber: new FormControl('', [
-                    Validators.required,
-                    Validators.maxLength(3),
-                    Validators.pattern('^[0-9a-zA-Zа-яА-Я]+$')
-                ]),
-                omsPayment: new FormControl('', [Validators.required])
+                policyNumber: new FormControl(''),
+                omsPayment: new FormControl(1, [Validators.required])
             }),
             medicalOrganization: new FormGroup({
                 organizationName: new FormControl('', [Validators.required]),
@@ -132,18 +137,13 @@ export class CardMainComponent implements OnInit {
         });
     }
 
-    // checkFormChanges() {
-    //   this.mainForm.valueChanges
-    //     .pipe(debounceTime(800))
-    //     .subscribe(data => this.cardThirteenYService.setTabCurrentValues(data));
-    // }
-
     getInitValues() {
         this.cardThirteenYService.activeTabInitValues
             .subscribe(data => {
                 this.formValues = data;
                 console.log(data);
                 this.setFormInitValues(data);
+                this.cardThirteenYService.setSelectedTabInitValues(this.mainForm.value);
             });
     }
 
@@ -157,7 +157,9 @@ export class CardMainComponent implements OnInit {
                 },
                 polisSerial: oms.policySeries,
                 polisNumber: oms.policyNumber,
-                polisType: oms.policyType,
+                polisType: {
+                    id: oms.policyType
+                },
                 payOms: {
                     id: oms.omsPayment
                 }
@@ -170,7 +172,7 @@ export class CardMainComponent implements OnInit {
         this.cardThirteenYService.getControls(this.mainForm, 'location').locationDate.valueChanges.subscribe(date => {
             const locationDateObj = {
                 ...this.formValues,
-                currentLocationDate: date.toISOString()
+                currentLocationDate: date.format()
             };
             this.cardThirteenYService.setTabCurrentValues(locationDateObj);
         });
@@ -190,17 +192,23 @@ export class CardMainComponent implements OnInit {
 
     setFormInitValues(data) {
         this.cardThirteenYService.getControls(this.mainForm, 'generalInfo').dateBegin.setValue(data.startDate, {emitEvent: false});
-        if (data.region) {
-            this.cardThirteenYService.getControls(this.mainForm, 'generalInfo').placeOfStay
-                .setValue(data.region.regionName, {emitEvent: false});
+        if (data.cityAoid) {
             this.cardThirteenYService.getControls(this.mainForm, 'generalInfo').placeOfStayCode
-                .setValue(data.region.code, {emitEvent: false});
+                .setValue(data.cityAoid, {emitEvent: false});
+        }
+        if (data.address) {
+            this.cardThirteenYService.getControls(this.mainForm, 'generalInfo').placeOfStay
+                .setValue(data.address, {emitEvent: false});
         }
         if (data.insuranceCompany) {
             this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').hospitalName
                 .setValue(data.insuranceCompany.name, {emitEvent: false});
             this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').hospitalId
                 .setValue(data.insuranceCompany.id, {emitEvent: false});
+        }
+        if (data.polisType) {
+            this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policyType.setValue(data.polisType.id, {emitEvent: false});
+            this.setPolicyNumberValidator(data.polisType.id);
         }
         if (data.polisSerial) {
             this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policySeries.setValue(data.polisSerial, {emitEvent: false});
@@ -267,17 +275,12 @@ export class CardMainComponent implements OnInit {
                         return item.fullAddress === data;
                     });
                     if (cityObject) {
-                        this.cardThirteenYService.getCityInfo(cityObject.aoid).subscribe((info: ICardMainCityInfo) => {
-                            this.cardThirteenYService.getControls(this.mainForm, 'generalInfo').placeOfStayCode.setValue(info.OKATO);
-                            const formObjectValues = {
-                                ...this.formValues,
-                                region: {
-                                    code: info.OKATO,
-                                    regionName: cityObject.fullAddress
-                                }
-                            };
-                            this.cardThirteenYService.setTabCurrentValues(formObjectValues);
-                        });
+                        const formObjectValues = {
+                            ...this.formValues,
+                            cityAoid: cityObject.aoid,
+                            address: cityObject.fullAddress
+                        };
+                        this.cardThirteenYService.setTabCurrentValues(formObjectValues);
                     }
                 }
             });
@@ -375,23 +378,28 @@ export class CardMainComponent implements OnInit {
 
     setActivePolicyType() {
         const policyNumberControl = this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policyNumber;
-        this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policyType.valueChanges.subscribe((type: string) => {
+        this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policyType.valueChanges.subscribe((type: number) => {
             this.selectedPolicyType = type;
             policyNumberControl.setValue('');
-            if (type === 'old') {
-                policyNumberControl.setValidators(this.oldPolicyNumberValidators);
-            } else if (type === 'new') {
-                policyNumberControl.setValidators(this.newPolicyNumberValidators);
-            } else {
-                policyNumberControl.setValidators(this.defaultPolicyNumberValidators);
-            }
+            this.setPolicyNumberValidator(type);
         });
     }
 
+    setPolicyNumberValidator(type) {
+        const policyNumberControl = this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policyNumber;
+        if (type === 2) {
+            policyNumberControl.setValidators(this.oldPolicyNumberValidators);
+        } else if (type === 1) {
+            policyNumberControl.setValidators(this.newPolicyNumberValidators);
+        } else {
+            policyNumberControl.setValidators(this.defaultPolicyNumberValidators);
+        }
+    }
+
     setPolicyTypeRule() {
-        if (this.selectedPolicyType === 'temporary') {
+        if (this.selectedPolicyType === 3) {
             this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policyNumber.setValue('001' + this.selectedPolicyValue);
-        } else if (this.selectedPolicyType === 'new') {
+        } else if (this.selectedPolicyType === 1) {
             const controlDischarge = this.getControlDischarge();
             this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policyNumber
                 .setValue(this.selectedPolicyValue.slice(0, -1) + controlDischarge);

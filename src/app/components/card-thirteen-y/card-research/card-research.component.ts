@@ -44,9 +44,9 @@ export class CardResearchComponent implements OnInit {
   ngOnInit() {
     this.createResearchFormGroups();
     this.additionalResearch = this.cardThirteenYService.getAdditionalResearch();
-    this.cardThirteenYService.setTabInitValues(this.researchFormGroup.value);
-    this.cardThirteenYService.setTabCurrentValues(null);
-    this.checkFormChanges();
+    // this.cardThirteenYService.setTabInitValues(this.researchFormGroup.value);
+    // this.cardThirteenYService.setTabCurrentValues(null);
+    // this.checkFormChanges();
   }
 
   createResearchFormGroups() {

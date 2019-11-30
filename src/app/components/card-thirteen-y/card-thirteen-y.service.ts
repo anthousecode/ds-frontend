@@ -16,10 +16,12 @@ import {AdditionalResearch} from './shared/interfaces/additional-research.interf
 })
 export class CardThirteenYService {
     getCitiesUrl = 'http://ds-dev.rt-eu.ru/addrobject/search?query=';
-    getCityInfoUrl = 'http://ds-dev.rt-eu.ru/addrobject/aoid?aoid=';
     activeTab: BehaviorSubject<string> = new BehaviorSubject('main');
     activeTabInitValues: BehaviorSubject<any> = new BehaviorSubject(false);
     activeTabCurrentValues: BehaviorSubject<any> = new BehaviorSubject(false);
+    selectedTabInitValues: Subject<AbstractControl> = new Subject();
+    selectedTabCurrentValues: Subject<AbstractControl> = new Subject();
+    isActiveTabValid: Subject<boolean> = new Subject<boolean>();
 
     baseUrl = 'http://ds-dev.rt-eu.ru/api/';
 
@@ -32,12 +34,24 @@ export class CardThirteenYService {
         this.activeTab.next(tab);
     }
 
+    setActiveTabValid(state: boolean) {
+        this.isActiveTabValid.next(state);
+    }
+
     setTabInitValues(initValue) {
         this.activeTabInitValues.next(initValue);
     }
 
     setTabCurrentValues(currentValue) {
         this.activeTabCurrentValues.next(currentValue);
+    }
+
+    setSelectedTabInitValues(initValue: AbstractControl) {
+        this.selectedTabInitValues.next(initValue);
+    }
+
+    setSelectedTabCurrentValues(currentValue: AbstractControl) {
+        this.selectedTabCurrentValues.next(currentValue);
     }
 
     getControls(nameForm: FormGroup, nameGroup: string): any {
@@ -63,13 +77,6 @@ export class CardThirteenYService {
 
     getCardInfo(patientId: number) {
         return this.http.get(this.baseUrl + 'cards/' + patientId);
-    }
-
-    getCityInfo(aoid: string) {
-        return this.http.get(this.getCityInfoUrl + aoid)
-            .pipe(
-                catchErrorLogEmpty()
-            );
     }
 
     getAdditionalInfo(): Observable<IAdditionalInfo[]> {

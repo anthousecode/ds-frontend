@@ -62,9 +62,9 @@ export class CardHealthStatusComponent implements OnInit {
     this.diagnosisList = this.cardThirteenYService.getDiagnoses();
     this.diagnosisListAfter = this.cardThirteenYService.getDiagnosesAfter();
     this.initFormGroups();
-    this.cardThirteenYService.setTabInitValues(this.healthStatusForm.value);
-    this.cardThirteenYService.setTabCurrentValues(null);
-    this.checkFormChanges();
+    // this.cardThirteenYService.setTabInitValues(this.healthStatusForm.value);
+    // this.cardThirteenYService.setTabCurrentValues(null);
+    // this.checkFormChanges();
     this.disabilityTypeChange();
     this.disableRehabilitationPerformance();
     this.disableDisabilityControls();

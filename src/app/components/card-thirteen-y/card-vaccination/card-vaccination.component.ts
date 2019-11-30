@@ -37,9 +37,9 @@ export class CardVaccinationComponent implements OnInit {
     this.initStateVaccinations();
     this.initVaccinations();
     this.filterVaccinations();
-    this.cardThirteenYService.setTabInitValues(this.vaccinationForm.value);
-    this.cardThirteenYService.setTabCurrentValues(null);
-    this.checkFormChanges();
+    // this.cardThirteenYService.setTabInitValues(this.vaccinationForm.value);
+    // this.cardThirteenYService.setTabCurrentValues(null);
+    // this.checkFormChanges();
   }
 
   createVaccinationForm() {
