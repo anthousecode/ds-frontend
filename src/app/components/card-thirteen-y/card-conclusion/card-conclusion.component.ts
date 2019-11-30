@@ -7,6 +7,7 @@ import {debounceTime, skip} from 'rxjs/operators';
 import {DictionaryService} from '../../../service/dictionary.service';
 import {AbsenceReason, DoctorForConclusion, DoctorForExamination, HealthGroup, ReasonMissed} from '../../../models/dictionary.model';
 import * as moment from 'moment';
+import {pipe} from 'rxjs';
 
 @Component({
     selector: 'app-card-conclusion',
@@ -15,7 +16,6 @@ import * as moment from 'moment';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CardConclusionComponent implements OnInit {
-
     private conclusionForm: FormGroup;
     private healthGroup: HealthGroup[];
     private maxDate = new Date();
@@ -24,7 +24,6 @@ export class CardConclusionComponent implements OnInit {
     private absenceReasons: AbsenceReason[];
     private formValues!: any;
     private doctorsList: DoctorForConclusion[];
-    validatorsData: {};
 
 
     constructor(private  fb: FormBuilder,
@@ -44,14 +43,22 @@ export class CardConclusionComponent implements OnInit {
     ngOnInit() {
         this.createConclusionForm();
         this.getInitValues();
+        this.checkIsFormValid();
         this.initDoctorExaminationsForm();
         this.initHealthGroup();
         this.initMissedReasons();
         this.initDoctorsList();
         this.initAbsenceReasons();
+        this.checkChangeOfMedicalExamination();
         this.setDoctorsDateData();
         this.setHealthGroupData();
-        // this.checkFormChanges();
+        this.checkFormChanges();
+    }
+
+    checkIsFormValid() {
+        this.conclusionForm.valueChanges.subscribe(() => {
+            this.cardThirteenYService.setActiveTabValid(true); // TODO: change for valid form after all data from api
+        });
     }
 
     getInitValues() {
@@ -81,7 +88,6 @@ export class CardConclusionComponent implements OnInit {
     initDoctorExaminationsForm() {
         this.dictionaryService.getDoctorsForExamination().subscribe((doctors) => {
             this.doctorsForExaminations = doctors;
-            // console.log('this.formValues', this.formValues);
             this.doctorsForExaminations.forEach((item: DoctorForExamination, i) => {
                 this.doctorExaminations.push(
                     this.fb.group({
@@ -96,25 +102,29 @@ export class CardConclusionComponent implements OnInit {
     }
 
     setFormInitValues(data) {
-        console.log('data', data);
+        // console.log('data', data);
         if (data.conclusion) {
             this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').healthGroup
                 .setValue(data.conclusion.healthGroup.name, {emitEvent: false});
-            // this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').doctor
-            // // tslint:disable-next-line:max-line-length
-            //     .setValue(`${data.conclusion.person.surname} + '' + ${data.conclusion.person.name} + '' + ${data.conclusion.person.lastname}`, {emitEvent: false});
             this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').recommendation
-                .setValue(data.recommend, {emitEvent: false});
+                .setValue(data.conclusion.recommend, {emitEvent: false});
+            if (data.conclusion.person) {
+                this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').doctor
+                // tslint:disable-next-line:max-line-length
+                    .setValue(`${data.conclusion.person.surname} + '' + ${data.conclusion.person.name} + '' + ${data.conclusion.person.lastname}`, {emitEvent: false});
+            }
             this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').medicalExamination
-                .setValue(data.dispanserizationFail, {emitEvent: false});
+                .setValue(data.conclusion.dispanserizationFail, {emitEvent: false});
+            this.conditionMedicalExaminationValue(data.conclusion.dispanserizationFail);
             this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').missedReasons
-                .setValue(data.failReason.name, {emitEvent: false});
-            this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').absence
-                .setValue(data.absenceReason.name, {emitEvent: false});
+                .setValue(data.conclusion.failReason.name, {emitEvent: false});
+            if (data.conclusion.absenceReason) {
+                this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').absence
+                    .setValue(data.conclusion.absenceReason.name, {emitEvent: false});
+            }
             this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').nonExecutionTextarea
-                .setValue(data.failReasonOther, {emitEvent: false});
+                .setValue(data.conclusion.failReasonOther, {emitEvent: false});
         }
-
     }
 
     initHealthGroup() {
@@ -133,10 +143,26 @@ export class CardConclusionComponent implements OnInit {
         this.dictionaryService.getAbsenceReasons().subscribe(item => this.absenceReasons = item);
     }
 
-    // checkFormChanges() {
-    //   this.conclusionForm.valueChanges
-    //     .subscribe(data => this.cardThirteenYService.setTabCurrentValues(data));
-    // }
+    checkFormChanges() {
+        this.conclusionForm.valueChanges
+            .subscribe(data => this.cardThirteenYService.setSelectedTabCurrentValues(data));
+    }
+
+    checkChangeOfMedicalExamination() {
+        this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').medicalExamination.valueChanges
+            .subscribe(checked => {
+                this.conditionMedicalExaminationValue(checked);
+            });
+    }
+
+    conditionMedicalExaminationValue(checked) {
+        if (checked) {
+            this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').missedReasons.enable();
+        } else {
+            this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').missedReasons.disable();
+            this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').missedReasons.setValue('');
+        }
+    }
 
     openDatepicker(name: MatDatepicker<any>) {
         name.open();
@@ -204,14 +230,15 @@ export class CardConclusionComponent implements OnInit {
         }
     }
 
-    isDisabledMedicalExamination(checked) {
-        if (checked) {
-            this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').missedReasons.enable();
-        } else {
-            this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').missedReasons.disable();
-            this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').missedReasons.setValue('');
-        }
-    }
+    // isDisabledMedicalExamination(checked) {
+    //     console.log(checked);
+    //     if (checked) {
+    //         this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').missedReasons.enable();
+    //     } else {
+    //         this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').missedReasons.disable();
+    //         this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').missedReasons.setValue('');
+    //     }
+    // }
 
     isDisabledMissedReasons(event: MatSelectChange) {
         if (event.source.value === 1) {
