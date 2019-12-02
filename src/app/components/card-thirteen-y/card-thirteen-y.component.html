@@ -58,3 +58,8 @@
 <app-additional-information *ngIf="isAdditionalInfoVisible"
                             [@fadeInOut]>
 </app-additional-information>
+
+<ng-container *ngIf="loading">
+  <mat-spinner class="spinner"></mat-spinner>
+  <div class="modal-over"></div>
+</ng-container>

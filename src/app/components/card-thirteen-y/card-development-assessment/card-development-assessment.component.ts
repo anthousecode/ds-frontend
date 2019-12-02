@@ -6,6 +6,13 @@ import {GENDER_SELECT} from '../shared/data/card-thirteen-y-select';
 import {debounceTime} from 'rxjs/operators';
 import {DictionaryService} from '../../../service/dictionary.service';
 import {DevelopmentDisorder, MenstrualCharacteristic} from '../../../models/dictionary.model';
+import { it } from '@angular/core/testing/src/testing_internal';
+import { MatCheckboxChange, MatRadioChange } from '@angular/material';
+import {
+  FEMALE_CHARASTERISTIC, MENTAL_DEVELOPMENT,
+  PATIENT_SEX, PHYSICAL_DEVELOPMENT,
+  SEXUAL_DEVELOPMENT_CONTROLS,
+} from '../shared/data/patient_sex';
 
 @Component({
   selector: 'app-card-development-assessment',
@@ -16,11 +23,15 @@ import {DevelopmentDisorder, MenstrualCharacteristic} from '../../../models/dict
 export class CardDevelopmentAssessmentComponent implements OnInit {
 
   devAssessmentForm!: FormGroup;
-  private devDisordersKid: DevelopmentDisorder[] = [];
+  private devDisordersKid: DevelopmentDisorder[];
   private devDisordersTeen: DevelopmentDisorder[] = [];
-  private characteristicMenstrualFunc: MenstrualCharacteristic[] = [];
+  private characteristicMenstrualFunc: MenstrualCharacteristic[];
   private psychoValue = PSYCHO_DEV_TEEN;
   private genderSelect = GENDER_SELECT;
+  private patientSexId = 0;
+  private patientAge;
+  private PATIENT_SEX = PATIENT_SEX;
+  formValues: any;
 
   constructor(private cardThirteenYService: CardThirteenYService,
               private dictionaryService: DictionaryService,
@@ -28,72 +39,91 @@ export class CardDevelopmentAssessmentComponent implements OnInit {
 
   ngOnInit() {
     this.createDevAssessmentForm();
+    this.getActiveTabInitValues();
     this.initPhysicalDevKid();
     this.initPhysicalDevTeen();
     this.initCharacteristicMenstrualFunc();
+    this.checkIsFormValid();
     // this.cardThirteenYService.setTabInitValues(this.devAssessmentForm.value);
-    // this.cardThirteenYService.setTabCurrentValues(null);
-    // this.checkFormChanges();
+    this.cardThirteenYService.setTabCurrentValues(null);
+    this.checkFormChanges();
+  }
+
+  getActiveTabInitValues() {
+    this.cardThirteenYService.activeTabInitValues
+        .subscribe(data => {
+          this.formValues = data;
+          this.patientSexId = data.patient.sex.id;
+          this.patientAge = Number(data.ageGroup.months / 12);
+          this.setFormInitValues(data);
+          const sexualDevelopmentControls = SEXUAL_DEVELOPMENT_CONTROLS.common.concat(this.patientSexId === this.PATIENT_SEX.male
+              ? SEXUAL_DEVELOPMENT_CONTROLS.male
+              : SEXUAL_DEVELOPMENT_CONTROLS.female);
+          this.setMentalDevelopmentControls(this.patientAge <= 4 ? MENTAL_DEVELOPMENT.child : MENTAL_DEVELOPMENT.teen);
+          this.setPhysicalDevelopment(this.patientAge <= 4 ? PHYSICAL_DEVELOPMENT.child : PHYSICAL_DEVELOPMENT.teen);
+          if (this.patientAge > 10) {
+            this.setSexualDevelopmentControls(sexualDevelopmentControls);
+            if (this.patientSexId === PATIENT_SEX.female) {
+              this.setFemaleControls(FEMALE_CHARASTERISTIC);
+            }
+          }
+          this.cardThirteenYService.setSelectedTabInitValues(this.devAssessmentForm.value);
+          this.cdRef.detectChanges();
+        });
+  }
+
+  setMentalDevelopmentControls(controls: Array<string>) {
+    controls.forEach(value =>
+        this.cardThirteenYService.getControls(this.devAssessmentForm, 'mentalDevelopment')[value].enable());
+  }
+
+  setPhysicalDevelopment(controls: Array<string>) {
+    controls.forEach(value =>
+        this.cardThirteenYService.getControls(this.devAssessmentForm, 'physicalDevelopment')[value].enable());
   }
 
   createDevAssessmentForm() {
     this.devAssessmentForm = new FormGroup({
-      physicalDevKidForm: new FormGroup({
+      physicalDevelopment: new FormGroup({
         weight: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{1,4}$/)]),
         height: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{1,4}$/)]),
-        head: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{1,4}$/)]),
+        headCircumference: new FormControl({value: '', disabled: true}, [Validators.required, Validators.pattern(/^[0-9]{1,4}$/)]),
+        weightDisorder: new FormControl(null),
+        heightDisorder: new FormControl(null),
       }),
-      devDisordersKidForm: new FormGroup({
-        thin: new FormControl(false),
-        obese: new FormControl(false),
-        short: new FormControl(false),
-        tall: new FormControl(false),
+      mentalDevelopment: new FormGroup({
+        cognitive: new FormControl({value: '', disabled: true}, [Validators.required, Validators.pattern(/^[0-9]{1,3}$/)]),
+        motor: new FormControl({value: '', disabled: true}, [Validators.required, Validators.pattern(/^[0-9]{1,3}$/)]),
+        emotionalAndSocial: new FormControl({value: 0, disabled: true}, [Validators.required, Validators.pattern(/^[0-9]{1,3}$/)]),
+        speech: new FormControl({value: '', disabled: true}, [Validators.required, Validators.pattern(/^[0-9]{1,3}$/)]),
+        psychomotor: new FormControl({value: this.psychoValue[0].id, disabled: true}, [Validators.required]),
+        intellect: new FormControl({value: this.psychoValue[0].id, disabled: true}, [Validators.required]),
+        emotionallyVegetative: new FormControl({value: this.psychoValue[0].id, disabled: true}, [Validators.required]),
       }),
-      psychoDevKidForm: new FormGroup({
-        cognitiveFunc: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{1,3}$/)]),
-        motorFunc: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{1,3}$/)]),
-        socialFunc: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{1,3}$/)]),
-        speechFunc: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{1,3}$/)]),
+      sexualDevelopment: new FormGroup({
+        p: new FormControl({value: null, disabled: true}, [Validators.required]),
+        ax: new FormControl({value: null, disabled: true}, [Validators.required]),
+        fa: new FormControl({value: null, disabled: true}, [Validators.required]),
+        ma: new FormControl({value: null, disabled: true}, [Validators.required]),
+        me: new FormControl({value: null, disabled: true}, [Validators.required]),
+        missing: new FormControl({value: null, disabled: true}),
+        menarheYear: new FormControl({value: null, disabled: true}, [Validators.pattern(/^[0-9]{1,3}$/)]),
+        menarheMonth: new FormControl({value: null, disabled: true}, [Validators.pattern(/^[0-9]{1,3}$/)]),
       }),
-      physicalDevTeenForm: new FormGroup({
-        weight: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{1,4}$/)]),
-        height: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{1,4}$/)]),
-      }),
-      devDisordersTeenForm: new FormGroup({
-        thin: new FormControl(false),
-        obese: new FormControl(false),
-        short: new FormControl(false),
-        tall: new FormControl(false),
-      }),
-      psychoDevTeenForm: new FormGroup({
-        psychoMotorSphere: new FormControl(this.psychoValue[0].id, [Validators.required]),
-        intelligence: new FormControl(this.psychoValue[0].id, [Validators.required]),
-        emotionallySphere: new FormControl(this.psychoValue[0].id, [Validators.required]),
-      }),
-      sexualDevBoyForm: new FormGroup({
-        p: new FormControl(this.genderSelect[0].value, [Validators.required]),
-        ax: new FormControl(this.genderSelect[0].value, [Validators.required]),
-        fa: new FormControl(this.genderSelect[0].value, [Validators.required]),
-      }),
-      sexualDevGirlForm: new FormGroup({
-        p: new FormControl(this.genderSelect[0].value, [Validators.required]),
-        ax: new FormControl(this.genderSelect[0].value, [Validators.required]),
-        ma: new FormControl(this.genderSelect[0].value, [Validators.required]),
-        me: new FormControl(this.genderSelect[0].value, [Validators.required]),
-        menstrualFunc: new FormControl(''),
-        year: new FormControl({value: '', disabled: true}, [Validators.pattern(/^[0-9]{1,3}$/)]),
-        month: new FormControl({value: '', disabled: true}, [Validators.pattern(/^[0-9]{1,3}$/)]),
-      }),
-      characteristicMenstrualFuncForm: new FormGroup({
-        regular: new FormControl(''),
-        notRegular: new FormControl(''),
-        plentiful: new FormControl(''),
-        moderate: new FormControl(''),
-        scarce: new FormControl(''),
-        painful: new FormControl(''),
-        painless: new FormControl(''),
-      }),
+      regularity: new FormControl({value: null, disabled: true}),
+      profusion: new FormControl({value: null, disabled: true}),
+      soreness: new FormControl({value: null, disabled: true}),
     });
+  }
+
+  private setSexualDevelopmentControls(sexualDevelopmentControls: Array<string>) {
+    sexualDevelopmentControls.forEach(value =>
+        this.cardThirteenYService.getControls(this.devAssessmentForm, 'sexualDevelopment')[value].enable());
+  }
+
+  private setFemaleControls(sexualDevelopmentControls: Array<string>) {
+    sexualDevelopmentControls.forEach(value =>
+        this.devAssessmentForm.controls[value].enable());
   }
 
   private initPhysicalDevKid() {
@@ -120,7 +150,17 @@ export class CardDevelopmentAssessmentComponent implements OnInit {
   checkFormChanges() {
     this.devAssessmentForm.valueChanges
       .pipe(debounceTime(800))
-      .subscribe(data => this.cardThirteenYService.setTabCurrentValues(data));
+        .subscribe(data => {
+          this.cardThirteenYService.setSelectedTabCurrentValues(data);
+          this.cardThirteenYService.setTabCurrentValues(data);
+        });
+  }
+
+  checkIsFormValid() {
+    this.devAssessmentForm.valueChanges.subscribe(() => {
+      this.cardThirteenYService.setActiveTabValid(this.devAssessmentForm.valid);
+      this.cardThirteenYService.setTabCurrentValues(this.devAssessmentForm);
+    });
   }
 
   private toggleCheckbox(
@@ -136,10 +176,38 @@ export class CardDevelopmentAssessmentComponent implements OnInit {
     });
   }
 
-  handlerWeightKid(currentControl: string, value: boolean) {
-    const controls = ['thin', 'obese'];
+  setFormInitValues(data) {
+    console.log('data', data);
+    if (data.physicalDevelopment) {
+      this.patchValueForGroup(data.physicalDevelopment, 'physicalDevelopment');
+    }
+    if (data.mentalDevelopment) {
+      this.patchValueForGroup(data.mentalDevelopment, 'mentalDevelopment');
+    }
+    if (data.sexualDevelopment) {
+      this.patchValueForGroup(data.sexualDevelopment, 'sexualDevelopment');
+    }
+  }
 
-    this.toggleCheckbox(controls, currentControl, value, 'devDisordersKidForm');
+  patchValueForGroup(data, nameGroup: string) {
+    for (const [key, value] of Object.entries(data)) {
+      const control = this.cardThirteenYService.getControls(this.devAssessmentForm, nameGroup)[key];
+      if (control) {
+        control.setValue(value, {emitEvent: false});
+      }
+    }
+  }
+
+  handlerRadioButton(groupName: string, currentControl: string, value: MatRadioChange) {
+
+      this.cardThirteenYService.getControls(this.devAssessmentForm, groupName)[currentControl].setValue(value.value);
+      console.log('form', this.devAssessmentForm);
+
+  }
+
+  handlerRadioWithoutGroup(currentControl: string, value: MatRadioChange) {
+    this.devAssessmentForm.controls[currentControl].setValue(value.value);
+    console.log('form', this.devAssessmentForm);
   }
 
   handlerHeightKid(currentControl: string, value: boolean) {
@@ -180,13 +248,13 @@ export class CardDevelopmentAssessmentComponent implements OnInit {
 
   isDisabled(checked) {
     if (checked) {
-      this.cardThirteenYService.getControls(this.devAssessmentForm, 'sexualDevGirlForm').year.enable();
-      this.cardThirteenYService.getControls(this.devAssessmentForm, 'sexualDevGirlForm').month.enable();
+      this.cardThirteenYService.getControls(this.devAssessmentForm, 'sexualDevelopment').menarheYear.enable();
+      this.cardThirteenYService.getControls(this.devAssessmentForm, 'sexualDevelopment').menarheMonth.enable();
     } else {
-      this.cardThirteenYService.getControls(this.devAssessmentForm, 'sexualDevGirlForm').year.disable();
-      this.cardThirteenYService.getControls(this.devAssessmentForm, 'sexualDevGirlForm').year.setValue('');
-      this.cardThirteenYService.getControls(this.devAssessmentForm, 'sexualDevGirlForm').month.disable();
-      this.cardThirteenYService.getControls(this.devAssessmentForm, 'sexualDevGirlForm').month.setValue('');
+      this.cardThirteenYService.getControls(this.devAssessmentForm, 'sexualDevelopment').menarheYear.disable();
+      this.cardThirteenYService.getControls(this.devAssessmentForm, 'sexualDevelopment').menarheYear.setValue('');
+      this.cardThirteenYService.getControls(this.devAssessmentForm, 'sexualDevelopment').menarheMonth.disable();
+      this.cardThirteenYService.getControls(this.devAssessmentForm, 'sexualDevelopment').menarheMonth.setValue('');
     }
   }
 

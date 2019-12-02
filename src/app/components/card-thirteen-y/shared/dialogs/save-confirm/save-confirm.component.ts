@@ -1,5 +1,5 @@
-import {Component, ChangeDetectionStrategy} from '@angular/core';
-import {MatSnackBar} from '@angular/material';
+import { Component, ChangeDetectionStrategy, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import {CardThirteenYService} from '../../../card-thirteen-y.service';
 
 @Component({
@@ -11,13 +11,9 @@ import {CardThirteenYService} from '../../../card-thirteen-y.service';
 export class SaveConfirmComponent {
 
   constructor(private cardThirteenYService: CardThirteenYService,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private cardService: CardThirteenYService,
+              @Inject(MAT_DIALOG_DATA) private data: any) {
 
-  }
-
-  saveData() {
-    this.snackBar.open('Сохранено', 'ОК', {
-      duration: 5000
-    });
   }
 }

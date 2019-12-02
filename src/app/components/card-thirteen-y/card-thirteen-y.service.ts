@@ -9,6 +9,8 @@ import {IGroupVaccinations} from './card-vaccination/shared/vaccination.interfac
 import {IAdditionalInfo} from './shared/interfaces/additional-info.interface';
 import {IChangesHistory} from './shared/interfaces/changes-history.interface';
 import {AdditionalResearch} from './shared/interfaces/additional-research.interface';
+import { load } from '@angular/core/src/render3';
+import { finalize } from 'rxjs/operators';
 
 
 @Injectable({
@@ -22,6 +24,8 @@ export class CardThirteenYService {
     selectedTabInitValues: Subject<AbstractControl> = new Subject();
     selectedTabCurrentValues: Subject<AbstractControl> = new Subject();
     isActiveTabValid: Subject<boolean> = new Subject<boolean>();
+    isLoading: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    isLoading$: Observable<boolean> = this.isLoading.asObservable();
 
     baseUrl = 'http://ds-dev.rt-eu.ru/api/';
 
@@ -54,6 +58,10 @@ export class CardThirteenYService {
         this.selectedTabCurrentValues.next(currentValue);
     }
 
+    setLoading(loader: boolean) {
+        this.isLoading.next(loader);
+    }
+
     getControls(nameForm: FormGroup, nameGroup: string): any {
         return (nameForm.get(nameGroup) as FormGroup).controls;
     }
@@ -63,7 +71,9 @@ export class CardThirteenYService {
             card: {}
         };
         card.card = values;
-        return this.http.put(this.baseUrl + 'cards/696', card);
+        this.setLoading(true);
+        return this.http.patch(this.baseUrl + 'cards/696', card)
+            .pipe(finalize(() => this.setLoading(false)));
     }
 
     getCities(text) {
