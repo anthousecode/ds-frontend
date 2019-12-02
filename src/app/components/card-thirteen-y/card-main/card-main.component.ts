@@ -141,7 +141,7 @@ export class CardMainComponent implements OnInit {
         this.cardThirteenYService.activeTabInitValues
             .subscribe(data => {
                 this.formValues = data;
-                console.log(data);
+                // console.log(data);
                 this.setFormInitValues(data);
                 this.cardThirteenYService.setSelectedTabInitValues(this.mainForm.value);
             });

@@ -1,18 +1,18 @@
 <form class="vaccination__form-wrapper"
-      [formGroup]="vaccinationForm"
-      (ngSubmit)="onSubmit(vaccinationForm.value)">
+      [formGroup]="vaccinationForm">
   <div class="vaccination__section">
     <div class="vaccination__field-block">
       <div class="vaccination-label">
         <p>Выполнение программы вакцинации</p>
       </div>
       <div class="vaccination-select-block">
-        <mat-form-field floatLabel="auto"
+        <mat-form-field floatLabel="never"
                         class="vaccination__input-field">
           <mat-label id="state-label">Выберите состояние вакцинации</mat-label>
           <mat-select formControlName="state"
                       aria-labelledby="state-label">
-            <mat-option *ngFor="let vaccination of stateVaccination" [value]="vaccination.id">
+            <mat-option *ngFor="let vaccination of stateVaccination"
+                        [value]="vaccination.id">
               {{vaccination.name}}
             </mat-option>
           </mat-select>
@@ -51,5 +51,4 @@
       </div>
     </div>
   </div>
-
 </form>

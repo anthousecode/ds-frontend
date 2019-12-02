@@ -9,100 +9,138 @@ import {DictionaryService} from '../../../service/dictionary.service';
 import {VaccinationStatus} from '../../../models/dictionary.model';
 
 @Component({
-  selector: 'app-card-vaccination',
-  templateUrl: './card-vaccination.component.html',
-  styleUrls: ['./card-vaccination.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-card-vaccination',
+    templateUrl: './card-vaccination.component.html',
+    styleUrls: ['./card-vaccination.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CardVaccinationComponent implements OnInit {
 
-  private vaccinationForm: FormGroup;
-  private stateVaccination: VaccinationStatus[];
-  private separatorKeysCodes: number[] = [ENTER];
-  private filteredVaccinations$: Observable<any[]>;
-  private chipsVaccinations: string[] = [];
-  private vaccinations: string[] = [];
+    private vaccinationForm: FormGroup;
+    private stateVaccination: VaccinationStatus[];
+    private separatorKeysCodes: number[] = [ENTER];
+    private filteredVaccinations$: Observable<any[]>;
+    private chipsVaccinations: string[] = [];
+    private vaccinations: string[] = [];
+    chipsQuery!: any;
+    formValues!: any;
 
-  @ViewChild('vaccinationInput') vaccinationInput: ElementRef<HTMLInputElement>;
-  @ViewChild('auto') matAutoComplete: MatAutocomplete;
+    @ViewChild('vaccinationInput') vaccinationInput: ElementRef<HTMLInputElement>;
+    @ViewChild('auto') matAutoComplete: MatAutocomplete;
 
-  constructor(private fb: FormBuilder,
-              private cardThirteenYService: CardThirteenYService,
-              private dictionaryService: DictionaryService,
-              private cdr: ChangeDetectorRef) {
-  }
+    constructor(private fb: FormBuilder,
+                private cardThirteenYService: CardThirteenYService,
+                private dictionaryService: DictionaryService,
+                private cdRef: ChangeDetectorRef) {
+        this.cardThirteenYService.activeTabCurrentValues
+            .subscribe(data => {
+                this.formValues = data;
+            });
+        this.cardThirteenYService.setActiveTabValid(true);
+    }
 
-  ngOnInit() {
-    this.createVaccinationForm();
-    this.initStateVaccinations();
-    this.initVaccinations();
-    this.filterVaccinations();
-    // this.cardThirteenYService.setTabInitValues(this.vaccinationForm.value);
-    // this.cardThirteenYService.setTabCurrentValues(null);
-    // this.checkFormChanges();
-  }
+    ngOnInit() {
+        this.createVaccinationForm();
+        this.initStateVaccinations();
+        // this.getInitValues();
+        this.initVaccinations();
+        this.filterVaccinations();
+        this.cardThirteenYService.setSelectedTabCurrentValues(null);
 
-  createVaccinationForm() {
-    this.vaccinationForm = this.fb.group({
-      state: [''],
-      vaccination: ['']
-    });
-  }
+        this.checkFormChanges();
+    }
 
-  checkFormChanges() {
-    this.vaccinationForm.valueChanges
-      .pipe(debounceTime(800))
-      .subscribe(data => this.cardThirteenYService.setTabCurrentValues(data));
-  }
+    createVaccinationForm() {
+        this.vaccinationForm = this.fb.group({
+            state: [''],
+            vaccination: ['']
+        });
+    }
 
-  private initStateVaccinations() {
-    this.dictionaryService.getVaccinationStatuses()
-      .subscribe((vaccinations: []) => {
-        this.stateVaccination = vaccinations;
-        this.cdr.markForCheck();
-      });
-  }
+    getInitValues() {
+        this.cardThirteenYService.activeTabInitValues.subscribe(data => {
+            this.formValues = data;
+            this.setFormInitValues(data);
+            this.cardThirteenYService.setSelectedTabInitValues(this.vaccinationForm.value);
+        });
+    }
 
-  private initVaccinations() {
-    this.dictionaryService.getVaccines()
-      .subscribe((vaccinations) => {
-        for (const vaccine of vaccinations) {
-          this.vaccinations.push(vaccine.name);
+    setFormInitValues(data) {
+        if (data.vaccination) {
+            if (data.vaccination.status) {
+                this.vaccinationForm.controls.state.setValue(data.status.id, {emitEvent: false});
+                // this.vaccinationForm.controls.state.setValue(data.status.id, {emitEvent: false});
+            }
         }
-        this.cdr.markForCheck();
-      });
-  }
+        // const initVaccinations = ['БЦЖ - R1', 'БЦЖ - R2'];
+        // this.chipsVaccinations = initVaccinations;
+        // this.vaccinations = this.vaccinations.filter(item => !initVaccinations.includes(item));
+        // this.cdRef.markForCheck();
+        // console.log(this.vaccinations)
+    }
 
-  private filterVaccinations() {
-    this.filteredVaccinations$ = this.vaccinationForm.get('vaccination')
-      .valueChanges
-      .pipe(
-        debounceTime(300),
-        startWith(null),
-        map((vaccination: string | null) => {
-          return vaccination ? this._filter(vaccination).sort() : this.vaccinations.slice();
-        }));
-  }
+    checkFormChanges() {
+        this.vaccinationForm.valueChanges
+            .pipe(debounceTime(500))
+            .subscribe(data => {
+                console.log(this.chipsVaccinations);
+                const chipsArr = this.chipsQuery.filter(item => this.chipsVaccinations.includes(item.name));
+                this.cardThirteenYService.setSelectedTabCurrentValues(data);
+                const vaccinationData = {
+                    ...this.formValues,
+                    vaccination: {
+                        status: {
+                            id: data.state
+                        },
+                        vaccines: chipsArr
+                    }
+                };
+                this.cardThirteenYService.setTabCurrentValues(vaccinationData);
+            });
+    }
 
-  removeChipsVaccination(vaccination: string): void {
-    this.chipsVaccinations = this.chipsVaccinations.filter((item) => item !== vaccination);
-    this.cdr.detectChanges();
-    this.vaccinations = this.vaccinations.concat([vaccination]);
-  }
+    private initStateVaccinations() {
+        this.dictionaryService.getVaccinationStatuses().subscribe((vaccinations: []) => {
+                this.stateVaccination = vaccinations;
+                this.cdRef.markForCheck();
+            });
+    }
 
-  addChipsVaccination(event: MatAutocompleteSelectedEvent): void {
-    this.chipsVaccinations.push(event.option.viewValue);
-    this.vaccinations = this.vaccinations.filter((item) => item !== event.option.viewValue);
-    this.cdr.detectChanges();
-    this.vaccinationInput.nativeElement.value = '';
-  }
+    private initVaccinations() {
+        this.dictionaryService.getVaccines().subscribe((vaccinations) => {
+            this.chipsQuery = vaccinations;
+            for (const vaccine of vaccinations) {
+                this.vaccinations.push(vaccine.name);
+            }
+            this.getInitValues();
+            this.cdRef.markForCheck();
+        });
+    }
 
-  private _filter(value: string): any[] {
-    const filterValue = value.toLowerCase();
-    return this.vaccinations.filter(vaccine => vaccine.toLowerCase().indexOf(filterValue) === 0);
-  }
+    private filterVaccinations() {
+        this.filteredVaccinations$ = this.vaccinationForm.get('vaccination').valueChanges
+            .pipe(
+                debounceTime(300),
+                startWith(null),
+                map((vaccination: string | null) => vaccination ? this._filter(vaccination).sort() : this.vaccinations.slice()));
+    }
 
-  onSubmit(value) {
-    console.log(value);
-  }
+    removeChipsVaccination(vaccination: string) {
+        this.chipsVaccinations = this.chipsVaccinations.filter((item) => item !== vaccination);
+        this.vaccinationForm.controls.state.setValue(this.vaccinationForm.controls.state.value);
+        this.cdRef.detectChanges();
+        this.vaccinations = this.vaccinations.concat([vaccination]);
+    }
+
+    addChipsVaccination(event: MatAutocompleteSelectedEvent) {
+        this.chipsVaccinations.push(event.option.viewValue);
+        this.vaccinations = this.vaccinations.filter((item) => item !== event.option.viewValue);
+        this.cdRef.detectChanges();
+        this.vaccinationInput.nativeElement.value = '';
+    }
+
+    private _filter(value: string): any[] {
+        const filterValue = value.toLowerCase();
+        return this.vaccinations.filter(vaccine => vaccine.toLowerCase().indexOf(filterValue) === 0);
+    }
 }
