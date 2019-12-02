@@ -4,6 +4,8 @@
 .__add-diagnosis-after {
   mat-form-field {
     &.__chips-disabled {
+      pointer-events: none;
+
       .mat-form-field-underline {
         background-color: transparent;
         background-image: linear-gradient(to right, rgba(0, 0, 0, .42) 0%, rgba(0, 0, 0, .42) 33%, transparent 0%);

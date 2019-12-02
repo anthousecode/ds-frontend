@@ -75,6 +75,7 @@ export class CardResearchComponent implements OnInit {
   checkFormChanges() {
     this.researchFormGroup.valueChanges.subscribe(data => {
       this.cardThirteenYService.setSelectedTabCurrentValues(data);
+      console.log(data)
     });
   }
 
