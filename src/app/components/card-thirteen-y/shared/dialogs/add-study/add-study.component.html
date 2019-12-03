@@ -34,6 +34,6 @@
   </div>
   <div class="add-study__buttons">
     <button class="add-study__button" mat-dialog-close>Отмена</button>
-    <button class="add-study__button" (click)="saveAndClose()" mat-dialog-close>Сохранить</button>
+    <button class="add-study__button" (click)="saveAndClose()" [ngClass]="{'__disabled': addStudyForm.invalid}" mat-dialog-close>Сохранить</button>
   </div>
 </form>

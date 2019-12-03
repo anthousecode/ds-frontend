@@ -55,7 +55,6 @@ export class CardResearchComponent implements OnInit {
     this.getInitValues();
     this.setAdditionalExaminations();
     this.checkIsFormValid();
-    this.cardThirteenYService.setSelectedTabCurrentValues(null);
     this.checkFormChanges();
   }
 

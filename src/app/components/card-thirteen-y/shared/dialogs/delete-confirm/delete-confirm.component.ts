@@ -24,7 +24,7 @@ export class DeleteConfirmComponent {
     this.cardThirteenYService.setTabCurrentValues(this.additionalExaminationsData.formValues);
     this.additionalExaminationsData.cdRef.detectChanges();
     this.dialogRef.close();
-    this.snackBar.open('Диагноз удалён', 'ОК', {
+    this.snackBar.open('Исследование удалено', 'ОК', {
       duration: 5000
     });
   }
