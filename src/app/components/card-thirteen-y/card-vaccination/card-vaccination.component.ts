@@ -32,17 +32,13 @@ export class CardVaccinationComponent implements OnInit {
                 private cardThirteenYService: CardThirteenYService,
                 private dictionaryService: DictionaryService,
                 private cdRef: ChangeDetectorRef) {
-        this.cardThirteenYService.activeTabCurrentValues
-            .subscribe(data => {
-                this.formValues = data;
-            });
+        this.cardThirteenYService.activeTabCurrentValues.subscribe(data => this.formValues = data);
         this.cardThirteenYService.setActiveTabValid(true);
     }
 
     ngOnInit() {
         this.createVaccinationForm();
         this.initStateVaccinations();
-        // this.getInitValues();
         this.initVaccinations();
         this.filterVaccinations();
         this.cardThirteenYService.setSelectedTabCurrentValues(null);
@@ -61,7 +57,11 @@ export class CardVaccinationComponent implements OnInit {
         this.cardThirteenYService.activeTabInitValues.subscribe(data => {
             this.formValues = data;
             this.setFormInitValues(data);
-            this.cardThirteenYService.setSelectedTabInitValues(this.vaccinationForm.value);
+            const formGroupData = {
+                ...this.vaccinationForm.value,
+                vaccination: this.chipsVaccinations
+            };
+            this.cardThirteenYService.setSelectedTabInitValues(formGroupData);
         });
     }
 
@@ -69,23 +69,26 @@ export class CardVaccinationComponent implements OnInit {
         if (data.vaccination) {
             if (data.vaccination.status) {
                 this.vaccinationForm.controls.state.setValue(data.status.id, {emitEvent: false});
-                // this.vaccinationForm.controls.state.setValue(data.status.id, {emitEvent: false});
+            }
+            if (data.vaccination.vaccines) {
+                const initVaccinations = data.vaccination.vaccines.map(item => item.name);
+                this.chipsVaccinations = initVaccinations;
+                this.vaccinations = this.vaccinations.filter(item => !initVaccinations.includes(item));
+                this.cdRef.markForCheck();
             }
         }
-        // const initVaccinations = ['БЦЖ - R1', 'БЦЖ - R2'];
-        // this.chipsVaccinations = initVaccinations;
-        // this.vaccinations = this.vaccinations.filter(item => !initVaccinations.includes(item));
-        // this.cdRef.markForCheck();
-        // console.log(this.vaccinations)
     }
 
     checkFormChanges() {
         this.vaccinationForm.valueChanges
             .pipe(debounceTime(500))
             .subscribe(data => {
-                console.log(this.chipsVaccinations);
+                const formGroupData = {
+                    ...data,
+                    vaccination: this.chipsVaccinations
+                };
+                this.cardThirteenYService.setSelectedTabCurrentValues(formGroupData);
                 const chipsArr = this.chipsQuery.filter(item => this.chipsVaccinations.includes(item.name));
-                this.cardThirteenYService.setSelectedTabCurrentValues(data);
                 const vaccinationData = {
                     ...this.formValues,
                     vaccination: {
@@ -101,9 +104,9 @@ export class CardVaccinationComponent implements OnInit {
 
     private initStateVaccinations() {
         this.dictionaryService.getVaccinationStatuses().subscribe((vaccinations: []) => {
-                this.stateVaccination = vaccinations;
-                this.cdRef.markForCheck();
-            });
+            this.stateVaccination = vaccinations;
+            this.cdRef.markForCheck();
+        });
     }
 
     private initVaccinations() {
@@ -122,7 +125,8 @@ export class CardVaccinationComponent implements OnInit {
             .pipe(
                 debounceTime(300),
                 startWith(null),
-                map((vaccination: string | null) => vaccination ? this._filter(vaccination).sort() : this.vaccinations.slice()));
+                map((vaccination: string | null) => vaccination ? this._filter(vaccination).sort() : this.vaccinations.slice())
+            );
     }
 
     removeChipsVaccination(vaccination: string) {
