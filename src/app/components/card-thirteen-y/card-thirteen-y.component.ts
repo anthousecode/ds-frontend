@@ -140,8 +140,6 @@ export class CardThirteenYComponent implements OnInit {
 
     changeTab(tabKey: string) {
         if (tabKey !== this.activeTabKey) {
-            console.log(this.selectedTabInitValues)
-            console.log(this.selectedTabCurrentValues)
             if ((JSON.stringify(this.selectedTabInitValues) === JSON.stringify(this.selectedTabCurrentValues))
                 || !this.selectedTabCurrentValues) {
                 this.cardThirteenYService.setActiveTab(tabKey);
