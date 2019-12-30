@@ -39,6 +39,7 @@
             formControlName="vaccination"
             [matAutocomplete]="auto"
             [matChipInputFor]="chipList"
+            (focus)="filterVaccinations()"
             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
             matChipInputAddOnBlur="true"
             class="vaccination__chip-input">

@@ -16,7 +16,7 @@ import {CardService} from '../../@core/shared/services/card.service';
 import {TOKEN} from './shared/data/token';
 import {DoneCardComponent} from './shared/dialogs/done-card/done-card.component';
 import {BlockCardComponent} from './shared/dialogs/block-card/block-card.component';
-import {skip} from 'rxjs/operators';
+import {debounceTime, skip} from 'rxjs/operators';
 
 @Component({
     selector: 'app-card-thirteen-y',
@@ -140,9 +140,7 @@ export class CardThirteenYComponent implements OnInit {
 
     changeTab(tabKey: string) {
         if (tabKey !== this.activeTabKey) {
-            console.log(this.selectedTabInitValues)
-            console.log(this.selectedTabCurrentValues)
-            if ((JSON.stringify(this.selectedTabInitValues) === JSON.stringify(this.selectedTabCurrentValues))
+            if (!this.isTabValid || (JSON.stringify(this.selectedTabInitValues) === JSON.stringify(this.selectedTabCurrentValues))
                 || !this.selectedTabCurrentValues) {
                 this.cardThirteenYService.setActiveTab(tabKey);
             } else {
@@ -171,13 +169,14 @@ export class CardThirteenYComponent implements OnInit {
     }
 
     saveCard(tabKey?: string) {
-        this.cardThirteenYService.saveCard(this.formValues)
-            .subscribe(data => {
-                this.cardThirteenYService.setTabInitValues(data);
-                this.cardThirteenYService.setSelectedTabCurrentValues(null);
-                if (tabKey) this.cardThirteenYService.setActiveTab(tabKey);
-                this.snackBar.open('Сохранено', 'ОК', {duration: 5000});
-            }, error => this.snackBar.open('Ошибка', 'ОК', {duration: 5000}));
+        this.cardThirteenYService.saveCard(this.formValues).subscribe(data => {
+            this.cardThirteenYService.setTabInitValues(data);
+            this.cardThirteenYService.setSelectedTabCurrentValues(null);
+            if (tabKey) {
+                this.cardThirteenYService.setActiveTab(tabKey);
+            }
+            this.snackBar.open('Сохранено', 'ОК', {duration: 5000});
+        }, error => this.snackBar.open('Ошибка', 'ОК', {duration: 5000}));
     }
 
     exportCard() {

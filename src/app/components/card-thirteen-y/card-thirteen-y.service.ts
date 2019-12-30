@@ -86,7 +86,9 @@ export class CardThirteenYService {
     }
 
     getCardInfo(patientId: number) {
-        return this.http.get(this.baseUrl + 'cards/' + patientId);
+        this.setLoading(true);
+        return this.http.get(this.baseUrl + 'cards/' + patientId)
+            .pipe(finalize(() => this.setLoading(false)));
     }
 
     getAdditionalInfo(): Observable<IAdditionalInfo[]> {

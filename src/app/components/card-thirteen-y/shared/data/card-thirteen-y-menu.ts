@@ -17,7 +17,7 @@ export const CARD_THIRTEEN_Y_MENU = [
   },
   {
     key: 'vaccination',
-    name: 'Вакцинации'
+    name: 'Вакцинация'
   },
   {
     key: 'conclusion',

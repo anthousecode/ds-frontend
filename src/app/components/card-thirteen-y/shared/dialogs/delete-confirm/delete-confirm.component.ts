@@ -24,8 +24,16 @@ export class DeleteConfirmComponent {
     this.cardThirteenYService.setTabCurrentValues(this.additionalExaminationsData.formValues);
     this.additionalExaminationsData.cdRef.detectChanges();
     this.dialogRef.close();
-    this.snackBar.open('Диагноз удалён', 'ОК', {
+    this.snackBar.open(this.getDeleteConfirmMessage(), 'ОК', {
       duration: 5000
     });
+  }
+
+  getDeleteKey() {
+    return this.additionalExaminationsData.key === 'research' ? 'исследование' : 'диагноз';
+  }
+
+  getDeleteConfirmMessage() {
+    return this.additionalExaminationsData.key === 'research' ? 'Исследование удалено' : 'Диагноз удалён';
   }
 }

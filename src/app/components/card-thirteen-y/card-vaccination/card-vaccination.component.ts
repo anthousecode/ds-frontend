@@ -129,18 +129,18 @@ export class CardVaccinationComponent implements OnInit {
             );
     }
 
-    removeChipsVaccination(vaccination: string) {
-        this.chipsVaccinations = this.chipsVaccinations.filter((item) => item !== vaccination);
-        this.vaccinationForm.controls.state.setValue(this.vaccinationForm.controls.state.value);
-        this.cdRef.detectChanges();
-        this.vaccinations = this.vaccinations.concat([vaccination]);
-    }
-
     addChipsVaccination(event: MatAutocompleteSelectedEvent) {
         this.chipsVaccinations.push(event.option.viewValue);
         this.vaccinations = this.vaccinations.filter((item) => item !== event.option.viewValue);
         this.cdRef.detectChanges();
         this.vaccinationInput.nativeElement.value = '';
+    }
+
+    removeChipsVaccination(vaccination: string) {
+        this.chipsVaccinations = this.chipsVaccinations.filter((item) => item !== vaccination);
+        this.vaccinationForm.controls.state.setValue(this.vaccinationForm.controls.state.value);
+        this.cdRef.detectChanges();
+        this.vaccinations = this.vaccinations.concat([vaccination]);
     }
 
     private _filter(value: string): any[] {
