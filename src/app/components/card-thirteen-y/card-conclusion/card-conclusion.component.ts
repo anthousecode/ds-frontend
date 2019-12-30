@@ -185,7 +185,7 @@ export class CardConclusionComponent implements OnInit {
                         }
                     };
                 });
-                console.log(formArrayConclusion);
+                console.log('formArrayConclusion', formArrayConclusion);
                 const conclusionObject = {
                     ...this.formValues,
                     doctorExaminations: formArrayConclusion
@@ -197,7 +197,6 @@ export class CardConclusionComponent implements OnInit {
 
     setHealthGroupData() {
         this.conclusionForm.controls.opinionForm.valueChanges.subscribe(val => {
-            console.log('val', val);
             const conclusionObj = {
                 ...this.formValues,
                 conclusion: {
@@ -222,13 +221,13 @@ export class CardConclusionComponent implements OnInit {
                 }
             };
             this.cardThirteenYService.setTabCurrentValues(conclusionObj);
-            console.log(this.formValues);
+            console.log('this.formValues', this.formValues);
         });
     }
 
     getDoctorDateFormat(date) {
-        if (date) {
-            return typeof date === 'string' ? date : date.format();
+        if (date !== []) {
+            return date._isAMomentObject  ? date.format() : date;
         } else {
             return '';
         }

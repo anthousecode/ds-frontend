@@ -101,10 +101,6 @@ export class CardThirteenYService {
         return this.apiService.get<IDiagnoses[]>('diagnoses.json'); // TODO: remove when api will work
     }
 
-    getDiagnosesAfter(): Observable<IDiagnoses[]> {
-        return this.apiService.get<IDiagnoses[]>('diagnoses-after.json'); // TODO: remove when api will work
-    }
-
     getAdditionalResearch(): Observable<AdditionalResearch[]> {
         return this.apiService.get<AdditionalResearch[]>('additional-research.json'); // TODO: remove when api will work
     }

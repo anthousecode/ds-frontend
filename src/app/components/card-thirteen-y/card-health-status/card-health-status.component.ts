@@ -25,7 +25,7 @@ export class CardHealthStatusComponent implements OnInit {
   healthStatusForm!: FormGroup;
   healthStatusList$!: Observable<HealthGroup[]>;
   diagnosisList!: Observable<IDiagnoses[]>;
-  diagnosisListAfter!: Observable<IDiagnoses[]>;
+  diagnosesListAfter!: any;
   disabilityTypeList$!: Observable<InvalidType[]>;
   doneList$!: Observable<ReabilitationStatus[]>;
   isChipsDisabled!: boolean;
@@ -43,6 +43,7 @@ export class CardHealthStatusComponent implements OnInit {
   disabilityDisordersChips = [];
   invalidDiseases = [];
   disabilityDisorders = [];
+  private formValues!: any;
 
   @ViewChild('invalidDiseasesInput') invalidDiseasesInput: ElementRef<HTMLInputElement>;
   @ViewChild('disabilityDisordersInput') disabilityDisordersInput: ElementRef<HTMLInputElement>;
@@ -60,7 +61,7 @@ export class CardHealthStatusComponent implements OnInit {
     this.disabilityTypeList$ = this.dictionaryService.getInvalidTypes();
     this.doneList$ = this.dictionaryService.getReabilitationStatuses();
     this.diagnosisList = this.cardThirteenYService.getDiagnoses();
-    this.diagnosisListAfter = this.cardThirteenYService.getDiagnosesAfter();
+    this.getInitValues();
     this.initFormGroups();
     // this.cardThirteenYService.setTabInitValues(this.healthStatusForm.value);
     // this.cardThirteenYService.setTabCurrentValues(null);
@@ -70,6 +71,7 @@ export class CardHealthStatusComponent implements OnInit {
     this.disableDisabilityControls();
 
     this.healthStatusForm.valueChanges.subscribe(q => console.log(q));
+    console.log('this.diagnosesListAfter', this.diagnosesListAfter);
   }
 
   initFormGroups() {
@@ -87,6 +89,16 @@ export class CardHealthStatusComponent implements OnInit {
         rehabilitationPerformance: new FormControl({value: '', disabled: true}, [Validators.required])
       })
     });
+  }
+
+  getInitValues() {
+    this.cardThirteenYService.activeTabInitValues
+        .subscribe(card => {
+          this.formValues = card;
+          this.diagnosesListAfter = this.formValues.healthStatusAfter.diagnoses;
+          console.log('this.formValues', this.formValues);
+          this.cdRef.detectChanges();
+        });
   }
 
   getInvalidDiseases() {
@@ -185,8 +197,27 @@ export class CardHealthStatusComponent implements OnInit {
     }
   }
 
-  addDiagnosisAfter() {
-    this.dialog.open(AddDiagnosisAfterComponent, {panelClass: '__add-diagnosis-after'});
+  addDiagnosisAfter(action?, obj?) {
+    const dialogRef = this.dialog.open(AddDiagnosisAfterComponent, {
+      panelClass: '__add-diagnosis-after',
+      data: obj
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('result', result);
+      const healthStatusAfterObj = {
+        ...this.formValues,
+        healthStatusAfter: result.data.healthStatusAfter
+      };
+      this.cardThirteenYService.setTabCurrentValues(healthStatusAfterObj);
+      console.log('healthStatusAfterObj', healthStatusAfterObj);
+    });
+  }
+
+  addRowDiagnosisAfter(diagnosis) {
+    console.log('diagnosis', diagnosis);
+
+
+    console.log('this.formValues', this.formValues);
   }
 
   editDiagnosisAfter(diagnosis: IDiagnoses, event) {

@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectionStrategy, Inject, ChangeDetectorRef} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy, Inject, ChangeDetectorRef, Optional} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {CardThirteenYService} from '../../../card-thirteen-y.service';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
@@ -20,11 +20,12 @@ import {DictionaryService} from '../../../../../service/dictionary.service';
 })
 export class AddDiagnosisAfterComponent implements OnInit {
   addDiagnosisAfterForm!: FormGroup;
-
   diagnosticObservationValues!: DispensaryObservation[];
   diagnosisList!: Mkb10[];
   treatmentCondition!: TreatmentCondition[];
   treatmentOrganizationTypes!: TreatmentOrganizationType[];
+  private formValues!: any;
+  private localData: any;
 
   medOrganizationTypeVisible = true;
   medOrgTypeAppointedVisible = true;
@@ -36,7 +37,8 @@ export class AddDiagnosisAfterComponent implements OnInit {
               private cdRef: ChangeDetectorRef,
               private snackBar: MatSnackBar,
               private dialogRef: MatDialogRef<AddDiagnosisAfterComponent>,
-              @Inject(MAT_DIALOG_DATA) public diagnosisData: IDiagnoses) {
+              @Optional() @Inject(MAT_DIALOG_DATA) public diagnosisData: IDiagnoses) {
+    this.localData = {...diagnosisData};
   }
 
   ngOnInit() {
@@ -44,10 +46,13 @@ export class AddDiagnosisAfterComponent implements OnInit {
     if (this.diagnosisData) {
       this.setDiagnosisData();
     }
+    this.getInitValues();
     this.getDiagnosisList();
     this.getTreatmentOrganizationTypes();
     this.getDispensaryObservations();
     this.getTreatmentCondition();
+    this.checkFormChanges();
+    this.setHealthGroupData();
 
     this.changeMedOrganizationTypeVisibleState();
     this.changeAdditionalConsultationsAppointedVisibleState();
@@ -100,6 +105,11 @@ export class AddDiagnosisAfterComponent implements OnInit {
     }
   }
 
+  getInitValues() {
+    this.cardThirteenYService.activeTabInitValues
+        .subscribe(card => this.formValues = card);
+  }
+
   getDispensaryObservations() {
     this.dictionaryService.getDispensaryObservations().subscribe(data => {
       this.diagnosticObservationValues = data;
@@ -134,6 +144,11 @@ export class AddDiagnosisAfterComponent implements OnInit {
           this.cdRef.detectChanges();
         });
     });
+  }
+
+  checkFormChanges() {
+    this.addDiagnosisAfterForm.valueChanges
+        .subscribe(data => this.cardThirteenYService.setSelectedTabCurrentValues(data));
   }
 
   changeMedOrganizationTypeVisibleState() {
@@ -178,8 +193,57 @@ export class AddDiagnosisAfterComponent implements OnInit {
       .setValue(this.diagnosisData.diagnosis);
   }
 
+  setHealthGroupData() {
+    this.addDiagnosisAfterForm.valueChanges.subscribe(val => {
+      this.localData = {
+        healthStatusAfter: {
+            healthGood: val.almostHealthy,
+            diagnoses: [
+              {
+                dispensaryObservation: {
+                  id: val.dispensaryObservation
+                },
+                diagnosisFirst: val.diagnosisFirstTime,
+                treatmentCondition: {
+                  id: val.treatmentPrescribed.ambulatoryConditions
+                },
+                treatmentConditionOrg: {
+                  id: val.treatmentPrescribed.medOrganizationType
+                },
+                consulNeed: {
+                  id: val.additionalConsultationsAppointed.isAdditionalConsultation
+                },
+                consulNeedOrg: {
+                  id: val.additionalConsultationsAppointed.medOrgTypeAppointed
+                },
+                consulDone: {
+                  id: val.additionalConsultationsDone.isAdditionalConsultation
+                },
+                consulDoneOrg: {
+                  id: val.additionalConsultationsDone.medOrgTypeDone
+                },
+                rehabilNeed: {
+                  id: val.medSklPrescribed.sklPrescribedAmbulatoryConditions
+                },
+                rehabilNeedOrg: {
+                  id: val.medSklPrescribed.sklPrescribedMedType
+                },
+                needVmp: {
+                  id: val.medicalHelp
+                },
+                recommend: val.recommendations,
+                mkb10: {
+                  id: val.diagnosisInfo.diagnosisId
+                }
+              },
+            ]
+          }
+      };
+    });
+  }
+
   saveAndClose() {
-    this.dialogRef.close();
+    this.dialogRef.close({data: this.localData});
     this.snackBar.open('Диагноз добавлен', 'ОК', {
       duration: 5000
     });
