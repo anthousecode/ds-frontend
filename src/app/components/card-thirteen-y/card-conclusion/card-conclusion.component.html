@@ -32,102 +32,104 @@
     <div class="conclusion__section"
          formGroupName="opinionForm">
         <p class="conclusion__title">Заключение</p>
-        <div class="conclusion__field-block">
-            <div class="conclusion__field-block-opinion">
-                <div class="conclusion__health-group">
-                    <mat-form-field floatLabel="auto"
-                                    class="conclusion__input-field">
-                        <mat-label id="health-group-label">Группа здоровья</mat-label>
-                        <mat-select formControlName="healthGroup"
-                                    aria-labelledby="health-group-label"
-                                    required>
-                            <mat-option *ngFor="let group of healthGroup"
-                                        [value]="group.id">
-                                {{group.name}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <div class="conclusion__date">
-                        <mat-form-field floatLabel="auto"
-                                        class="conclusion__date-field">
-                            <input matInput
-                                   [matDatepicker]="datepickerDate"
-                                   placeholder="Дата заключения"
-                                   formControlName="date"
-                                   matTooltip="Допустимый интервал: от даты начала обследования до текущей даты"
-                                   [max]="maxDate"
-                                   autocomplete="off"
-                                   (click)="openDatepicker(datepickerDate)"
-                                   required>
-                            <mat-error
-                                    *ngIf="cardThirteenYService.getControls(conclusionForm, 'opinionForm').date.invalid">
-                                Выберите дату
-                            </mat-error>
-                            <mat-datepicker class="__mainbar-header" #datepickerDate></mat-datepicker>
-                        </mat-form-field>
-                    </div>
-                </div>
+        <div class="conclusion__base-info">
+            <div class="conclusion__health-group">
                 <mat-form-field floatLabel="auto"
                                 class="conclusion__input-field">
-                    <input matInput
-                           placeholder="Лицо, давшее заключение. Начните вводить ФИО врача"
-                           formControlName="doctor"
-                           required>
+                    <mat-label id="health-group-label">Группа здоровья</mat-label>
+                    <mat-select formControlName="healthGroup"
+                                aria-labelledby="health-group-label"
+                                required>
+                        <mat-option *ngFor="let group of healthGroupFiltered"
+                                    [value]="group.id">
+                            {{group.name}}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
-                <mat-form-field floatLabel="auto"
+                <div class="conclusion__date">
+                    <mat-form-field floatLabel="auto"
+                                    class="conclusion__date-field">
+                        <input matInput
+                               [matDatepicker]="datepickerDate"
+                               placeholder="Дата заключения"
+                               formControlName="date"
+                               matTooltip="Допустимый интервал: от даты начала обследования до текущей даты"
+                               [max]="maxDate"
+                               autocomplete="off"
+                               (click)="openDatepicker(datepickerDate)"
+                               required>
+                        <mat-error
+                                *ngIf="cardThirteenYService.getControls(conclusionForm, 'opinionForm').date.invalid">
+                            Выберите дату
+                        </mat-error>
+                        <mat-datepicker class="__mainbar-header" #datepickerDate></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+            <mat-form-field floatLabel="always"
+                            class="conclusion__input-field">
+                <mat-label>Лицо, давшее заключение</mat-label>
+                <input matInput
+                       placeholder="Начните вводить ФИО врача"
+                       formControlName="doctor"
+                       required>
+            </mat-form-field>
+            <mat-form-field floatLabel="always"
+                            class="conclusion__input-field">
+                <mat-label>Рекомендации</mat-label>
+                <input matInput
+                       placeholder="Рекомендации по формированию здорового образа жизни, режиму дня, питанию, физическому развитию, иммунопрофилактике, занятиям физической культурой"
+                       formControlName="recommendation"
+                       required>
+            </mat-form-field>
+            <div class="conclusion__exam-failed-chbox">
+                <mat-checkbox #medicalExamination
+                              formControlName="medicalExamination">
+                    Диспансеризация не выполнена
+                </mat-checkbox>
+            </div>
+            <div class="conclusion__reasons">
+                <mat-form-field floatLabel="always"
                                 class="conclusion__input-field">
-                    <input matInput
-                           placeholder="Рекомендации по формированию здорового образа жизни, режиму дня,
-                              питанию, физическому развитию, иммунопрофилактике, занятиям физической культурой"
-                           formControlName="recommendation"
-                           required>
+                    <mat-label id="missedReasons-label">Причина невыполнения диспансеризации</mat-label>
+                    <mat-select formControlName="missedReasons"
+                                placeholder="Выберите причину невыполнения"
+                                #missedReason
+                                aria-labelledby="missedReasons-label"
+                                (selectionChange)="isDisabledMissedReasons($event)"
+                                required="medicalExamination.checked">
+                        <mat-option *ngFor="let reason of missedReasons"
+                                    [value]="reason.id">
+                            {{reason.name}}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
-                <div class="conclusion__exam-failed-chbox">
-                    <mat-checkbox #medicalExamination
-                                  formControlName="medicalExamination">
-                        Диспансеризация не выполнена
-                    </mat-checkbox>
-                </div>
-                <div class="conclusion__reasons">
-                    <mat-form-field floatLabel="auto"
-                                    class="conclusion__input-field">
-                        <mat-label id="missedReasons-label">Выберите причину невыполнения</mat-label>
-                        <mat-select formControlName="missedReasons"
-                                    #missedReason
-                                    aria-labelledby="missedReasons-label"
-                                    (selectionChange)="isDisabledMissedReasons($event)"
-                                    required="medicalExamination.checked">
-                            <mat-option *ngFor="let reason of missedReasons"
-                                        [value]="reason.id">
-                                {{reason.name}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <mat-form-field floatLabel="auto"
-                                    class="conclusion__input-field">
-                        <mat-label id="absence-label">Выберите причину отсутствия</mat-label>
-                        <mat-select formControlName="absence"
-                                    aria-labelledby="absence-label"
-                                    required="missedReason.source.value === 1">
-                            <mat-option *ngFor="let reason of absenceReasons"
-                                        [value]="reason.id">
-                                {{reason.name}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <mat-form-field floatLabel="auto"
+                <mat-form-field floatLabel="always"
                                 class="conclusion__input-field">
-          <textarea matInput
-                    placeholder="Укажите иную причину"
-                    formControlName="nonExecutionTextarea"
-                    cdkTextareaAutosize
-                    #autosize="cdkTextareaAutosize"
-                    cdkAutosizeMinRows="1"
-                    required>
-          </textarea>
+                    <mat-label id="absence-label">Причина отсутствия на момент проведения диспансеризации</mat-label>
+                    <mat-select formControlName="absence"
+                                placeholder="Выберите причину отсутствия"
+                                aria-labelledby="absence-label"
+                                required="missedReason.source.value === 1">
+                        <mat-option *ngFor="let reason of absenceReasons"
+                                    [value]="reason.id">
+                            {{reason.name}}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
             </div>
+            <mat-form-field floatLabel="always"
+                            class="conclusion__input-field">
+                <mat-label>Причина невыполнения</mat-label>
+                <textarea matInput
+                          placeholder="Укажите иную причину"
+                          formControlName="nonExecutionTextarea"
+                          cdkTextareaAutosize
+                          #autosize="cdkTextareaAutosize"
+                          cdkAutosizeMinRows="1"
+                          required>
+                </textarea>
+            </mat-form-field>
         </div>
     </div>
 </form>

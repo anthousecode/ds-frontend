@@ -26,6 +26,11 @@
     }
   }
 
+  &__base-info {
+    display: flex;
+    flex-direction: column;
+  }
+
   &__input-field {
     textarea {
       width: 100%;

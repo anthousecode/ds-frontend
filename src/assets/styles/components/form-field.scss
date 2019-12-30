@@ -1,7 +1,8 @@
 .__card-main,
 .__health-status,
 .__add-diagnosis-before,
-.__add-diagnosis-after {
+.__add-diagnosis-after,
+.__conclusion {
   mat-form-field {
     &.__chips-disabled {
       pointer-events: none;
@@ -12,11 +13,6 @@
         background-size: 4px 100%;
         background-repeat: repeat-x;
       }
-    }
-
-    .mat-select,
-    .mat-input-element {
-      height: auto !important;
     }
 
     &.card-main__location-place,
@@ -39,6 +35,15 @@
 
       input {
         height: auto !important;
+      }
+    }
+
+    &.health-status__disability-first-date,
+    &.health-status__disability-last-date {
+      margin-top: 5px;
+
+      @media (max-width: 992px) {
+        margin-top: 0;
       }
     }
 
@@ -105,5 +110,16 @@
 
   .mat-select-value {
     font-size: 16px;
+  }
+}
+
+.__card-main,
+.__health-status,
+.__add-diagnosis-after {
+  mat-form-field {
+    .mat-select,
+    .mat-input-element {
+      height: auto !important;
+    }
   }
 }

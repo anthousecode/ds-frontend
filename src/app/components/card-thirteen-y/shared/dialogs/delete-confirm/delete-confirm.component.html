@@ -1,4 +1,4 @@
-<p class="delete-confirm__title">Вы уверены, что хотите удалить диагноз?</p>
+<p class="delete-confirm__title">{{'Вы уверены, что хотите удалить ' + getDeleteKey() + '?'}}</p>
 <div class="delete-confirm__buttons">
   <button class="delete-confirm__button-item" mat-dialog-close>Нет</button>
   <button class="delete-confirm__button-item" (click)="deleteData()">Да</button>

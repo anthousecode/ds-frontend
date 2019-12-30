@@ -2,11 +2,11 @@ import {Component, OnInit, ChangeDetectionStrategy, ViewChild, ChangeDetectorRef
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {CardThirteenYService} from '../card-thirteen-y.service';
 import {IDiagnoses} from '../shared/interfaces/diagnoses.interface';
-import {Observable} from 'rxjs';
+import {Observable, pipe} from 'rxjs';
 import {MatDatepicker, MatDialog, MatAutocomplete, MatAutocompleteSelectedEvent} from '@angular/material';
 import {AddDiagnosisComponent} from '../shared/dialogs/add-diagnosis/add-diagnosis.component';
 import {AddDiagnosisAfterComponent} from '../shared/dialogs/add-diagnosis-after/add-diagnosis-after.component';
-import {debounceTime} from 'rxjs/operators';
+import {debounceTime, flatMap, map, startWith, switchMap, tap} from 'rxjs/operators';
 import {DeleteConfirmComponent} from '../shared/dialogs/delete-confirm/delete-confirm.component';
 import {DictionaryService} from '../../../service/dictionary.service';
 import {HealthGroup, InvalidType, ReabilitationStatus} from '../../../models/dictionary.model';
@@ -22,33 +22,37 @@ export class CardHealthStatusComponent implements OnInit {
     @ViewChild('datepickerFirstDate') datepickerFirstDate!: MatDatepicker<any>;
     @ViewChild('datepickerLastDate') datepickerLastDate!: MatDatepicker<any>;
     @ViewChild('rehabilitationDate') rehabilitationDate!: MatDatepicker<any>;
+    @ViewChild('invalidDiseasesInput') invalidDiseasesInput: ElementRef<HTMLInputElement>;
+    @ViewChild('disabilityDisordersInput') disabilityDisordersInput: ElementRef<HTMLInputElement>;
+    @ViewChild('auto') matAutocomplete: MatAutocomplete;
+    @ViewChild('auto2') matAutocomplete2: MatAutocomplete;
     healthStatusForm!: FormGroup;
     healthStatusList$!: Observable<HealthGroup[]>;
     diagnosisList!: Observable<IDiagnoses[]>;
     diagnosisListAfter!: Observable<IDiagnoses[]>;
     disabilityTypeList$!: Observable<InvalidType[]>;
     doneList$!: Observable<ReabilitationStatus[]>;
+    private filteredDiseases$: Observable<any[]>;
+    private filteredDisorders$: Observable<any[]>;
     isChipsDisabled!: boolean;
-    maxDate = new Date();
-    disabilityDisabledControlList = [
-        'disabilityFirstDate',
-        'disabilityLastDate',
-        'disabilityDiseases',
-        'disabilityDisorders',
-        'rehabilitationDate'
-    ];
+    formValues!: any;
+    invalidDiseasesQuery!: any;
+    disordersQuery!: any;
 
     separatorKeysCodes: number[] = [ENTER];
     invalidDiseasesChips = [];
     disabilityDisordersChips = [];
     invalidDiseases = [];
     disabilityDisorders = [];
-
-    @ViewChild('invalidDiseasesInput') invalidDiseasesInput: ElementRef<HTMLInputElement>;
-    @ViewChild('disabilityDisordersInput') disabilityDisordersInput: ElementRef<HTMLInputElement>;
-    @ViewChild('auto') matAutocomplete: MatAutocomplete;
-    @ViewChild('auto2') matAutocomplete2: MatAutocomplete;
-    formValues!: any;
+    maxDate = new Date();
+    disabilityDisabledControlList = [
+        'disabilityFirstDate',
+        'disabilityLastDate',
+        'disabilityDiseases',
+        'disabilityDisorders',
+        'rehabilitationDate',
+        'rehabilitationPerformance'
+    ];
 
     constructor(private cardThirteenYService: CardThirteenYService,
                 private dictionaryService: DictionaryService,
@@ -74,6 +78,8 @@ export class CardHealthStatusComponent implements OnInit {
         this.disabilityTypeChange();
         this.disableRehabilitationPerformance();
         this.setDisabilityData();
+        this.filterDiseases();
+        this.filterDisorders();
 
         this.checkFormChanges();
     }
@@ -97,60 +103,80 @@ export class CardHealthStatusComponent implements OnInit {
             }),
             disability: new FormGroup({
                 disabilityType: new FormControl(1, [Validators.required]),
-                disabilityFirstDate: new FormControl({value: ''}, [Validators.required]),
-                disabilityLastDate: new FormControl({value: ''}, [Validators.required]),
-                disabilityDiseases: new FormControl({value: ''}, [Validators.required]),
-                disabilityDisorders: new FormControl({value: ''}, [Validators.required]),
-                rehabilitationDate: new FormControl({value: ''}, [Validators.required]),
-                rehabilitationPerformance: new FormControl({value: ''}, [Validators.required])
+                disabilityFirstDate: new FormControl('', [Validators.required]),
+                disabilityLastDate: new FormControl('', [Validators.required]),
+                disabilityDiseases: new FormControl('', [Validators.required]),
+                disabilityDisorders: new FormControl('', [Validators.required]),
+                rehabilitationDate: new FormControl('', [Validators.required]),
+                rehabilitationPerformance: new FormControl('', [Validators.required])
             })
         });
     }
 
     getInitValues() {
-        this.cardThirteenYService.activeTabInitValues
-            .subscribe(data => {
-                this.formValues = data;
-                console.log(data);
-                this.setFormInitValues(data);
-                this.cardThirteenYService.setSelectedTabInitValues(this.healthStatusForm.value);
-            });
+        this.cardThirteenYService.activeTabInitValues.subscribe(data => {
+            this.formValues = data;
+            console.log(data);
+            this.getInvalidDiseases();
+            this.getDisabilityDisorders();
+            this.setFormInitValues(data);
+            this.cardThirteenYService.setSelectedTabInitValues(this.healthStatusForm.value);
+        });
     }
 
     setFormInitValues(data) {
         if (data.disability) {
             if (data.disability.disabilityType) {
                 this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityType
-                    .setValue(data.disability.disabilityType.id);
-                data.disability.disabilityType.id === 1 ? this.disableDisabilityControls() : this.enableDisabilityControls();
+                    .setValue(data.disability.disabilityType.id, {emitEvent: false});
+                if (data.disability.disabilityType.id === 1) {
+                    this.disableDisabilityControls();
+                }
             }
             if (data.disability.firstSetDate) {
                 this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityFirstDate
-                    .setValue(data.disability.firstSetDate);
+                    .setValue(data.disability.firstSetDate, {emitEvent: false});
             }
             if (data.disability.lastExamDate) {
                 this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityLastDate
-                    .setValue(data.disability.lastExamDate);
+                    .setValue(data.disability.lastExamDate, {emitEvent: false});
+            }
+            if (data.disability.iprDate) {
+                this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').rehabilitationDate
+                    .setValue(data.disability.iprDate, {emitEvent: false});
+            }
+            if (data.disability.iprStatus) {
+                this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').rehabilitationPerformance
+                    .setValue(data.disability.iprStatus.id, {emitEvent: false});
             }
         }
     }
 
     setDisabilityData() {
-        this.healthStatusForm.controls.disability.valueChanges.subscribe(data => {
-            console.log(data)
-            const disabilityObj = {
-                ...this.formValues,
-                disability: {
-                    disabilityType: {
-                        id: data.disabilityType
-                    },
-                    firstSetDate: this.getDateFormat(data.disabilityFirstDate),
-                    lastExamDate: this.getDateFormat(data.disabilityLastDate),
-                }
-            };
-            // console.log(disabilityObj)
-            this.cardThirteenYService.setTabCurrentValues(disabilityObj);
-        });
+        this.healthStatusForm.controls.disability.valueChanges
+            .pipe(debounceTime(500))
+            .subscribe(data => {
+                console.log(data)
+                const diseasesChipsArr = this.invalidDiseasesQuery.filter(item => this.invalidDiseasesChips.includes(item.name));
+                const disordersChipsArr = this.disordersQuery.filter(item => this.disabilityDisordersChips.includes(item.name));
+                const disabilityObj = {
+                    ...this.formValues,
+                    disability: {
+                        disabilityType: {
+                            id: data.disabilityType
+                        },
+                        firstSetDate: this.getDateFormat(data.disabilityFirstDate),
+                        lastExamDate: this.getDateFormat(data.disabilityLastDate),
+                        diseases: diseasesChipsArr,
+                        healthDisorders: disordersChipsArr,
+                        iprDate: this.getDateFormat(data.rehabilitationDate),
+                        iprStatus: {
+                            id: data.rehabilitationPerformance
+                        }
+                    }
+                };
+                this.cardThirteenYService.setTabCurrentValues(disabilityObj);
+            });
     }
 
     getDateFormat(date) {
@@ -161,72 +187,99 @@ export class CardHealthStatusComponent implements OnInit {
         }
     }
 
+    private _filterChips(value: string, chipsControl: string): any[] {
+        const filterValue = value.toLowerCase();
+        return this[chipsControl].filter(item => item.toLowerCase().indexOf(filterValue) === 0);
+    }
+
+    private filterDiseases() {
+        this.filteredDiseases$ = this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityDiseases.valueChanges
+            .pipe(
+                debounceTime(300),
+                startWith(null),
+                map((vaccination: string | null) => vaccination ?
+                    this._filterChips(vaccination, 'invalidDiseases').sort() :
+                    this.invalidDiseases.slice())
+            );
+    }
+
     getInvalidDiseases() {
         this.dictionaryService.getInvalidDiseases()
             .subscribe(invalidDiseases => {
-                    this.invalidDiseases = [];
-                    for (const invalidDisease of invalidDiseases) {
-                        const index = this.invalidDiseasesChips.indexOf(invalidDisease.name);
-                        if (index === -1) {
-                            this.invalidDiseases.push(invalidDisease.name);
-                        }
-                    }
-                    this.cdRef.detectChanges();
+                    this.invalidDiseasesQuery = invalidDiseases;
+                    this.invalidDiseases = invalidDiseases.map(item => item.name);
+                    this.cdRef.markForCheck();
+                    this.setInitDiseases();
                 }
+            );
+    }
+
+    setInitDiseases() {
+        if (this.formValues.disability.diseases) {
+            const initDiseases = this.formValues.disability.diseases.map(item => item.name);
+            this.invalidDiseasesChips = initDiseases;
+            this.invalidDiseases = this.invalidDiseases.filter(item => !initDiseases.includes(item));
+            this.cdRef.markForCheck();
+        }
+    }
+
+    addInvalidDiseasesChip(event: MatAutocompleteSelectedEvent) {
+        this.invalidDiseasesChips.push(event.option.viewValue);
+        this.invalidDiseases = this.invalidDiseases.filter((item) => item !== event.option.viewValue);
+        this.cdRef.detectChanges();
+        this.invalidDiseasesInput.nativeElement.value = '';
+    }
+
+    removeInvalidDiseasesChip(chip: string) {
+        this.invalidDiseasesChips = this.invalidDiseasesChips.filter((item) => item !== chip);
+        this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityType
+            .setValue(this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityType.value);
+        this.cdRef.detectChanges();
+        this.invalidDiseases = this.invalidDiseases.concat([chip]);
+    }
+
+    private filterDisorders() {
+        this.filteredDisorders$ = this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityDisorders
+            .valueChanges.pipe(
+                debounceTime(300),
+                startWith(null),
+                map((vaccination: string | null) => vaccination ? this._filterChips(vaccination, 'disabilityDisorders').sort() :
+                    this.disabilityDisorders.slice())
             );
     }
 
     getDisabilityDisorders() {
         this.dictionaryService.getHealthDisorders()
             .subscribe(disabilityDisorders => {
-                this.disabilityDisorders = [];
-                for (const disabilityDisorder of disabilityDisorders) {
-                    const index = this.disabilityDisordersChips.indexOf(disabilityDisorder.name);
-                    if (index === -1) {
-                        this.disabilityDisorders.push(disabilityDisorder.name);
-                    }
-                }
-
-                this.cdRef.detectChanges();
+                this.disordersQuery = disabilityDisorders;
+                this.disabilityDisorders = disabilityDisorders.map(item => item.name);
+                this.cdRef.markForCheck();
+                this.setInitDisorders();
             });
     }
 
-    addInvalidDiseasesChip(event: MatAutocompleteSelectedEvent) {
-        this.invalidDiseasesChips.push(event.option.viewValue);
-        const index = this.invalidDiseases.indexOf(event.option.viewValue);
-        if (index >= 0) {
-            this.invalidDiseases.splice(index, 1);
+    setInitDisorders() {
+        if (this.formValues.disability.healthDisorders) {
+            const initDisorders = this.formValues.disability.healthDisorders.map(item => item.name);
+            this.disabilityDisordersChips = initDisorders;
+            this.disabilityDisorders = this.disabilityDisorders.filter(item => !initDisorders.includes(item));
+            this.cdRef.markForCheck();
         }
-        this.invalidDiseasesInput.nativeElement.blur();
-        this.cdRef.detectChanges();
-    }
-
-    removeInvalidDiseasesChip(chip: string) {
-        const index = this.invalidDiseasesChips.indexOf(chip);
-        this.invalidDiseasesChips.splice(index, 1);
-        this.invalidDiseases.push(chip);
-        this.invalidDiseasesInput.nativeElement.blur();
-        this.cdRef.detectChanges();
     }
 
     addDisabilityDisordersChip(event: MatAutocompleteSelectedEvent) {
         this.disabilityDisordersChips.push(event.option.viewValue);
-        const index = this.disabilityDisorders.indexOf(event.option.viewValue);
-
-        if (index >= 0) {
-            this.disabilityDisorders.splice(index, 1);
-        }
-
-        this.disabilityDisordersInput.nativeElement.blur();
+        this.disabilityDisorders = this.disabilityDisorders.filter((item) => item !== event.option.viewValue);
         this.cdRef.detectChanges();
+        this.disabilityDisordersInput.nativeElement.value = '';
     }
 
     removeDisabilityDisordersChip(chip: string) {
-        const index = this.disabilityDisordersChips.indexOf(chip);
-        this.disabilityDisordersChips.splice(index, 1);
-        this.disabilityDisorders.push(chip);
-        this.invalidDiseasesInput.nativeElement.blur();
+        this.disabilityDisordersChips = this.disabilityDisordersChips.filter((item) => item !== chip);
+        this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityType
+            .setValue(this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityType.value);
         this.cdRef.detectChanges();
+        this.disabilityDisorders = this.disabilityDisorders.concat([chip]);
     }
 
     checkDeleteClass(event) {
@@ -280,8 +333,8 @@ export class CardHealthStatusComponent implements OnInit {
         this.disabilityDisabledControlList.forEach((item) => {
             this.cardThirteenYService.getControls(this.healthStatusForm, 'disability')[item].enable();
         });
-        this.getInvalidDiseases();
-        this.getDisabilityDisorders();
+        this.invalidDiseases = this.invalidDiseasesQuery.map(item => item.name);
+        this.disabilityDisorders = this.disordersQuery.map(item => item.name);
     }
 
     deleteDiagnosis() {

@@ -68,7 +68,7 @@ export class CardDevelopmentAssessmentComponent implements OnInit {
             }
           }
           this.cardThirteenYService.setSelectedTabInitValues(this.devAssessmentForm.value);
-          this.cdRef.detectChanges();
+          this.cdRef.markForCheck();
         });
   }
 

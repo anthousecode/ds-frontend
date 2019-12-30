@@ -55,7 +55,6 @@ export class CardResearchComponent implements OnInit {
     this.getInitValues();
     this.setAdditionalExaminations();
     this.checkIsFormValid();
-    this.cardThirteenYService.setSelectedTabCurrentValues(null);
     this.checkFormChanges();
   }
 
@@ -75,7 +74,6 @@ export class CardResearchComponent implements OnInit {
   checkFormChanges() {
     this.researchFormGroup.valueChanges.subscribe(data => {
       this.cardThirteenYService.setSelectedTabCurrentValues(data);
-      console.log(data)
     });
   }
 
@@ -97,9 +95,9 @@ export class CardResearchComponent implements OnInit {
         );
         this.requiredExaminations.push(examination);
       });
-
       this.setRequiredExaminations();
       this.cdRef.detectChanges();
+      this.cardThirteenYService.setSelectedTabCurrentValues(null);
     });
   }
 
@@ -122,8 +120,6 @@ export class CardResearchComponent implements OnInit {
           exam: this.requiredExaminations[i],
           result
         };
-
-        console.log(this.formValues);
         this.cardThirteenYService.setTabCurrentValues(this.formValues);
       });
     }
@@ -153,6 +149,7 @@ export class CardResearchComponent implements OnInit {
         formValues: this.formValues,
         additionalExaminations: this.additionalExaminations,
         i,
+        key: 'research',
         cdRef: this.cdRef
       }
     });
@@ -167,6 +164,7 @@ export class CardResearchComponent implements OnInit {
           formValues: this.formValues,
           additionalExaminations: this.additionalExaminations,
           cdRef: this.cdRef,
+          mode: 'edit',
           exam,
           i
         }

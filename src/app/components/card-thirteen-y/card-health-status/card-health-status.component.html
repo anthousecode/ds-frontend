@@ -152,7 +152,7 @@
         </mat-chip>
       </mat-chip-list>
       <input matInput
-             placeholder="Заболевания, обуславливающие возникновение инвалидности:"
+             placeholder="Заболевания, обусловившие возникновение инвалидности:"
              formControlName="disabilityDiseases"
              #invalidDiseasesInput
              [matAutocomplete]="auto"
@@ -161,7 +161,7 @@
              required>
       <mat-autocomplete #auto="matAutocomplete"
                         (optionSelected)="addInvalidDiseasesChip($event)">
-        <mat-option *ngFor="let invalidDisease of invalidDiseases"
+        <mat-option *ngFor="let invalidDisease of filteredDiseases$ | async"
                     [value]="invalidDisease">
           {{ invalidDisease }}
         </mat-option>
@@ -192,7 +192,7 @@
              required>
       <mat-autocomplete #auto2="matAutocomplete"
                         (optionSelected)="addDisabilityDisordersChip($event)">
-        <mat-option *ngFor="let disabilityDisorder of disabilityDisorders"
+        <mat-option *ngFor="let disabilityDisorder of filteredDisorders$ | async"
                     [value]="disabilityDisorder">
           {{ disabilityDisorder }}
         </mat-option>
