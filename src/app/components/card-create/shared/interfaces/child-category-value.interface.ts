@@ -1,4 +1,4 @@
-export interface ChildCategoryValue {
+export interface IChildCategoryValue {
   id: number;
   categoryName: string;
 }

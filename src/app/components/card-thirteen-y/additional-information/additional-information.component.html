@@ -1,17 +1,44 @@
 <p class="additional-info__title">Дополнительная информация</p>
-<div class="additional-info__block"
-     *ngFor="let blockItem of additionalInfoData | async">
-  <p class="additional-info__block-title">{{blockItem.title}}</p>
-  <p class="additional-info__block-general-info"
-     matTooltip="Перейти к карту ребёнка"
-     (click)="toPatientCard()"
-     *ngIf="blockItem.generalInfo">
-    {{blockItem.generalInfo}}
-  </p>
-  <div class="additional-info__block-item"
-       *ngFor="let item of blockItem.blockInfo">
-    <p class="additional-info__item-label">{{item.label}}:
-      <span class="additional-info__item-value">{{item.value}}</span>
+<div class="additional-info__block">
+    <p class="additional-info__block-title">Общие сведения об обследовании</p>
+    <p class="additional-info__item-label">Тип карты:
+        <span class="additional-info__item-value">{{cardInfo.type.name}}</span>
     </p>
-  </div>
+    <p class="additional-info__item-label">Статус карты:
+        <span class="additional-info__item-value">{{cardInfo.status.name}}</span>
+    </p>
+    <p class="additional-info__item-label">Организация, проводящая осмотр:
+        <span class="additional-info__item-value">{{cardInfo.organizationCheckup.shortName}}</span>
+    </p>
+</div>
+<div class="additional-info__block">
+    <p class="additional-info__block-title">Информация о ребенке</p>
+    <p class="additional-info__block-general-info"
+       matTooltip="Перейти к карту ребёнка"
+       (click)="toPatientCard()">
+        {{cardInfo.patient.lastName + ' ' + cardInfo.patient.firstName + ' ' + cardInfo.patient.patronymic}}
+        <span *ngIf="cardInfo.patient.snils">, СНИЛС {{cardInfo.patient.snils}}</span>
+    </p>
+    <p class="additional-info__item-label">Дата рождения:
+        <span class="additional-info__item-value">{{cardInfo.patient.birthdate | date: 'dd.MM.yyyy'}}</span>
+    </p>
+    <p class="additional-info__item-label">Пол:
+        <span class="additional-info__item-value">{{cardInfo.patient.sex.name}}</span>
+    </p>
+    <p class="additional-info__item-label">Возрастная группа:
+        <span class="additional-info__item-value">{{cardInfo.ageGroup.name}}</span>
+    </p>
+    <p class="additional-info__item-label">Категория ребёнка:
+        <span class="additional-info__item-value">{{cardInfo.childCategory.categoryName}}</span>
+    </p>
+</div>
+<div class="additional-info__block">
+    <p class="additional-info__block-title">Справочная информация</p>
+    <p class="additional-info__item-label">Возраст на момент проведения обследования:
+        <span class="additional-info__item-value">{{getAgeForCheckup()}}</span>
+    </p>
+    <p class="additional-info__item-label"
+       matTooltip="Индекс массы тела">
+        ИМТ: <span class="additional-info__item-value">{{calcIMT()}}</span>
+    </p>
 </div>

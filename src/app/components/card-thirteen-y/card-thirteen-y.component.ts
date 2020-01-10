@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectionStrategy, Inject, ChangeDetectorRef} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy, Inject, ChangeDetectorRef, Self} from '@angular/core';
 import {ICardThirteenYMenu} from './shared/interfaces/card-thirteen-y-menu.interface';
 import {CARD_THIRTEEN_Y_MENU} from './shared/data/card-thirteen-y-menu';
 import {trigger, style, animate, transition} from '@angular/animations';
@@ -16,7 +16,8 @@ import {CardService} from '../../@core/shared/services/card.service';
 import {TOKEN} from './shared/data/token';
 import {DoneCardComponent} from './shared/dialogs/done-card/done-card.component';
 import {BlockCardComponent} from './shared/dialogs/block-card/block-card.component';
-import {debounceTime, skip} from 'rxjs/operators';
+import {skip, takeUntil} from 'rxjs/operators';
+import {NgOnDestroy} from '../../@core/shared/services/destroy.service';
 
 @Component({
     selector: 'app-card-thirteen-y',
@@ -33,7 +34,8 @@ import {debounceTime, skip} from 'rxjs/operators';
     ],
     templateUrl: './card-thirteen-y.component.html',
     styleUrls: ['./card-thirteen-y.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [NgOnDestroy]
 })
 export class CardThirteenYComponent implements OnInit {
     menuItems: ICardThirteenYMenu[] = CARD_THIRTEEN_Y_MENU;
@@ -58,7 +60,8 @@ export class CardThirteenYComponent implements OnInit {
                 private snackBar: MatSnackBar,
                 private cardService: CardService,
                 private cdRef: ChangeDetectorRef,
-                private eventManager: EventManager) {
+                private eventManager: EventManager,
+                @Self() private onDestroy$: NgOnDestroy) {
         this.eventManager.addGlobalEventListener('window', 'resize', () => {
             this.innerWidth = this.document.body.offsetWidth;
             if (this.innerWidth <= 1300) {
@@ -81,44 +84,53 @@ export class CardThirteenYComponent implements OnInit {
     }
 
     getValidState() {
-        this.cardThirteenYService.isActiveTabValid.subscribe(state => {
-            this.isTabValid = state;
-            this.cdRef.detectChanges();
-        });
+        this.cardThirteenYService.isActiveTabValid
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe((state: boolean) => {
+                this.isTabValid = state;
+                this.cdRef.detectChanges();
+            });
     }
 
     getCardInfo() {
-        this.cardThirteenYService.getCardInfo(this.cardId).subscribe(data => {
-            this.cardInfo = data;
-            this.cardThirteenYService.setTabInitValues(data);
-        });
+        this.cardThirteenYService.getCardInfo(this.cardId)
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(data => {
+                this.cardInfo = data;
+                this.cardThirteenYService.setTabInitValues(data);
+            });
     }
 
     getActiveCardCurrentValues() {
         this.cardThirteenYService.activeTabCurrentValues
-            .pipe(skip(1))
-            .subscribe(data => {
-                this.formValues = data;
-            });
+            .pipe(
+                skip(1),
+                takeUntil(this.onDestroy$)
+            )
+            .subscribe(data => this.formValues = data);
     }
 
     getIsLoading() {
         this.cardThirteenYService.isLoading$
-            .subscribe(data => {
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe((data: boolean) => {
                 this.loading = data;
                 this.cdRef.detectChanges();
             });
     }
 
     checkActiveTab() {
-        this.cardThirteenYService.activeTab.subscribe(key => {
-            this.activeTabKey = key;
-            this.cdRef.markForCheck();
-        });
+        this.cardThirteenYService.activeTab
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe((key: string) => {
+                this.activeTabKey = key;
+                this.cdRef.markForCheck();
+            });
     }
 
     checkSelectedTabInitValues() {
         this.cardThirteenYService.selectedTabInitValues
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(data => {
                 this.selectedTabInitValues = data;
                 this.selectedTabInitValuesModified = JSON.stringify(data);
@@ -127,15 +139,17 @@ export class CardThirteenYComponent implements OnInit {
     }
 
     checkSelectedTabCurrentValues() {
-        this.cardThirteenYService.selectedTabCurrentValues.subscribe(data => {
-            if (data) {
-                this.selectedTabCurrentValues = data;
-                this.selectedTabCurrentValuesModified = JSON.stringify(data);
-            } else {
-                this.selectedTabCurrentValues = null;
-            }
-            this.cdRef.detectChanges();
-        });
+        this.cardThirteenYService.selectedTabCurrentValues
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(data => {
+                if (data) {
+                    this.selectedTabCurrentValues = data;
+                    this.selectedTabCurrentValuesModified = JSON.stringify(data);
+                } else {
+                    this.selectedTabCurrentValues = null;
+                }
+                this.cdRef.detectChanges();
+            });
     }
 
     changeTab(tabKey: string) {
@@ -145,13 +159,7 @@ export class CardThirteenYComponent implements OnInit {
                 this.cardThirteenYService.setActiveTab(tabKey);
             } else {
                 this.dialog.open(SaveConfirmComponent, {panelClass: '__save-confirm'}).afterClosed()
-                    .subscribe((value) => {
-                        if (value && value.save) {
-                            this.saveCard(tabKey);
-                        } else {
-                            this.cardThirteenYService.setActiveTab(tabKey);
-                        }
-                    });
+                    .subscribe((value) => value && value.save ? this.saveCard(tabKey) : this.cardThirteenYService.setActiveTab(tabKey));
             }
         }
     }
@@ -164,7 +172,10 @@ export class CardThirteenYComponent implements OnInit {
         if (this.innerWidth > 1300) {
             this.isAdditionalInfoVisible = !this.isAdditionalInfoVisible;
         } else {
-            this.dialog.open(AdditionalInformationComponent, {panelClass: '__additional-dialog'});
+            this.dialog.open(AdditionalInformationComponent, {
+                panelClass: '__additional-dialog',
+                data: this.cardInfo
+            });
         }
     }
 

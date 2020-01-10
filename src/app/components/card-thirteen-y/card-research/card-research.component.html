@@ -9,7 +9,6 @@
                [formControl]="requiredExaminationsArray.controls[i].controls.dateBegin" [max]="maxDate"
                (click)="openDatepicker(ii)"
                matTooltip="Допустимый интервал: от даты рождения ребенка до текущей даты" required>
-        <!-- <mat-datepicker-toggle matSuffix [for]="ii"></mat-datepicker-toggle> -->
         <mat-error *ngIf="requiredExaminationsArray.controls[i].controls.dateBegin.invalid">
           Выберите дату
         </mat-error>

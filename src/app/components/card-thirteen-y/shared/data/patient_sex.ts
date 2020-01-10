@@ -1,6 +1,3 @@
-export const PATIENT_SEX_MAN = 1;
-export const PATIENT_SEX_WOMAN = 2;
-
 export const PATIENT_SEX = {
     male: 1,
     female: 2

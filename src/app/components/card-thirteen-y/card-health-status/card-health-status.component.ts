@@ -1,22 +1,24 @@
-import {Component, OnInit, ChangeDetectionStrategy, ViewChild, ChangeDetectorRef, ElementRef} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy, ViewChild, ChangeDetectorRef, ElementRef, Self} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {CardThirteenYService} from '../card-thirteen-y.service';
 import {IDiagnoses} from '../shared/interfaces/diagnoses.interface';
-import {Observable, pipe} from 'rxjs';
+import {Observable} from 'rxjs';
 import {MatDatepicker, MatDialog, MatAutocomplete, MatAutocompleteSelectedEvent} from '@angular/material';
 import {AddDiagnosisComponent} from '../shared/dialogs/add-diagnosis/add-diagnosis.component';
 import {AddDiagnosisAfterComponent} from '../shared/dialogs/add-diagnosis-after/add-diagnosis-after.component';
-import {debounceTime, flatMap, map, startWith, switchMap, tap} from 'rxjs/operators';
+import {debounceTime, map, startWith, takeUntil} from 'rxjs/operators';
 import {DeleteConfirmComponent} from '../shared/dialogs/delete-confirm/delete-confirm.component';
 import {DictionaryService} from '../../../service/dictionary.service';
-import {HealthGroup, InvalidType, ReabilitationStatus} from '../../../models/dictionary.model';
+import {HealthDisorder, HealthGroup, InvalidDisease, InvalidType, ReabilitationStatus} from '../../../models/dictionary.model';
 import {ENTER} from '@angular/cdk/keycodes';
+import {NgOnDestroy} from '../../../@core/shared/services/destroy.service';
 
 @Component({
     selector: 'app-card-health-status',
     templateUrl: './card-health-status.component.html',
     styleUrls: ['./card-health-status.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [NgOnDestroy]
 })
 export class CardHealthStatusComponent implements OnInit {
     @ViewChild('datepickerFirstDate') datepickerFirstDate!: MatDatepicker<any>;
@@ -32,18 +34,20 @@ export class CardHealthStatusComponent implements OnInit {
     diagnosisListAfter!: Observable<IDiagnoses[]>;
     disabilityTypeList$!: Observable<InvalidType[]>;
     doneList$!: Observable<ReabilitationStatus[]>;
-    private filteredDiseases$: Observable<any[]>;
-    private filteredDisorders$: Observable<any[]>;
-    isChipsDisabled!: boolean;
     formValues!: any;
-    invalidDiseasesQuery!: any;
-    disordersQuery!: any;
 
+    private filteredDiseases$: Observable<string[]>;
+    invalidDiseasesQuery!: InvalidDisease[];
+    invalidDiseasesChips: string[] = [];
+    invalidDiseases: string[] = [];
+
+    private filteredDisorders$: Observable<string[]>;
+    disordersQuery!: HealthDisorder[];
+    disabilityDisordersChips: string[] = [];
+    disabilityDisorders: string[] = [];
+
+    isChipsDisabled!: boolean;
     separatorKeysCodes: number[] = [ENTER];
-    invalidDiseasesChips = [];
-    disabilityDisordersChips = [];
-    invalidDiseases = [];
-    disabilityDisorders = [];
     maxDate = new Date();
     disabilityDisabledControlList = [
         'disabilityFirstDate',
@@ -57,11 +61,11 @@ export class CardHealthStatusComponent implements OnInit {
     constructor(private cardThirteenYService: CardThirteenYService,
                 private dictionaryService: DictionaryService,
                 private dialog: MatDialog,
-                private cdRef: ChangeDetectorRef) {
-        this.cardThirteenYService.activeTabCurrentValues
-            .subscribe(data => {
-                this.formValues = data;
-            });
+                private cdRef: ChangeDetectorRef,
+                @Self() private onDestroy$: NgOnDestroy) {
+        // this.cardThirteenYService.activeTabCurrentValues
+        //     .pipe(takeUntil(this.onDestroy$))
+        //     .subscribe(data => this.formValues = data);
         this.cardThirteenYService.setActiveTabValid(true);
     }
 
@@ -80,20 +84,19 @@ export class CardHealthStatusComponent implements OnInit {
         this.setDisabilityData();
         this.filterDiseases();
         this.filterDisorders();
-
         this.checkFormChanges();
     }
 
     checkFormChanges() {
-        this.healthStatusForm.valueChanges.subscribe(data => {
-            this.cardThirteenYService.setSelectedTabCurrentValues(data);
-        });
+        this.healthStatusForm.valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(data => this.cardThirteenYService.setSelectedTabCurrentValues(data));
     }
 
     checkIsFormValid() {
-        this.healthStatusForm.valueChanges.subscribe(() => {
-            this.cardThirteenYService.setActiveTabValid(true);
-        });
+        this.healthStatusForm.valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(() => this.cardThirteenYService.setActiveTabValid(true));
     }
 
     initFormGroups() {
@@ -114,14 +117,15 @@ export class CardHealthStatusComponent implements OnInit {
     }
 
     getInitValues() {
-        this.cardThirteenYService.activeTabInitValues.subscribe(data => {
-            this.formValues = data;
-            console.log(data);
-            this.getInvalidDiseases();
-            this.getDisabilityDisorders();
-            this.setFormInitValues(data);
-            this.cardThirteenYService.setSelectedTabInitValues(this.healthStatusForm.value);
-        });
+        this.cardThirteenYService.activeTabInitValues
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(data => {
+                this.formValues = data;
+                this.getInvalidDiseases();
+                this.getDisabilityDisorders();
+                this.setFormInitValues(data);
+                this.cardThirteenYService.setSelectedTabInitValues(this.healthStatusForm.value);
+            });
     }
 
     setFormInitValues(data) {
@@ -154,9 +158,11 @@ export class CardHealthStatusComponent implements OnInit {
 
     setDisabilityData() {
         this.healthStatusForm.controls.disability.valueChanges
-            .pipe(debounceTime(500))
+            .pipe(
+                debounceTime(500),
+                takeUntil(this.onDestroy$)
+            )
             .subscribe(data => {
-                console.log(data)
                 const diseasesChipsArr = this.invalidDiseasesQuery.filter(item => this.invalidDiseasesChips.includes(item.name));
                 const disordersChipsArr = this.disordersQuery.filter(item => this.disabilityDisordersChips.includes(item.name));
                 const disabilityObj = {
@@ -187,7 +193,7 @@ export class CardHealthStatusComponent implements OnInit {
         }
     }
 
-    private _filterChips(value: string, chipsControl: string): any[] {
+    private _filterChips(value: string, chipsControl: string): string[] {
         const filterValue = value.toLowerCase();
         return this[chipsControl].filter(item => item.toLowerCase().indexOf(filterValue) === 0);
     }
@@ -199,19 +205,19 @@ export class CardHealthStatusComponent implements OnInit {
                 startWith(null),
                 map((vaccination: string | null) => vaccination ?
                     this._filterChips(vaccination, 'invalidDiseases').sort() :
-                    this.invalidDiseases.slice())
+                    this.invalidDiseases.slice()
+                )
             );
     }
 
     getInvalidDiseases() {
-        this.dictionaryService.getInvalidDiseases()
-            .subscribe(invalidDiseases => {
-                    this.invalidDiseasesQuery = invalidDiseases;
-                    this.invalidDiseases = invalidDiseases.map(item => item.name);
-                    this.cdRef.markForCheck();
-                    this.setInitDiseases();
-                }
-            );
+        this.dictionaryService.getInvalidDiseases().subscribe((invalidDiseases: InvalidDisease[]) => {
+                this.invalidDiseasesQuery = invalidDiseases;
+                this.invalidDiseases = invalidDiseases.map(item => item.name);
+                this.setInitDiseases();
+                this.cdRef.markForCheck();
+            }
+        );
     }
 
     setInitDiseases() {
@@ -226,16 +232,16 @@ export class CardHealthStatusComponent implements OnInit {
     addInvalidDiseasesChip(event: MatAutocompleteSelectedEvent) {
         this.invalidDiseasesChips.push(event.option.viewValue);
         this.invalidDiseases = this.invalidDiseases.filter((item) => item !== event.option.viewValue);
-        this.cdRef.detectChanges();
         this.invalidDiseasesInput.nativeElement.value = '';
+        this.cdRef.detectChanges();
     }
 
     removeInvalidDiseasesChip(chip: string) {
         this.invalidDiseasesChips = this.invalidDiseasesChips.filter((item) => item !== chip);
-        this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityType
-            .setValue(this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityType.value);
-        this.cdRef.detectChanges();
+        this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityFirstDate
+            .setValue(this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityFirstDate.value);
         this.invalidDiseases = this.invalidDiseases.concat([chip]);
+        this.cdRef.detectChanges();
     }
 
     private filterDisorders() {
@@ -244,18 +250,18 @@ export class CardHealthStatusComponent implements OnInit {
                 debounceTime(300),
                 startWith(null),
                 map((vaccination: string | null) => vaccination ? this._filterChips(vaccination, 'disabilityDisorders').sort() :
-                    this.disabilityDisorders.slice())
+                    this.disabilityDisorders.slice()
+                )
             );
     }
 
     getDisabilityDisorders() {
-        this.dictionaryService.getHealthDisorders()
-            .subscribe(disabilityDisorders => {
-                this.disordersQuery = disabilityDisorders;
-                this.disabilityDisorders = disabilityDisorders.map(item => item.name);
-                this.cdRef.markForCheck();
-                this.setInitDisorders();
-            });
+        this.dictionaryService.getHealthDisorders().subscribe((disabilityDisorders: HealthDisorder[]) => {
+            this.disordersQuery = disabilityDisorders;
+            this.disabilityDisorders = disabilityDisorders.map(item => item.name);
+            this.setInitDisorders();
+            this.cdRef.markForCheck();
+        });
     }
 
     setInitDisorders() {
@@ -269,30 +275,28 @@ export class CardHealthStatusComponent implements OnInit {
 
     addDisabilityDisordersChip(event: MatAutocompleteSelectedEvent) {
         this.disabilityDisordersChips.push(event.option.viewValue);
-        this.disabilityDisorders = this.disabilityDisorders.filter((item) => item !== event.option.viewValue);
-        this.cdRef.detectChanges();
+        this.disabilityDisorders = this.disabilityDisorders.filter(item => item !== event.option.viewValue);
         this.disabilityDisordersInput.nativeElement.value = '';
+        this.cdRef.detectChanges();
     }
 
     removeDisabilityDisordersChip(chip: string) {
-        this.disabilityDisordersChips = this.disabilityDisordersChips.filter((item) => item !== chip);
-        this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityType
-            .setValue(this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityType.value);
-        this.cdRef.detectChanges();
+        this.disabilityDisordersChips = this.disabilityDisordersChips.filter(item => item !== chip);
+        this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityFirstDate
+            .setValue(this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityFirstDate.value);
         this.disabilityDisorders = this.disabilityDisorders.concat([chip]);
+        this.cdRef.detectChanges();
     }
 
     checkDeleteClass(event) {
-        return event.path.find(element => {
-            return element.className === '__delete-diagnosis';
-        });
+        return event.path.find(element => element.className === '__delete-diagnosis');
     }
 
     addDiagnosis() {
         this.dialog.open(AddDiagnosisComponent, {panelClass: '__add-diagnosis-before'});
     }
 
-    editDiagnosis(diagnosis: IDiagnoses, event) {
+    editDiagnosis(diagnosis: IDiagnoses, event: MouseEvent) {
         if (!this.checkDeleteClass(event)) {
             this.dialog.open(AddDiagnosisComponent, {
                 panelClass: '__add-diagnosis-before',
@@ -305,7 +309,7 @@ export class CardHealthStatusComponent implements OnInit {
         this.dialog.open(AddDiagnosisAfterComponent, {panelClass: '__add-diagnosis-after'});
     }
 
-    editDiagnosisAfter(diagnosis: IDiagnoses, event) {
+    editDiagnosisAfter(diagnosis: IDiagnoses, event: MouseEvent) {
         if (!this.checkDeleteClass(event)) {
             this.dialog.open(AddDiagnosisAfterComponent, {
                 panelClass: '__add-diagnosis-after',
@@ -316,13 +320,13 @@ export class CardHealthStatusComponent implements OnInit {
 
     disableDisabilityControls() {
         this.isChipsDisabled = true;
-        this.disabilityDisabledControlList.forEach((item) => {
-            this.cardThirteenYService.getControls(this.healthStatusForm, 'disability')[item].disable();
-            this.cardThirteenYService.getControls(this.healthStatusForm, 'disability')[item].setValue('');
-            if (item === 'disabilityDisorders') {
+        this.disabilityDisabledControlList.forEach(control => {
+            this.cardThirteenYService.getControls(this.healthStatusForm, 'disability')[control].disable();
+            this.cardThirteenYService.getControls(this.healthStatusForm, 'disability')[control].setValue('');
+            if (control === 'disabilityDisorders') {
                 this.invalidDiseasesChips = [];
             }
-            if (item === 'disabilityDiseases') {
+            if (control === 'disabilityDiseases') {
                 this.disabilityDisordersChips = [];
             }
         });
@@ -330,8 +334,8 @@ export class CardHealthStatusComponent implements OnInit {
 
     enableDisabilityControls() {
         this.isChipsDisabled = false;
-        this.disabilityDisabledControlList.forEach((item) => {
-            this.cardThirteenYService.getControls(this.healthStatusForm, 'disability')[item].enable();
+        this.disabilityDisabledControlList.forEach(control => {
+            this.cardThirteenYService.getControls(this.healthStatusForm, 'disability')[control].enable();
         });
         this.invalidDiseases = this.invalidDiseasesQuery.map(item => item.name);
         this.disabilityDisorders = this.disordersQuery.map(item => item.name);
@@ -347,13 +351,13 @@ export class CardHealthStatusComponent implements OnInit {
 
     disabilityTypeChange() {
         this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityType.valueChanges
-            .subscribe((type: number) => {
-                type === 1 ? this.disableDisabilityControls() : this.enableDisabilityControls();
-            });
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe((type: number) => type === 1 ? this.disableDisabilityControls() : this.enableDisabilityControls());
     }
 
     disableRehabilitationPerformance() {
         this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').rehabilitationDate.valueChanges
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(data => {
                 if (data) {
                     this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').rehabilitationPerformance.enable();

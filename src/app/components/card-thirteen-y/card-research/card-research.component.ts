@@ -1,184 +1,166 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  ViewChild
-} from '@angular/core';
-import {
-  FormGroup,
-  FormControl,
-  Validators,
-  FormBuilder,
-  FormArray
-} from '@angular/forms';
-import { MatDatepicker, MatDialog } from '@angular/material';
-import { Observable } from 'rxjs';
-
-import { CardThirteenYService } from '../card-thirteen-y.service';
-import { AdditionalResearch } from '../shared/interfaces/additional-research.interface';
-import { AddStudyComponent } from '../shared/dialogs/add-study/add-study.component';
-import { debounceTime } from 'rxjs/operators';
-import { DeleteConfirmComponent } from '../shared/dialogs/delete-confirm/delete-confirm.component';
-import * as moment from 'moment';
-import { Examination } from '../../../models/dictionary.model';
-import { DictionaryService } from '../../../service/dictionary.service';
+import {Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, Self} from '@angular/core';
+import {FormGroup, Validators, FormBuilder, FormArray} from '@angular/forms';
+import {MatDatepicker, MatDialog} from '@angular/material';
+import {CardThirteenYService} from '../card-thirteen-y.service';
+import {AddStudyComponent} from '../shared/dialogs/add-study/add-study.component';
+import {DeleteConfirmComponent} from '../shared/dialogs/delete-confirm/delete-confirm.component';
+import {Examination} from '../../../models/dictionary.model';
+import {DictionaryService} from '../../../service/dictionary.service';
+import {NgOnDestroy} from '../../../@core/shared/services/destroy.service';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
-  selector: 'app-card-research',
-  templateUrl: './card-research.component.html',
-  styleUrls: ['./card-research.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-card-research',
+    templateUrl: './card-research.component.html',
+    styleUrls: ['./card-research.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [NgOnDestroy]
 })
 export class CardResearchComponent implements OnInit {
-  researchFormGroup!: FormGroup;
-  requiredExaminations: Examination[];
-  maxDate = new Date();
-  additionalExaminations: [];
-  formValues!: any;
+    researchFormGroup!: FormGroup;
+    requiredExaminations: Examination[];
+    maxDate = new Date();
+    additionalExaminations: [];
+    formValues!: any;
 
-  constructor(
-    private cdRef: ChangeDetectorRef,
-    private dialog: MatDialog,
-    public cardThirteenYService: CardThirteenYService,
-    private formBuilder: FormBuilder,
-    private dictionaryService: DictionaryService
-  ) {
-    this.researchFormGroup = this.formBuilder.group({
-      requiredExaminationsArray: this.formBuilder.array([]),
-    });
-    this.cardThirteenYService.setActiveTabValid(true);
-  }
-
-  ngOnInit() {
-    this.requiredExaminations = [];
-    this.getInitValues();
-    this.setAdditionalExaminations();
-    this.checkIsFormValid();
-    this.checkFormChanges();
-  }
-
-  get requiredExaminationsArray() {
-    return this.researchFormGroup.get('requiredExaminationsArray') as FormArray;
-  }
-
-  getInitValues() {
-    this.cardThirteenYService.activeTabInitValues
-      .subscribe(data => {
-        this.formValues = data;
-        this.createResearchFormGroups();
-        this.cardThirteenYService.setSelectedTabInitValues(this.researchFormGroup.value);
-      });
-  }
-
-  checkFormChanges() {
-    this.researchFormGroup.valueChanges.subscribe(data => {
-      this.cardThirteenYService.setSelectedTabCurrentValues(data);
-    });
-  }
-
-  checkIsFormValid() {
-    this.researchFormGroup.valueChanges.subscribe(() => {
-      this.cardThirteenYService.setActiveTabValid(this.researchFormGroup.valid);
-    });
-  }
-
-  createResearchFormGroups() {
-    this.dictionaryService.getExaminations(1, 100, '').subscribe(res => {
-      this.requiredExaminations = [];
-      res.forEach((examination, i) => {
-        this.requiredExaminationsArray.push(
-          this.formBuilder.group({
-            dateBegin: [this.formValues.requiredExaminations[i].date || '', [Validators.required]],
-            result: [this.formValues.requiredExaminations[i].result || '', [Validators.required]]
-          })
-        );
-        this.requiredExaminations.push(examination);
-      });
-      this.setRequiredExaminations();
-      this.cdRef.detectChanges();
-      this.cardThirteenYService.setSelectedTabCurrentValues(null);
-    });
-  }
-
-  setRequiredExaminations() {
-    for (let i = 0; i < this.requiredExaminationsArray.length; i++) {
-      this.requiredExaminationsArray.get(`${i}`).get('dateBegin').valueChanges.subscribe(date => {
-        date = date.format();
-        this.formValues.requiredExaminations[i] = {
-          ...this.formValues.requiredExaminations[i],
-          exam: this.requiredExaminations[i],
-          date,
-        };
-
-        this.cardThirteenYService.setTabCurrentValues(this.formValues);
-        console.log(this.formValues);
-      });
-      this.requiredExaminationsArray.get(`${i}`).get('result').valueChanges.subscribe(result => {
-        this.formValues.requiredExaminations[i] = {
-          ...this.formValues.requiredExaminations[i],
-          exam: this.requiredExaminations[i],
-          result
-        };
-        this.cardThirteenYService.setTabCurrentValues(this.formValues);
-      });
+    constructor(private cdRef: ChangeDetectorRef,
+                private dialog: MatDialog,
+                public cardThirteenYService: CardThirteenYService,
+                private formBuilder: FormBuilder,
+                private dictionaryService: DictionaryService,
+                @Self() private onDestroy$: NgOnDestroy) {
+        this.researchFormGroup = this.formBuilder.group({
+            requiredExaminationsArray: this.formBuilder.array([]),
+        });
+        this.cardThirteenYService.setActiveTabValid(true);
     }
-  }
 
-  setAdditionalExaminations() {
-    this.additionalExaminations = this.formValues.additionalExaminations;
-    this.cdRef.detectChanges();
-  }
+    ngOnInit() {
+        this.requiredExaminations = [];
+        this.getInitValues();
+        this.setAdditionalExaminations();
+        this.checkIsFormValid();
+        this.checkFormChanges();
+    }
 
-  addStudy() {
-    this.dialog.open(AddStudyComponent, {
-      panelClass: '__add-diagnosis-before',
-      autoFocus: false,
-      data: {
-        formValues: this.formValues,
-        additionalExaminations: this.additionalExaminations,
-        cdRef: this.cdRef
-      }
-    });
-  }
+    get requiredExaminationsArray() {
+        return this.researchFormGroup.get('requiredExaminationsArray') as FormArray;
+    }
 
-  deleteStudy(i) {
-    this.dialog.open(DeleteConfirmComponent, {
-      panelClass: '__delete-confirm',
-      data: {
-        formValues: this.formValues,
-        additionalExaminations: this.additionalExaminations,
-        i,
-        key: 'research',
-        cdRef: this.cdRef
-      }
-    });
-  }
+    getInitValues() {
+        this.cardThirteenYService.activeTabInitValues
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(data => {
+                this.formValues = data;
+                this.createResearchFormGroups();
+                this.cardThirteenYService.setSelectedTabInitValues(this.researchFormGroup.value);
+            });
+    }
 
-  editStudy(exam, i, event) {
-    if (!this.checkDeleteClass(event)) {
-      this.dialog.open(AddStudyComponent, {
-        panelClass: '__add-diagnosis-before',
-        autoFocus: false,
-        data: {
-          formValues: this.formValues,
-          additionalExaminations: this.additionalExaminations,
-          cdRef: this.cdRef,
-          mode: 'edit',
-          exam,
-          i
+    checkFormChanges() {
+        this.researchFormGroup.valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(data => this.cardThirteenYService.setSelectedTabCurrentValues(data));
+    }
+
+    checkIsFormValid() {
+        this.researchFormGroup.valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(() => this.cardThirteenYService.setActiveTabValid(this.researchFormGroup.valid));
+    }
+
+    createResearchFormGroups() {
+        this.dictionaryService.getExaminations(1, 100, '').subscribe(res => {
+            this.requiredExaminations = [];
+            res.forEach((examination, i) => {
+                this.requiredExaminationsArray.push(
+                    this.formBuilder.group({
+                        dateBegin: [this.formValues.requiredExaminations[i].date || '', [Validators.required]],
+                        result: [this.formValues.requiredExaminations[i].result || '', [Validators.required]]
+                    })
+                );
+                this.requiredExaminations.push(examination);
+            });
+            this.setRequiredExaminations();
+            this.cdRef.detectChanges();
+            this.cardThirteenYService.setSelectedTabCurrentValues(null);
+        });
+    }
+
+    setRequiredExaminations() {
+        for (let i = 0; i < this.requiredExaminationsArray.length; i++) {
+            this.requiredExaminationsArray.get(`${i}`).get('dateBegin').valueChanges.subscribe(date => {
+                date = date.format();
+                this.formValues.requiredExaminations[i] = {
+                    ...this.formValues.requiredExaminations[i],
+                    exam: this.requiredExaminations[i],
+                    date,
+                };
+                this.cardThirteenYService.setTabCurrentValues(this.formValues);
+            });
+            this.requiredExaminationsArray.get(`${i}`).get('result').valueChanges.subscribe(result => {
+                this.formValues.requiredExaminations[i] = {
+                    ...this.formValues.requiredExaminations[i],
+                    exam: this.requiredExaminations[i],
+                    result
+                };
+                this.cardThirteenYService.setTabCurrentValues(this.formValues);
+            });
         }
-      });
     }
-  }
 
-  checkDeleteClass(event) {
-    return event.path.find(element => {
-      return element.className === '__delete-diagnosis';
-    });
-  }
+    setAdditionalExaminations() {
+        this.additionalExaminations = this.formValues.additionalExaminations;
+        this.cdRef.detectChanges();
+    }
 
-  openDatepicker(name: MatDatepicker<any>) {
-    name.open();
-  }
+    addStudy() {
+        this.dialog.open(AddStudyComponent, {
+            panelClass: '__add-diagnosis-before',
+            autoFocus: false,
+            data: {
+                formValues: this.formValues,
+                additionalExaminations: this.additionalExaminations,
+                cdRef: this.cdRef
+            }
+        });
+    }
+
+    deleteStudy(index: number) {
+        this.dialog.open(DeleteConfirmComponent, {
+            panelClass: '__delete-confirm',
+            data: {
+                formValues: this.formValues,
+                additionalExaminations: this.additionalExaminations,
+                index,
+                key: 'research',
+                cdRef: this.cdRef
+            }
+        });
+    }
+
+    editStudy(exam, index: number, event: MouseEvent) {
+        if (!this.checkDeleteClass(event)) {
+            this.dialog.open(AddStudyComponent, {
+                panelClass: '__add-diagnosis-before',
+                autoFocus: false,
+                data: {
+                    formValues: this.formValues,
+                    additionalExaminations: this.additionalExaminations,
+                    cdRef: this.cdRef,
+                    mode: 'edit',
+                    exam,
+                    index
+                }
+            });
+        }
+    }
+
+    checkDeleteClass(event) {
+        return event.path.find(element => element.className === '__delete-diagnosis');
+    }
+
+    openDatepicker(name: MatDatepicker<any>) {
+        name.open();
+    }
 }

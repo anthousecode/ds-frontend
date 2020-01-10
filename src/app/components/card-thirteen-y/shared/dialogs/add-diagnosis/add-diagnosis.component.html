@@ -42,14 +42,11 @@
     </div>
     <div class="add-diagnosis__treatment"
          formGroupName="treatmentPrescribed">
-      <p class="add-diagnosis__treatment-title">
-        Лечение было назначено
-        <span>*</span>
-      </p>
+      <p class="add-diagnosis__treatment-title">Лечение было назначено</p>
       <div class="add-diagnosis__treatment-block">
         <mat-form-field floatLabel="auto"
                         class="add-diagnosis__treatment-item">
-          <mat-label>Амбулаторные условия</mat-label>
+          <mat-label>Условия оказания медицинской помощи</mat-label>
           <mat-select formControlName="ambulatoryConditions"
                       required>
             <mat-option *ngFor="let condition of ambulatoryConditionsList"
@@ -74,14 +71,11 @@
     </div>
     <div class="add-diagnosis__treatment"
          formGroupName="treatmentPerformed">
-      <p class="add-diagnosis__treatment-title">
-        Лечение было выполнено
-        <span>*</span>
-      </p>
+      <p class="add-diagnosis__treatment-title">Лечение было выполнено</p>
       <div class="add-diagnosis__treatment-block">
         <mat-form-field floatLabel="auto"
                         class="add-diagnosis__treatment-item">
-          <mat-label>Амбулаторные условия</mat-label>
+          <mat-label>Условия оказания медицинской помощи</mat-label>
           <mat-select formControlName="treatmentPerformedControl"
                       required>
             <mat-option *ngFor="let condition of ambulatoryConditionsList"
@@ -130,14 +124,11 @@
     <div class="add-diagnosis__skl-wrapper">
       <div class="add-diagnosis__skl"
            formGroupName="medSklPrescribed">
-        <p class="add-diagnosis__skl-title">
-          Медицинская реабилитация/санаторно-курортное лечение были назначены
-          <span>*</span>
-        </p>
+        <p class="add-diagnosis__skl-title">Медицинская реабилитация/санаторно-курортное лечение были назначены</p>
         <div class="add-diagnosis__skl-block">
           <mat-form-field floatLabel="auto"
                           class="add-diagnosis__skl-item">
-            <mat-label>Амбулаторные условия</mat-label>
+            <mat-label>Условия оказания медицинской помощи</mat-label>
             <mat-select formControlName="sklPrescribedAmbulatoryConditions"
                         required>
               <mat-option *ngFor="let condition of ambulatoryConditionsList"
@@ -162,14 +153,11 @@
       </div>
       <div class="add-diagnosis__skl"
            formGroupName="medSklPerformed">
-        <p class="add-diagnosis__skl-title">
-          Медицинская реабилитация и (или) санаторно-курортное лечение были выполнены
-          <span>*</span>
-        </p>
+        <p class="add-diagnosis__skl-title">Медицинская реабилитация и (или) санаторно-курортное лечение были выполнены</p>
         <div class="add-diagnosis__skl-block">
           <mat-form-field floatLabel="auto"
                           class="add-diagnosis__skl-item">
-            <mat-label>Амбулаторные условия</mat-label>
+            <mat-label>Условия оказания медицинской помощи</mat-label>
             <mat-select formControlName="sklPerformedAmbulatoryConditions"
                         required>
               <mat-option *ngFor="let condition of ambulatoryConditionsList"
@@ -217,10 +205,7 @@
       </div>
     </div>
     <div class="add-diagnosis__med-help">
-      <p class="add-diagnosis__med-help-title">
-        Высокотехнологичная медицинская помощь
-        <span>*</span>
-      </p>
+      <p class="add-diagnosis__med-help-title">Высокотехнологичная медицинская помощь</p>
       <mat-form-field floatLabel="auto"
                       class="add-diagnosis__treatment-item">
         <mat-label>Выберите медицинскую помощь</mat-label>

@@ -1,7 +1,7 @@
-import {Component, OnInit, ChangeDetectionStrategy, ViewChild, ChangeDetectorRef} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Component, OnInit, ChangeDetectionStrategy, ViewChild, ChangeDetectorRef, Self} from '@angular/core';
+import {FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {MatDatepicker} from '@angular/material';
-import {debounceTime, filter, mergeMap} from 'rxjs/operators';
+import {debounceTime, filter, mergeMap, takeUntil} from 'rxjs/operators';
 import {CardThirteenYService} from '../card-thirteen-y.service';
 import {ILabelId} from '../shared/interfaces/label-id.interface';
 import {CARD_MAIN_OMS_PAYMENT} from '../shared/data/card-main-oms-payment';
@@ -22,43 +22,48 @@ import {
     StationaryOrganization
 } from '../../../models/dictionary.model';
 import {IPolicyType} from '../shared/interfaces/policy-type.interface';
+import {NgOnDestroy} from '../../../@core/shared/services/destroy.service';
+import {IOrganizationInfo} from '../shared/interfaces/organization-info.interface';
 
 @Component({
     selector: 'app-card-main',
     templateUrl: './card-main.component.html',
     styleUrls: ['./card-main.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [NgOnDestroy]
 })
 export class CardMainComponent implements OnInit {
     @ViewChild('datepicker') datepicker!: MatDatepicker<any>;
     @ViewChild('datepickerLocation') datepickerLocation!: MatDatepicker<any>;
     mainForm!: FormGroup;
     maxDate = new Date();
-    citiesList$: Observable<ICardMainCities[]>;
     citiesList: ICardMainCities[];
     omsPaymentValues: ILabelId[] = CARD_MAIN_OMS_PAYMENT;
     policyType: IPolicyType[] = POLICY_TYPE;
     selectedPolicyType: number;
     selectedPolicyValue: string;
-    policySeriesError!: any;
-    policyNumberError!: any;
+    policySeriesError!: ValidationErrors;
+    policyNumberError!: ValidationErrors;
     defaultPolicyNumberValidators = DEFAULT_POLICY_NUMBER_VALIDATORS;
     oldPolicyNumberValidators = OLD_POLICY_NUMBER_VALIDATORS;
     newPolicyNumberValidators = NEW_POLICY_NUMBER_VALIDATORS;
+    locationList$!: Observable<CurrentLocation[]>;
     hospitalList!: InsuranceCompany[];
     organizationList!: Organization[];
-    organizationInfo!: any;
+    organizationInfo!: IOrganizationInfo;
     educationList!: EducationalOrganization[];
-    educationInfo!: any;
-    locationList$!: Observable<CurrentLocation[]>;
+    educationInfo!: IOrganizationInfo;
     institutionList!: StationaryOrganization[];
-    institutionInfo!: any;
+    institutionInfo!: IOrganizationInfo;
     formValues!: any;
 
     constructor(private cardThirteenYService: CardThirteenYService,
                 private dictionaryService: DictionaryService,
-                private cdRef: ChangeDetectorRef) {
-        this.cardThirteenYService.activeTabCurrentValues.subscribe(data => this.formValues = data);
+                private cdRef: ChangeDetectorRef,
+                @Self() private onDestroy$: NgOnDestroy) {
+        // this.cardThirteenYService.activeTabCurrentValues
+        //     .pipe(takeUntil(this.onDestroy$))
+        //     .subscribe(data => this.formValues = data);
         this.cardThirteenYService.setActiveTabValid(true);
     }
 
@@ -68,7 +73,6 @@ export class CardMainComponent implements OnInit {
         this.checkIsFormValid();
         // this.cardThirteenYService.setSelectedTabCurrentValues(null);
         this.getCitiesList();
-        this.citiesList$.subscribe(list => this.citiesList = list);
         this.setActivePolicyType();
         this.checkPolicySeriesError();
         this.checkPolicyNumberError();
@@ -85,14 +89,17 @@ export class CardMainComponent implements OnInit {
     }
 
     checkFormChanges() {
-        this.mainForm.valueChanges.subscribe(data => {
-            this.cardThirteenYService.setSelectedTabCurrentValues(data);
-        });
+        this.mainForm.valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(data => this.cardThirteenYService.setSelectedTabCurrentValues(data));
     }
 
     checkIsFormValid() {
         this.mainForm.valueChanges
-            .pipe(debounceTime(200))
+            .pipe(
+                debounceTime(200),
+                takeUntil(this.onDestroy$)
+            )
             .subscribe(() => this.cardThirteenYService.setActiveTabValid(this.mainForm.valid));
     }
 
@@ -134,54 +141,62 @@ export class CardMainComponent implements OnInit {
     }
 
     getInitValues() {
-        this.cardThirteenYService.activeTabInitValues.subscribe(data => {
-            this.formValues = data;
-            this.setFormInitValues(data);
-            this.cardThirteenYService.setSelectedTabInitValues(this.mainForm.value);
-        });
+        this.cardThirteenYService.activeTabInitValues
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(data => {
+                this.formValues = data;
+                this.setFormInitValues(data);
+                this.cardThirteenYService.setSelectedTabInitValues(this.mainForm.value);
+            });
     }
 
     setOmsInfoData() {
-        this.mainForm.get('omsInfo').valueChanges.subscribe(oms => {
-            const omsObjectValues = {
-                ...this.formValues,
-                insuranceCompany: {
-                    id: oms.hospitalId,
-                    name: oms.hospitalName
-                },
-                polisType: {
-                    id: oms.policyType
-                },
-                polisSerial: oms.policySeries,
-                polisNumber: oms.policyNumber,
-                payOms: {
-                    id: oms.omsPayment
-                }
-            };
-            this.cardThirteenYService.setTabCurrentValues(omsObjectValues);
-        });
+        this.mainForm.get('omsInfo').valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(oms => {
+                const omsObjectValues = {
+                    ...this.formValues,
+                    insuranceCompany: {
+                        id: oms.hospitalId,
+                        name: oms.hospitalName
+                    },
+                    polisType: {
+                        id: oms.policyType
+                    },
+                    polisSerial: oms.policySeries,
+                    polisNumber: oms.policyNumber,
+                    payOms: {
+                        id: oms.omsPayment
+                    }
+                };
+                this.cardThirteenYService.setTabCurrentValues(omsObjectValues);
+            });
     }
 
     setLocationDateData() {
-        this.cardThirteenYService.getControls(this.mainForm, 'location').locationDate.valueChanges.subscribe(date => {
-            const locationDateObj = {
-                ...this.formValues,
-                currentLocationDate: date.format()
-            };
-            this.cardThirteenYService.setTabCurrentValues(locationDateObj);
-        });
+        this.cardThirteenYService.getControls(this.mainForm, 'location').locationDate.valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(date => {
+                const locationDateObj = {
+                    ...this.formValues,
+                    currentLocationDate: date.format()
+                };
+                this.cardThirteenYService.setTabCurrentValues(locationDateObj);
+            });
     }
 
     setLocationPlaceData() {
-        this.cardThirteenYService.getControls(this.mainForm, 'location').locationPlace.valueChanges.subscribe(place => {
-            const locationPlaceObj = {
-                ...this.formValues,
-                currentLocation: {
-                    id: place
-                }
-            };
-            this.cardThirteenYService.setTabCurrentValues(locationPlaceObj);
-        });
+        this.cardThirteenYService.getControls(this.mainForm, 'location').locationPlace.valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(place => {
+                const locationPlaceObj = {
+                    ...this.formValues,
+                    currentLocation: {
+                        id: place
+                    }
+                };
+                this.cardThirteenYService.setTabCurrentValues(locationPlaceObj);
+            });
     }
 
     setFormInitValues(data) {
@@ -257,13 +272,19 @@ export class CardMainComponent implements OnInit {
     }
 
     getCitiesList() {
-        this.citiesList$ = this.cardThirteenYService.getControls(this.mainForm, 'generalInfo').placeOfStay.valueChanges
+        this.cardThirteenYService.getControls(this.mainForm, 'generalInfo').placeOfStay.valueChanges
             .pipe(
                 filter(value => value !== ''),
                 debounceTime(500),
                 filter(text => this.citiesList ? !this.citiesList.find(item => item.fullAddress === text) : true),
-                mergeMap(value => this.cardThirteenYService.getCities(value))
-            );
+                mergeMap(value => this.cardThirteenYService.getCities(value)),
+                takeUntil(this.onDestroy$)
+            )
+            .subscribe(data => {
+                this.citiesList = data;
+                this.cdRef.detectChanges();
+            })
+        ;
     }
 
     setCityCode(cityObject) {
@@ -284,6 +305,7 @@ export class CardMainComponent implements OnInit {
             .pipe(
                 filter(value => value !== ''),
                 debounceTime(500),
+                takeUntil(this.onDestroy$)
             )
             .subscribe(data => {
                 this.dictionaryService.getInsuranceCompanies(1, 50, data).subscribe((list: InsuranceCompany[]) => {
@@ -328,6 +350,7 @@ export class CardMainComponent implements OnInit {
                 filter(value => value !== ''),
                 debounceTime(500),
                 filter(text => this.organizationList ? !this.organizationList.find(item => item.shortName === text) : true),
+                takeUntil(this.onDestroy$)
             )
             .subscribe(data => {
                 this.dictionaryService.getOrganizations(1, 50, data).subscribe((list: Organization[]) => {
@@ -343,6 +366,7 @@ export class CardMainComponent implements OnInit {
                 filter(value => value !== ''),
                 debounceTime(500),
                 filter(text => this.educationList ? !this.educationList.find(item => item.shortName === text) : true),
+                takeUntil(this.onDestroy$)
             )
             .subscribe(data => {
                 this.dictionaryService.getEducationalOrganizations(1, 50, data).subscribe((list: EducationalOrganization[]) => {
@@ -358,6 +382,7 @@ export class CardMainComponent implements OnInit {
                 filter(value => value !== ''),
                 debounceTime(500),
                 filter(text => this.institutionList ? !this.institutionList.find(item => item.shortName === text) : true),
+                takeUntil(this.onDestroy$)
             )
             .subscribe(data => {
                 this.dictionaryService.getStationaryOrganizations(1, 50, data).subscribe((list: StationaryOrganization[]) => {
@@ -369,12 +394,14 @@ export class CardMainComponent implements OnInit {
 
     setActivePolicyType() {
         const policyNumberControl = this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policyNumber;
-        this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policyType.valueChanges.subscribe((type: number) => {
-            this.selectedPolicyType = type;
-            type === 2 ? this.enablePolicySeries() : this.disablePolicySeries();
-            policyNumberControl.setValue('', {emitEvent: false});
-            this.setPolicyNumberValidator(type);
-        });
+        this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policyType.valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe((type: number) => {
+                this.selectedPolicyType = type;
+                type === 2 ? this.enablePolicySeries() : this.disablePolicySeries();
+                policyNumberControl.setValue('', {emitEvent: false});
+                this.setPolicyNumberValidator(type);
+            });
     }
 
     disablePolicySeries() {
@@ -432,16 +459,18 @@ export class CardMainComponent implements OnInit {
     }
 
     checkPolicySeriesError() {
-        this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policySeries.valueChanges.subscribe(() => {
-            this.policySeriesError = this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policySeries.errors;
-        });
+        this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policySeries.valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(() => this.policySeriesError = this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policySeries.errors);
     }
 
     checkPolicyNumberError() {
-        this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policyNumber.valueChanges.subscribe(value => {
-            this.policyNumberError = this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policyNumber.errors;
-            this.selectedPolicyValue = value;
-        });
+        this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policyNumber.valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(value => {
+                this.policyNumberError = this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policyNumber.errors;
+                this.selectedPolicyValue = value;
+            });
     }
 
     getPlaceOfStayError() {

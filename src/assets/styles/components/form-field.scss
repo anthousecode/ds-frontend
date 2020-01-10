@@ -1,3 +1,9 @@
+mat-form-field {
+  .mat-input-element {
+    color: #000000;
+  }
+}
+
 .__card-main,
 .__health-status,
 .__add-diagnosis-before,
@@ -33,18 +39,9 @@
         width: 100% !important;
       }
 
-      input {
-        height: auto !important;
-      }
-    }
-
-    &.health-status__disability-first-date,
-    &.health-status__disability-last-date {
-      margin-top: 5px;
-
-      @media (max-width: 992px) {
-        margin-top: 0;
-      }
+      //input {
+      //  height: auto !important;
+      //}
     }
 
     &.health-status__disability-type,
@@ -75,7 +72,6 @@
     }
 
     .mat-form-field-label {
-      font-size: 15px !important;
       color: #808080;
     }
 
@@ -113,13 +109,13 @@
   }
 }
 
-.__card-main,
-.__health-status,
-.__add-diagnosis-after {
-  mat-form-field {
-    .mat-select,
-    .mat-input-element {
-      height: auto !important;
-    }
-  }
-}
+//.__card-main,
+//.__health-status,
+//.__add-diagnosis-after {
+//  mat-form-field {
+//    .mat-select,
+//    .mat-input-element {
+//      height: auto !important;
+//    }
+//  }
+//}

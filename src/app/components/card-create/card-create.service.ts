@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import {IAccountingFormValue} from './shared/interfaces/accounting-form-value.interface';
+import {IAgeGroupValue} from './shared/interfaces/age-group-value.interface';
+import {IChildCategoryValue} from './shared/interfaces/child-category-value.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -8,31 +11,22 @@ import { HttpClient } from '@angular/common/http';
 export class CardCreateService {
   baseUrl = 'http://ds-dev.rt-eu.ru/api/';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient) {}
+
+  getCardTypes(): Observable<IAccountingFormValue[]> {
+    return this.http.get<IAccountingFormValue[]>(`${this.baseUrl}dictionary/card-types`);
   }
 
-  getCardTypes(): Observable<any> {
-    return this.http.get<any>(
-      `${this.baseUrl}dictionary/card-types`
-    );
+  getChildCategories(): Observable<IChildCategoryValue[]> {
+    return this.http.get<IChildCategoryValue[]>(`${this.baseUrl}dictionary/child-categories`);
   }
 
-  getChildCategories(): Observable<any> {
-    return this.http.get<any>(
-      `${this.baseUrl}dictionary/child-categories`
-    );
-  }
-
-  getAgeGroups(): Observable<any> {
-    return this.http.get<any>(
-      `${this.baseUrl}dictionary/age-groups`
-    );
+  getAgeGroups(): Observable<IAgeGroupValue[]> {
+    return this.http.get<IAgeGroupValue[]>(`${this.baseUrl}dictionary/age-groups`);
   }
 
   createCard(newCard) {
-    return this.http.post<any>(
-      `${this.baseUrl}cards`, newCard
-    );
+    return this.http.post<any>(`${this.baseUrl}cards`, newCard);
   }
 
   getCardById(id) {

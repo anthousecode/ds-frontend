@@ -71,8 +71,16 @@
                 <mat-label>Лицо, давшее заключение</mat-label>
                 <input matInput
                        placeholder="Начните вводить ФИО врача"
+                       [matAutocomplete]="auto"
                        formControlName="doctor"
                        required>
+                <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let doctor of filteredDoctors | async"
+                                (onSelectionChange)="setDoctorId(doctor.id)"
+                                [value]="doctor.fullName">
+                        <span>{{doctor.fullName}}</span>
+                    </mat-option>
+                </mat-autocomplete>
             </mat-form-field>
             <mat-form-field floatLabel="always"
                             class="conclusion__input-field">

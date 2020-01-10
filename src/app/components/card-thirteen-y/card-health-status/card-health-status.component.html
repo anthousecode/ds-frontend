@@ -146,6 +146,8 @@
                     [ngClass]="{'__chips-disabled': isChipsDisabled}">
       <mat-chip-list #disabilityDiseasesChipList>
         <mat-chip *ngFor="let invalidDiseasesChip of invalidDiseasesChips"
+                  selectable="true"
+                  removable="true"
                   (removed)="removeInvalidDiseasesChip(invalidDiseasesChip)">
           <span class="create-group-fields__truncate">{{ invalidDiseasesChip }}</span>
           <mat-icon matChipRemove>cancel</mat-icon>

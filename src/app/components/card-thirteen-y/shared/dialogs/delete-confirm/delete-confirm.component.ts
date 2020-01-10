@@ -14,8 +14,7 @@ export class DeleteConfirmComponent {
               private dialogRef: MatDialogRef<DeleteConfirmComponent>,
               private snackBar: MatSnackBar,
               @Inject(MAT_DIALOG_DATA) public additionalExaminationsData: any,
-              private cdRef: ChangeDetectorRef
-  ) {
+              private cdRef: ChangeDetectorRef) {
   }
 
   deleteData() {
@@ -24,9 +23,7 @@ export class DeleteConfirmComponent {
     this.cardThirteenYService.setTabCurrentValues(this.additionalExaminationsData.formValues);
     this.additionalExaminationsData.cdRef.detectChanges();
     this.dialogRef.close();
-    this.snackBar.open(this.getDeleteConfirmMessage(), 'ОК', {
-      duration: 5000
-    });
+    this.snackBar.open(this.getDeleteConfirmMessage(), 'ОК', {duration: 5000});
   }
 
   getDeleteKey() {

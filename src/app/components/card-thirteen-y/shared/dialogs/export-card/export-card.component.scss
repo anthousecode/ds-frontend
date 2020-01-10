@@ -36,6 +36,12 @@
     color: #ffffff;
     cursor: pointer;
 
+    &.__disabled {
+      background-color: rgba(27, 152, 129, .6);
+      pointer-events: none;
+      cursor: default;
+    }
+
     &:first-child {
       margin-left: 0;
     }
