@@ -71,6 +71,7 @@ export class CardMainComponent implements OnInit {
         this.initFormGroups();
         this.getInitValues();
         this.checkIsFormValid();
+        this.checkBlockState();
         // this.cardThirteenYService.setSelectedTabCurrentValues(null);
         this.getCitiesList();
         this.setActivePolicyType();
@@ -101,6 +102,15 @@ export class CardMainComponent implements OnInit {
                 takeUntil(this.onDestroy$)
             )
             .subscribe(() => this.cardThirteenYService.setActiveTabValid(this.mainForm.valid));
+    }
+
+    checkBlockState() {
+        this.cardThirteenYService.isBlocked.subscribe(state => {
+           if (state) {
+               this.mainForm.disable({emitEvent: false});
+               this.cardThirteenYService.setSelectedTabCurrentValues(null);
+           }
+        });
     }
 
     initFormGroups() {
@@ -179,7 +189,7 @@ export class CardMainComponent implements OnInit {
             .subscribe(date => {
                 const locationDateObj = {
                     ...this.formValues,
-                    currentLocationDate: date.format()
+                    currentLocationDate: typeof date === 'string' ? date : date.format()
                 };
                 this.cardThirteenYService.setTabCurrentValues(locationDateObj);
             });
@@ -355,7 +365,7 @@ export class CardMainComponent implements OnInit {
             .subscribe(data => {
                 this.dictionaryService.getOrganizations(1, 50, data).subscribe((list: Organization[]) => {
                     this.organizationList = list.filter(orgItem => orgItem);
-                    this.cdRef.detectChanges();
+                    this.cdRef.markForCheck();
                 });
             });
     }

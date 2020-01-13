@@ -21,6 +21,8 @@ export class CardThirteenYService {
     isActiveTabValid: Subject<boolean> = new Subject<boolean>();
     isLoading: BehaviorSubject<boolean> = new BehaviorSubject(false);
     isLoading$: Observable<boolean> = this.isLoading.asObservable();
+    isBlocked: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    cardStatus: Subject<number> = new Subject();
 
     baseUrl = 'http://ds-dev.rt-eu.ru/api/';
     getCitiesUrl = 'http://ds-dev.rt-eu.ru/addrobject/search?query=';
@@ -52,8 +54,16 @@ export class CardThirteenYService {
         this.selectedTabCurrentValues.next(currentValue);
     }
 
+    checkCardStatus(status) {
+        this.cardStatus.next(status);
+    }
+
     setLoading(loader: boolean) {
         this.isLoading.next(loader);
+    }
+
+    setBlockedMode(isBlocked: boolean) {
+        this.isBlocked.next(isBlocked);
     }
 
     getControls(nameForm: FormGroup, nameGroup: string): any {
@@ -68,6 +78,11 @@ export class CardThirteenYService {
         this.setLoading(true);
         return this.http.patch(this.baseUrl + 'cards/696', card)
             .pipe(finalize(() => this.setLoading(false)));
+    }
+
+    setCardStatus(statusParams) {
+        const params = statusParams;
+        return this.http.put(this.baseUrl + 'cards/696/status', params);
     }
 
     getCities(text) {

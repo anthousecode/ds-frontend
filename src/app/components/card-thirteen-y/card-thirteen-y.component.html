@@ -39,7 +39,8 @@
     <app-card-research *ngSwitchCase="'research'"
                        class="__old">
     </app-card-research>
-    <app-card-vaccination *ngSwitchCase="'vaccination'">
+    <app-card-vaccination *ngSwitchCase="'vaccination'"
+                          class="__vaccination">
     </app-card-vaccination>
     <app-card-conclusion *ngSwitchCase="'conclusion'"
                          class="__old __conclusion">
@@ -47,13 +48,22 @@
   </div>
   <div class="card-13y__buttons">
     <button class="card-13y__buttons-item"
+            *ngIf="cardStatus !== 2"
             (click)="saveCard()"
             [ngClass]="{'__disabled': !isTabValid || ((selectedTabInitValuesModified) === selectedTabCurrentValuesModified) || !selectedTabCurrentValues}">
       Сохранить
     </button>
     <button class="card-13y__buttons-item" (click)="exportCard()">Экспорт</button>
-    <button class="card-13y__buttons-item" (click)="doneCard()">Выполнено</button>
-    <button class="card-13y__buttons-item" (click)="blockCard()">Заблокировать</button>
+    <button class="card-13y__buttons-item"
+            (click)="doneCard()"
+            [ngClass]="{'__disabled': cardStatus !== 1}">
+      Выполнено
+    </button>
+    <button class="card-13y__buttons-item"
+            (click)="blockCard()"
+            [ngClass]="{'__disabled': cardStatus === 4}">
+      Заблокировать
+    </button>
   </div>
 </div>
 <app-additional-information *ngIf="isAdditionalInfoVisible"

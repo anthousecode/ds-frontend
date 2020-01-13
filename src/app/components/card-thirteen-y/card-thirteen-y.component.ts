@@ -52,6 +52,7 @@ export class CardThirteenYComponent implements OnInit {
     formValues!: any;
     isTabValid!: boolean;
     loading: boolean;
+    cardStatus!: number;
 
     constructor(@Inject(DOCUMENT) private document: Document,
                 private cardThirteenYService: CardThirteenYService,
@@ -68,6 +69,10 @@ export class CardThirteenYComponent implements OnInit {
                 this.isAdditionalInfoVisible = false;
                 this.cdRef.detectChanges();
             }
+        });
+        this.cardThirteenYService.cardStatus.subscribe(status => {
+            this.cardStatus = status;
+            this.cdRef.detectChanges();
         });
         this.getCardInfo();
         this.getActiveCardCurrentValues();
@@ -97,8 +102,16 @@ export class CardThirteenYComponent implements OnInit {
             .pipe(takeUntil(this.onDestroy$))
             .subscribe(data => {
                 this.cardInfo = data;
+                this.cardThirteenYService.checkCardStatus(this.cardInfo.status.id);
+                this.checkCardStatus();
                 this.cardThirteenYService.setTabInitValues(data);
             });
+    }
+
+    checkCardStatus() {
+        if (this.cardInfo.status.id === 2 || this.cardInfo.status.id === 4) {
+            this.cardThirteenYService.setBlockedMode(true);
+        }
     }
 
     getActiveCardCurrentValues() {

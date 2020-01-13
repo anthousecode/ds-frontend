@@ -25,6 +25,7 @@ export class CardVaccinationComponent implements OnInit {
     private vaccinations: string[] = [];
     chipsQuery!: Vaccine[];
     formValues!: any;
+    isChipsDisabled!: boolean;
 
     @ViewChild('vaccinationInput') vaccinationInput: ElementRef<HTMLInputElement>;
     @ViewChild('auto') matAutoComplete: MatAutocomplete;
@@ -45,6 +46,7 @@ export class CardVaccinationComponent implements OnInit {
         this.initStateVaccinations();
         this.initVaccinations();
         this.filterVaccinations();
+        this.checkBlockState();
         this.cardThirteenYService.setSelectedTabCurrentValues(null);
         this.checkFormChanges();
     }
@@ -68,6 +70,17 @@ export class CardVaccinationComponent implements OnInit {
                 };
                 this.cardThirteenYService.setSelectedTabInitValues(formGroupData);
             });
+    }
+
+    checkBlockState() {
+        this.cardThirteenYService.isBlocked.subscribe(state => {
+            if (state) {
+                this.vaccinationForm.disable({emitEvent: false});
+                this.cardThirteenYService.setSelectedTabCurrentValues(null);
+                this.isChipsDisabled = true;
+                this.cdRef.detectChanges();
+            }
+        });
     }
 
     setFormInitValues(data) {

@@ -39,6 +39,7 @@ export class CardDevelopmentAssessmentComponent implements OnInit {
     ngOnInit() {
         this.createDevAssessmentForm();
         this.getActiveTabInitValues();
+        this.checkBlockState();
         this.initPhysicalDevKid();
         this.initPhysicalDevTeen();
         this.initCharacteristicMenstrualFunc();
@@ -78,6 +79,15 @@ export class CardDevelopmentAssessmentComponent implements OnInit {
     setPhysicalDevelopment(controls: string[]) {
         controls.forEach(value =>
             this.cardThirteenYService.getControls(this.devAssessmentForm, 'physicalDevelopment')[value].enable());
+    }
+
+    checkBlockState() {
+        this.cardThirteenYService.isBlocked.subscribe(state => {
+            if (state) {
+                this.devAssessmentForm.disable({emitEvent: false});
+                this.cardThirteenYService.setSelectedTabCurrentValues(null);
+            }
+        });
     }
 
     createDevAssessmentForm() {

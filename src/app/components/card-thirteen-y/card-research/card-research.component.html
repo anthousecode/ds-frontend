@@ -27,11 +27,14 @@
   </div>
   <p class="mandatory-studies__title">Дополнительные исследования</p>
 
-  <p class="health-status__add-diagnosis" (click)="addStudy()">
+  <p class="health-status__add-diagnosis"
+     [ngClass]="{'__disabled': isTableDisabled}"
+     (click)="addStudy()">
     Добавить исследование
   </p>
   <div class="health-status__before-ex-diagnoses" *ngIf="additionalExaminations">
-    <table class="health-status__diagnoses-table">
+    <table class="health-status__diagnoses-table"
+           [ngClass]="{'__disabled': isTableDisabled}">
       <thead class="health-status__diagnoses-table-header">
       <tr>
         <th>Исследование</th>

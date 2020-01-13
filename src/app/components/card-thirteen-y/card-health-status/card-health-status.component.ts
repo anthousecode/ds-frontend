@@ -35,6 +35,7 @@ export class CardHealthStatusComponent implements OnInit {
     disabilityTypeList$!: Observable<InvalidType[]>;
     doneList$!: Observable<ReabilitationStatus[]>;
     formValues!: any;
+    isTableDisabled!: boolean;
 
     private filteredDiseases$: Observable<string[]>;
     invalidDiseasesQuery!: InvalidDisease[];
@@ -73,6 +74,7 @@ export class CardHealthStatusComponent implements OnInit {
         this.initFormGroups();
         this.getInitValues();
         this.checkIsFormValid();
+        this.checkBlockState();
         this.cardThirteenYService.setSelectedTabCurrentValues(null);
         this.healthStatusList$ = this.dictionaryService.getHealthGroups();
         this.disabilityTypeList$ = this.dictionaryService.getInvalidTypes();
@@ -97,6 +99,18 @@ export class CardHealthStatusComponent implements OnInit {
         this.healthStatusForm.valueChanges
             .pipe(takeUntil(this.onDestroy$))
             .subscribe(() => this.cardThirteenYService.setActiveTabValid(true));
+    }
+
+    checkBlockState() {
+        this.cardThirteenYService.isBlocked.subscribe(state => {
+            if (state) {
+                this.healthStatusForm.disable({emitEvent: false});
+                this.cardThirteenYService.setSelectedTabCurrentValues(null);
+                this.isChipsDisabled = true;
+                this.isTableDisabled = true;
+                this.cdRef.detectChanges();
+            }
+        });
     }
 
     initFormGroups() {

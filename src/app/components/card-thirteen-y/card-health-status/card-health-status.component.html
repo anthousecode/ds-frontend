@@ -1,6 +1,7 @@
 <form class="health-status__wrapper"
       [formGroup]="healthStatusForm">
   <div class="health-status__before-ex"
+       [ngClass]="{'__is-table-disabled': isTableDisabled}"
        formGroupName="beforeMedicalExamination">
     <p class="health-status__before-ex-title">До проведения диспансеризации</p>
     <mat-form-field floatLabel="auto"
@@ -52,7 +53,8 @@
       </table>
     </div>
   </div>
-  <div class="health-status__after-ex">
+  <div class="health-status__after-ex"
+       [ngClass]="{'__is-table-disabled': isTableDisabled}">
     <p class="health-status__after-ex-title">По результатам проведения диспансеризации</p>
     <p class="health-status__add-diagnosis"
        (click)="addDiagnosisAfter()">

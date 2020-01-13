@@ -25,6 +25,7 @@ export class CardConclusionComponent implements OnInit {
     private missedReasons: ReasonMissed[];
     private absenceReasons: AbsenceReason[];
     private formValues!: any;
+    isCardDisabled!: boolean;
     private doctorsForConclusion: DoctorForConclusion[];
     private filteredDoctors: Observable<DoctorForConclusion[]>;
     canDisabledControls = ['missedReasons', 'absence', 'nonExecutionTextarea'];
@@ -56,6 +57,7 @@ export class CardConclusionComponent implements OnInit {
         this.checkChangeOfMedicalExamination();
         this.setDoctorsDateData();
         this.setHealthGroupData();
+        this.checkBlockState();
         this.checkFormChanges();
     }
 
@@ -63,6 +65,21 @@ export class CardConclusionComponent implements OnInit {
         this.conclusionForm.valueChanges
             .pipe(takeUntil(this.onDestroy$))
             .subscribe(() => this.cardThirteenYService.setActiveTabValid(this.conclusionForm.valid));
+    }
+
+    checkBlockState() {
+        this.cardThirteenYService.isBlocked.subscribe(state => {
+            if (state) {
+                this.disableGroup();
+            }
+        });
+    }
+
+    disableGroup() {
+        this.conclusionForm.disable({emitEvent: false});
+        this.isCardDisabled = true;
+        this.cardThirteenYService.setSelectedTabCurrentValues(null);
+        this.cdRef.detectChanges();
     }
 
     getInitValues() {
@@ -105,6 +122,9 @@ export class CardConclusionComponent implements OnInit {
             });
             this.cdRef.detectChanges();
             this.cardThirteenYService.setSelectedTabCurrentValues(null);
+            if (this.isCardDisabled) {
+                this.disableGroup();
+            }
         });
     }
 

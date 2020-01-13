@@ -24,6 +24,11 @@
     width: 100%;
     margin-right: 20px;
     margin-bottom: 30px;
+
+    &.__disabled {
+      pointer-events: none;
+      cursor: default;
+    }
   }
 
   &__truncate {

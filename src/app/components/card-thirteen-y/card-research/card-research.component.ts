@@ -7,7 +7,7 @@ import {DeleteConfirmComponent} from '../shared/dialogs/delete-confirm/delete-co
 import {Examination} from '../../../models/dictionary.model';
 import {DictionaryService} from '../../../service/dictionary.service';
 import {NgOnDestroy} from '../../../@core/shared/services/destroy.service';
-import {takeUntil} from 'rxjs/operators';
+import {debounceTime, takeUntil} from 'rxjs/operators';
 
 @Component({
     selector: 'app-card-research',
@@ -22,6 +22,8 @@ export class CardResearchComponent implements OnInit {
     maxDate = new Date();
     additionalExaminations: [];
     formValues!: any;
+    isCardDisabled!: boolean;
+    isTableDisabled!: boolean;
 
     constructor(private cdRef: ChangeDetectorRef,
                 private dialog: MatDialog,
@@ -40,6 +42,7 @@ export class CardResearchComponent implements OnInit {
         this.getInitValues();
         this.setAdditionalExaminations();
         this.checkIsFormValid();
+        this.checkBlockState();
         this.checkFormChanges();
     }
 
@@ -69,6 +72,22 @@ export class CardResearchComponent implements OnInit {
             .subscribe(() => this.cardThirteenYService.setActiveTabValid(this.researchFormGroup.valid));
     }
 
+    checkBlockState() {
+        this.cardThirteenYService.isBlocked.subscribe(state => {
+            if (state) {
+                this.disableGroup();
+            }
+        });
+    }
+
+    disableGroup() {
+        this.researchFormGroup.disable({emitEvent: false});
+        this.cardThirteenYService.setSelectedTabCurrentValues(null);
+        this.isCardDisabled = true;
+        this.isTableDisabled = true;
+        this.cdRef.detectChanges();
+    }
+
     createResearchFormGroups() {
         this.dictionaryService.getExaminations(1, 100, '').subscribe(res => {
             this.requiredExaminations = [];
@@ -82,15 +101,18 @@ export class CardResearchComponent implements OnInit {
                 this.requiredExaminations.push(examination);
             });
             this.setRequiredExaminations();
-            this.cdRef.detectChanges();
+            this.cdRef.markForCheck();
             this.cardThirteenYService.setSelectedTabCurrentValues(null);
+            if (this.isCardDisabled) {
+                this.disableGroup();
+            }
         });
     }
 
     setRequiredExaminations() {
         for (let i = 0; i < this.requiredExaminationsArray.length; i++) {
             this.requiredExaminationsArray.get(`${i}`).get('dateBegin').valueChanges.subscribe(date => {
-                date = date.format();
+                date = typeof date === 'string' ? date : date.format();
                 this.formValues.requiredExaminations[i] = {
                     ...this.formValues.requiredExaminations[i],
                     exam: this.requiredExaminations[i],
