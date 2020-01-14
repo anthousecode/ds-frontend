@@ -21,8 +21,14 @@ export class DeleteConfirmComponent {
     deleteData() {
         this.data.arr.splice(this.data.i, 1);
         this.dialogRef.close();
-        this.snackBar.open(this.data.message, 'ОК', {
-            duration: 5000
-        });
+        this.snackBar.open(this.getDeleteConfirmMessage(), 'ОК', {duration: 5000});
+    }
+
+    getDeleteKey() {
+        return this.data.key === 'research' ? 'исследование' : 'диагноз';
+    }
+
+    getDeleteConfirmMessage() {
+        return this.data.key === 'research' ? 'Исследование удалено' : 'Диагноз удалён';
     }
 }

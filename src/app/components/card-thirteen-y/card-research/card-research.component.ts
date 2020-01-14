@@ -152,19 +152,19 @@ export class CardResearchComponent implements OnInit {
         });
     }
 
-  deleteStudy(i) {
-    this.dialog.open(DeleteConfirmComponent, {
-      panelClass: '__delete-confirm',
-      data: {
-        arr: this.formValues.additionalExaminations,
-        i,
-        message: 'Исследование удалено'
-      }
-    }).afterClosed().subscribe(() => {
-      this.cdRef.detectChanges();
-      this.cardThirteenYService.setTabCurrentValues(this.formValues);
-    });
-  }
+    deleteStudy(i) {
+        this.dialog.open(DeleteConfirmComponent, {
+            panelClass: '__delete-confirm',
+            data: {
+                arr: this.formValues.additionalExaminations,
+                i,
+                key: 'research',
+            }
+        }).afterClosed().subscribe(() => {
+            this.cdRef.detectChanges();
+            this.cardThirteenYService.setTabCurrentValues(this.formValues);
+        });
+    }
 
     editStudy(exam, index: number, event: MouseEvent) {
         if (!this.checkDeleteClass(event)) {

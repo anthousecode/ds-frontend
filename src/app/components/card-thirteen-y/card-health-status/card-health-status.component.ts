@@ -384,7 +384,7 @@ export class CardHealthStatusComponent implements OnInit {
         if (!this.checkDeleteClass(event)) {
             this.dialog.open(AddDiagnosisAfterComponent, {
                 panelClass: '__add-diagnosis-after',
-                data: diagnosis
+                data: diagnosis,
             });
         }
     }
@@ -416,7 +416,6 @@ export class CardHealthStatusComponent implements OnInit {
             data: {
                 i,
                 arr: this.formValues.healthStatusBefore.diagnoses,
-                message: 'Диагноз удален'
             }
         }).afterClosed()
             .subscribe(() => {
