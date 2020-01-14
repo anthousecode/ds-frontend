@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {catchErrorLogEmpty} from '../../@core/shared/rxjs-operators/base-catch-error.operator';
 import {AbstractControl, FormGroup} from '@angular/forms';
 import {BaseApiService} from '../../@core/api/shared/base-api.service';
-import {IDiagnoses} from './shared/interfaces/diagnoses.interface';
+import {IDiagnose} from './shared/interfaces/diagnoses.interface';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {IGroupVaccinations} from './card-vaccination/shared/vaccination.interface';
 import {IAdditionalInfo} from './shared/interfaces/additional-info.interface';
@@ -97,12 +97,12 @@ export class CardThirteenYService {
         return this.apiService.get<IChangesHistory>('changes-history.json'); // TODO: remove when api will work
     }
 
-    getDiagnoses(): Observable<IDiagnoses[]> {
-        return this.apiService.get<IDiagnoses[]>('diagnoses.json'); // TODO: remove when api will work
+    getDiagnoses(): Observable<IDiagnose[]> {
+        return this.apiService.get<IDiagnose[]>('diagnoses.json'); // TODO: remove when api will work
     }
 
-    getDiagnosesAfter(): Observable<IDiagnoses[]> {
-        return this.apiService.get<IDiagnoses[]>('diagnoses-after.json'); // TODO: remove when api will work
+    getDiagnosesAfter(): Observable<IDiagnose[]> {
+        return this.apiService.get<IDiagnose[]>('diagnoses-after.json'); // TODO: remove when api will work
     }
 
     getAdditionalResearch(): Observable<AdditionalResearch[]> {

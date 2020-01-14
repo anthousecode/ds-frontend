@@ -173,7 +173,9 @@ export class CardThirteenYComponent implements OnInit {
             .subscribe(data => {
                 this.cardThirteenYService.setTabInitValues(data);
                 this.cardThirteenYService.setSelectedTabCurrentValues(null);
-                if (tabKey) this.cardThirteenYService.setActiveTab(tabKey);
+                if (tabKey) {
+                    this.cardThirteenYService.setActiveTab(tabKey);
+                }
                 this.snackBar.open('Сохранено', 'ОК', {duration: 5000});
             }, error => this.snackBar.open('Ошибка', 'ОК', {duration: 5000}));
     }

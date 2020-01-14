@@ -1,41 +1,41 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class CardCreateService {
-  baseUrl = 'http://ds-dev.rt-eu.ru/api/';
+    baseUrl = 'http://ds-dev.rt-eu.ru/api/';
 
-  constructor(private http: HttpClient) {
-  }
+    constructor(private http: HttpClient) {
+    }
 
-  getCardTypes(): Observable<any> {
-    return this.http.get<any>(
-      `${this.baseUrl}dictionary/card-types`
-    );
-  }
+    getCardTypes(): Observable<any> {
+        return this.http.get<any>(
+            `${this.baseUrl}dictionary/card-types`
+        );
+    }
 
-  getChildCategories(): Observable<any> {
-    return this.http.get<any>(
-      `${this.baseUrl}dictionary/child-categories`
-    );
-  }
+    getChildCategories(): Observable<any> {
+        return this.http.get<any>(
+            `${this.baseUrl}dictionary/child-categories`
+        );
+    }
 
-  getAgeGroups(): Observable<any> {
-    return this.http.get<any>(
-      `${this.baseUrl}dictionary/age-groups`
-    );
-  }
+    getAgeGroups(): Observable<any> {
+        return this.http.get<any>(
+            `${this.baseUrl}dictionary/age-groups`
+        );
+    }
 
-  createCard(newCard) {
-    return this.http.post<any>(
-      `${this.baseUrl}cards`, newCard
-    );
-  }
+    createCard(newCard) {
+        return this.http.post<any>(
+            `${this.baseUrl}cards`, newCard
+        );
+    }
 
-  getCardById(id) {
-    return this.http.get<any>(`${this.baseUrl}cards/${id}/`);
-  }
+    getCardById(id) {
+        return this.http.get<any>(`${this.baseUrl}cards/${id}/`);
+    }
 }

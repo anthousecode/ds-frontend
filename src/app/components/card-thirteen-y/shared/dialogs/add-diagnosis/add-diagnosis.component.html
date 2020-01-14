@@ -1,241 +1,239 @@
 <form class="__old"
       [formGroup]="addDiagnosisForm">
-  <div class="add-diagnosis__wrapper">
-    <p class="add-diagnosis__title">Добавить диагноз</p>
-    <div class="add-diagnosis__info"
-         formGroupName="diagnosisInfo">
-      <mat-checkbox formControlName="almostHealthy"
-                    class="add-diagnosis__almost-healthy">
-        Практически здоров
-      </mat-checkbox>
-      <mat-form-field floatLabel="auto"
-                      class="add-diagnosis__diagnosis-name">
-        <input matInput
-               placeholder="Диагноз"
-               [matAutocomplete]="autoDiagnosis"
-               (blur)="setControlInfo('diagnosisInfo', 'diagnosis', 'name')"
-               formControlName="diagnosisName"
-               required>
-        <mat-autocomplete #autoDiagnosis="matAutocomplete">
-          <mat-option *ngFor="let diagnosis of diagnosisList"
-                      [value]="diagnosis.name">
-            {{diagnosis.name}}
-          </mat-option>
-        </mat-autocomplete>
-        <mat-error *ngIf="cardThirteenYService.getControls(addDiagnosisForm,'diagnosisInfo').diagnosisName.invalid">
-          Выберите страховую медицинскую организацию
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="add-diagnosis__observation">
-      <label class="add-diagnosis__observation-title"
-             id="add-diagnosis__observation">Диспансерное наблюдение</label>
-      <mat-radio-group aria-labelledby="add-diagnosis__observation"
-                       class="add-diagnosis__observation-block"
-                       formControlName="dispensaryObservation">
-        <mat-radio-button *ngFor="let observationItem of diagnosticObservationValues"
-                          class="add-diagnosis__observation-item"
-                          [value]="observationItem.id">
-          {{observationItem.name}}
-        </mat-radio-button>
-      </mat-radio-group>
-    </div>
-    <div class="add-diagnosis__treatment"
-         formGroupName="treatmentPrescribed">
-      <p class="add-diagnosis__treatment-title">
-        Лечение было назначено
-        <span>*</span>
-      </p>
-      <div class="add-diagnosis__treatment-block">
-        <mat-form-field floatLabel="auto"
-                        class="add-diagnosis__treatment-item">
-          <mat-label>Амбулаторные условия</mat-label>
-          <mat-select formControlName="ambulatoryConditions"
-                      required>
-            <mat-option *ngFor="let condition of ambulatoryConditionsList"
-                        [value]="condition.id">
-              {{condition.name}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field floatLabel="auto"
-                        *ngIf="medOrganizationTypeVisible"
-                        class="add-diagnosis__treatment-item">
-          <mat-label>Выберите тип медицинской организации</mat-label>
-          <mat-select formControlName="medOrganizationType"
-                      required>
-            <mat-option *ngFor="let org of treatmentOrganizationTypes"
-                        [value]="org.id">
-              {{org.name}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="add-diagnosis__treatment"
-         formGroupName="treatmentPerformed">
-      <p class="add-diagnosis__treatment-title">
-        Лечение было выполнено
-        <span>*</span>
-      </p>
-      <div class="add-diagnosis__treatment-block">
-        <mat-form-field floatLabel="auto"
-                        class="add-diagnosis__treatment-item">
-          <mat-label>Амбулаторные условия</mat-label>
-          <mat-select formControlName="treatmentPerformedControl"
-                      required>
-            <mat-option *ngFor="let condition of ambulatoryConditionsList"
-                        [value]="condition.id">
-              {{condition.name}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field floatLabel="auto"
-                        *ngIf="!isReasonFailureVisible"
-                        class="add-diagnosis__treatment-item">
-          <mat-label>Выберите тип медицинской организации</mat-label>
-          <mat-select formControlName="medOrganizationTypePerformed"
-                      required>
-            <mat-option *ngFor="let org of treatmentOrganizationTypes"
-                        [value]="org.id">
-              {{org.name}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="add-diagnosis__treatment"
-         *ngIf="isReasonFailureVisible"
-         formGroupName="reasonFailureValue">
-      <p class="add-diagnosis__treatment-title">Причина невыполнения в соответствии со значением</p>
-      <div class="add-diagnosis__treatment-block">
-        <mat-form-field floatLabel="auto"
-                        class="add-diagnosis__treatment-item">
-          <mat-label>Выберите причину невыполнения</mat-label>
-          <mat-select formControlName="reasonValue"
-                      required>
-            <mat-option *ngFor="let reason of reasonFailureList"
-                        [value]="reason.id">
-              {{reason.name}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <input matInput
-               *ngIf="isReasonFailureTextVisible"
-               class="add-diagnosis__treatment-input"
-               placeholder="Укажите причину невыполнения"
-               formControlName="reasonValueText">
-      </div>
-    </div>
-    <div class="add-diagnosis__skl-wrapper">
-      <div class="add-diagnosis__skl"
-           formGroupName="medSklPrescribed">
-        <p class="add-diagnosis__skl-title">
-          Медицинская реабилитация/санаторно-курортное лечение были назначены
-          <span>*</span>
-        </p>
-        <div class="add-diagnosis__skl-block">
-          <mat-form-field floatLabel="auto"
-                          class="add-diagnosis__skl-item">
-            <mat-label>Амбулаторные условия</mat-label>
-            <mat-select formControlName="sklPrescribedAmbulatoryConditions"
-                        required>
-              <mat-option *ngFor="let condition of ambulatoryConditionsList"
-                          [value]="condition.id">
-                {{condition.name}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field floatLabel="auto"
-                          *ngIf="isSklPrescribedMedTypeVisible"
-                          class="add-diagnosis__skl-item">
-            <mat-label>Выберите тип медицинской организации</mat-label>
-            <mat-select formControlName="sklPrescribedMedType"
-                        required>
-              <mat-option *ngFor="let org of treatmentOrganizationTypes"
-                          [value]="org.id">
-                {{org.name}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+    <div class="add-diagnosis__wrapper">
+        <p class="add-diagnosis__title">{{modalName}}</p>
+        <div class="add-diagnosis__info"
+             formGroupName="diagnosisInfo">
+            <mat-checkbox formControlName="healthGood"
+                          class="add-diagnosis__almost-healthy">
+                Практически здоров
+            </mat-checkbox>
+            <mat-form-field floatLabel="auto"
+                            class="add-diagnosis__diagnosis-name">
+                <input #mkb10NameInput
+                       matInput
+                       placeholder="Диагноз"
+                       [matAutocomplete]="autoDiagnosis"
+                       formControlName="mkb10Name"
+                       required>
+                <mat-autocomplete #autoDiagnosis="matAutocomplete">
+                    <mat-option *ngFor="let mkb10 of mkb10s" [value]="mkb10.name"
+                                (onSelectionChange)="checkMkb10(mkb10)">
+                        {{mkb10.name}}
+                    </mat-option>
+                </mat-autocomplete>
+                <mat-error *ngIf="cardThirteenYService.getControls(addDiagnosisForm,'diagnosisInfo').mkb10Name.invalid">
+                    Выберите страховую медицинскую организацию
+                </mat-error>
+            </mat-form-field>
         </div>
-      </div>
-      <div class="add-diagnosis__skl"
-           formGroupName="medSklPerformed">
-        <p class="add-diagnosis__skl-title">
-          Медицинская реабилитация и (или) санаторно-курортное лечение были выполнены
-          <span>*</span>
-        </p>
-        <div class="add-diagnosis__skl-block">
-          <mat-form-field floatLabel="auto"
-                          class="add-diagnosis__skl-item">
-            <mat-label>Амбулаторные условия</mat-label>
-            <mat-select formControlName="sklPerformedAmbulatoryConditions"
-                        required>
-              <mat-option *ngFor="let condition of ambulatoryConditionsList"
-                          [value]="condition.id">
-                {{condition.name}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field floatLabel="auto"
-                          *ngIf="isSklPerformedMedTypeVisible"
-                          class="add-diagnosis__skl-item">
-            <mat-label>Выберите тип медицинской организации</mat-label>
-            <mat-select formControlName="sklPerformedMedType"
-                        required>
-              <mat-option *ngFor="let org of treatmentOrganizationTypes"
-                          [value]="org.id">
-                {{org.name}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+        <div class="add-diagnosis__observation">
+            <label class="add-diagnosis__observation-title"
+                   id="add-diagnosis__observation">Диспансерное наблюдение</label>
+            <mat-radio-group aria-labelledby="add-diagnosis__observation" class="add-diagnosis__observation-block"
+                             formControlName="dispensaryObservation">
+                <mat-radio-button *ngFor="let observationItem of diagnosticObservationValues"
+                                  class="add-diagnosis__observation-item"
+                                  [value]="observationItem.id">
+                    {{observationItem.name}}
+                </mat-radio-button>
+            </mat-radio-group>
         </div>
-      </div>
-      <div class="add-diagnosis__skl"
-           *ngIf="!isSklPerformedMedTypeVisible"
-           formGroupName="performedReasonFailureValue">
-        <p class="add-diagnosis__treatment-title">Причина невыполнения в соответствии со значением</p>
-        <div class="add-diagnosis__treatment-block">
-          <mat-form-field floatLabel="auto"
-                          class="add-diagnosis__treatment-item">
-            <mat-label>Выберите причину невыполнения</mat-label>
-            <mat-select formControlName="performedReasonValue"
-                        required>
-              <mat-option *ngFor="let reason of reasonFailureList"
-                          [value]="reason.id">
-                {{reason.name}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <input matInput
-                 *ngIf="isReasonPerformedFailureTextVisible"
-                 class="add-diagnosis__treatment-input"
-                 placeholder="Укажите причину невыполнения"
-                 formControlName="performedReasonValueText">
+        <div class="add-diagnosis__treatment"
+             formGroupName="treatmentConditionGroup">
+            <p class="add-diagnosis__treatment-title">
+                Лечение было назначено
+                <span>*</span>
+            </p>
+            <div class="add-diagnosis__treatment-block">
+                <mat-form-field floatLabel="auto"
+                                class="add-diagnosis__treatment-item">
+                    <mat-select formControlName="treatmentCondition" required>
+                        <mat-option *ngFor="let condition of treatmentConditionList"
+                                    [value]="condition.id">
+                            {{condition.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field floatLabel="auto"
+                                *ngIf="treatmentConditionOrgVisible"
+                                class="add-diagnosis__treatment-item">
+                    <mat-label>Выберите тип медицинской организации</mat-label>
+                    <mat-select formControlName="treatmentConditionOrg"
+                                required>
+                        <mat-option *ngFor="let org of treatmentOrganizationTypes"
+                                    [value]="org.id">
+                            {{org.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
         </div>
-      </div>
+        <div class="add-diagnosis__treatment"
+             formGroupName="treatmentDoneGroup">
+            <p class="add-diagnosis__treatment-title">
+                Лечение было выполнено
+                <span>*</span>
+            </p>
+            <div class="add-diagnosis__treatment-block">
+                <mat-form-field floatLabel="auto"
+                                class="add-diagnosis__treatment-item">
+                    <mat-select formControlName="treatmentDone"
+                                required>
+                        <mat-option *ngFor="let condition of treatmentConditionList"
+                                    [value]="condition.id">
+                            {{condition.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field floatLabel="auto"
+                                *ngIf="treatmentDoneOrgVisible"
+                                class="add-diagnosis__treatment-item">
+                    <mat-label>Выберите тип медицинской организации</mat-label>
+                    <mat-select formControlName="treatmentDoneOrg"
+                                required>
+                        <mat-option *ngFor="let org of treatmentOrganizationTypes"
+                                    [value]="org.id">
+                            {{org.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="add-diagnosis__treatment"
+             *ngIf="!treatmentDoneOrgVisible"
+             formGroupName="treatmentFailReasonGroup">
+            <p class="add-diagnosis__treatment-title">Причина невыполнения в соответствии со значением</p>
+            <div class="add-diagnosis__treatment-block">
+                <mat-form-field floatLabel="auto"
+                                class="add-diagnosis__treatment-item">
+                    <mat-label>Выберите причину невыполнения</mat-label>
+                    <mat-select formControlName="treatmentFailReason"
+                                required>
+                        <mat-option *ngFor="let reason of reasonFailureList"
+                                    [value]="reason.id">
+                            {{reason.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <input matInput
+                       *ngIf="treatmentFailReasonOtherVisible"
+                       class="add-diagnosis__treatment-input"
+                       placeholder="Укажите причину невыполнения"
+                       formControlName="treatmentFailReasonOther">
+            </div>
+        </div>
+        <div class="add-diagnosis__skl-wrapper">
+            <div class="add-diagnosis__skl"
+                 formGroupName="rehabilConditionGroup">
+                <p class="add-diagnosis__skl-title">
+                    Медицинская реабилитация/санаторно-курортное лечение были назначены
+                    <span>*</span>
+                </p>
+                <div class="add-diagnosis__skl-block">
+                    <mat-form-field floatLabel="auto"
+                                    class="add-diagnosis__skl-item">
+                        <mat-select formControlName="rehabilCondition"
+                                    required>
+                            <mat-option *ngFor="let condition of treatmentConditionList"
+                                        [value]="condition.id">
+                                {{condition.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field floatLabel="auto"
+                                    *ngIf="rehabilConditionOrgVisible"
+                                    class="add-diagnosis__skl-item">
+                        <mat-label>Выберите тип медицинской организации</mat-label>
+                        <mat-select formControlName="rehabilConditionOrg"
+                                    required>
+                            <mat-option *ngFor="let org of treatmentOrganizationTypes"
+                                        [value]="org.id">
+                                {{org.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="add-diagnosis__skl"
+                 formGroupName="rehabilDoneGroup">
+                <p class="add-diagnosis__skl-title">
+                    Медицинская реабилитация и (или) санаторно-курортное лечение были выполнены
+                    <span>*</span>
+                </p>
+                <div class="add-diagnosis__skl-block">
+                    <mat-form-field floatLabel="auto"
+                                    class="add-diagnosis__skl-item">
+                        <mat-select formControlName="rehabilDone"
+                                    required>
+                            <mat-option *ngFor="let condition of treatmentConditionList"
+                                        [value]="condition.id">
+                                {{condition.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field floatLabel="auto"
+                                    *ngIf="rehabilDoneOrgVisible"
+                                    class="add-diagnosis__skl-item">
+                        <mat-label>Выберите тип медицинской организации</mat-label>
+                        <mat-select formControlName="rehabilDoneOrg"
+                                    required>
+                            <mat-option *ngFor="let org of treatmentOrganizationTypes"
+                                        [value]="org.id">
+                                {{org.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="add-diagnosis__skl"
+                 *ngIf="!rehabilDoneOrgVisible"
+                 formGroupName="rehabilFailReasonGroup">
+                <p class="add-diagnosis__treatment-title">Причина невыполнения в соответствии со значением</p>
+                <div class="add-diagnosis__treatment-block">
+                    <mat-form-field floatLabel="auto"
+                                    class="add-diagnosis__treatment-item">
+                        <mat-label>Выберите причину невыполнения</mat-label>
+                        <mat-select formControlName="rehabilFailReason"
+                                    required>
+                            <mat-option *ngFor="let reason of reasonFailureList"
+                                        [value]="reason.id">
+                                {{reason.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <input matInput
+                           *ngIf="rehabilFailReasonOtherVisible"
+                           class="add-diagnosis__treatment-input"
+                           placeholder="Укажите причину невыполнения"
+                           formControlName="rehabilFailReasonOther">
+                </div>
+            </div>
+        </div>
+        <div class="add-diagnosis__med-help">
+            <p class="add-diagnosis__med-help-title">
+                Высокотехнологичная медицинская помощь
+                <span>*</span>
+            </p>
+            <mat-form-field floatLabel="auto"
+                            class="add-diagnosis__treatment-item">
+                <mat-label>Выберите медицинскую помощь</mat-label>
+                <mat-select formControlName="needVmp"
+                            required>
+                    <mat-option *ngFor="let vmp of vmpNecessitiesList"
+                                [value]="vmp.id">
+                        {{vmp.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
     </div>
-    <div class="add-diagnosis__med-help">
-      <p class="add-diagnosis__med-help-title">
-        Высокотехнологичная медицинская помощь
-        <span>*</span>
-      </p>
-      <mat-form-field floatLabel="auto"
-                      class="add-diagnosis__treatment-item">
-        <mat-label>Выберите медицинскую помощь</mat-label>
-        <mat-select formControlName="medicalHelp"
-                    required>
-          <mat-option *ngFor="let vmp of vmpNecessitiesList"
-                      [value]="vmp.id">
-            {{vmp.name}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+    <div class="add-diagnosis__buttons">
+        <button class="add-diagnosis__buttons-item" mat-dialog-close>Отмена</button>
+        <button class="add-diagnosis__buttons-item" (click)="saveAndClose()"
+                [ngClass]="{'__disabled': addDiagnosisForm.invalid || !addDiagnosisForm.dirty}">
+            Сохранить
+        </button>
+        <br>
     </div>
-  </div>
-  <div class="add-diagnosis__buttons">
-    <button class="add-diagnosis__buttons-item" mat-dialog-close>Отмена</button>
-    <button class="add-diagnosis__buttons-item" (click)="saveAndClose()">Сохранить</button>
-  </div>
 </form>

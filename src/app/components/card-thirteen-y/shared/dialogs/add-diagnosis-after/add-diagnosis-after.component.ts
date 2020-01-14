@@ -2,7 +2,7 @@ import {Component, OnInit, ChangeDetectionStrategy, Inject, ChangeDetectorRef} f
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {CardThirteenYService} from '../../../card-thirteen-y.service';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
-import {IDiagnoses} from '../../interfaces/diagnoses.interface';
+import {IDiagnose} from '../../interfaces/diagnoses.interface';
 import {debounceTime, filter} from 'rxjs/operators';
 import {
   DispensaryObservation,
@@ -36,7 +36,7 @@ export class AddDiagnosisAfterComponent implements OnInit {
               private cdRef: ChangeDetectorRef,
               private snackBar: MatSnackBar,
               private dialogRef: MatDialogRef<AddDiagnosisAfterComponent>,
-              @Inject(MAT_DIALOG_DATA) public diagnosisData: IDiagnoses) {
+              @Inject(MAT_DIALOG_DATA) public diagnosisData) {
   }
 
   ngOnInit() {
@@ -62,13 +62,13 @@ export class AddDiagnosisAfterComponent implements OnInit {
       diagnosisInfo: new FormGroup({
         almostHealthy: new FormControl(''),
         diagnosisFirstTime: new FormControl(''),
-        diagnosisName: new FormControl('', [Validators.required]),
+        diagnoseName: new FormControl('', [Validators.required]),
         diagnosisId: new FormControl('', [Validators.required])
       }),
       dispensaryObservation: new FormControl(3, [Validators.required]),
-      treatmentPrescribed: new FormGroup({
-        ambulatoryConditions: new FormControl(1, [Validators.required]),
-        medOrganizationType: new FormControl('', [Validators.required])
+      treatmentConditionGroup: new FormGroup({
+        treatmentCondition: new FormControl(1, [Validators.required]),
+        treatmentConditionOrg: new FormControl('', [Validators.required])
       }),
       additionalConsultationsAppointed: new FormGroup({
         isAdditionalConsultation: new FormControl(1, [Validators.required]),
@@ -78,11 +78,11 @@ export class AddDiagnosisAfterComponent implements OnInit {
         isAdditionalConsultation: new FormControl(1, [Validators.required]),
         medOrgTypeDone: new FormControl('')
       }),
-      medSklPrescribed: new FormGroup({
+      rehabilConditionGroup: new FormGroup({
         sklPrescribedAmbulatoryConditions: new FormControl(1, [Validators.required]),
-        sklPrescribedMedType: new FormControl('')
+        rehabilConditionOrg: new FormControl('')
       }),
-      medicalHelp: new FormControl('', [Validators.required]),
+      needVmp: new FormControl('', [Validators.required]),
       recommendations: new FormControl('', [Validators.required])
     });
   }

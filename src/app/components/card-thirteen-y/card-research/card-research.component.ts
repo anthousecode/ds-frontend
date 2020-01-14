@@ -74,7 +74,7 @@ export class CardResearchComponent implements OnInit {
   checkFormChanges() {
     this.researchFormGroup.valueChanges.subscribe(data => {
       this.cardThirteenYService.setSelectedTabCurrentValues(data);
-      console.log(data)
+      console.log(data);
     });
   }
 
@@ -149,11 +149,13 @@ export class CardResearchComponent implements OnInit {
     this.dialog.open(DeleteConfirmComponent, {
       panelClass: '__delete-confirm',
       data: {
-        formValues: this.formValues,
-        additionalExaminations: this.additionalExaminations,
+        arr: this.formValues.additionalExaminations,
         i,
-        cdRef: this.cdRef
+        message: 'Исследование удалено'
       }
+    }).afterClosed().subscribe(() => {
+      this.cdRef.detectChanges();
+      this.cardThirteenYService.setTabCurrentValues(this.formValues);
     });
   }
 

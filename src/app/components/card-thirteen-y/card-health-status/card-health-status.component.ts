@@ -1,7 +1,7 @@
 import {Component, OnInit, ChangeDetectionStrategy, ViewChild, ChangeDetectorRef, ElementRef} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {CardThirteenYService} from '../card-thirteen-y.service';
-import {IDiagnoses} from '../shared/interfaces/diagnoses.interface';
+import {IDiagnose} from '../shared/interfaces/diagnoses.interface';
 import {Observable} from 'rxjs';
 import {MatDatepicker, MatDialog, MatAutocomplete, MatAutocompleteSelectedEvent} from '@angular/material';
 import {AddDiagnosisComponent} from '../shared/dialogs/add-diagnosis/add-diagnosis.component';
@@ -24,8 +24,8 @@ export class CardHealthStatusComponent implements OnInit {
     @ViewChild('rehabilitationDate') rehabilitationDate!: MatDatepicker<any>;
     healthStatusForm!: FormGroup;
     healthStatusList$!: Observable<HealthGroup[]>;
-    diagnosisList!: Observable<IDiagnoses[]>;
-    diagnosisListAfter!: Observable<IDiagnoses[]>;
+    diagnosisList!: Observable<IDiagnose[]>;
+    diagnosisListAfter!: Observable<IDiagnose[]>;
     disabilityTypeList$!: Observable<InvalidType[]>;
     doneList$!: Observable<ReabilitationStatus[]>;
     isChipsDisabled!: boolean;
@@ -54,10 +54,6 @@ export class CardHealthStatusComponent implements OnInit {
                 private dictionaryService: DictionaryService,
                 private dialog: MatDialog,
                 private cdRef: ChangeDetectorRef) {
-        this.cardThirteenYService.activeTabCurrentValues
-            .subscribe(data => {
-                this.formValues = data;
-            });
         this.cardThirteenYService.setActiveTabValid(true);
     }
 
@@ -69,17 +65,18 @@ export class CardHealthStatusComponent implements OnInit {
         this.healthStatusList$ = this.dictionaryService.getHealthGroups();
         this.disabilityTypeList$ = this.dictionaryService.getInvalidTypes();
         this.doneList$ = this.dictionaryService.getReabilitationStatuses();
-        this.diagnosisList = this.cardThirteenYService.getDiagnoses();
+        // this.diagnosisList = this.cardThirteenYService.getDiagnoses();
         this.diagnosisListAfter = this.cardThirteenYService.getDiagnosesAfter();
         this.disabilityTypeChange();
         this.disableRehabilitationPerformance();
         this.setDisabilityData();
-
         this.checkFormChanges();
+        this.checkHealthGroupChanges();
     }
 
     checkFormChanges() {
         this.healthStatusForm.valueChanges.subscribe(data => {
+            console.log(data);
             this.cardThirteenYService.setSelectedTabCurrentValues(data);
         });
     }
@@ -93,8 +90,9 @@ export class CardHealthStatusComponent implements OnInit {
     initFormGroups() {
         this.healthStatusForm = new FormGroup({
             beforeMedicalExamination: new FormGroup({
-                healthGroup: new FormControl(1, [Validators.required])
+                healthGroup: new FormControl('', [Validators.required])
             }),
+            diagnoses: new FormControl(''),
             disability: new FormGroup({
                 disabilityType: new FormControl(1, [Validators.required]),
                 disabilityFirstDate: new FormControl({value: ''}, [Validators.required]),
@@ -107,17 +105,48 @@ export class CardHealthStatusComponent implements OnInit {
         });
     }
 
+    checkHealthGroupChanges() {
+        this.cardThirteenYService.getControls(this.healthStatusForm, 'beforeMedicalExamination').healthGroup.valueChanges
+            .subscribe(id => {
+                this.setHealthGroup(id);
+            });
+    }
+
+    setHealthGroup(id) {
+        this.formValues = {
+            ...this.formValues,
+            healthStatusBefore: {
+                ...this.formValues.healthStatusBefore,
+                healthGroup: {
+                    id
+                }
+            }
+        };
+    }
+
     getInitValues() {
         this.cardThirteenYService.activeTabInitValues
             .subscribe(data => {
                 this.formValues = data;
-                console.log(data);
+                this.cdRef.detectChanges();
                 this.setFormInitValues(data);
                 this.cardThirteenYService.setSelectedTabInitValues(this.healthStatusForm.value);
             });
     }
 
     setFormInitValues(data) {
+        if (data.healthStatusBefore && data.healthStatusBefore.healthGroup) {
+            this.setHealthGroup(data.healthStatusBefore.healthGroup.id);
+            this.cardThirteenYService.getControls(this.healthStatusForm, 'beforeMedicalExamination').healthGroup
+                .setValue(data.healthStatusBefore.healthGroup.id, {emmitEvent: false});
+        } else {
+            this.setHealthGroup(1);
+            this.cardThirteenYService.getControls(this.healthStatusForm, 'beforeMedicalExamination').healthGroup
+                .setValue(1, {emmitEvent: false});
+        }
+        if (data.healthStatusBefore && data.healthStatusBefore.diagnoses) {
+            this.healthStatusForm.get('diagnoses').setValue(data.healthStatusBefore.diagnoses, {emmitEvent: false});
+        }
         if (data.disability) {
             if (data.disability.disabilityType) {
                 this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityType
@@ -137,7 +166,6 @@ export class CardHealthStatusComponent implements OnInit {
 
     setDisabilityData() {
         this.healthStatusForm.controls.disability.valueChanges.subscribe(data => {
-            console.log(data)
             const disabilityObj = {
                 ...this.formValues,
                 disability: {
@@ -148,7 +176,6 @@ export class CardHealthStatusComponent implements OnInit {
                     lastExamDate: this.getDateFormat(data.disabilityLastDate),
                 }
             };
-            // console.log(disabilityObj)
             this.cardThirteenYService.setTabCurrentValues(disabilityObj);
         });
     }
@@ -236,14 +263,34 @@ export class CardHealthStatusComponent implements OnInit {
     }
 
     addDiagnosis() {
-        this.dialog.open(AddDiagnosisComponent, {panelClass: '__add-diagnosis-before'});
+        this.dialog.open(AddDiagnosisComponent, {
+            panelClass: '__add-diagnosis-before',
+            data: {
+                formValues: this.formValues,
+                modalName: 'Добавить диагноз'
+            }
+        }).afterClosed().subscribe(() => {
+            this.cardThirteenYService.setTabCurrentValues(this.formValues);
+            this.healthStatusForm.get('diagnoses').setValue(this.formValues.healthStatusBefore.diagnoses);
+            this.cdRef.detectChanges();
+        });
     }
 
-    editDiagnosis(diagnosis: IDiagnoses, event) {
+    editDiagnosis(i, event) {
         if (!this.checkDeleteClass(event)) {
             this.dialog.open(AddDiagnosisComponent, {
                 panelClass: '__add-diagnosis-before',
-                data: diagnosis
+                autoFocus: false,
+                data: {
+                    healthStatusBefore: this.formValues.healthStatusBefore,
+                    i,
+                    formValues: this.formValues,
+                    modalName: 'Изменить диагноз'
+                }
+            }).afterClosed().subscribe(() => {
+                this.cardThirteenYService.setTabCurrentValues(this.formValues);
+                this.healthStatusForm.get('diagnoses').setValue(this.formValues.healthStatusBefore.diagnoses);
+                this.cdRef.detectChanges();
             });
         }
     }
@@ -252,7 +299,7 @@ export class CardHealthStatusComponent implements OnInit {
         this.dialog.open(AddDiagnosisAfterComponent, {panelClass: '__add-diagnosis-after'});
     }
 
-    editDiagnosisAfter(diagnosis: IDiagnoses, event) {
+    editDiagnosisAfter(diagnosis: IDiagnose, event) {
         if (!this.checkDeleteClass(event)) {
             this.dialog.open(AddDiagnosisAfterComponent, {
                 panelClass: '__add-diagnosis-after',
@@ -284,8 +331,20 @@ export class CardHealthStatusComponent implements OnInit {
         this.getDisabilityDisorders();
     }
 
-    deleteDiagnosis() {
-        this.dialog.open(DeleteConfirmComponent, {panelClass: '__delete-confirm'});
+    deleteDiagnosis(i) {
+        this.dialog.open(DeleteConfirmComponent, {
+            panelClass: '__delete-confirm',
+            data: {
+                i,
+                arr: this.formValues.healthStatusBefore.diagnoses,
+                message: 'Диагноз удален'
+            }
+        }).afterClosed()
+            .subscribe(() => {
+                this.cardThirteenYService.setTabCurrentValues(this.formValues);
+                this.healthStatusForm.get('diagnoses').setValue(this.formValues.healthStatusBefore.diagnoses);
+                this.cdRef.detectChanges();
+            });
     }
 
     openDatepicker(name: string) {

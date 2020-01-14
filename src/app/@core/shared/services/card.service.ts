@@ -1,15 +1,16 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class CardService {
-  thirteenYCardId: number;
+    thirteenYCardId: number;
+    patientId: number = 16995;
 
-  constructor() {
-  }
+    constructor() {
+    }
 
-  setThirteenYCardId(id: number) {
-    this.thirteenYCardId = id;
-  }
+    setThirteenYCardId(id: number) {
+        this.thirteenYCardId = id;
+    }
 }
