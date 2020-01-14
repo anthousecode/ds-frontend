@@ -41,10 +41,14 @@ export class AdditionalInformationComponent {
   }
 
   calcIMT() {
-    const weight = this.cardInfo.physicalDevelopment.weight;
-    const height = this.cardInfo.physicalDevelopment.height / 100;
-    const imt = weight * height * height;
-    return imt.toFixed(2);
+    if (this.cardInfo.physicalDevelopment) {
+      const weight = this.cardInfo.physicalDevelopment.weight;
+      const height = this.cardInfo.physicalDevelopment.height / 100;
+      const imt = weight * height * height;
+      return imt.toFixed(2);
+    } else {
+      return 'не рассчитано';
+    }
   }
 
   toPatientCard() {

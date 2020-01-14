@@ -6,9 +6,6 @@ import { Injectable } from '@angular/core';
 export class CardService {
   thirteenYCardId: number;
 
-  constructor() {
-  }
-
   setThirteenYCardId(id: number) {
     this.thirteenYCardId = id;
   }

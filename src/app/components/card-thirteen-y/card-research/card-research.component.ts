@@ -92,10 +92,12 @@ export class CardResearchComponent implements OnInit {
         this.dictionaryService.getExaminations(1, 100, '').subscribe(res => {
             this.requiredExaminations = [];
             res.forEach((examination, i) => {
+                const dateBegin = !this.formValues.requiredExaminations ? this.formValues.requiredExaminations[i].date : '';
+                const result = !this.formValues.requiredExaminations ? this.formValues.requiredExaminations[i].result : '';
                 this.requiredExaminationsArray.push(
                     this.formBuilder.group({
-                        dateBegin: [this.formValues.requiredExaminations[i].date || '', [Validators.required]],
-                        result: [this.formValues.requiredExaminations[i].result || '', [Validators.required]]
+                        dateBegin: [dateBegin, [Validators.required]],
+                        result: [result, [Validators.required]]
                     })
                 );
                 this.requiredExaminations.push(examination);

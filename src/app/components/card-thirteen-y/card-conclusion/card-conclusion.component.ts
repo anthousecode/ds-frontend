@@ -112,9 +112,10 @@ export class CardConclusionComponent implements OnInit {
         this.dictionaryService.getDoctorsForExamination().subscribe((doctors: DoctorForExamination[]) => {
             this.doctorsForExaminations = doctors;
             this.doctorsForExaminations.forEach((item: DoctorForExamination, i) => {
+                const date = !this.formValues.doctorExaminations ? this.formValues.doctorExaminations[i].date : '';
                 this.doctorExaminations.push(
                     this.fb.group({
-                        date: [this.formValues.doctorExaminations[i].date || '', [Validators.required]],
+                        date: [date, [Validators.required]],
                         id: [item.id, [Validators.required]],
                         name: [item.name, [Validators.required]]
                     })

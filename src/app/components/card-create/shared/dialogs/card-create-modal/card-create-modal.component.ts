@@ -1,14 +1,14 @@
 import {Component, OnInit, ChangeDetectionStrategy, ViewChild, ChangeDetectorRef} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
-import {IAccountingFormValue} from '../../interfaces/accounting-form-value.interface';
-import {IAgeGroupValue} from '../../interfaces/age-group-value.interface';
-import {IChildCategoryValue} from '../../interfaces/child-category-value.interface';
 import {MatDatepicker} from '@angular/material';
 import {CardCreateService} from '../../../card-create.service';
 import {CARD_DATA} from '../../data/card';
 import {DateExaminationValidator} from '../../../../../validators/date.validator';
 import {CardService} from '../../../../../@core/shared/services/card.service';
 import {Router} from '@angular/router';
+import {DictionaryService} from '../../../../../service/dictionary.service';
+import {AgeGroup, CardType, ChildCategory} from '../../../../../models/dictionary.model';
+
 
 @Component({
     selector: 'app-card-create-modal',
@@ -23,14 +23,15 @@ export class CardCreateModalComponent implements OnInit {
     accountingFormId = 1;
     childCategoryId = 3;
     ageGroupId = 0;
-    accountingFormValues: IAccountingFormValue[];
-    childCategoryValues: IChildCategoryValue[];
-    ageGroupValues: IAgeGroupValue[];
+    accountingFormValues: CardType[];
+    childCategoryValues: ChildCategory[];
+    ageGroupValues: AgeGroup[];
 
     @ViewChild('surveyStartDateDatepicker')
     surveyStartDateDatepicker!: MatDatepicker<any>;
 
     constructor(private cardCreateService: CardCreateService,
+                private dictionaryService: DictionaryService,
                 private cardService: CardService,
                 private router: Router,
                 private cdRef: ChangeDetectorRef) {
@@ -38,18 +39,18 @@ export class CardCreateModalComponent implements OnInit {
 
     ngOnInit() {
         this.createForm();
-        this.cardCreateService.getCardTypes().subscribe((data: IAccountingFormValue[]) => {
+        this.dictionaryService.getCardTypes().subscribe((data: CardType[]) => {
             data.length = 2;
             this.accountingFormValues = data;
             this.accountingFormControl.setValue(data[this.accountingFormId].id);
             this.cdRef.detectChanges();
         });
-        this.cardCreateService.getChildCategories().subscribe((data: IChildCategoryValue[]) => {
+        this.dictionaryService.getChildCategories().subscribe((data: ChildCategory[]) => {
             this.childCategoryValues = data;
             this.childCategoryControl.setValue(data[this.childCategoryId].id);
             this.cdRef.detectChanges();
         });
-        this.cardCreateService.getAgeGroups().subscribe((data: IAgeGroupValue[]) => {
+        this.dictionaryService.getAgeGroups().subscribe((data: AgeGroup[]) => {
             this.ageGroupValues = data;
             this.ageGroupControl.setValue(data[this.ageGroupId].id);
             this.cdRef.detectChanges();

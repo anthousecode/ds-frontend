@@ -167,6 +167,8 @@ export class CardHealthStatusComponent implements OnInit {
                 this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').rehabilitationPerformance
                     .setValue(data.disability.iprStatus.id, {emitEvent: false});
             }
+        } else {
+            this.disableDisabilityControls();
         }
     }
 
@@ -235,7 +237,7 @@ export class CardHealthStatusComponent implements OnInit {
     }
 
     setInitDiseases() {
-        if (this.formValues.disability.diseases) {
+        if (this.formValues.disability && this.formValues.disability.diseases) {
             const initDiseases = this.formValues.disability.diseases.map(item => item.name);
             this.invalidDiseasesChips = initDiseases;
             this.invalidDiseases = this.invalidDiseases.filter(item => !initDiseases.includes(item));
@@ -279,7 +281,7 @@ export class CardHealthStatusComponent implements OnInit {
     }
 
     setInitDisorders() {
-        if (this.formValues.disability.healthDisorders) {
+        if (this.formValues.disability && this.formValues.disability.healthDisorders) {
             const initDisorders = this.formValues.disability.healthDisorders.map(item => item.name);
             this.disabilityDisordersChips = initDisorders;
             this.disabilityDisorders = this.disabilityDisorders.filter(item => !initDisorders.includes(item));

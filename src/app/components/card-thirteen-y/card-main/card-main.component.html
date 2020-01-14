@@ -34,7 +34,7 @@
             {{city.fullAddress}}
           </mat-option>
         </mat-autocomplete>
-        <mat-error *ngIf="cardThirteenYService.getControls(mainForm,'generalInfo').placeOfStay.invalid">
+        <mat-error *ngIf="mainForm.get('generalInfo').get('placeOfStay').invalid">
           {{getPlaceOfStayError()}}
         </mat-error>
       </mat-form-field>

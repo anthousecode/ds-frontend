@@ -173,12 +173,13 @@ export class CardMainComponent implements OnInit {
                     polisType: {
                         id: oms.policyType
                     },
-                    polisSerial: oms.policySeries,
+                    polisSerial: !oms.policySeries ? '' : oms.policySeries,
                     polisNumber: oms.policyNumber,
                     payOms: {
                         id: oms.omsPayment
                     }
                 };
+                console.log(omsObjectValues)
                 this.cardThirteenYService.setTabCurrentValues(omsObjectValues);
             });
     }
@@ -278,6 +279,7 @@ export class CardMainComponent implements OnInit {
                 fullName: data.stationaryOrganization.fullName,
             };
         }
+        this.cdRef.detectChanges();
         this.cardThirteenYService.setSelectedTabCurrentValues(null);
     }
 

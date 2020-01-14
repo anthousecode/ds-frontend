@@ -8,6 +8,7 @@ import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {AdditionalResearch} from './shared/interfaces/additional-research.interface';
 import {finalize} from 'rxjs/operators';
 import {IChangesHistory} from './shared/interfaces/changes-history.interface';
+import {CardService} from '../../@core/shared/services/card.service';
 
 @Injectable({
     providedIn: 'root'
@@ -28,7 +29,10 @@ export class CardThirteenYService {
     getCitiesUrl = 'http://ds-dev.rt-eu.ru/addrobject/search?query=';
 
     constructor(private http: HttpClient,
-                private apiService: BaseApiService) {}
+                private apiService: BaseApiService,
+                private cardService: CardService) {
+        console.log(this.cardService.thirteenYCardId);
+    }
 
     setActiveTab(tab: string) {
         this.activeTab.next(tab);

@@ -47,6 +47,7 @@ export class CardThirteenYComponent implements OnInit {
     selectedTabCurrentValues!: AbstractControl;
     selectedTabCurrentValuesModified!: string;
     cardId = 696;
+    // cardId = 1161;
     cardInfo!: any;
     token = TOKEN;
     formValues!: any;
