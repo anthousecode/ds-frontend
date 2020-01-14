@@ -1,331 +1,353 @@
-<form class="assessment__form-wrapper" [formGroup]="devAssessmentForm" (ngSubmit)="onSubmit(devAssessmentForm.value)">
-  <div class="assessment__section assessment__no-border-top" formGroupName="physicalDevelopment">
-    <p class="assessment__title">Оценка физического развития</p>
-    <div class="assessment__field-block">
-      <mat-form-field floatLabel="auto" class="assessment__input-field">
-        <input matInput class="assessment__input" placeholder="Вес, кг" formControlName="weight" required>
-        <mat-error *ngIf="cardThirteenYService.getControls(devAssessmentForm,'physicalDevelopment').weight.invalid"
-          class="assessment__helper-text">
-          Укажите вес
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field floatLabel="auto" class="assessment__input-field">
-        <input matInput class="assessment__input" placeholder="Рост, см" formControlName="height" required>
-        <mat-error *ngIf="cardThirteenYService.getControls(devAssessmentForm, 'physicalDevelopment').height.invalid"
-          class="assessment__helper-text">
-          Укажите рост
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field floatLabel="auto" class="assessment__input-field">
-        <input matInput class="assessment__input" placeholder="Окружность головы, см" formControlName="headCircumference" required>
-        <mat-error *ngIf="cardThirteenYService.getControls(devAssessmentForm, 'physicalDevelopment').headCircumference.invalid"
-          class="assessment__helper-text">
-          Укажите длинну окружности
-        </mat-error>
-      </mat-form-field>
+<form class="assessment__form-wrapper"
+      [formGroup]="devAssessmentForm">
+    <div class="assessment__section assessment__no-border-top" formGroupName="physicalDevelopment">
+        <p class="assessment__title">Оценка физического развития</p>
+        <div class="assessment__field-block">
+            <mat-form-field floatLabel="auto" class="assessment__input-field">
+                <input matInput class="assessment__input" placeholder="Вес, кг" formControlName="weight" required>
+                <mat-error
+                        *ngIf="cardThirteenYService.getControls(devAssessmentForm,'physicalDevelopment').weight.invalid"
+                        class="assessment__helper-text">
+                    Укажите вес
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field floatLabel="auto" class="assessment__input-field">
+                <input matInput class="assessment__input" placeholder="Рост, см" formControlName="height" required>
+                <mat-error
+                        *ngIf="cardThirteenYService.getControls(devAssessmentForm, 'physicalDevelopment').height.invalid"
+                        class="assessment__helper-text">
+                    Укажите рост
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field floatLabel="auto" class="assessment__input-field">
+                <input matInput class="assessment__input" placeholder="Окружность головы, см"
+                       formControlName="headCircumference" required>
+                <mat-error
+                        *ngIf="cardThirteenYService.getControls(devAssessmentForm, 'physicalDevelopment').headCircumference.invalid"
+                        class="assessment__helper-text">
+                    Укажите длинну окружности
+                </mat-error>
+            </mat-form-field>
+        </div>
     </div>
-  </div>
 
-  <div class="assessment__section" formGroupName="physicalDevelopment">
-    <p class="assessment__title">Нарушения в развитии</p>
-    <div class="assessment__field-block">
-      <div class="assessment__columns">
-        <div class="assessment__column">
-          <p class="physical-radio__label">Вес</p>
-          <div class="physical-radio__row">
-            <mat-radio-group class="assessment__psycho-radio-group" formControlName="weightDisorder">
-              <mat-radio-button (change)="handlerRadioButton('physicalDevelopment' ,'weightDisorder', $event)" [value]="null"
-                                class="assessment__radio-btn">
-                Нет
-              </mat-radio-button>
-              <mat-radio-button *ngIf="devDisordersKid" (change)="handlerRadioButton('physicalDevelopment' ,'weightDisorder', $event)" [value]="devDisordersKid[0]"
-                                class="assessment__radio-btn">
-                {{devDisordersKid[0].name}}
-              </mat-radio-button>
-              <mat-radio-button *ngIf="devDisordersKid" (change)="handlerRadioButton('physicalDevelopment' ,'weightDisorder', $event)" [value]="devDisordersKid[1]"
-                                class="assessment__radio-btn">
-                {{devDisordersKid[1].name}}
-              </mat-radio-button>
-            </mat-radio-group>
-          </div>
+    <div class="assessment__section" formGroupName="physicalDevelopment">
+        <p class="assessment__title">Нарушения в развитии</p>
+        <div class="assessment__field-block">
+            <div class="assessment__columns">
+                <div class="assessment__column">
+                    <p class="physical-radio__label">Вес</p>
+                    <div class="physical-radio__row">
+                        <mat-radio-group class="assessment__psycho-radio-group" formControlName="weightDisorder">
+                            <mat-radio-button
+                                    (change)="handlerRadioButton('physicalDevelopment' ,'weightDisorder', $event)"
+                                    [value]="null"
+                                    class="assessment__radio-btn">
+                                Нет
+                            </mat-radio-button>
+                            <mat-radio-button *ngIf="devDisordersKid"
+                                              (change)="handlerRadioButton('physicalDevelopment' ,'weightDisorder', $event)"
+                                              [value]="devDisordersKid[0]"
+                                              class="assessment__radio-btn">
+                                {{devDisordersKid[0].name}}
+                            </mat-radio-button>
+                            <mat-radio-button *ngIf="devDisordersKid"
+                                              (change)="handlerRadioButton('physicalDevelopment' ,'weightDisorder', $event)"
+                                              [value]="devDisordersKid[1]"
+                                              class="assessment__radio-btn">
+                                {{devDisordersKid[1].name}}
+                            </mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </div>
+                <div class="assessment__column">
+                    <p class="physical-radio__label">Рост</p>
+                    <div class="physical-radio__row">
+                        <mat-radio-group class="assessment__psycho-radio-group" formControlName="heightDisorder">
+                            <mat-radio-button
+                                    (change)="handlerRadioButton('physicalDevelopment' ,'heightDisorder', $event)"
+                                    [value]="null"
+                                    class="assessment__radio-btn">
+                                Нет
+                            </mat-radio-button>
+                            <mat-radio-button *ngIf="devDisordersKid"
+                                              (change)="handlerRadioButton('physicalDevelopment' ,'heightDisorder', $event)"
+                                              [value]="devDisordersKid[2]"
+                                              class="assessment__radio-btn">
+                                {{devDisordersKid[2].name}}
+                            </mat-radio-button>
+                            <mat-radio-button *ngIf="devDisordersKid"
+                                              (change)="handlerRadioButton('physicalDevelopment' ,'heightDisorder', $event)"
+                                              [value]="devDisordersKid[3]"
+                                              class="assessment__radio-btn">
+                                {{devDisordersKid[3].name}}
+                            </mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="assessment__column">
-          <p class="physical-radio__label">Рост</p>
-          <div class="physical-radio__row">
-            <mat-radio-group class="assessment__psycho-radio-group" formControlName="heightDisorder">
-              <mat-radio-button (change)="handlerRadioButton('physicalDevelopment' ,'heightDisorder', $event)" [value]="null"
-                                class="assessment__radio-btn">
-                Нет
-              </mat-radio-button>
-              <mat-radio-button *ngIf="devDisordersKid" (change)="handlerRadioButton('physicalDevelopment' ,'heightDisorder', $event)" [value]="devDisordersKid[2]"
-                                class="assessment__radio-btn">
-                {{devDisordersKid[2].name}}
-              </mat-radio-button>
-              <mat-radio-button *ngIf="devDisordersKid" (change)="handlerRadioButton('physicalDevelopment' ,'heightDisorder', $event)" [value]="devDisordersKid[3]"
-                                class="assessment__radio-btn">
-                {{devDisordersKid[3].name}}
-              </mat-radio-button>
-            </mat-radio-group>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <div *ngIf="patientAge <= 4" class="assessment__section" formGroupName="mentalDevelopment">
-    <p class="assessment__title">
-      Оценка психологического развития для детей 0-4 лет
-    </p>
-    <div class="assessment__field-block">
-      <div class="assessment__psycho-dev-kid">
-        <div class="psycho-dev-kid__row">
-          <mat-form-field floatLabel="auto" class="assessment__input-field">
-            <input matInput placeholder="Познавательная функция (возраст развития)" formControlName="cognitive"
-              class="assessment__input" required>
-          </mat-form-field>
-        </div>
-        <div class="psycho-dev-kid__row">
-          <mat-form-field floatLabel="auto" class="assessment__input-field">
-            <input matInput formControlName="motor" placeholder="Моторная функция (возраст развития)"
-              class="assessment__input" required>
-          </mat-form-field>
-        </div>
-        <div class="psycho-dev-kid__row">
-          <mat-form-field floatLabel="auto" class="assessment__input-field">
-            <input matInput formControlName="emotionalAndSocial"
-              placeholder="Эмоциональная и социальная (контакт с окружающим миром) функции (возраст развития)"
-              class="assessment__input" required>
-          </mat-form-field>
-        </div>
-        <div class="psycho-dev-kid__row">
-          <mat-form-field floatLabel="auto" class="assessment__input-field">
-            <input matInput formControlName="speech" placeholder="Предречевое и речевое развитие (возраст развития)"
-              class="assessment__input" required>
-          </mat-form-field>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div *ngIf="patientAge >= 5 && patientAge <=17" class="assessment__section" formGroupName="mentalDevelopment">
-    <p class="assessment__title">
-      Оценка психологического развития для детей 5-17 лет
-    </p>
-    <div class="assessment__field-block">
-      <div class="assessment__psycho-dev-teen">
-        <div class="psycho-dev-kid__row">
-          <p class="psycho-dev-kid__label">Психомоторная сфера <span class="required-symbol">*</span></p>
-          <mat-radio-group class="assessment__psycho-radio-group" formControlName="psychomotor">
-            <mat-radio-button
-                    *ngFor="let item of psychoValue" [value]="item.id" class="assessment__radio-btn"
-                    (change)="handlerRadioButton('mentalDevelopment' ,'psychomotor', $event)">
-              {{item.label}}
-            </mat-radio-button>
-          </mat-radio-group>
-        </div>
-        <div class="psycho-dev-kid__row">
-          <p class="psycho-dev-kid__label">Интеллект <span class="required-symbol">*</span></p>
-          <mat-radio-group class="assessment__psycho-radio-group" formControlName="intellect">
-            <mat-radio-button
-                    *ngFor="let item of psychoValue" [value]="item.id" class="assessment__radio-btn"
-                    (change)="handlerRadioButton('mentalDevelopment' ,'intellect', $event)">
-              {{item.label}}
-            </mat-radio-button>
-          </mat-radio-group>
-        </div>
-        <div class="psycho-dev-kid__row">
-          <p class="psycho-dev-kid__label">Эмоционально вегеативная сфера <span class="required-symbol">*</span></p>
-          <mat-radio-group class="assessment__psycho-radio-group" formControlName="emotionallyVegetative">
-            <mat-radio-button
-                    *ngFor="let item of psychoValue" [value]="item.id" class="assessment__radio-btn"
-                    (change)="handlerRadioButton('mentalDevelopment' ,'emotionallyVegetative', $event)">
-              {{item.label}}
-            </mat-radio-button>
-          </mat-radio-group>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div *ngIf="patientAge >= 10" class="assessment__section" formGroupName="sexualDevelopment">
-    <p class="assessment__title">
-      Оценка полового развития с 10 лет
-    </p>
-    <div class="assessment__gender-block">
-      <div class="gender-select-block">
-        <div [ngSwitch]="patientSexId" class="gender-label">
-          <p *ngSwitchCase="PATIENT_SEX.male">
-            Половая формула мальчиков
-            <span class="required-symbol">*</span>
-          </p>
-          <p *ngSwitchCase="PATIENT_SEX.female">
-            Половая формула девочек
-            <span class="required-symbol">*</span>
-          </p>
-        </div>
-        <mat-form-field floatLabel="auto" class="gender__input-field">
-          <mat-label id="p-label-girl">P</mat-label>
-          <mat-select formControlName="p" aria-labelledby="p-label-girl">
-            <mat-option *ngFor="let value of genderSelect" [value]="value.value">
-              {{value.value}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field floatLabel="auto" class="gender__input-field">
-          <mat-label id="ax-label-girl">Ax</mat-label>
-          <mat-select formControlName="ax" aria-labelledby="ax-label-girl">
-            <mat-option *ngFor="let value of genderSelect" [value]="value.value">
-              {{value.value}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field *ngIf="patientSexId === PATIENT_SEX.male" floatLabel="auto" class="gender__input-field">
-          <mat-label id="fa-label">Fa</mat-label>
-          <mat-select formControlName="fa" aria-labelledby="fa-label">
-            <mat-option *ngFor="let value of genderSelect" [value]="value.value">
-              {{value.value}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field *ngIf="patientSexId === PATIENT_SEX.female" floatLabel="auto" class="gender__input-field">
-          <mat-label id="ma-label">Ma</mat-label>
-          <mat-select formControlName="ma" aria-labelledby="ma-label">
-            <mat-option *ngFor="let value of genderSelect" [value]="value.value">
-              {{value.value}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field *ngIf="patientSexId === PATIENT_SEX.female" floatLabel="auto" class="gender__input-field">
-          <mat-label id="me-label">Me</mat-label>
-          <mat-select formControlName="me" aria-labelledby="me-label">
-            <mat-option *ngFor="let value of genderSelect" [value]="value.value">
-              {{value.value}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div *ngIf="patientSexId === PATIENT_SEX.female" class="assessment__gender">
-        <p class="gender-label">
-          Менструальная функция
+    <div *ngIf="patientAge <= 4" class="assessment__section" formGroupName="mentalDevelopment">
+        <p class="assessment__title">
+            Оценка психологического развития для детей 0-4 лет
         </p>
-        <mat-checkbox #menstrualFunc
-                      class="assessment__checkbox"
-                      formControlName="missing"
-                      (change)="isDisabled($event.checked)">
-          Отсутствует
-        </mat-checkbox>
-      </div>
-      <div *ngIf="patientSexId === PATIENT_SEX.female" class="assessment__gender">
-        <div class="gender-label">
-          <p>
-            Менархе
-          </p>
+        <div class="assessment__field-block">
+            <div class="assessment__psycho-dev-kid">
+                <div class="psycho-dev-kid__row">
+                    <mat-form-field floatLabel="auto" class="assessment__input-field">
+                        <input matInput placeholder="Познавательная функция (возраст развития)"
+                               formControlName="cognitive"
+                               class="assessment__input" required>
+                    </mat-form-field>
+                </div>
+                <div class="psycho-dev-kid__row">
+                    <mat-form-field floatLabel="auto" class="assessment__input-field">
+                        <input matInput formControlName="motor" placeholder="Моторная функция (возраст развития)"
+                               class="assessment__input" required>
+                    </mat-form-field>
+                </div>
+                <div class="psycho-dev-kid__row">
+                    <mat-form-field floatLabel="auto" class="assessment__input-field">
+                        <input matInput formControlName="emotionalAndSocial"
+                               placeholder="Эмоциональная и социальная (контакт с окружающим миром) функции (возраст развития)"
+                               class="assessment__input" required>
+                    </mat-form-field>
+                </div>
+                <div class="psycho-dev-kid__row">
+                    <mat-form-field floatLabel="auto" class="assessment__input-field">
+                        <input matInput formControlName="speech"
+                               placeholder="Предречевое и речевое развитие (возраст развития)"
+                               class="assessment__input" required>
+                    </mat-form-field>
+                </div>
+            </div>
         </div>
-        <div class="assessment__input-fields">
-          <mat-form-field class="assessment__input-field">
-            <input matInput
-                   class="assessment__input"
-                   formControlName="menarheYear"
-                   required="menstrualFunc.checked">
-          </mat-form-field>
-          <p class="fields__label">лет</p>
-          <mat-form-field class="assessment__input-field">
-            <input matInput
-                   class="assessment__input"
-                   formControlName="menarheMonth"
-                   required="menstrualFunc.checked">
-          </mat-form-field>
-          <p class="fields__label">месяцев</p>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <div *ngIf="patientSexId === PATIENT_SEX.female && patientAge >= 10" class="assessment__section">
-    <p class="assessment__title">
-      Характеристика
-    </p>
-    <div class="assessment__field-block">
-      <div *ngIf="characteristicMenstrualFunc" class="assessment__columns">
-        <div class="assessment__column">
-          <p class="physical-radio__label">Регулярность</p>
-          <div class="physical-radio__row">
-            <mat-radio-group class="assessment__psycho-radio-group" formControlName="regularity">
-              <mat-radio-button
-                      (change)="handlerRadioWithoutGroup('regularity', $event)" [value]="null"
-                      class="assessment__radio-btn">
-                Нет
-              </mat-radio-button>
-              <mat-radio-button
-                      (change)="handlerRadioWithoutGroup('regularity', $event)"
-                      [value]="characteristicMenstrualFunc[0]"
-                      class="assessment__radio-btn">
-                {{characteristicMenstrualFunc[0].name}}
-              </mat-radio-button>
-              <mat-radio-button
-                      (change)="handlerRadioWithoutGroup('regularity', $event)"
-                      [value]="characteristicMenstrualFunc[1]"
-                      class="assessment__radio-btn">
-                {{characteristicMenstrualFunc[1].name}}
-              </mat-radio-button>
-            </mat-radio-group>
-          </div>
+    <div *ngIf="patientAge >= 5 && patientAge <=17" class="assessment__section" formGroupName="mentalDevelopment">
+        <p class="assessment__title">
+            Оценка психологического развития для детей 5-17 лет
+        </p>
+        <div class="assessment__field-block">
+            <div class="assessment__psycho-dev-teen">
+                <div class="psycho-dev-kid__row">
+                    <p class="psycho-dev-kid__label">Психомоторная сфера <span class="required-symbol">*</span></p>
+                    <mat-radio-group class="assessment__psycho-radio-group" formControlName="psychomotor">
+                        <mat-radio-button
+                                *ngFor="let item of psychoValue" [value]="item.id" class="assessment__radio-btn"
+                                (change)="handlerRadioButton('mentalDevelopment' ,'psychomotor', $event)">
+                            {{item.label}}
+                        </mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <div class="psycho-dev-kid__row">
+                    <p class="psycho-dev-kid__label">Интеллект <span class="required-symbol">*</span></p>
+                    <mat-radio-group class="assessment__psycho-radio-group" formControlName="intellect">
+                        <mat-radio-button
+                                *ngFor="let item of psychoValue" [value]="item.id" class="assessment__radio-btn"
+                                (change)="handlerRadioButton('mentalDevelopment' ,'intellect', $event)">
+                            {{item.label}}
+                        </mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <div class="psycho-dev-kid__row">
+                    <p class="psycho-dev-kid__label">Эмоционально вегеативная сфера <span
+                            class="required-symbol">*</span></p>
+                    <mat-radio-group class="assessment__psycho-radio-group" formControlName="emotionallyVegetative">
+                        <mat-radio-button
+                                *ngFor="let item of psychoValue" [value]="item.id" class="assessment__radio-btn"
+                                (change)="handlerRadioButton('mentalDevelopment' ,'emotionallyVegetative', $event)">
+                            {{item.label}}
+                        </mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </div>
         </div>
-        <div class="assessment__column">
-          <p class="physical-radio__label">Обильность</p>
-          <div class="physical-radio__row">
-            <mat-radio-group class="assessment__psycho-radio-group" formControlName="profusion">
-              <mat-radio-button
-                      (change)="handlerRadioWithoutGroup('profusion', $event)" [value]="null"
-                      class="assessment__radio-btn">
-                Нет
-              </mat-radio-button>
-              <mat-radio-button
-                      (change)="handlerRadioWithoutGroup('profusion', $event)"
-                      [value]="characteristicMenstrualFunc[2]"
-                      class="assessment__radio-btn">
-                {{characteristicMenstrualFunc[2].name}}
-              </mat-radio-button>
-              <mat-radio-button
-                      (change)="handlerRadioWithoutGroup('profusion', $event)"
-                      [value]="characteristicMenstrualFunc[3]"
-                      class="assessment__radio-btn">
-                {{characteristicMenstrualFunc[3].name}}
-              </mat-radio-button>
-              <mat-radio-button
-                      (change)="handlerRadioWithoutGroup('profusion', $event)"
-                      [value]="characteristicMenstrualFunc[4]"
-                      class="assessment__radio-btn">
-                {{characteristicMenstrualFunc[4].name}}
-              </mat-radio-button>
-            </mat-radio-group>
-          </div>
-        </div>
-        <div class="assessment__column">
-          <p class="physical-radio__label">Болезненность</p>
-          <div class="physical-radio__row">
-            <mat-radio-group class="assessment__psycho-radio-group" formControlName="soreness">
-              <mat-radio-button
-                      (change)="handlerRadioWithoutGroup('soreness', $event)" [value]="null"
-                      class="assessment__radio-btn">
-                Нет
-              </mat-radio-button>
-              <mat-radio-button
-                      (change)="handlerRadioWithoutGroup('soreness', $event)"
-                      [value]="characteristicMenstrualFunc[5]"
-                      class="assessment__radio-btn">
-                {{characteristicMenstrualFunc[5].name}}
-              </mat-radio-button>
-              <mat-radio-button
-                      (change)="handlerRadioWithoutGroup('soreness', $event)"
-                      [value]="characteristicMenstrualFunc[6]"
-                      class="assessment__radio-btn">
-                {{characteristicMenstrualFunc[6].name}}
-              </mat-radio-button>
-            </mat-radio-group>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
+
+    <div *ngIf="patientAge >= 10" class="assessment__section" formGroupName="sexualDevelopment">
+        <p class="assessment__title">
+            Оценка полового развития с 10 лет
+        </p>
+        <div class="assessment__gender-block">
+            <div class="gender-select-block">
+                <div [ngSwitch]="patientSexId" class="gender-label">
+                    <p *ngSwitchCase="PATIENT_SEX.male">
+                        Половая формула мальчиков
+                        <span class="required-symbol">*</span>
+                    </p>
+                    <p *ngSwitchCase="PATIENT_SEX.female">
+                        Половая формула девочек
+                        <span class="required-symbol">*</span>
+                    </p>
+                </div>
+                <mat-form-field floatLabel="auto" class="gender__input-field">
+                    <mat-label id="p-label-girl">P</mat-label>
+                    <mat-select formControlName="p" aria-labelledby="p-label-girl">
+                        <mat-option *ngFor="let value of genderSelect" [value]="value.value">
+                            {{value.value}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field floatLabel="auto" class="gender__input-field">
+                    <mat-label id="ax-label-girl">Ax</mat-label>
+                    <mat-select formControlName="ax" aria-labelledby="ax-label-girl">
+                        <mat-option *ngFor="let value of genderSelect" [value]="value.value">
+                            {{value.value}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field *ngIf="patientSexId === PATIENT_SEX.male" floatLabel="auto" class="gender__input-field">
+                    <mat-label id="fa-label">Fa</mat-label>
+                    <mat-select formControlName="fa" aria-labelledby="fa-label">
+                        <mat-option *ngFor="let value of genderSelect" [value]="value.value">
+                            {{value.value}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field *ngIf="patientSexId === PATIENT_SEX.female" floatLabel="auto"
+                                class="gender__input-field">
+                    <mat-label id="ma-label">Ma</mat-label>
+                    <mat-select formControlName="ma" aria-labelledby="ma-label">
+                        <mat-option *ngFor="let value of genderSelect" [value]="value.value">
+                            {{value.value}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field *ngIf="patientSexId === PATIENT_SEX.female" floatLabel="auto"
+                                class="gender__input-field">
+                    <mat-label id="me-label">Me</mat-label>
+                    <mat-select formControlName="me" aria-labelledby="me-label">
+                        <mat-option *ngFor="let value of genderSelect" [value]="value.value">
+                            {{value.value}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div *ngIf="patientSexId === PATIENT_SEX.female" class="assessment__gender">
+                <p class="gender-label">
+                    Менструальная функция
+                </p>
+                <mat-checkbox #menstrualFunc
+                              class="assessment__checkbox"
+                              formControlName="missing"
+                              (change)="isDisabled($event.checked)">
+                    Отсутствует
+                </mat-checkbox>
+            </div>
+            <div *ngIf="patientSexId === PATIENT_SEX.female" class="assessment__gender">
+                <div class="gender-label">
+                    <p>
+                        Менархе
+                    </p>
+                </div>
+                <div class="assessment__input-fields">
+                    <mat-form-field class="assessment__input-field">
+                        <input matInput
+                               class="assessment__input"
+                               formControlName="menarheYear"
+                               required="menstrualFunc.checked">
+                    </mat-form-field>
+                    <p class="fields__label">лет</p>
+                    <mat-form-field class="assessment__input-field">
+                        <input matInput
+                               class="assessment__input"
+                               formControlName="menarheMonth"
+                               required="menstrualFunc.checked">
+                    </mat-form-field>
+                    <p class="fields__label">месяцев</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="patientSexId === PATIENT_SEX.female && patientAge >= 10" class="assessment__section">
+        <p class="assessment__title">
+            Характеристика
+        </p>
+        <div class="assessment__field-block">
+            <div *ngIf="characteristicMenstrualFunc" class="assessment__columns">
+                <div class="assessment__column">
+                    <p class="physical-radio__label">Регулярность</p>
+                    <div class="physical-radio__row">
+                        <mat-radio-group class="assessment__psycho-radio-group" formControlName="regularity">
+                            <mat-radio-button
+                                    (change)="handlerRadioWithoutGroup('regularity', $event)" [value]="null"
+                                    class="assessment__radio-btn">
+                                Нет
+                            </mat-radio-button>
+                            <mat-radio-button
+                                    (change)="handlerRadioWithoutGroup('regularity', $event)"
+                                    [value]="characteristicMenstrualFunc[0]"
+                                    class="assessment__radio-btn">
+                                {{characteristicMenstrualFunc[0].name}}
+                            </mat-radio-button>
+                            <mat-radio-button
+                                    (change)="handlerRadioWithoutGroup('regularity', $event)"
+                                    [value]="characteristicMenstrualFunc[1]"
+                                    class="assessment__radio-btn">
+                                {{characteristicMenstrualFunc[1].name}}
+                            </mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </div>
+                <div class="assessment__column">
+                    <p class="physical-radio__label">Обильность</p>
+                    <div class="physical-radio__row">
+                        <mat-radio-group class="assessment__psycho-radio-group" formControlName="profusion">
+                            <mat-radio-button
+                                    (change)="handlerRadioWithoutGroup('profusion', $event)" [value]="null"
+                                    class="assessment__radio-btn">
+                                Нет
+                            </mat-radio-button>
+                            <mat-radio-button
+                                    (change)="handlerRadioWithoutGroup('profusion', $event)"
+                                    [value]="characteristicMenstrualFunc[2]"
+                                    class="assessment__radio-btn">
+                                {{characteristicMenstrualFunc[2].name}}
+                            </mat-radio-button>
+                            <mat-radio-button
+                                    (change)="handlerRadioWithoutGroup('profusion', $event)"
+                                    [value]="characteristicMenstrualFunc[3]"
+                                    class="assessment__radio-btn">
+                                {{characteristicMenstrualFunc[3].name}}
+                            </mat-radio-button>
+                            <mat-radio-button
+                                    (change)="handlerRadioWithoutGroup('profusion', $event)"
+                                    [value]="characteristicMenstrualFunc[4]"
+                                    class="assessment__radio-btn">
+                                {{characteristicMenstrualFunc[4].name}}
+                            </mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </div>
+                <div class="assessment__column">
+                    <p class="physical-radio__label">Болезненность</p>
+                    <div class="physical-radio__row">
+                        <mat-radio-group class="assessment__psycho-radio-group" formControlName="soreness">
+                            <mat-radio-button
+                                    (change)="handlerRadioWithoutGroup('soreness', $event)" [value]="null"
+                                    class="assessment__radio-btn">
+                                Нет
+                            </mat-radio-button>
+                            <mat-radio-button
+                                    (change)="handlerRadioWithoutGroup('soreness', $event)"
+                                    [value]="characteristicMenstrualFunc[5]"
+                                    class="assessment__radio-btn">
+                                {{characteristicMenstrualFunc[5].name}}
+                            </mat-radio-button>
+                            <mat-radio-button
+                                    (change)="handlerRadioWithoutGroup('soreness', $event)"
+                                    [value]="characteristicMenstrualFunc[6]"
+                                    class="assessment__radio-btn">
+                                {{characteristicMenstrualFunc[6].name}}
+                            </mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </form>

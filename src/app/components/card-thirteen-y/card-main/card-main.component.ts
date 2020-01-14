@@ -106,10 +106,10 @@ export class CardMainComponent implements OnInit {
 
     checkBlockState() {
         this.cardThirteenYService.isBlocked.subscribe(state => {
-           if (state) {
-               this.mainForm.disable({emitEvent: false});
-               this.cardThirteenYService.setSelectedTabCurrentValues(null);
-           }
+            if (state) {
+                this.mainForm.disable({emitEvent: false});
+                this.cardThirteenYService.setSelectedTabCurrentValues(null);
+            }
         });
     }
 
@@ -179,7 +179,6 @@ export class CardMainComponent implements OnInit {
                         id: oms.omsPayment
                     }
                 };
-                console.log(omsObjectValues)
                 this.cardThirteenYService.setTabCurrentValues(omsObjectValues);
             });
     }
@@ -333,27 +332,20 @@ export class CardMainComponent implements OnInit {
             });
     }
 
-    setControlInfo(groupName: string, controlKey: string, objectName: string, idType: string) {
-        if (this[controlKey + 'List']) {
-            const infoObject = this[controlKey + 'List'].find(item => {
-                return item.shortName === this.cardThirteenYService.getControls(this.mainForm, groupName)[controlKey + 'Name'].value;
-            });
-            if (infoObject) {
-                this[controlKey + 'Info'] = infoObject;
-                this.cdRef.detectChanges();
-                this.cardThirteenYService.getControls(this.mainForm, groupName)[controlKey + 'Id'].setValue(infoObject[idType]);
-                const objData = {
-                    ...this.formValues,
-                    [objectName]: {
-                        [idType]: infoObject[idType],
-                        shortName: infoObject.shortName,
-                        address: infoObject.address,
-                        fullName: infoObject.fullName,
-                    }
-                };
-                this.cardThirteenYService.setTabCurrentValues(objData);
+    setControlInfo(groupName: string, controlKey: string, objectName: string, idType: string, infoObject) {
+        this[controlKey + 'Info'] = infoObject;
+        this.cdRef.detectChanges();
+        this.cardThirteenYService.getControls(this.mainForm, groupName)[controlKey + 'Id'].setValue(infoObject[idType]);
+        const objData = {
+            ...this.formValues,
+            [objectName]: {
+                [idType]: infoObject[idType],
+                shortName: infoObject.shortName,
+                address: infoObject.address,
+                fullName: infoObject.fullName,
             }
-        }
+        };
+        this.cardThirteenYService.setTabCurrentValues(objData);
     }
 
     getOrganizationList() {

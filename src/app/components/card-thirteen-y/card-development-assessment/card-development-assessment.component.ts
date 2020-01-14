@@ -1,9 +1,9 @@
-import {Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, Self} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {CardThirteenYService} from '../card-thirteen-y.service';
 import {PSYCHO_DEV_TEEN} from '../shared/data/card-thirteen-y-psycho';
 import {GENDER_SELECT} from '../shared/data/card-thirteen-y-select';
-import {debounceTime} from 'rxjs/operators';
+import {debounceTime, takeUntil} from 'rxjs/operators';
 import {DictionaryService} from '../../../service/dictionary.service';
 import {DevelopmentDisorder, MenstrualCharacteristic} from '../../../models/dictionary.model';
 import {MatRadioChange} from '@angular/material';
@@ -12,12 +12,14 @@ import {
     PATIENT_SEX, PHYSICAL_DEVELOPMENT,
     SEXUAL_DEVELOPMENT_CONTROLS,
 } from '../shared/data/patient_sex';
+import {NgOnDestroy} from '../../../@core/shared/services/destroy.service';
 
 @Component({
     selector: 'app-card-development-assessment',
     templateUrl: './card-development-assessment.component.html',
     styleUrls: ['./card-development-assessment.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [NgOnDestroy]
 })
 export class CardDevelopmentAssessmentComponent implements OnInit {
     devAssessmentForm!: FormGroup;
@@ -33,7 +35,8 @@ export class CardDevelopmentAssessmentComponent implements OnInit {
 
     constructor(private cardThirteenYService: CardThirteenYService,
                 private dictionaryService: DictionaryService,
-                private cdRef: ChangeDetectorRef) {
+                private cdRef: ChangeDetectorRef,
+                @Self() private onDestroy$: NgOnDestroy) {
     }
 
     ngOnInit() {
@@ -72,22 +75,22 @@ export class CardDevelopmentAssessmentComponent implements OnInit {
     }
 
     setMentalDevelopmentControls(controls: string[]) {
-        controls.forEach(value =>
-            this.cardThirteenYService.getControls(this.devAssessmentForm, 'mentalDevelopment')[value].enable());
+        controls.forEach(value => this.devAssessmentForm.get('mentalDevelopment').get(value).enable());
     }
 
     setPhysicalDevelopment(controls: string[]) {
-        controls.forEach(value =>
-            this.cardThirteenYService.getControls(this.devAssessmentForm, 'physicalDevelopment')[value].enable());
+        controls.forEach(value => this.devAssessmentForm.get('physicalDevelopment').get(value).enable());
     }
 
     checkBlockState() {
-        this.cardThirteenYService.isBlocked.subscribe(state => {
-            if (state) {
-                this.devAssessmentForm.disable({emitEvent: false});
-                this.cardThirteenYService.setSelectedTabCurrentValues(null);
-            }
-        });
+        this.cardThirteenYService.isBlocked
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(state => {
+                if (state) {
+                    this.devAssessmentForm.disable({emitEvent: false});
+                    this.cardThirteenYService.setSelectedTabCurrentValues(null);
+                }
+            });
     }
 
     createDevAssessmentForm() {
@@ -125,31 +128,29 @@ export class CardDevelopmentAssessmentComponent implements OnInit {
     }
 
     private setSexualDevelopmentControls(sexualDevelopmentControls: string[]) {
-        sexualDevelopmentControls.forEach(value =>
-            this.cardThirteenYService.getControls(this.devAssessmentForm, 'sexualDevelopment')[value].enable());
+        sexualDevelopmentControls.forEach(value => this.devAssessmentForm.get('sexualDevelopment').get(value).enable());
     }
 
     private setFemaleControls(sexualDevelopmentControls: string[]) {
-        sexualDevelopmentControls.forEach(value =>
-            this.devAssessmentForm.controls[value].enable());
+        sexualDevelopmentControls.forEach(value => this.devAssessmentForm.controls[value].enable());
     }
 
     private initPhysicalDevKid() {
-        this.dictionaryService.getDevelopmentDisorders().subscribe((item) => {
+        this.dictionaryService.getDevelopmentDisorders().subscribe(item => {
             this.devDisordersKid = item;
             this.cdRef.markForCheck();
         });
     }
 
     private initPhysicalDevTeen() {
-        this.dictionaryService.getDevelopmentDisorders().subscribe((item) => {
+        this.dictionaryService.getDevelopmentDisorders().subscribe(item => {
             this.devDisordersTeen = item;
             this.cdRef.markForCheck();
         });
     }
 
     private initCharacteristicMenstrualFunc() {
-        this.dictionaryService.getMenstrualCharacteristics().subscribe((item) => {
+        this.dictionaryService.getMenstrualCharacteristics().subscribe(item => {
             this.characteristicMenstrualFunc = item;
             this.cdRef.markForCheck();
         });
@@ -157,7 +158,10 @@ export class CardDevelopmentAssessmentComponent implements OnInit {
 
     checkFormChanges() {
         this.devAssessmentForm.valueChanges
-            .pipe(debounceTime(800))
+            .pipe(
+                debounceTime(800),
+                takeUntil(this.onDestroy$)
+            )
             .subscribe(data => {
                 this.cardThirteenYService.setSelectedTabCurrentValues(data);
                 this.cardThirteenYService.setTabCurrentValues(data);
@@ -165,10 +169,12 @@ export class CardDevelopmentAssessmentComponent implements OnInit {
     }
 
     checkIsFormValid() {
-        this.devAssessmentForm.valueChanges.subscribe(() => {
-            this.cardThirteenYService.setActiveTabValid(this.devAssessmentForm.valid);
-            this.cardThirteenYService.setTabCurrentValues(this.devAssessmentForm);
-        });
+        this.devAssessmentForm.valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(() => {
+                this.cardThirteenYService.setActiveTabValid(this.devAssessmentForm.valid);
+                this.cardThirteenYService.setTabCurrentValues(this.devAssessmentForm);
+            });
     }
 
     private toggleCheckbox(
@@ -179,8 +185,8 @@ export class CardDevelopmentAssessmentComponent implements OnInit {
     ) {
         controls.forEach((control) => {
             control === currentControl ?
-                this.cardThirteenYService.getControls(this.devAssessmentForm, groupName)[control].setValue(value) :
-                this.cardThirteenYService.getControls(this.devAssessmentForm, groupName)[control].setValue(false);
+                this.devAssessmentForm.get(groupName).get(control).setValue(value) :
+                this.devAssessmentForm.get(groupName).get(control).setValue(false);
         });
     }
 
@@ -198,7 +204,7 @@ export class CardDevelopmentAssessmentComponent implements OnInit {
 
     patchValueForGroup(data, nameGroup: string) {
         for (const [key, value] of Object.entries(data)) {
-            const control = this.cardThirteenYService.getControls(this.devAssessmentForm, nameGroup)[key];
+            const control = this.devAssessmentForm.get(nameGroup).get(key);
             if (control) {
                 control.setValue(value, {emitEvent: false});
             }
@@ -206,66 +212,52 @@ export class CardDevelopmentAssessmentComponent implements OnInit {
     }
 
     handlerRadioButton(groupName: string, currentControl: string, value: MatRadioChange) {
-
-        this.cardThirteenYService.getControls(this.devAssessmentForm, groupName)[currentControl].setValue(value.value);
-        console.log('form', this.devAssessmentForm);
-
+        this.devAssessmentForm.get(groupName).get(currentControl).setValue(value.value);
     }
 
     handlerRadioWithoutGroup(currentControl: string, value: MatRadioChange) {
         this.devAssessmentForm.controls[currentControl].setValue(value.value);
-        console.log('form', this.devAssessmentForm);
     }
 
     handlerHeightKid(currentControl: string, value: boolean) {
         const controls = ['short', 'tall'];
-
         this.toggleCheckbox(controls, currentControl, value, 'devDisordersKidForm');
     }
 
     handlerWeightTeen(currentControl: string, value: boolean) {
         const controls = ['thin', 'obese'];
-
         this.toggleCheckbox(controls, currentControl, value, 'devDisordersTeenForm');
     }
 
     handlerHeightTeen(currentControl: string, value: boolean) {
         const controls = ['short', 'tall'];
-
         this.toggleCheckbox(controls, currentControl, value, 'devDisordersTeenForm');
     }
 
     handlerRegularity(currentControl: string, value: boolean) {
         const controls = ['regular', 'notRegular', 'plentiful'];
-
         this.toggleCheckbox(controls, currentControl, value, 'characteristicMenstrualFuncForm');
     }
 
     handlerProfusion(currentControl: string, value: boolean) {
         const controls = ['plentiful', 'moderate', 'scarce'];
-
         this.toggleCheckbox(controls, currentControl, value, 'characteristicMenstrualFuncForm');
     }
 
     handlerSoreness(currentControl: string, value: boolean) {
         const controls = ['painful', 'painless'];
-
         this.toggleCheckbox(controls, currentControl, value, 'characteristicMenstrualFuncForm');
     }
 
     isDisabled(checked) {
         if (checked) {
-            this.cardThirteenYService.getControls(this.devAssessmentForm, 'sexualDevelopment').menarheYear.enable();
-            this.cardThirteenYService.getControls(this.devAssessmentForm, 'sexualDevelopment').menarheMonth.enable();
+            this.devAssessmentForm.get('sexualDevelopment').get('menarheYear').enable();
+            this.devAssessmentForm.get('sexualDevelopment').get('menarheMonth').enable();
         } else {
-            this.cardThirteenYService.getControls(this.devAssessmentForm, 'sexualDevelopment').menarheYear.disable();
-            this.cardThirteenYService.getControls(this.devAssessmentForm, 'sexualDevelopment').menarheYear.setValue('');
-            this.cardThirteenYService.getControls(this.devAssessmentForm, 'sexualDevelopment').menarheMonth.disable();
-            this.cardThirteenYService.getControls(this.devAssessmentForm, 'sexualDevelopment').menarheMonth.setValue('');
+            this.devAssessmentForm.get('sexualDevelopment').get('menarheYear').disable();
+            this.devAssessmentForm.get('sexualDevelopment').get('menarheYear').setValue('');
+            this.devAssessmentForm.get('sexualDevelopment').get('menarheMonth').disable();
+            this.devAssessmentForm.get('sexualDevelopment').get('menarheMonth').setValue('');
         }
-    }
-
-    onSubmit(object: {}) {
-        console.log('form submitted OBJECT', object);
     }
 }

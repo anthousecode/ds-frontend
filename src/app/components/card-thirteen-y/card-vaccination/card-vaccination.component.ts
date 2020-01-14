@@ -73,14 +73,16 @@ export class CardVaccinationComponent implements OnInit {
     }
 
     checkBlockState() {
-        this.cardThirteenYService.isBlocked.subscribe(state => {
-            if (state) {
-                this.vaccinationForm.disable({emitEvent: false});
-                this.cardThirteenYService.setSelectedTabCurrentValues(null);
-                this.isChipsDisabled = true;
-                this.cdRef.detectChanges();
-            }
-        });
+        this.cardThirteenYService.isBlocked
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(state => {
+                if (state) {
+                    this.vaccinationForm.disable({emitEvent: false});
+                    this.cardThirteenYService.setSelectedTabCurrentValues(null);
+                    this.isChipsDisabled = true;
+                    this.cdRef.detectChanges();
+                }
+            });
     }
 
     setFormInitValues(data) {

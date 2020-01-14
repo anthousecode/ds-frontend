@@ -7,7 +7,7 @@ import {DeleteConfirmComponent} from '../shared/dialogs/delete-confirm/delete-co
 import {Examination} from '../../../models/dictionary.model';
 import {DictionaryService} from '../../../service/dictionary.service';
 import {NgOnDestroy} from '../../../@core/shared/services/destroy.service';
-import {debounceTime, takeUntil} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
     selector: 'app-card-research',
@@ -73,11 +73,13 @@ export class CardResearchComponent implements OnInit {
     }
 
     checkBlockState() {
-        this.cardThirteenYService.isBlocked.subscribe(state => {
-            if (state) {
-                this.disableGroup();
-            }
-        });
+        this.cardThirteenYService.isBlocked
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(state => {
+                if (state) {
+                    this.disableGroup();
+                }
+            });
     }
 
     disableGroup() {
@@ -92,8 +94,8 @@ export class CardResearchComponent implements OnInit {
         this.dictionaryService.getExaminations(1, 100, '').subscribe(res => {
             this.requiredExaminations = [];
             res.forEach((examination, i) => {
-                const dateBegin = !this.formValues.requiredExaminations ? this.formValues.requiredExaminations[i].date : '';
-                const result = !this.formValues.requiredExaminations ? this.formValues.requiredExaminations[i].result : '';
+                const dateBegin = this.formValues.requiredExaminations[i] ? this.formValues.requiredExaminations[i].date : '';
+                const result = this.formValues.requiredExaminations[i] ? this.formValues.requiredExaminations[i].result : '';
                 this.requiredExaminationsArray.push(
                     this.formBuilder.group({
                         dateBegin: [dateBegin, [Validators.required]],

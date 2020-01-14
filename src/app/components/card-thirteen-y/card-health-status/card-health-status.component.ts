@@ -102,15 +102,17 @@ export class CardHealthStatusComponent implements OnInit {
     }
 
     checkBlockState() {
-        this.cardThirteenYService.isBlocked.subscribe(state => {
-            if (state) {
-                this.healthStatusForm.disable({emitEvent: false});
-                this.cardThirteenYService.setSelectedTabCurrentValues(null);
-                this.isChipsDisabled = true;
-                this.isTableDisabled = true;
-                this.cdRef.detectChanges();
-            }
-        });
+        this.cardThirteenYService.isBlocked
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(state => {
+                if (state) {
+                    this.healthStatusForm.disable({emitEvent: false});
+                    this.cardThirteenYService.setSelectedTabCurrentValues(null);
+                    this.isChipsDisabled = true;
+                    this.isTableDisabled = true;
+                    this.cdRef.detectChanges();
+                }
+            });
     }
 
     initFormGroups() {
@@ -145,26 +147,25 @@ export class CardHealthStatusComponent implements OnInit {
     setFormInitValues(data) {
         if (data.disability) {
             if (data.disability.disabilityType) {
-                this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityType
+                this.healthStatusForm.get('disability').get('disabilityType')
                     .setValue(data.disability.disabilityType.id, {emitEvent: false});
                 if (data.disability.disabilityType.id === 1) {
                     this.disableDisabilityControls();
                 }
             }
             if (data.disability.firstSetDate) {
-                this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityFirstDate
+                this.healthStatusForm.get('disability').get('disabilityFirstDate')
                     .setValue(data.disability.firstSetDate, {emitEvent: false});
             }
             if (data.disability.lastExamDate) {
-                this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityLastDate
+                this.healthStatusForm.get('disability').get('disabilityLastDate')
                     .setValue(data.disability.lastExamDate, {emitEvent: false});
             }
             if (data.disability.iprDate) {
-                this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').rehabilitationDate
-                    .setValue(data.disability.iprDate, {emitEvent: false});
+                this.healthStatusForm.get('disability').get('rehabilitationDate').setValue(data.disability.iprDate, {emitEvent: false});
             }
             if (data.disability.iprStatus) {
-                this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').rehabilitationPerformance
+                this.healthStatusForm.get('disability').get('rehabilitationPerformance')
                     .setValue(data.disability.iprStatus.id, {emitEvent: false});
             }
         } else {
@@ -215,7 +216,7 @@ export class CardHealthStatusComponent implements OnInit {
     }
 
     private filterDiseases() {
-        this.filteredDiseases$ = this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityDiseases.valueChanges
+        this.filteredDiseases$ = this.healthStatusForm.get('disability').get('disabilityDiseases').valueChanges
             .pipe(
                 debounceTime(300),
                 startWith(null),
@@ -254,15 +255,15 @@ export class CardHealthStatusComponent implements OnInit {
 
     removeInvalidDiseasesChip(chip: string) {
         this.invalidDiseasesChips = this.invalidDiseasesChips.filter((item) => item !== chip);
-        this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityFirstDate
-            .setValue(this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityFirstDate.value);
+        this.healthStatusForm.get('disability').get('disabilityFirstDate')
+            .setValue(this.healthStatusForm.get('disability').get('disabilityFirstDate').value);
         this.invalidDiseases = this.invalidDiseases.concat([chip]);
         this.cdRef.detectChanges();
     }
 
     private filterDisorders() {
-        this.filteredDisorders$ = this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityDisorders
-            .valueChanges.pipe(
+        this.filteredDisorders$ = this.healthStatusForm.get('disability').get('disabilityDisorders').valueChanges
+            .pipe(
                 debounceTime(300),
                 startWith(null),
                 map((vaccination: string | null) => vaccination ? this._filterChips(vaccination, 'disabilityDisorders').sort() :
@@ -298,8 +299,8 @@ export class CardHealthStatusComponent implements OnInit {
 
     removeDisabilityDisordersChip(chip: string) {
         this.disabilityDisordersChips = this.disabilityDisordersChips.filter(item => item !== chip);
-        this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityFirstDate
-            .setValue(this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityFirstDate.value);
+        this.healthStatusForm.get('disability').get('disabilityFirstDate')
+            .setValue(this.healthStatusForm.get('disability').get('disabilityFirstDate').value);
         this.disabilityDisorders = this.disabilityDisorders.concat([chip]);
         this.cdRef.detectChanges();
     }
@@ -337,8 +338,8 @@ export class CardHealthStatusComponent implements OnInit {
     disableDisabilityControls() {
         this.isChipsDisabled = true;
         this.disabilityDisabledControlList.forEach(control => {
-            this.cardThirteenYService.getControls(this.healthStatusForm, 'disability')[control].disable();
-            this.cardThirteenYService.getControls(this.healthStatusForm, 'disability')[control].setValue('');
+            this.healthStatusForm.get('disability').get(control).disable();
+            this.healthStatusForm.get('disability').get(control).setValue('');
             if (control === 'disabilityDisorders') {
                 this.invalidDiseasesChips = [];
             }
@@ -350,9 +351,7 @@ export class CardHealthStatusComponent implements OnInit {
 
     enableDisabilityControls() {
         this.isChipsDisabled = false;
-        this.disabilityDisabledControlList.forEach(control => {
-            this.cardThirteenYService.getControls(this.healthStatusForm, 'disability')[control].enable();
-        });
+        this.disabilityDisabledControlList.forEach(control => this.healthStatusForm.get('disability').get(control).enable());
         this.invalidDiseases = this.invalidDiseasesQuery.map(item => item.name);
         this.disabilityDisorders = this.disordersQuery.map(item => item.name);
     }
@@ -366,20 +365,20 @@ export class CardHealthStatusComponent implements OnInit {
     }
 
     disabilityTypeChange() {
-        this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityType.valueChanges
+        this.healthStatusForm.get('disability').get('disabilityType').valueChanges
             .pipe(takeUntil(this.onDestroy$))
             .subscribe((type: number) => type === 1 ? this.disableDisabilityControls() : this.enableDisabilityControls());
     }
 
     disableRehabilitationPerformance() {
-        this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').rehabilitationDate.valueChanges
+        this.healthStatusForm.get('disability').get('rehabilitationDate').valueChanges
             .pipe(takeUntil(this.onDestroy$))
             .subscribe(data => {
                 if (data) {
-                    this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').rehabilitationPerformance.enable();
+                    this.healthStatusForm.get('disability').get('rehabilitationPerformance').enable();
                 } else {
-                    this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').rehabilitationPerformance.disable();
-                    this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').rehabilitationPerformance.setValue('');
+                    this.healthStatusForm.get('disability').get('rehabilitationPerformance').disable();
+                    this.healthStatusForm.get('disability').get('rehabilitationPerformance').setValue('');
                 }
             });
     }
