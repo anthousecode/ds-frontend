@@ -9,7 +9,6 @@
                [formControl]="requiredExaminationsArray.controls[i].controls.dateBegin" [max]="maxDate"
                (click)="openDatepicker(ii)"
                matTooltip="Допустимый интервал: от даты рождения ребенка до текущей даты" required>
-        <!-- <mat-datepicker-toggle matSuffix [for]="ii"></mat-datepicker-toggle> -->
         <mat-error *ngIf="requiredExaminationsArray.controls[i].controls.dateBegin.invalid">
           Выберите дату
         </mat-error>
@@ -28,11 +27,14 @@
   </div>
   <p class="mandatory-studies__title">Дополнительные исследования</p>
 
-  <p class="health-status__add-diagnosis" (click)="addStudy()">
+  <p class="health-status__add-diagnosis"
+     [ngClass]="{'__disabled': isTableDisabled}"
+     (click)="addStudy()">
     Добавить исследование
   </p>
   <div class="health-status__before-ex-diagnoses" *ngIf="additionalExaminations">
-    <table class="health-status__diagnoses-table">
+    <table class="health-status__diagnoses-table"
+           [ngClass]="{'__disabled': isTableDisabled}">
       <thead class="health-status__diagnoses-table-header">
       <tr>
         <th>Исследование</th>
@@ -48,7 +50,7 @@
         <td>{{additionalExamination.date | date: 'd.MM.yyyy'}}</td>
         <td>{{additionalExamination.result}}</td>
         <td class="__delete-diagnosis">
-          <div class="health-status__diagnoses-delete" matTooltip="Нажмите для удаления диагноза"
+          <div class="health-status__diagnoses-delete" matTooltip="Нажмите для удаления исследования"
                (click)="deleteStudy(i)">
             <mat-icon svgIcon="delete" class="__s18 __white"></mat-icon>
           </div>

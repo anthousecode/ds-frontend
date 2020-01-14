@@ -7,6 +7,12 @@
 
   &__section {
     border-top: 1px solid lightgray;
+
+    &:last-child {
+      .assessment__field-block {
+        padding-bottom: 0;
+      }
+    }
   }
 
   &__no-border-top {

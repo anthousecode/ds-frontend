@@ -2,6 +2,8 @@ import {Validators} from '@angular/forms';
 
 export const DEFAULT_POLICY_NUMBER_VALIDATORS = [
   Validators.required,
+  Validators.minLength(9),
+  Validators.maxLength(9),
   Validators.pattern('^[0-9a-zA-Zа-яА-Я]+$')
 ];
 

@@ -4,7 +4,3 @@ export interface ICardMainCities {
   aolevel: number;
   fullAddress: string;
 }
-
-export interface ICardMainCityInfo {
-  OKATO: string;
-}

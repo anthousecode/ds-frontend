@@ -1,4 +1,10 @@
+.mat-snack-bar-handset {
+  width: auto !important;
+}
+
 .mat-snack-bar-container {
+  max-width: 33vw !important;
+  min-width: 344px !important;
   background-color: #1b9881;
 
   span {

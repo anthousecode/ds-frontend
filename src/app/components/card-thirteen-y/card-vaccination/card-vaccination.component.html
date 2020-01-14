@@ -1,54 +1,55 @@
 <form class="vaccination__form-wrapper"
       [formGroup]="vaccinationForm">
-  <div class="vaccination__section">
-    <div class="vaccination__field-block">
-      <div class="vaccination-label">
-        <p>Выполнение программы вакцинации</p>
-      </div>
-      <div class="vaccination-select-block">
-        <mat-form-field floatLabel="never"
-                        class="vaccination__input-field">
-          <mat-label id="state-label">Выберите состояние вакцинации</mat-label>
-          <mat-select formControlName="state"
-                      aria-labelledby="state-label">
-            <mat-option *ngFor="let vaccination of stateVaccination"
-                        [value]="vaccination.id">
-              {{vaccination.name}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div class="vaccination-label margin-label">
-        <p>Нуждается в проведении вакцинации/ревакцинации:</p>
-      </div>
-      <div class="vaccination__chip-list">
-        <mat-chip-list #chipList
-                       aria-label="users selection">
-          <mat-chip
-            *ngFor="let chip of chipsVaccinations"
-            selectable="true"
-            removable="true"
-            class="vaccination__mat-chip"
-            (removed)="removeChipsVaccination(chip)">
-            <span class="vaccination__truncate">{{chip}}</span>
-            <mat-icon matChipRemove>cancel</mat-icon>
-          </mat-chip>
-          <input
-            placeholder="Выберите необходимые прививки"
-            #vaccinationInput
-            formControlName="vaccination"
-            [matAutocomplete]="auto"
-            [matChipInputFor]="chipList"
-            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-            matChipInputAddOnBlur="true"
-            class="vaccination__chip-input">
-        </mat-chip-list>
-        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addChipsVaccination($event)">
-          <mat-option *ngFor="let vaccination of filteredVaccinations$ | async" [value]="vaccination">
-            {{ vaccination }}
-          </mat-option>
-        </mat-autocomplete>
-      </div>
+    <div class="vaccination__section">
+        <div class="vaccination__field-block">
+            <div class="vaccination-label">
+                <p>Выполнение программы вакцинации</p>
+            </div>
+            <div class="vaccination-select-block">
+                <mat-form-field floatLabel="never"
+                                class="vaccination__input-field">
+                    <mat-label id="state-label">Выберите состояние вакцинации</mat-label>
+                    <mat-select formControlName="state"
+                                aria-labelledby="state-label">
+                        <mat-option *ngFor="let vaccination of stateVaccination"
+                                    [value]="vaccination.id">
+                            {{vaccination.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="vaccination-label margin-label">
+                <p>Нуждается в проведении вакцинации/ревакцинации:</p>
+            </div>
+            <div class="vaccination__chip-list">
+                <mat-form-field [ngClass]="{'__chips-disabled': isChipsDisabled}">
+                    <mat-chip-list #chipList
+                                   aria-label="users selection">
+                        <mat-chip *ngFor="let chip of chipsVaccinations"
+                                  selectable="true"
+                                  removable="true"
+                                  class="vaccination__mat-chip"
+                                  (removed)="removeChipsVaccination(chip)">
+                            <span class="vaccination__truncate">{{chip}}</span>
+                            <mat-icon matChipRemove>cancel</mat-icon>
+                        </mat-chip>
+                        <input placeholder="Выберите необходимые прививки"
+                               #vaccinationInput
+                               formControlName="vaccination"
+                               [matAutocomplete]="auto"
+                               [matChipInputFor]="chipList"
+                               (focus)="filterVaccinations()"
+                               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                               matChipInputAddOnBlur="true"
+                               class="vaccination__chip-input">
+                    </mat-chip-list>
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addChipsVaccination($event)">
+                        <mat-option *ngFor="let vaccination of filteredVaccinations$ | async" [value]="vaccination">
+                            {{ vaccination }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+        </div>
     </div>
-  </div>
 </form>

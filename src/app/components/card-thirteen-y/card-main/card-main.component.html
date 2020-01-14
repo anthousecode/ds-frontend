@@ -28,13 +28,14 @@
                [matAutocomplete]="auto"
                required>
         <mat-autocomplete #auto="matAutocomplete">
-          <mat-option *ngFor="let city of citiesList$ | async;"
+          <mat-option *ngFor="let city of citiesList"
+                      (click)="setCityCode(city)"
                       [value]="city.fullAddress">
             {{city.fullAddress}}
           </mat-option>
         </mat-autocomplete>
-        <mat-error *ngIf="cardThirteenYService.getControls(mainForm,'generalInfo').placeOfStay.invalid">
-          Укажите место постоянного пребывания
+        <mat-error *ngIf="mainForm.get('generalInfo').get('placeOfStay').invalid">
+          {{getPlaceOfStayError()}}
         </mat-error>
       </mat-form-field>
     </div>
@@ -104,8 +105,7 @@
                        formControlName="omsPayment">
         <mat-radio-button *ngFor="let omsPaymentItem of omsPaymentValues"
                           class="card-main__oms-payment-item"
-                          [value]="omsPaymentItem.id"
-                          [checked]="omsPaymentItem.id === 1">
+                          [value]="omsPaymentItem.id">
           {{omsPaymentItem.label}}
         </mat-radio-button>
       </mat-radio-group>
@@ -120,10 +120,10 @@
              placeholder="Наименование организации"
              [matAutocomplete]="autoOrganization"
              formControlName="organizationName"
-             (blur)="setControlInfo('medicalOrganization', 'organization', 'organizationPmsp', 'oid')"
              required>
       <mat-autocomplete #autoOrganization="matAutocomplete">
         <mat-option *ngFor="let organization of organizationList"
+                    (onSelectionChange)="setControlInfo('medicalOrganization', 'organization', 'organizationPmsp', 'oid', organization)"
                     [value]="organization.shortName">
           {{organization.shortName}}
         </mat-option>
@@ -158,11 +158,11 @@
       <input matInput
              placeholder="Образовательное учреждение"
              [matAutocomplete]="autoEducation"
-             (blur)="setControlInfo('education', 'education', 'educationalOrganization', 'id')"
              formControlName="educationName"
              required>
       <mat-autocomplete #autoEducation="matAutocomplete">
         <mat-option *ngFor="let education of educationList"
+                    (onSelectionChange)="setControlInfo('education', 'education', 'educationalOrganization', 'id', education)"
                     [value]="education.shortName">
           {{education.shortName}}
         </mat-option>
@@ -224,11 +224,11 @@
       <input matInput
              placeholder="Наименование стационарного учреждения"
              [matAutocomplete]="autoInstitution"
-             (blur)="setControlInfo('location', 'institution', 'stationaryOrganization', 'id')"
              formControlName="institutionName"
              required>
       <mat-autocomplete #autoInstitution="matAutocomplete">
         <mat-option *ngFor="let institution of institutionList"
+                    (onSelectionChange)="setControlInfo('location', 'institution', 'stationaryOrganization', 'id', institution)"
                     [value]="institution.shortName">
           {{institution.shortName}}
         </mat-option>

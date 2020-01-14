@@ -17,6 +17,10 @@ p, h3, h5 {
   margin: 0;
 }
 
+.cdk-global-overlay-wrapper {
+  align-items: center !important;
+}
+
 .cdk-overlay-backdrop {
   background: rgba(#000000, .6);
   cursor: pointer;

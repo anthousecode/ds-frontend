@@ -12,6 +12,26 @@
     color: #000000;
   }
 
+  &__before-ex,
+  &__after-ex {
+    &.__is-table-disabled {
+      .health-status__add-diagnosis {
+        background-color: rgba(#1b9881, .6);
+        pointer-events: none;
+        cursor: default;
+      }
+
+      tr {
+        pointer-events: none;
+        cursor: default;
+      }
+
+      .health-status__diagnoses-delete {
+        background-color: rgba(#F44336, .6);
+      }
+    }
+  }
+
   &__health-group {
     margin-top: 20px;
   }
@@ -46,7 +66,6 @@
     &-header {
       th {
         max-width: 100%;
-        white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         text-align: center;
@@ -125,9 +144,11 @@
     }
 
     &-date {
+      margin-top: 1px;
       margin-right: 20px;
 
       @media (max-width: 992px) {
+        margin-top: 0;
         margin-right: 0;
       }
     }

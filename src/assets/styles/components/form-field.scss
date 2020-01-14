@@ -1,7 +1,15 @@
+mat-form-field {
+  .mat-input-element {
+    color: #000000;
+  }
+}
+
 .__card-main,
 .__health-status,
 .__add-diagnosis-before,
-.__add-diagnosis-after {
+.__add-diagnosis-after,
+.__vaccination,
+.__conclusion {
   mat-form-field {
     &.__chips-disabled {
       pointer-events: none;
@@ -12,11 +20,6 @@
         background-size: 4px 100%;
         background-repeat: repeat-x;
       }
-    }
-
-    .mat-select,
-    .mat-input-element {
-      height: auto !important;
     }
 
     &.card-main__location-place,
@@ -37,9 +40,9 @@
         width: 100% !important;
       }
 
-      input {
-        height: auto !important;
-      }
+      //input {
+      //  height: auto !important;
+      //}
     }
 
     &.health-status__disability-type,
@@ -70,7 +73,6 @@
     }
 
     .mat-form-field-label {
-      font-size: 15px !important;
       color: #808080;
     }
 
@@ -107,3 +109,14 @@
     font-size: 16px;
   }
 }
+
+//.__card-main,
+//.__health-status,
+//.__add-diagnosis-after {
+//  mat-form-field {
+//    .mat-select,
+//    .mat-input-element {
+//      height: auto !important;
+//    }
+//  }
+//}

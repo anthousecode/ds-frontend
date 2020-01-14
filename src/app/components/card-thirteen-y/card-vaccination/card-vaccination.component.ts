@@ -1,29 +1,31 @@
-import {Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, ElementRef} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, ElementRef, Self} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {ENTER} from '@angular/cdk/keycodes';
 import {Observable} from 'rxjs';
 import {MatAutocomplete, MatAutocompleteSelectedEvent} from '@angular/material';
-import {debounceTime, map, startWith} from 'rxjs/operators';
+import {debounceTime, map, startWith, takeUntil} from 'rxjs/operators';
 import {CardThirteenYService} from '../card-thirteen-y.service';
 import {DictionaryService} from '../../../service/dictionary.service';
-import {VaccinationStatus} from '../../../models/dictionary.model';
+import {VaccinationStatus, Vaccine} from '../../../models/dictionary.model';
+import {NgOnDestroy} from '../../../@core/shared/services/destroy.service';
 
 @Component({
     selector: 'app-card-vaccination',
     templateUrl: './card-vaccination.component.html',
     styleUrls: ['./card-vaccination.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [NgOnDestroy]
 })
 export class CardVaccinationComponent implements OnInit {
-
     private vaccinationForm: FormGroup;
     private stateVaccination: VaccinationStatus[];
     private separatorKeysCodes: number[] = [ENTER];
-    private filteredVaccinations$: Observable<any[]>;
+    private filteredVaccinations$: Observable<string[]>;
     private chipsVaccinations: string[] = [];
     private vaccinations: string[] = [];
-    chipsQuery!: any;
+    chipsQuery!: Vaccine[];
     formValues!: any;
+    isChipsDisabled!: boolean;
 
     @ViewChild('vaccinationInput') vaccinationInput: ElementRef<HTMLInputElement>;
     @ViewChild('auto') matAutoComplete: MatAutocomplete;
@@ -31,8 +33,11 @@ export class CardVaccinationComponent implements OnInit {
     constructor(private fb: FormBuilder,
                 private cardThirteenYService: CardThirteenYService,
                 private dictionaryService: DictionaryService,
-                private cdRef: ChangeDetectorRef) {
-        this.cardThirteenYService.activeTabCurrentValues.subscribe(data => this.formValues = data);
+                private cdRef: ChangeDetectorRef,
+                @Self() private onDestroy$: NgOnDestroy) {
+        // this.cardThirteenYService.activeTabCurrentValues
+        //     .pipe(takeUntil(this.onDestroy$))
+        //     .subscribe(data => this.formValues = data);
         this.cardThirteenYService.setActiveTabValid(true);
     }
 
@@ -41,8 +46,8 @@ export class CardVaccinationComponent implements OnInit {
         this.initStateVaccinations();
         this.initVaccinations();
         this.filterVaccinations();
+        this.checkBlockState();
         this.cardThirteenYService.setSelectedTabCurrentValues(null);
-
         this.checkFormChanges();
     }
 
@@ -54,15 +59,30 @@ export class CardVaccinationComponent implements OnInit {
     }
 
     getInitValues() {
-        this.cardThirteenYService.activeTabInitValues.subscribe(data => {
-            this.formValues = data;
-            this.setFormInitValues(data);
-            const formGroupData = {
-                ...this.vaccinationForm.value,
-                vaccination: this.chipsVaccinations
-            };
-            this.cardThirteenYService.setSelectedTabInitValues(formGroupData);
-        });
+        this.cardThirteenYService.activeTabInitValues
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(data => {
+                this.formValues = data;
+                this.setFormInitValues(data);
+                const formGroupData = {
+                    ...this.vaccinationForm.value,
+                    vaccination: this.chipsVaccinations
+                };
+                this.cardThirteenYService.setSelectedTabInitValues(formGroupData);
+            });
+    }
+
+    checkBlockState() {
+        this.cardThirteenYService.isBlocked
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(state => {
+                if (state) {
+                    this.vaccinationForm.disable({emitEvent: false});
+                    this.cardThirteenYService.setSelectedTabCurrentValues(null);
+                    this.isChipsDisabled = true;
+                    this.cdRef.detectChanges();
+                }
+            });
     }
 
     setFormInitValues(data) {
@@ -81,7 +101,10 @@ export class CardVaccinationComponent implements OnInit {
 
     checkFormChanges() {
         this.vaccinationForm.valueChanges
-            .pipe(debounceTime(500))
+            .pipe(
+                debounceTime(500),
+                takeUntil(this.onDestroy$)
+            )
             .subscribe(data => {
                 const formGroupData = {
                     ...data,
@@ -103,18 +126,16 @@ export class CardVaccinationComponent implements OnInit {
     }
 
     private initStateVaccinations() {
-        this.dictionaryService.getVaccinationStatuses().subscribe((vaccinations: []) => {
-            this.stateVaccination = vaccinations;
+        this.dictionaryService.getVaccinationStatuses().subscribe((statuses: VaccinationStatus[]) => {
+            this.stateVaccination = statuses;
             this.cdRef.markForCheck();
         });
     }
 
     private initVaccinations() {
-        this.dictionaryService.getVaccines().subscribe((vaccinations) => {
+        this.dictionaryService.getVaccines().subscribe((vaccinations: Vaccine[]) => {
             this.chipsQuery = vaccinations;
-            for (const vaccine of vaccinations) {
-                this.vaccinations.push(vaccine.name);
-            }
+            this.vaccinations = vaccinations.map(item => item.name);
             this.getInitValues();
             this.cdRef.markForCheck();
         });
@@ -131,19 +152,19 @@ export class CardVaccinationComponent implements OnInit {
 
     addChipsVaccination(event: MatAutocompleteSelectedEvent) {
         this.chipsVaccinations.push(event.option.viewValue);
-        this.vaccinations = this.vaccinations.filter((item) => item !== event.option.viewValue);
+        this.vaccinations = this.vaccinations.filter(item => item !== event.option.viewValue);
         this.cdRef.detectChanges();
         this.vaccinationInput.nativeElement.value = '';
     }
 
     removeChipsVaccination(vaccination: string) {
-        this.chipsVaccinations = this.chipsVaccinations.filter((item) => item !== vaccination);
+        this.chipsVaccinations = this.chipsVaccinations.filter(item => item !== vaccination);
         this.vaccinationForm.controls.state.setValue(this.vaccinationForm.controls.state.value);
         this.cdRef.detectChanges();
         this.vaccinations = this.vaccinations.concat([vaccination]);
     }
 
-    private _filter(value: string): any[] {
+    private _filter(value: string): string[] {
         const filterValue = value.toLowerCase();
         return this.vaccinations.filter(vaccine => vaccine.toLowerCase().indexOf(filterValue) === 0);
     }
