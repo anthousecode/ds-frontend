@@ -85,7 +85,7 @@ export class CardVaccinationComponent implements OnInit {
     setFormInitValues(data) {
         if (data.vaccination) {
             if (data.vaccination.status) {
-                this.vaccinationForm.controls.state.setValue(data.status.id, {emitEvent: false});
+                this.vaccinationForm.controls.state.setValue(data.vaccination.status.id, {emitEvent: false});
             }
             if (data.vaccination.vaccines) {
                 const initVaccinations = data.vaccination.vaccines.map(item => item.name);
