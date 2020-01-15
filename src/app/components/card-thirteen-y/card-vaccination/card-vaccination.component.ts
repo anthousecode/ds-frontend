@@ -35,9 +35,6 @@ export class CardVaccinationComponent implements OnInit {
                 private dictionaryService: DictionaryService,
                 private cdRef: ChangeDetectorRef,
                 @Self() private onDestroy$: NgOnDestroy) {
-        // this.cardThirteenYService.activeTabCurrentValues
-        //     .pipe(takeUntil(this.onDestroy$))
-        //     .subscribe(data => this.formValues = data);
         this.cardThirteenYService.setActiveTabValid(true);
     }
 

@@ -24,6 +24,7 @@ import {
 import {IPolicyType} from '../shared/interfaces/policy-type.interface';
 import {NgOnDestroy} from '../../../@core/shared/services/destroy.service';
 import {IOrganizationInfo} from '../shared/interfaces/organization-info.interface';
+import {getControlDischarge} from '../../../@core/shared/utils/policy-number-discharge';
 
 @Component({
     selector: 'app-card-main',
@@ -61,9 +62,6 @@ export class CardMainComponent implements OnInit {
                 private dictionaryService: DictionaryService,
                 private cdRef: ChangeDetectorRef,
                 @Self() private onDestroy$: NgOnDestroy) {
-        // this.cardThirteenYService.activeTabCurrentValues
-        //     .pipe(takeUntil(this.onDestroy$))
-        //     .subscribe(data => this.formValues = data);
         this.cardThirteenYService.setActiveTabValid(true);
     }
 
@@ -72,7 +70,6 @@ export class CardMainComponent implements OnInit {
         this.getInitValues();
         this.checkIsFormValid();
         this.checkBlockState();
-        // this.cardThirteenYService.setSelectedTabCurrentValues(null);
         this.getCitiesList();
         this.setActivePolicyType();
         this.checkPolicySeriesError();
@@ -85,7 +82,6 @@ export class CardMainComponent implements OnInit {
         this.setOmsInfoData();
         this.setLocationDateData();
         this.setLocationPlaceData();
-
         this.checkFormChanges();
     }
 
@@ -184,7 +180,7 @@ export class CardMainComponent implements OnInit {
     }
 
     setLocationDateData() {
-        this.cardThirteenYService.getControls(this.mainForm, 'location').locationDate.valueChanges
+        this.mainForm.get('location').get('locationDate').valueChanges
             .pipe(takeUntil(this.onDestroy$))
             .subscribe(date => {
                 const locationDateObj = {
@@ -196,7 +192,7 @@ export class CardMainComponent implements OnInit {
     }
 
     setLocationPlaceData() {
-        this.cardThirteenYService.getControls(this.mainForm, 'location').locationPlace.valueChanges
+        this.mainForm.get('location').get('locationPlace').valueChanges
             .pipe(takeUntil(this.onDestroy$))
             .subscribe(place => {
                 const locationPlaceObj = {
@@ -210,69 +206,59 @@ export class CardMainComponent implements OnInit {
     }
 
     setFormInitValues(data) {
-        this.cardThirteenYService.getControls(this.mainForm, 'generalInfo').dateBegin.setValue(data.startDate, {emitEvent: false});
+        this.mainForm.get('generalInfo').get('dateBegin').setValue(data.startDate, {emitEvent: false});
         if (data.cityAoid) {
-            this.cardThirteenYService.getControls(this.mainForm, 'generalInfo').placeOfStayCode.setValue(data.cityAoid, {emitEvent: false});
+            this.mainForm.get('generalInfo').get('placeOfStayCode').setValue(data.cityAoid, {emitEvent: false});
         }
         if (data.address) {
-            this.cardThirteenYService.getControls(this.mainForm, 'generalInfo').placeOfStay.setValue(data.address, {emitEvent: false});
+            this.mainForm.get('generalInfo').get('placeOfStay').setValue(data.address, {emitEvent: false});
         }
         if (data.insuranceCompany) {
-            this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').hospitalName
-                .setValue(data.insuranceCompany.name, {emitEvent: false});
-            this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').hospitalId
-                .setValue(data.insuranceCompany.id, {emitEvent: false});
+            this.mainForm.get('omsInfo').get('hospitalName').setValue(data.insuranceCompany.name, {emitEvent: false});
+            this.mainForm.get('omsInfo').get('hospitalId').setValue(data.insuranceCompany.id, {emitEvent: false});
         }
         if (data.polisNumber) {
-            this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policyNumber.setValue(data.polisNumber, {emitEvent: false});
+            this.mainForm.get('omsInfo').get('policyNumber').setValue(data.polisNumber, {emitEvent: false});
         }
         if (data.payOms) {
-            this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').omsPayment.setValue(data.payOms.id, {emitEvent: false});
+            this.mainForm.get('omsInfo').get('omsPayment').setValue(data.payOms.id, {emitEvent: false});
         }
         if (data.polisType) {
-            this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policyType.setValue(data.polisType.id, {emitEvent: false});
+            this.mainForm.get('omsInfo').get('policyType').setValue(data.polisType.id, {emitEvent: false});
             this.selectedPolicyType = data.polisType.id;
             if (data.polisType.id === 2) {
                 this.enablePolicySeries();
-                this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policySeries.setValue(data.polisSerial, {emitEvent: false});
+                this.mainForm.get('omsInfo').get('policySeries').setValue(data.polisSerial, {emitEvent: false});
             } else {
                 this.disablePolicySeries();
             }
             this.setPolicyNumberValidator(data.polisType.id);
         }
         if (data.organizationPmsp) {
-            this.cardThirteenYService.getControls(this.mainForm, 'medicalOrganization').organizationId
-                .setValue(data.organizationPmsp.id, {emitEvent: false});
-            this.cardThirteenYService.getControls(this.mainForm, 'medicalOrganization').organizationName
-                .setValue(data.organizationPmsp.shortName, {emitEvent: false});
+            this.mainForm.get('medicalOrganization').get('organizationId').setValue(data.organizationPmsp.id, {emitEvent: false});
+            this.mainForm.get('medicalOrganization').get('organizationName').setValue(data.organizationPmsp.shortName, {emitEvent: false});
             this.organizationInfo = {
                 address: data.organizationPmsp.address,
-                fullName: data.organizationPmsp.fullName,
+                fullName: data.organizationPmsp.fullName
             };
         }
         if (data.educationalOrganization) {
-            this.cardThirteenYService.getControls(this.mainForm, 'education').educationId
-                .setValue(data.educationalOrganization.id, {emitEvent: false});
-            this.cardThirteenYService.getControls(this.mainForm, 'education').educationName
-                .setValue(data.educationalOrganization.shortName, {emitEvent: false});
+            this.mainForm.get('education').get('educationId').setValue(data.educationalOrganization.id, {emitEvent: false});
+            this.mainForm.get('education').get('educationName').setValue(data.educationalOrganization.shortName, {emitEvent: false});
             this.educationInfo = {
                 address: data.educationalOrganization.address,
-                fullName: data.educationalOrganization.fullName,
+                fullName: data.educationalOrganization.fullName
             };
         }
         if (data.currentLocation) {
-            this.cardThirteenYService.getControls(this.mainForm, 'location').locationPlace
-                .setValue(data.currentLocation.id, {emitEvent: false});
+            this.mainForm.get('location').get('locationPlace').setValue(data.currentLocation.id, {emitEvent: false});
         }
         if (data.currentLocationDate) {
-            this.cardThirteenYService.getControls(this.mainForm, 'location').locationDate
-                .setValue(data.currentLocationDate, {emitEvent: false});
+            this.mainForm.get('location').get('locationDate').setValue(data.currentLocationDate, {emitEvent: false});
         }
         if (data.stationaryOrganization) {
-            this.cardThirteenYService.getControls(this.mainForm, 'location').institutionId
-                .setValue(data.stationaryOrganization.id, {emitEvent: false});
-            this.cardThirteenYService.getControls(this.mainForm, 'location').institutionName
-                .setValue(data.stationaryOrganization.shortName, {emitEvent: false});
+            this.mainForm.get('location').get('institutionId').setValue(data.stationaryOrganization.id, {emitEvent: false});
+            this.mainForm.get('location').get('institutionName').setValue(data.stationaryOrganization.shortName, {emitEvent: false});
             this.institutionInfo = {
                 address: data.stationaryOrganization.address,
                 fullName: data.stationaryOrganization.fullName,
@@ -283,7 +269,7 @@ export class CardMainComponent implements OnInit {
     }
 
     getCitiesList() {
-        this.cardThirteenYService.getControls(this.mainForm, 'generalInfo').placeOfStay.valueChanges
+        this.mainForm.get('generalInfo').get('placeOfStay').valueChanges
             .pipe(
                 filter(value => value !== ''),
                 debounceTime(500),
@@ -291,7 +277,7 @@ export class CardMainComponent implements OnInit {
                 mergeMap(value => this.cardThirteenYService.getCities(value)),
                 takeUntil(this.onDestroy$)
             )
-            .subscribe(data => {
+            .subscribe((data: ICardMainCities[]) => {
                 this.citiesList = data;
                 this.cdRef.detectChanges();
             })
@@ -307,12 +293,12 @@ export class CardMainComponent implements OnInit {
             };
             this.cardThirteenYService.setTabCurrentValues(formObjectValues);
         } else {
-            this.cardThirteenYService.getControls(this.mainForm, 'generalInfo').placeOfStay.setErrors({wrong: true});
+            this.mainForm.get('generalInfo').get('placeOfStay').setErrors({wrong: true});
         }
     }
 
     getHospitalList() {
-        this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').hospitalName.valueChanges
+        this.mainForm.get('omsInfo').get('hospitalName').valueChanges
             .pipe(
                 filter(value => value !== ''),
                 debounceTime(500),
@@ -325,7 +311,7 @@ export class CardMainComponent implements OnInit {
                     if (this.hospitalList) {
                         const hospitalObject = this.hospitalList.find(item => item.name === data);
                         if (hospitalObject) {
-                            this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').hospitalId.setValue(hospitalObject.id);
+                            this.mainForm.get('omsInfo').get('hospitalId').setValue(hospitalObject.id);
                         }
                     }
                 });
@@ -335,7 +321,7 @@ export class CardMainComponent implements OnInit {
     setControlInfo(groupName: string, controlKey: string, objectName: string, idType: string, infoObject) {
         this[controlKey + 'Info'] = infoObject;
         this.cdRef.detectChanges();
-        this.cardThirteenYService.getControls(this.mainForm, groupName)[controlKey + 'Id'].setValue(infoObject[idType]);
+        this.mainForm.get(groupName).get(controlKey + 'Id').setValue(infoObject[idType]);
         const objData = {
             ...this.formValues,
             [objectName]: {
@@ -349,7 +335,7 @@ export class CardMainComponent implements OnInit {
     }
 
     getOrganizationList() {
-        this.cardThirteenYService.getControls(this.mainForm, 'medicalOrganization').organizationName.valueChanges
+        this.mainForm.get('medicalOrganization').get('organizationName').valueChanges
             .pipe(
                 filter(value => value !== ''),
                 debounceTime(500),
@@ -365,7 +351,7 @@ export class CardMainComponent implements OnInit {
     }
 
     getEducationList() {
-        this.cardThirteenYService.getControls(this.mainForm, 'education').educationName.valueChanges
+        this.mainForm.get('education').get('educationName').valueChanges
             .pipe(
                 filter(value => value !== ''),
                 debounceTime(500),
@@ -381,7 +367,7 @@ export class CardMainComponent implements OnInit {
     }
 
     getInstitutionList() {
-        this.cardThirteenYService.getControls(this.mainForm, 'location').institutionName.valueChanges
+        this.mainForm.get('location').get('institutionName').valueChanges
             .pipe(
                 filter(value => value !== ''),
                 debounceTime(500),
@@ -397,28 +383,27 @@ export class CardMainComponent implements OnInit {
     }
 
     setActivePolicyType() {
-        const policyNumberControl = this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policyNumber;
-        this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policyType.valueChanges
+        this.mainForm.get('omsInfo').get('policyType').valueChanges
             .pipe(takeUntil(this.onDestroy$))
             .subscribe((type: number) => {
                 this.selectedPolicyType = type;
                 type === 2 ? this.enablePolicySeries() : this.disablePolicySeries();
-                policyNumberControl.setValue('', {emitEvent: false});
+                this.mainForm.get('omsInfo').get('policyNumber').setValue('', {emitEvent: false});
                 this.setPolicyNumberValidator(type);
             });
     }
 
     disablePolicySeries() {
-        this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policySeries.disable();
-        this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policySeries.setValue('', {emitEvent: false});
+        this.mainForm.get('omsInfo').get('policySeries').disable();
+        this.mainForm.get('omsInfo').get('policySeries').setValue('', {emitEvent: false});
     }
 
     enablePolicySeries() {
-        this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policySeries.enable({emitEvent: false});
+        this.mainForm.get('omsInfo').get('policySeries').enable({emitEvent: false});
     }
 
     setPolicyNumberValidator(type) {
-        const policyNumberControl = this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policyNumber;
+        const policyNumberControl = this.mainForm.get('omsInfo').get('policyNumber');
         if (type === 2) {
             policyNumberControl.setValidators(this.oldPolicyNumberValidators);
         } else if (type === 1) {
@@ -429,13 +414,13 @@ export class CardMainComponent implements OnInit {
     }
 
     setPolicyTypeRule() {
-        const policyNumberValue = this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policyNumber.value;
+        const policyNumberValue = this.mainForm.get('omsInfo').get('policyNumber').value;
         if (this.selectedPolicyType === 3) {
             if (policyNumberValue.substring(0, 3) !== '001') {
                 this.setPolicyNumberError();
             }
         } else if (this.selectedPolicyType === 1) {
-            const controlDischarge = this.getControlDischarge();
+            const controlDischarge = getControlDischarge(this.selectedPolicyValue);
             const correctNumberValue = this.selectedPolicyValue.slice(0, -1) + controlDischarge;
             if (policyNumberValue !== correctNumberValue) {
                 this.setPolicyNumberError();
@@ -443,42 +428,23 @@ export class CardMainComponent implements OnInit {
         }
     }
 
-    getControlDischarge() {
-        let firstTemporaryResult = '';
-        let secondAction = '';
-        let actionsSum = 0;
-        for (let i = this.selectedPolicyValue.length - 2; i >= 0; i -= 2) {
-            firstTemporaryResult += this.selectedPolicyValue[i];
-        }
-        const firstAction = +firstTemporaryResult * 2;
-        for (let i = this.selectedPolicyValue.length - 3; i >= 0; i -= 2) {
-            secondAction += this.selectedPolicyValue[i];
-        }
-        const thirdAction = secondAction + firstAction;
-        for (let i = 0, l = thirdAction.length; i < l; i++) {
-            actionsSum += Number(thirdAction[i]);
-        }
-        const acc = Math.ceil(actionsSum / 10) * 10;
-        return acc - actionsSum;
-    }
-
     checkPolicySeriesError() {
-        this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policySeries.valueChanges
+        this.mainForm.get('omsInfo').get('policySeries').valueChanges
             .pipe(takeUntil(this.onDestroy$))
-            .subscribe(() => this.policySeriesError = this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policySeries.errors);
+            .subscribe(() => this.policySeriesError = this.mainForm.get('omsInfo').get('policySeries').errors);
     }
 
     checkPolicyNumberError() {
-        this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policyNumber.valueChanges
+        this.mainForm.get('omsInfo').get('policyNumber').valueChanges
             .pipe(takeUntil(this.onDestroy$))
             .subscribe(value => {
-                this.policyNumberError = this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policyNumber.errors;
+                this.policyNumberError = this.mainForm.get('omsInfo').get('policyNumber').errors;
                 this.selectedPolicyValue = value;
             });
     }
 
     getPlaceOfStayError() {
-        const cityErrorCode = this.cardThirteenYService.getControls(this.mainForm, 'generalInfo').placeOfStay.errors;
+        const cityErrorCode = this.mainForm.get('generalInfo').get('placeOfStay').errors;
         return cityErrorCode.required ? 'Укажите место постоянного пребывания' : 'Укажите регион или город';
     }
 
@@ -495,8 +461,8 @@ export class CardMainComponent implements OnInit {
     }
 
     setPolicyNumberError() {
-        this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policyNumber.setErrors({incorrect: true});
-        this.policyNumberError = this.cardThirteenYService.getControls(this.mainForm, 'omsInfo').policyNumber.errors;
+        this.mainForm.get('omsInfo').get('policyNumber').setErrors({incorrect: true});
+        this.policyNumberError = this.mainForm.get('omsInfo').get('policyNumber').errors;
         this.cardThirteenYService.setActiveTabValid(this.mainForm.valid);
     }
 

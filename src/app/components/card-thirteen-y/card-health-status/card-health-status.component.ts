@@ -30,7 +30,6 @@ export class CardHealthStatusComponent implements OnInit {
     @ViewChild('auto2') matAutocomplete2: MatAutocomplete;
     healthStatusForm!: FormGroup;
     healthStatusList$!: Observable<HealthGroup[]>;
-    diagnosisList!: Observable<IDiagnose[]>;
     diagnosisListAfter!: Observable<IDiagnose[]>;
     disabilityTypeList$!: Observable<InvalidType[]>;
     doneList$!: Observable<ReabilitationStatus[]>;
@@ -64,9 +63,6 @@ export class CardHealthStatusComponent implements OnInit {
                 private dialog: MatDialog,
                 private cdRef: ChangeDetectorRef,
                 @Self() private onDestroy$: NgOnDestroy) {
-        // this.cardThirteenYService.activeTabCurrentValues
-        //     .pipe(takeUntil(this.onDestroy$))
-        //     .subscribe(data => this.formValues = data);
         this.cardThirteenYService.setActiveTabValid(true);
     }
 
@@ -79,7 +75,6 @@ export class CardHealthStatusComponent implements OnInit {
         this.healthStatusList$ = this.dictionaryService.getHealthGroups();
         this.disabilityTypeList$ = this.dictionaryService.getInvalidTypes();
         this.doneList$ = this.dictionaryService.getReabilitationStatuses();
-        // this.diagnosisList = this.cardThirteenYService.getDiagnoses();
         this.diagnosisListAfter = this.cardThirteenYService.getDiagnosesAfter();
         this.disabilityTypeChange();
         this.disableRehabilitationPerformance();
@@ -169,15 +164,14 @@ export class CardHealthStatusComponent implements OnInit {
     setFormInitValues(data) {
         if (data.healthStatusBefore && data.healthStatusBefore.healthGroup) {
             this.setHealthGroup(data.healthStatusBefore.healthGroup.id);
-            this.cardThirteenYService.getControls(this.healthStatusForm, 'beforeMedicalExamination').healthGroup
-                .setValue(data.healthStatusBefore.healthGroup.id, {emmitEvent: false});
+            this.healthStatusForm.get('beforeMedicalExamination').get('healthGroup')
+                .setValue(data.healthStatusBefore.healthGroup.id, {emitEvent: false});
         } else {
             this.setHealthGroup(1);
-            this.cardThirteenYService.getControls(this.healthStatusForm, 'beforeMedicalExamination').healthGroup
-                .setValue(1, {emmitEvent: false});
+            this.healthStatusForm.get('beforeMedicalExamination').get('healthGroup').setValue(1, {emitEvent: false});
         }
         if (data.healthStatusBefore && data.healthStatusBefore.diagnoses) {
-            this.healthStatusForm.get('diagnoses').setValue(data.healthStatusBefore.diagnoses, {emmitEvent: false});
+            this.healthStatusForm.get('diagnoses').setValue(data.healthStatusBefore.diagnoses, {emitEvent: false});
         }
         if (data.disability) {
             if (data.disability.disabilityType) {

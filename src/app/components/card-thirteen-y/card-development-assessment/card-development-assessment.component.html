@@ -5,26 +5,23 @@
         <div class="assessment__field-block">
             <mat-form-field floatLabel="auto" class="assessment__input-field">
                 <input matInput class="assessment__input" placeholder="Вес, кг" formControlName="weight" required>
-                <mat-error
-                        *ngIf="cardThirteenYService.getControls(devAssessmentForm,'physicalDevelopment').weight.invalid"
-                        class="assessment__helper-text">
+                <mat-error class="assessment__helper-text"
+                           *ngIf="devAssessmentForm.get('physicalDevelopment').get('weight').invalid">
                     Укажите вес
                 </mat-error>
             </mat-form-field>
             <mat-form-field floatLabel="auto" class="assessment__input-field">
                 <input matInput class="assessment__input" placeholder="Рост, см" formControlName="height" required>
-                <mat-error
-                        *ngIf="cardThirteenYService.getControls(devAssessmentForm, 'physicalDevelopment').height.invalid"
-                        class="assessment__helper-text">
+                <mat-error class="assessment__helper-text"
+                           *ngIf="devAssessmentForm.get('physicalDevelopment').get('height').invalid">
                     Укажите рост
                 </mat-error>
             </mat-form-field>
             <mat-form-field floatLabel="auto" class="assessment__input-field">
                 <input matInput class="assessment__input" placeholder="Окружность головы, см"
                        formControlName="headCircumference" required>
-                <mat-error
-                        *ngIf="cardThirteenYService.getControls(devAssessmentForm, 'physicalDevelopment').headCircumference.invalid"
-                        class="assessment__helper-text">
+                <mat-error class="assessment__helper-text"
+                           *ngIf="devAssessmentForm.get('physicalDevelopment').get('headCircumference').invalid">
                     Укажите длинну окружности
                 </mat-error>
             </mat-form-field>

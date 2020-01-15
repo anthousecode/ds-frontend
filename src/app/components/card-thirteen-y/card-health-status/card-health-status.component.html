@@ -121,7 +121,7 @@
                [max]="maxDate"
                (click)="openDatepicker('datepickerFirstDate')"
                required>
-        <mat-error *ngIf="cardThirteenYService.getControls(healthStatusForm, 'disability').disabilityFirstDate.invalid">
+        <mat-error *ngIf="healthStatusForm.get('disability').get('disabilityFirstDate').invalid">
           Выберите дату
         </mat-error>
         <mat-datepicker class="__mainbar-header" #datepickerFirstDate></mat-datepicker>
@@ -136,7 +136,7 @@
                [max]="maxDate"
                (click)="openDatepicker('datepickerLastDate')"
                required>
-        <mat-error *ngIf="cardThirteenYService.getControls(healthStatusForm, 'disability').disabilityLastDate.invalid">
+        <mat-error *ngIf="healthStatusForm.get('disability').get('disabilityLastDate').invalid">
           Выберите дату
         </mat-error>
         <mat-datepicker class="__mainbar-header" #datepickerLastDate></mat-datepicker>
@@ -170,7 +170,7 @@
           {{ invalidDisease }}
         </mat-option>
       </mat-autocomplete>
-      <mat-error *ngIf="cardThirteenYService.getControls(healthStatusForm,'disability').disabilityDiseases.invalid">
+      <mat-error *ngIf="healthStatusForm.get('disability').get('disabilityDiseases').invalid">
         Напишите заболевания
       </mat-error>
     </mat-form-field>
@@ -201,7 +201,7 @@
           {{ disabilityDisorder }}
         </mat-option>
       </mat-autocomplete>
-      <mat-error *ngIf="cardThirteenYService.getControls(healthStatusForm,'disability').disabilityDisorders.invalid">
+      <mat-error *ngIf="healthStatusForm.get('disability').get('disabilityDisorders').invalid">
         Напишите нарушения в состоянии здоровья
       </mat-error>
     </mat-form-field>
@@ -221,7 +221,7 @@
                    [max]="maxDate"
                    (click)="openDatepicker('rehabilitationDate')"
                    required>
-            <mat-error *ngIf="cardThirteenYService.getControls(healthStatusForm, 'disability').rehabilitationDate.invalid">
+            <mat-error *ngIf="healthStatusForm.get('disability').get('rehabilitationDate').invalid">
               Выберите дату
             </mat-error>
             <mat-datepicker class="__mainbar-header" #rehabilitationDate></mat-datepicker>
