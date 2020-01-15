@@ -1,244 +1,249 @@
 <form class="health-status__wrapper"
       [formGroup]="healthStatusForm">
-  <div class="health-status__before-ex"
-       [ngClass]="{'__is-table-disabled': isTableDisabled}"
-       formGroupName="beforeMedicalExamination">
-    <p class="health-status__before-ex-title">До проведения диспансеризации</p>
-    <mat-form-field floatLabel="auto"
-                    class="health-status__health-group">
-      <mat-label>Группа здоровья</mat-label>
-      <mat-select formControlName="healthGroup"
-                  required>
-        <mat-option *ngFor="let healthStatus of healthStatusList$ | async"
-                    [value]="healthStatus.id">
-          {{healthStatus.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <p class="health-status__add-diagnosis"
-       (click)="addDiagnosis()">
-      Добавить
-    </p>
-    <div class="health-status__before-ex-diagnoses">
-      <table class="health-status__diagnoses-table">
-        <thead class="health-status__diagnoses-table-header">
-        <tr>
-          <th>Диагноз</th>
-          <th>МКБ-10</th>
-          <th>Диспансерное наблюдение</th>
-          <th>Лечение</th>
-          <th>Реабилитация/СКЛ</th>
-          <th>ВМП</th>
-          <th>Удалить</th>
-        </tr>
-        </thead>
-        <tbody class="health-status__diagnoses-table-body">
-        <tr *ngFor="let diagnose of healthStatusForm.controls.diagnoses.value; let i = index"
-            (click)="editDiagnosis(i, $event)">
-          <td>{{diagnose.mkb10.name}}</td>
-          <td>{{diagnose.mkb10.code}}</td>
-          <td>{{diagnose.dispensaryObservation.name}}</td>
-          <td>{{diagnose.treatmentCondition.name}}</td>
-          <td>{{diagnose.rehabilCondition.name}}</td>
-          <td>{{diagnose.needVmp.name}}</td>
-          <td class="__delete-diagnosis">
-            <div class="health-status__diagnoses-delete"
-                 matTooltip="Нажмите для удаления диагноза"
-                 (click)="deleteDiagnosis(i)">
-              <mat-icon svgIcon="delete" class="__s18 __white"></mat-icon>
-            </div>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="health-status__after-ex"
-       [ngClass]="{'__is-table-disabled': isTableDisabled}">
-    <p class="health-status__after-ex-title">По результатам проведения диспансеризации</p>
-    <p class="health-status__add-diagnosis"
-       (click)="addDiagnosisAfter()">
-      Добавить
-    </p>
-    <div class="health-status__after-ex-diagnoses">
-      <table class="health-status__diagnoses-table">
-        <thead class="health-status__diagnoses-table-header">
-        <tr>
-          <th>Диагноз</th>
-          <th>МКБ-10</th>
-          <th>Диспансерное наблюдение</th>
-          <th>Лечение</th>
-          <th>Реабилитация/СКЛ</th>
-          <th>Доп. консультации и исследования</th>
-          <th>ВМП</th>
-          <th>Удалить</th>
-        </tr>
-        </thead>
-        <tbody class="health-status__diagnoses-table-body">
-        <tr *ngFor="let diagnosis of diagnosisListAfter | async"
-            (click)="editDiagnosisAfter(diagnosis, $event)">
-          <td>{{diagnosis.diagnosis}}</td>
-          <td>{{diagnosis.mkb_10}}</td>
-          <td>{{diagnosis.observation}}</td>
-          <td>{{diagnosis.treatment}}</td>
-          <td>{{diagnosis.rehabilitation}}</td>
-          <td>{{diagnosis.consultations}}</td>
-          <td>{{diagnosis.vmp}}</td>
-          <td class="__delete-diagnosis">
-            <div class="health-status__diagnoses-delete"
-                 matTooltip="Нажмите для удаления диагноза"
-                 (click)="deleteDiagnosis()">
-              <mat-icon svgIcon="delete" class="__s18 __white"></mat-icon>
-            </div>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="health-status__disability"
-       formGroupName="disability">
-    <p class="health-status__disability-title">Инвалидность</p>
-    <div class="health-status__disability-info">
-      <mat-form-field floatLabel="auto"
-                      class="health-status__disability-type">
-        <mat-label>Инвалидность</mat-label>
-        <mat-select formControlName="disabilityType"
-                    required>
-          <mat-option *ngFor="let disabilityType of disabilityTypeList$ | async"
-                      [value]="disabilityType.id">
-            {{disabilityType.name}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field floatLabel="auto"
-                      class="health-status__disability-first-date">
-        <input matInput
-               matTooltip="Допустимый интервал: от даты рождения ребенка до текущей даты"
-               [matDatepicker]="datepickerFirstDate"
-               placeholder="Установлена впервые"
-               formControlName="disabilityFirstDate"
-               [max]="maxDate"
-               (click)="openDatepicker('datepickerFirstDate')"
-               required>
-        <mat-error *ngIf="healthStatusForm.get('disability').get('disabilityFirstDate').invalid">
-          Выберите дату
-        </mat-error>
-        <mat-datepicker class="__mainbar-header" #datepickerFirstDate></mat-datepicker>
-      </mat-form-field>
-      <mat-form-field floatLabel="auto"
-                      class="health-status__disability-last-date">
-        <input matInput
-               matTooltip="Допустимый интервал: от даты первичного установления инвалидности до текущей даты"
-               [matDatepicker]="datepickerLastDate"
-               placeholder="Дата последнего освидетельствования"
-               formControlName="disabilityLastDate"
-               [max]="maxDate"
-               (click)="openDatepicker('datepickerLastDate')"
-               required>
-        <mat-error *ngIf="healthStatusForm.get('disability').get('disabilityLastDate').invalid">
-          Выберите дату
-        </mat-error>
-        <mat-datepicker class="__mainbar-header" #datepickerLastDate></mat-datepicker>
-      </mat-form-field>
-    </div>
-
-
-    <mat-form-field floatLabel="auto" class="health-status__diseases"
-                    [ngClass]="{'__chips-disabled': isChipsDisabled}">
-      <mat-chip-list #disabilityDiseasesChipList>
-        <mat-chip *ngFor="let invalidDiseasesChip of invalidDiseasesChips"
-                  selectable="true"
-                  removable="true"
-                  (removed)="removeInvalidDiseasesChip(invalidDiseasesChip)">
-          <span class="create-group-fields__truncate">{{ invalidDiseasesChip }}</span>
-          <mat-icon matChipRemove>cancel</mat-icon>
-        </mat-chip>
-      </mat-chip-list>
-      <input matInput
-             placeholder="Заболевания, обусловившие возникновение инвалидности:"
-             formControlName="disabilityDiseases"
-             #invalidDiseasesInput
-             [matAutocomplete]="auto"
-             [matChipInputFor]="disabilityDiseasesChipList"
-             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-             required>
-      <mat-autocomplete #auto="matAutocomplete"
-                        (optionSelected)="addInvalidDiseasesChip($event)">
-        <mat-option *ngFor="let invalidDisease of filteredDiseases$ | async"
-                    [value]="invalidDisease">
-          {{ invalidDisease }}
-        </mat-option>
-      </mat-autocomplete>
-      <mat-error *ngIf="healthStatusForm.get('disability').get('disabilityDiseases').invalid">
-        Напишите заболевания
-      </mat-error>
-    </mat-form-field>
-
-
-    <mat-form-field floatLabel="auto2" class="health-status__disorders"
-                    [ngClass]="{'__chips-disabled': isChipsDisabled}">
-      <mat-chip-list #disabilityDisordersChipList>
-        <mat-chip *ngFor="let disabilityDisordersChip of disabilityDisordersChips"
-                  (removed)="removeDisabilityDisordersChip(disabilityDisordersChip)">
-          <span class="create-group-fields__truncate">{{ disabilityDisordersChip }}</span>
-          <mat-icon matChipRemove>cancel</mat-icon>
-        </mat-chip>
-      </mat-chip-list>
-      <input matInput
-             placeholder="Виды нарушений в состоянии здоровья:"
-             formControlName="disabilityDisorders"
-             #disabilityDisordersInput
-             [matAutocomplete]="auto2"
-             [matChipInputFor]="disabilityDisordersChipList"
-             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-             matChipInputAddOnBlur="false"
-             required>
-      <mat-autocomplete #auto2="matAutocomplete"
-                        (optionSelected)="addDisabilityDisordersChip($event)">
-        <mat-option *ngFor="let disabilityDisorder of filteredDisorders$ | async"
-                    [value]="disabilityDisorder">
-          {{ disabilityDisorder }}
-        </mat-option>
-      </mat-autocomplete>
-      <mat-error *ngIf="healthStatusForm.get('disability').get('disabilityDisorders').invalid">
-        Напишите нарушения в состоянии здоровья
-      </mat-error>
-    </mat-form-field>
-
-
-    <div class="health-status__rehabilitation">
-      <p class="health-status__rehabilitation-title">Индивидуальная программа реабилитации</p>
-      <div class="health-status__rehabilitation-main">
-        <div class="health-status__rehabilitation-date">
-          <mat-form-field floatLabel="auto"
-                          class="health-status__date">
-            <input matInput
-                   matTooltip="Допустимый интервал: от рождения ребенка до текущей даты"
-                   [matDatepicker]="rehabilitationDate"
-                   placeholder="Дата назначения"
-                   formControlName="rehabilitationDate"
-                   [max]="maxDate"
-                   (click)="openDatepicker('rehabilitationDate')"
-                   required>
-            <mat-error *ngIf="healthStatusForm.get('disability').get('rehabilitationDate').invalid">
-              Выберите дату
-            </mat-error>
-            <mat-datepicker class="__mainbar-header" #rehabilitationDate></mat-datepicker>
-          </mat-form-field>
-        </div>
+    <div class="health-status__before-ex"
+         [ngClass]="{'__is-table-disabled': isTableDisabled}"
+         formGroupName="beforeMedicalExamination">
+        <p class="health-status__before-ex-title">До проведения диспансеризации</p>
         <mat-form-field floatLabel="auto"
-                        class="health-status__rehabilitation-performance">
-          <mat-label>Выполнение на момент диспансеризации</mat-label>
-          <mat-select formControlName="rehabilitationPerformance"
-                      required>
-            <mat-option *ngFor="let item of doneList$ | async"
-                        [value]="item.id">
-              {{item.name}}
-            </mat-option>
-          </mat-select>
+                        class="health-status__health-group">
+            <mat-label>Группа здоровья</mat-label>
+            <mat-select formControlName="healthGroup"
+                        required>
+                <mat-option *ngFor="let healthStatus of healthStatusList$ | async"
+                            [value]="healthStatus.id">
+                    {{healthStatus.name}}
+                </mat-option>
+            </mat-select>
         </mat-form-field>
-      </div>
+        <p class="health-status__add-diagnosis"
+           (click)="addDiagnosis()">
+            Добавить
+        </p>
+        <div class="health-status__before-ex-diagnoses">
+            <table class="health-status__diagnoses-table">
+                <thead class="health-status__diagnoses-table-header">
+                <tr>
+                    <th>Диагноз</th>
+                    <th>МКБ-10</th>
+                    <th>Диспансерное наблюдение</th>
+                    <th>Лечение</th>
+                    <th>Реабилитация/СКЛ</th>
+                    <th>ВМП</th>
+                    <th>Удалить</th>
+                </tr>
+                </thead>
+                <tbody class="health-status__diagnoses-table-body">
+                <tr *ngFor="let diagnose of healthStatusForm.controls.diagnoses.value; let i = index"
+                    (click)="editDiagnosis(i, $event)">
+                    <td>{{diagnose.mkb10.name}}</td>
+                    <td>{{diagnose.mkb10.code}}</td>
+                    <td>{{diagnose.dispensaryObservation.name}}</td>
+                    <td>{{diagnose.treatmentCondition.name}}</td>
+                    <td>{{diagnose.rehabilCondition.name}}</td>
+                    <td>{{diagnose.needVmp.name}}</td>
+                    <td class="__delete-diagnosis">
+                        <div class="health-status__diagnoses-delete"
+                             matTooltip="Нажмите для удаления диагноза"
+                             (click)="deleteDiagnosis(i)">
+                            <mat-icon svgIcon="delete" class="__s18 __white"></mat-icon>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
+    <div class="health-status__after-ex"
+         [ngClass]="{'__is-table-disabled': isTableDisabled}">
+        <p class="health-status__after-ex-title">По результатам проведения диспансеризации</p>
+        <p class="health-status__add-diagnosis"
+           (click)="addDiagnosisAfter()">
+            Добавить
+        </p>
+        <div class="health-status__after-ex-diagnoses">
+            <table class="health-status__diagnoses-table">
+                <thead class="health-status__diagnoses-table-header">
+                <tr>
+                    <th>Диагноз</th>
+                    <th>МКБ-10</th>
+                    <th>Диспансерное наблюдение</th>
+                    <th>Лечение</th>
+                    <th>Реабилитация/СКЛ</th>
+                    <th>Доп. консультации и исследования</th>
+                    <th>ВМП</th>
+                    <th>Удалить</th>
+                </tr>
+                </thead>
+                <tbody class="health-status__diagnoses-table-body">
+                <tr *ngFor="let diagnosis of diagnosisListAfter | async"
+                    (click)="editDiagnosisAfter(diagnosis, $event)">
+                    <td>{{diagnosis.diagnosis}}</td>
+                    <td>{{diagnosis.mkb_10}}</td>
+                    <td>{{diagnosis.observation}}</td>
+                    <td>{{diagnosis.treatment}}</td>
+                    <td>{{diagnosis.rehabilitation}}</td>
+                    <td>{{diagnosis.consultations}}</td>
+                    <td>{{diagnosis.vmp}}</td>
+                    <td class="__delete-diagnosis">
+                        <div class="health-status__diagnoses-delete"
+                             matTooltip="Нажмите для удаления диагноза"
+                             (click)="deleteDiagnosis()">
+                            <mat-icon svgIcon="delete" class="__s18 __white"></mat-icon>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="health-status__disability"
+         formGroupName="disability">
+        <p class="health-status__disability-title">Инвалидность</p>
+        <div class="health-status__disability-info">
+            <mat-form-field floatLabel="auto"
+                            class="health-status__disability-type">
+                <mat-label>Инвалидность</mat-label>
+                <mat-select formControlName="disabilityType"
+                            required>
+                    <mat-option *ngFor="let disabilityType of disabilityTypeList$ | async"
+                                [value]="disabilityType.id">
+                        {{disabilityType.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field floatLabel="auto"
+                            class="health-status__disability-first-date">
+                <input matInput
+                       matTooltip="Допустимый интервал: от даты рождения ребенка до текущей даты"
+                       [matDatepicker]="datepickerFirstDate"
+                       placeholder="Установлена впервые"
+                       formControlName="disabilityFirstDate"
+                       [max]="maxDate"
+                       (click)="openDatepicker('datepickerFirstDate')"
+                       required>
+                <mat-error
+                        *ngIf="cardThirteenYService.getControls(healthStatusForm, 'disability').disabilityFirstDate.invalid">
+                    Выберите дату
+                </mat-error>
+                <mat-datepicker class="__mainbar-header" #datepickerFirstDate></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field floatLabel="auto"
+                            class="health-status__disability-last-date">
+                <input matInput
+                       matTooltip="Допустимый интервал: от даты первичного установления инвалидности до текущей даты"
+                       [matDatepicker]="datepickerLastDate"
+                       placeholder="Дата последнего освидетельствования"
+                       formControlName="disabilityLastDate"
+                       [max]="maxDate"
+                       (click)="openDatepicker('datepickerLastDate')"
+                       required>
+                <mat-error
+                        *ngIf="cardThirteenYService.getControls(healthStatusForm, 'disability').disabilityLastDate.invalid">
+                    Выберите дату
+                </mat-error>
+                <mat-datepicker class="__mainbar-header" #datepickerLastDate></mat-datepicker>
+            </mat-form-field>
+        </div>
+
+
+        <mat-form-field floatLabel="auto" class="health-status__diseases"
+                        [ngClass]="{'__chips-disabled': isChipsDisabled}">
+            <mat-chip-list #disabilityDiseasesChipList>
+                <mat-chip *ngFor="let invalidDiseasesChip of invalidDiseasesChips"
+                          selectable="true"
+                          removable="true"
+                          (removed)="removeInvalidDiseasesChip(invalidDiseasesChip)">
+                    <span class="create-group-fields__truncate">{{ invalidDiseasesChip }}</span>
+                    <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+            </mat-chip-list>
+            <input matInput
+                   placeholder="Заболевания, обусловившие возникновение инвалидности:"
+                   formControlName="disabilityDiseases"
+                   #invalidDiseasesInput
+                   [matAutocomplete]="auto"
+                   [matChipInputFor]="disabilityDiseasesChipList"
+                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                   required>
+            <mat-autocomplete #auto="matAutocomplete"
+                              (optionSelected)="addInvalidDiseasesChip($event)">
+                <mat-option *ngFor="let invalidDisease of filteredDiseases$ | async"
+                            [value]="invalidDisease">
+                    {{ invalidDisease }}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-error
+                    *ngIf="cardThirteenYService.getControls(healthStatusForm,'disability').disabilityDiseases.invalid">
+                Напишите заболевания
+            </mat-error>
+        </mat-form-field>
+
+
+        <mat-form-field floatLabel="auto2" class="health-status__disorders"
+                        [ngClass]="{'__chips-disabled': isChipsDisabled}">
+            <mat-chip-list #disabilityDisordersChipList>
+                <mat-chip *ngFor="let disabilityDisordersChip of disabilityDisordersChips"
+                          (removed)="removeDisabilityDisordersChip(disabilityDisordersChip)">
+                    <span class="create-group-fields__truncate">{{ disabilityDisordersChip }}</span>
+                    <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+            </mat-chip-list>
+            <input matInput
+                   placeholder="Виды нарушений в состоянии здоровья:"
+                   formControlName="disabilityDisorders"
+                   #disabilityDisordersInput
+                   [matAutocomplete]="auto2"
+                   [matChipInputFor]="disabilityDisordersChipList"
+                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                   matChipInputAddOnBlur="false"
+                   required>
+            <mat-autocomplete #auto2="matAutocomplete"
+                              (optionSelected)="addDisabilityDisordersChip($event)">
+                <mat-option *ngFor="let disabilityDisorder of filteredDisorders$ | async"
+                            [value]="disabilityDisorder">
+                    {{ disabilityDisorder }}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-error
+                    *ngIf="cardThirteenYService.getControls(healthStatusForm,'disability').disabilityDisorders.invalid">
+                Напишите нарушения в состоянии здоровья
+            </mat-error>
+        </mat-form-field>
+
+
+        <div class="health-status__rehabilitation">
+            <p class="health-status__rehabilitation-title">Индивидуальная программа реабилитации</p>
+            <div class="health-status__rehabilitation-main">
+                <div class="health-status__rehabilitation-date">
+                    <mat-form-field floatLabel="auto"
+                                    class="health-status__date">
+                        <input matInput
+                               matTooltip="Допустимый интервал: от рождения ребенка до текущей даты"
+                               [matDatepicker]="rehabilitationDate"
+                               placeholder="Дата назначения"
+                               formControlName="rehabilitationDate"
+                               [max]="maxDate"
+                               (click)="openDatepicker('rehabilitationDate')"
+                               required>
+                        <mat-error
+                                *ngIf="cardThirteenYService.getControls(healthStatusForm, 'disability').rehabilitationDate.invalid">
+                            Выберите дату
+                        </mat-error>
+                        <mat-datepicker class="__mainbar-header" #rehabilitationDate></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <mat-form-field floatLabel="auto"
+                                class="health-status__rehabilitation-performance">
+                    <mat-label>Выполнение на момент диспансеризации</mat-label>
+                    <mat-select formControlName="rehabilitationPerformance"
+                                required>
+                        <mat-option *ngFor="let item of doneList$ | async"
+                                    [value]="item.id">
+                            {{item.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
 </form>

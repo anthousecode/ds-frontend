@@ -1,62 +1,62 @@
 <form [formGroup]="researchFormGroup">
-  <p class="mandatory-studies__title">Обязательные исследования</p>
+    <p class="mandatory-studies__title">Обязательные исследования</p>
 
-  <div formArrayName="requiredExaminationsArray" *ngFor="let researchItem of requiredExaminations; let i = index">
-    <p class="mandatory-studies__subtitle">{{researchItem.name}}</p>
-    <div class="mandatory-studies__fields">
-      <mat-form-field class="mandatory-studies__date" floatLabel="auto">
-        <input matInput placeholder="Дата" [matDatepicker]="ii"
-               [formControl]="requiredExaminationsArray.controls[i].controls.dateBegin" [max]="maxDate"
-               (click)="openDatepicker(ii)"
-               matTooltip="Допустимый интервал: от даты рождения ребенка до текущей даты" required>
-        <mat-error *ngIf="requiredExaminationsArray.controls[i].controls.dateBegin.invalid">
-          Выберите дату
-        </mat-error>
-        <mat-datepicker class="__mainbar-header" #ii></mat-datepicker>
-      </mat-form-field>
-      <mat-form-field class="mandatory-studies__result" floatLabel="auto">
+    <div formArrayName="requiredExaminationsArray" *ngFor="let researchItem of requiredExaminations; let i = index">
+        <p class="mandatory-studies__subtitle">{{researchItem.name}}</p>
+        <div class="mandatory-studies__fields">
+            <mat-form-field class="mandatory-studies__date" floatLabel="auto">
+                <input matInput placeholder="Дата" [matDatepicker]="ii"
+                       [formControl]="requiredExaminationsArray.controls[i].controls.dateBegin" [max]="maxDate"
+                       (click)="openDatepicker(ii)"
+                       matTooltip="Допустимый интервал: от даты рождения ребенка до текущей даты" required>
+                <mat-error *ngIf="requiredExaminationsArray.controls[i].controls.dateBegin.invalid">
+                    Выберите дату
+                </mat-error>
+                <mat-datepicker class="__mainbar-header" #ii></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="mandatory-studies__result" floatLabel="auto">
         <textarea matInput placeholder="Результат" [formControl]="requiredExaminationsArray.controls[i].controls.result"
                   matTooltip="Укажите результат исследования" matTextareaAutosize required>
 
       </textarea>
-        <mat-error *ngIf="requiredExaminationsArray.controls[i].controls.result.invalid">
-          Укажите результат исследования
-        </mat-error>
-      </mat-form-field>
+                <mat-error *ngIf="requiredExaminationsArray.controls[i].controls.result.invalid">
+                    Укажите результат исследования
+                </mat-error>
+            </mat-form-field>
+        </div>
     </div>
-  </div>
-  <p class="mandatory-studies__title">Дополнительные исследования</p>
+    <p class="mandatory-studies__title">Дополнительные исследования</p>
 
-  <p class="health-status__add-diagnosis"
-     [ngClass]="{'__disabled': isTableDisabled}"
-     (click)="addStudy()">
-    Добавить исследование
-  </p>
-  <div class="health-status__before-ex-diagnoses" *ngIf="additionalExaminations">
-    <table class="health-status__diagnoses-table"
-           [ngClass]="{'__disabled': isTableDisabled}">
-      <thead class="health-status__diagnoses-table-header">
-      <tr>
-        <th>Исследование</th>
-        <th>Дата</th>
-        <th>Результат</th>
-        <th>Удалить</th>
-      </tr>
-      </thead>
-      <tbody class="health-status__diagnoses-table-body">
-      <tr *ngFor="let additionalExamination of formValues.additionalExaminations; let i = index"
-          (click)="editStudy(additionalExamination, i, $event)">
-        <td>{{additionalExamination.name}}</td>
-        <td>{{additionalExamination.date | date: 'd.MM.yyyy'}}</td>
-        <td>{{additionalExamination.result}}</td>
-        <td class="__delete-diagnosis">
-          <div class="health-status__diagnoses-delete" matTooltip="Нажмите для удаления исследования"
-               (click)="deleteStudy(i)">
-            <mat-icon svgIcon="delete" class="__s18 __white"></mat-icon>
-          </div>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
+    <p class="health-status__add-diagnosis"
+       [ngClass]="{'__disabled': isTableDisabled}"
+       (click)="addStudy()">
+        Добавить исследование
+    </p>
+    <div class="health-status__before-ex-diagnoses" *ngIf="additionalExaminations">
+        <table class="health-status__diagnoses-table"
+               [ngClass]="{'__disabled': isTableDisabled}">
+            <thead class="health-status__diagnoses-table-header">
+            <tr>
+                <th>Исследование</th>
+                <th>Дата</th>
+                <th>Результат</th>
+                <th>Удалить</th>
+            </tr>
+            </thead>
+            <tbody class="health-status__diagnoses-table-body">
+            <tr *ngFor="let additionalExamination of additionalExaminations.value; let i = index"
+                (click)="editStudy(additionalExamination, i, $event)">
+                <td>{{additionalExamination.name}}</td>
+                <td>{{additionalExamination.date | date: 'd.MM.yyyy'}}</td>
+                <td>{{additionalExamination.result}}</td>
+                <td class="__delete-diagnosis">
+                    <div class="health-status__diagnoses-delete" matTooltip="Нажмите для удаления исследования"
+                         (click)="deleteStudy(i)">
+                        <mat-icon svgIcon="delete" class="__s18 __white"></mat-icon>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </form>

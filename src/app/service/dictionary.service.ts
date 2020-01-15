@@ -54,6 +54,7 @@ import {FinancingSource, Lgota, Organ, SocialStatus} from '../models/talon.model
 import {formatDate} from '@angular/common';
 import {PatientDocumentType} from '../models/patient.model';
 import {NoSnilsReasonModel} from '../models/noSnilsReason.model';
+import * as moment from 'moment';
 
 @Injectable({
     providedIn: 'root'
@@ -191,8 +192,13 @@ export class DictionaryService {
         return this.http.get<Territory[]>(this.dictionaryUrl + '/territories');
     }
 
-    getAgeGroups(): Observable<AgeGroup[]> {
-        return this.http.get<AgeGroup[]>(this.dictionaryUrl + '/age-groups');
+    getAgeGroups(birthdate?): Observable<AgeGroup[]> {
+        let birthdateShort: string;
+        if (birthdate) {
+            birthdateShort = moment(birthdate).format('YYYY-MM-DD');
+        }
+        return this.http.get<AgeGroup[]>(this.dictionaryUrl + '/age-groups?date=' + (birthdateShort || ''));
+
     }
 
     getChildCategories(): Observable<ChildCategory[]> {

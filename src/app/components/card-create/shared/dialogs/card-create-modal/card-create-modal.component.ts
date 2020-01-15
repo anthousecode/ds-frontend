@@ -8,16 +8,18 @@ import {CardService} from '../../../../../@core/shared/services/card.service';
 import {Router} from '@angular/router';
 import {DictionaryService} from '../../../../../service/dictionary.service';
 import {AgeGroup, CardType, ChildCategory} from '../../../../../models/dictionary.model';
+import {Patient} from '../../../../../models/patient.model';
+import {PatientService} from '../../../../../service/patient.service';
 
 
 @Component({
-  selector: 'app-card-create-modal',
-  templateUrl: './card-create-modal.component.html',
-  styleUrls: ['./card-create-modal.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-card-create-modal',
+    templateUrl: './card-create-modal.component.html',
+    styleUrls: ['./card-create-modal.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CardCreateModalComponent implements OnInit {
-    cardData = CARD_DATA;
+    patient: Patient;
     maxDate = new Date();
     cardCreateForm: FormGroup;
     accountingFormId = 1;
@@ -27,34 +29,20 @@ export class CardCreateModalComponent implements OnInit {
     childCategoryValues: ChildCategory[];
     ageGroupValues: AgeGroup[];
 
-  @ViewChild('surveyStartDateDatepicker')
-  surveyStartDateDatepicker!: MatDatepicker<any>;
+    @ViewChild('surveyStartDateDatepicker')
+    surveyStartDateDatepicker!: MatDatepicker<any>;
 
     constructor(private cardCreateService: CardCreateService,
                 private dictionaryService: DictionaryService,
                 private cardService: CardService,
+                private patientService: PatientService,
                 private router: Router,
                 private cdRef: ChangeDetectorRef) {
     }
 
     ngOnInit() {
         this.createForm();
-        this.dictionaryService.getCardTypes().subscribe((data: CardType[]) => {
-            data.length = 2;
-            this.accountingFormValues = data;
-            this.accountingFormControl.setValue(data[this.accountingFormId].id);
-            this.cdRef.detectChanges();
-        });
-        this.dictionaryService.getChildCategories().subscribe((data: ChildCategory[]) => {
-            this.childCategoryValues = data;
-            this.childCategoryControl.setValue(data[this.childCategoryId].id);
-            this.cdRef.detectChanges();
-        });
-        this.dictionaryService.getAgeGroups().subscribe((data: AgeGroup[]) => {
-            this.ageGroupValues = data;
-            this.ageGroupControl.setValue(data[this.ageGroupId].id);
-            this.cdRef.detectChanges();
-        });
+        this.getInitData();
     }
 
     get accountingFormControl(): AbstractControl {
@@ -73,9 +61,39 @@ export class CardCreateModalComponent implements OnInit {
         return this.cardCreateForm.get('surveyStartDateControl');
     }
 
+    getInitData() {
+        this.dictionaryService.getCardTypes().subscribe((data: CardType[]) => {
+            data.length = 2;
+            this.accountingFormValues = data;
+            this.accountingFormControl.setValue(data[this.accountingFormId].id);
+            this.cdRef.detectChanges();
+        });
+        this.dictionaryService.getChildCategories().subscribe((data: ChildCategory[]) => {
+            this.childCategoryValues = data;
+            this.childCategoryControl.setValue(data[this.childCategoryId].id);
+            this.cdRef.detectChanges();
+        });
+        this.dictionaryService.getAgeGroups().subscribe((data: AgeGroup[]) => {
+            this.ageGroupValues = data;
+            this.ageGroupControl.setValue(data[this.ageGroupId].id);
+            this.cdRef.detectChanges();
+        });
+
+        this.patientService.getPatient(this.cardService.patientId).subscribe(patient => {
+            this.patient = patient;
+            console.log(patient.birthdate);
+            this.dictionaryService.getAgeGroups(patient.birthdate).subscribe(data => {
+                this.ageGroupValues = data;
+                this.ageGroupControl.setValue(data[this.ageGroupId].id);
+                this.cdRef.detectChanges();
+            });
+        });
+    }
+
     createCard() {
         const newCard = {
             card: {
+                patient: this.patient,
                 type: {
                     id: this.accountingFormControl.value,
                     name: this.accountingFormValues[this.accountingFormControl.value - 1].name
@@ -92,15 +110,10 @@ export class CardCreateModalComponent implements OnInit {
             }
         };
 
-        this.cardData.card.type = newCard.card.type;
-        this.cardData.card.childCategory = newCard.card.childCategory;
-        this.cardData.card.ageGroup = newCard.card.ageGroup;
-        this.cardData.card.startDate = newCard.card.startDate;
-
-        this.cardCreateService.createCard(this.cardData).subscribe(res => {
+        /*this.cardCreateService.createCard(newCard).subscribe(res => {
             this.cardService.setThirteenYCardId(res.id);
             this.router.navigate(['/card-13y']).then();
-        });
+        });*/
     }
 
     private createForm() {

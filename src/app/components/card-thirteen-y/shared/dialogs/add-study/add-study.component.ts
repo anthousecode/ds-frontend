@@ -69,19 +69,17 @@ export class AddStudyComponent implements OnInit {
         let snackBarMessage = 'Исследование добавлено';
         if (this.additionalExaminationsData.exam) {
             snackBarMessage = 'Исследование сохранено';
-            this.additionalExaminationsData.additionalExaminations[this.additionalExaminationsData.i] = {
+            this.additionalExaminationsData.additionalExaminations[this.additionalExaminationsData.index] = {
                 ...this.addStudyForm.value,
                 date: moment(this.addStudyForm.value.date).format()
             };
             this.additionalExaminationsData.formValues.additionalExaminations = this.additionalExaminationsData.additionalExaminations;
-            this.cardThirteenYService.setTabCurrentValues(this.additionalExaminationsData.formValues);
+            console.log(this.additionalExaminationsData);
         } else {
             this.additionalExaminationsData.additionalExaminations.push(this.additionalExamination);
             this.additionalExaminationsData.formValues.additionalExaminations = this.additionalExaminationsData.additionalExaminations;
-            this.cardThirteenYService.setTabCurrentValues(this.additionalExaminationsData.formValues);
         }
 
-        this.additionalExaminationsData.cdRef.detectChanges();
         this.snackBar.open(snackBarMessage, 'ОК', {duration: 5000});
     }
 }

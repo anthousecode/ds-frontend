@@ -20,7 +20,7 @@ export class CardResearchComponent implements OnInit {
     researchFormGroup!: FormGroup;
     requiredExaminations: Examination[];
     maxDate = new Date();
-    additionalExaminations: [];
+    // additionalExaminations: [];
     formValues!: any;
     isCardDisabled!: boolean;
     isTableDisabled!: boolean;
@@ -33,14 +33,15 @@ export class CardResearchComponent implements OnInit {
                 @Self() private onDestroy$: NgOnDestroy) {
         this.researchFormGroup = this.formBuilder.group({
             requiredExaminationsArray: this.formBuilder.array([]),
+            additionalExaminations: ''
         });
+
         this.cardThirteenYService.setActiveTabValid(true);
     }
 
     ngOnInit() {
         this.requiredExaminations = [];
         this.getInitValues();
-        this.setAdditionalExaminations();
         this.checkIsFormValid();
         this.checkBlockState();
         this.checkFormChanges();
@@ -50,12 +51,17 @@ export class CardResearchComponent implements OnInit {
         return this.researchFormGroup.get('requiredExaminationsArray') as FormArray;
     }
 
+    get additionalExaminations() {
+        return this.researchFormGroup.get('additionalExaminations') as FormArray;
+    }
+
     getInitValues() {
         this.cardThirteenYService.activeTabInitValues
             .pipe(takeUntil(this.onDestroy$))
             .subscribe(data => {
                 this.formValues = data;
-                this.createResearchFormGroups();
+                this.initResearchFormGroups();
+                this.setAdditionalExaminations(data.additionalExaminations);
                 this.cardThirteenYService.setSelectedTabInitValues(this.researchFormGroup.value);
             });
     }
@@ -90,7 +96,7 @@ export class CardResearchComponent implements OnInit {
         this.cdRef.detectChanges();
     }
 
-    createResearchFormGroups() {
+    initResearchFormGroups() {
         this.dictionaryService.getExaminations(1, 100, '').subscribe(res => {
             this.requiredExaminations = [];
             res.forEach((examination, i) => {
@@ -135,8 +141,8 @@ export class CardResearchComponent implements OnInit {
         }
     }
 
-    setAdditionalExaminations() {
-        this.additionalExaminations = this.formValues.additionalExaminations;
+    setAdditionalExaminations(additionalExaminations) {
+        this.researchFormGroup.get('additionalExaminations').setValue(additionalExaminations);
         this.cdRef.detectChanges();
     }
 
@@ -146,9 +152,12 @@ export class CardResearchComponent implements OnInit {
             autoFocus: false,
             data: {
                 formValues: this.formValues,
-                additionalExaminations: this.additionalExaminations,
-                cdRef: this.cdRef
+                additionalExaminations: this.additionalExaminations.value,
             }
+        }).afterClosed().subscribe(() => {
+            this.cardThirteenYService.setTabCurrentValues(this.formValues);
+            this.setAdditionalExaminations(this.formValues.additionalExaminations);
+            this.cdRef.detectChanges();
         });
     }
 
@@ -161,8 +170,9 @@ export class CardResearchComponent implements OnInit {
                 key: 'research',
             }
         }).afterClosed().subscribe(() => {
-            this.cdRef.detectChanges();
             this.cardThirteenYService.setTabCurrentValues(this.formValues);
+            this.setAdditionalExaminations(this.formValues.additionalExaminations);
+            this.cdRef.detectChanges();
         });
     }
 
@@ -173,12 +183,16 @@ export class CardResearchComponent implements OnInit {
                 autoFocus: false,
                 data: {
                     formValues: this.formValues,
-                    additionalExaminations: this.additionalExaminations,
+                    additionalExaminations: this.formValues.additionalExaminations,
                     cdRef: this.cdRef,
                     mode: 'edit',
                     exam,
                     index
                 }
+            }).afterClosed().subscribe(() => {
+                this.cardThirteenYService.setTabCurrentValues(this.formValues);
+                this.setAdditionalExaminations(this.formValues.additionalExaminations);
+                this.cdRef.detectChanges();
             });
         }
     }
