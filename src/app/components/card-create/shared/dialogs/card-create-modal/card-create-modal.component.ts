@@ -81,7 +81,6 @@ export class CardCreateModalComponent implements OnInit {
 
         this.patientService.getPatient(this.cardService.patientId).subscribe(patient => {
             this.patient = patient;
-            console.log(patient.birthdate);
             this.dictionaryService.getAgeGroups(patient.birthdate).subscribe(data => {
                 this.ageGroupValues = data;
                 this.ageGroupControl.setValue(data[this.ageGroupId].id);
@@ -110,10 +109,10 @@ export class CardCreateModalComponent implements OnInit {
             }
         };
 
-        /*this.cardCreateService.createCard(newCard).subscribe(res => {
+        this.cardCreateService.createCard(newCard).subscribe(res => {
             this.cardService.setThirteenYCardId(res.id);
             this.router.navigate(['/card-13y']).then();
-        });*/
+        });
     }
 
     private createForm() {

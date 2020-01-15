@@ -5,7 +5,7 @@ import {Injectable} from '@angular/core';
 })
 export class CardService {
     thirteenYCardId: number;
-    patientId: number = 16995;
+    patientId = 16995;
 
     setThirteenYCardId(id: number) {
         this.thirteenYCardId = id;
