@@ -75,8 +75,6 @@ export class CardHealthStatusComponent implements OnInit {
         this.healthStatusList$ = this.dictionaryService.getHealthGroups();
         this.disabilityTypeList$ = this.dictionaryService.getInvalidTypes();
         this.doneList$ = this.dictionaryService.getReabilitationStatuses();
-        this.diagnosisList = this.cardThirteenYService.getDiagnoses();
-        this.diagnosisListAfter = this.cardThirteenYService.getDiagnosesAfter();
         this.disabilityTypeChange();
         this.disableRehabilitationPerformance();
         this.setDisabilityData();
@@ -377,7 +375,6 @@ export class CardHealthStatusComponent implements OnInit {
             data: this.formValues.healthStatusAfter.healthGood
         });
         dialogRef.afterClosed().subscribe(result => {
-            console.log(result)
             if (result) {
                 const healthStatusAfterData = {
                     healthGood: result.data.healthGood,
@@ -387,20 +384,20 @@ export class CardHealthStatusComponent implements OnInit {
                     ...this.formValues,
                     healthStatusAfter: healthStatusAfterData
                 };
+                this.formValues = healthStatusAfterObj;
                 this.cardThirteenYService.setTabCurrentValues(healthStatusAfterObj);
                 this.cdRef.detectChanges();
             }
         });
     }
 
-    editDiagnosisAfter(diagnosis: IDiagnoses, event) {
+    editDiagnosisAfter(diagnosisData: any, i, event) {
         if (!this.checkDeleteClass(event)) {
             this.dialog.open(AddDiagnosisAfterComponent, {
                 panelClass: '__add-diagnosis-after',
                 data: diagnosisData
             }).afterClosed().subscribe(result => {
                 if (result) {
-                    console.log('result', result);
                     const afterObj = this.formValues.healthStatusAfter;
                     const diagnoses = afterObj.diagnoses;
                     diagnoses[i] = result.data.diagnoses;
@@ -416,6 +413,10 @@ export class CardHealthStatusComponent implements OnInit {
                 }
             });
         }
+    }
+
+    getVmpInfo(state: boolean) {
+        return state ? 'есть' : 'отсутствует';
     }
 
     disableDisabilityControls() {

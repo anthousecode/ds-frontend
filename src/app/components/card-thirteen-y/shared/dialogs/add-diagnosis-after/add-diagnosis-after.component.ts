@@ -249,9 +249,8 @@ export class AddDiagnosisAfterComponent implements OnInit {
     }
 
   changeSklPrescribedMedTypeVisibleState() {
-    this.cardThirteenYService.getControls(this.addDiagnosisAfterForm, 'medSklPrescribed')
-      .sklPrescribedAmbulatoryConditions.valueChanges.subscribe((value: number) => {
-      this.checkVisibilityConditions(value, 'medSklPrescribed', 'sklPrescribedMedType');
+      this.healthStatusAfter.get('diagnoses').get('rehabilNeed').valueChanges.subscribe((value: number) => {
+      this.checkVisibilityConditions(value, 'rehabilNeedOrg');
     });
   }
 
