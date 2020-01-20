@@ -1,16 +1,19 @@
-import {Component, OnInit, ChangeDetectionStrategy, Inject, ChangeDetectorRef, Optional} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy, Inject, ChangeDetectorRef, Optional, Self} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {CardThirteenYService} from '../../../card-thirteen-y.service';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
-import {debounceTime, filter} from 'rxjs/operators';
+import {debounceTime, filter, takeUntil} from 'rxjs/operators';
 import {DispensaryObservation, Mkb10, TreatmentCondition, TreatmentOrganizationType} from '../../../../../models/dictionary.model';
 import {DictionaryService} from '../../../../../service/dictionary.service';
+import {DISABLED_CONTROL_LIST, INIT_GROUPS} from './shared/disabled-controls';
+import {NgOnDestroy} from '../../../../../@core/shared/services/destroy.service';
 
 @Component({
     selector: 'app-add-diagnosis-after',
     templateUrl: './add-diagnosis-after.component.html',
     styleUrls: ['./add-diagnosis-after.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [NgOnDestroy]
 })
 export class AddDiagnosisAfterComponent implements OnInit {
     healthStatusAfter!: FormGroup;
@@ -27,21 +30,8 @@ export class AddDiagnosisAfterComponent implements OnInit {
     consulNeedOrgVisible!: boolean;
     consulDoneOrgVisible!: boolean;
     rehabilNeedOrgVisible!: boolean;
-    initGroups = ['treatmentCondition', 'consulNeed', 'consulDone', 'rehabilNeed'];
-    disabledControlList = [
-        'id',
-        'dispensaryObservation',
-        'diagnosisFirst',
-        'treatmentCondition',
-        'treatmentConditionOrg',
-        'consulNeed',
-        'consulNeedOrg',
-        'consulDone',
-        'consulDoneOrg',
-        'rehabilNeed',
-        'rehabilNeedOrg',
-        'needVmp'
-    ];
+    initGroups = INIT_GROUPS;
+    disabledControlList = DISABLED_CONTROL_LIST;
 
     constructor(private cardThirteenYService: CardThirteenYService,
                 private fb: FormBuilder,
@@ -49,7 +39,8 @@ export class AddDiagnosisAfterComponent implements OnInit {
                 private cdRef: ChangeDetectorRef,
                 private snackBar: MatSnackBar,
                 private dialogRef: MatDialogRef<AddDiagnosisAfterComponent>,
-                @Optional() @Inject(MAT_DIALOG_DATA) public diagnosisData: any) {
+                @Optional() @Inject(MAT_DIALOG_DATA) public diagnosisData: any,
+                @Self() private onDestroy$: NgOnDestroy) {
     }
 
     ngOnInit() {
@@ -62,12 +53,10 @@ export class AddDiagnosisAfterComponent implements OnInit {
         this.checkFormChanges();
         this.checkFormValid();
         this.setHealthGroupData();
-
         this.changeMedOrganizationTypeVisibleState();
         this.changeAdditionalConsultationsAppointedVisibleState();
         this.changeAdditionalConsultationsDoneVisibleState();
         this.changeSklPrescribedMedTypeVisibleState();
-
         this.dataState();
         this.checkHealthGoodChanges();
     }
@@ -76,29 +65,31 @@ export class AddDiagnosisAfterComponent implements OnInit {
         if (typeof this.diagnosisData !== 'boolean') {
             this.isHealthGood = this.diagnosisData.healthGood;
             Object.keys(this.diagnosisData.diagnoses).forEach(key => {
-               if (!this.diagnosisData.diagnoses[key]) {
-                   delete this.diagnosisData.diagnoses[key];
-               }
+                if (!this.diagnosisData.diagnoses[key]) {
+                    delete this.diagnosisData.diagnoses[key];
+                }
             });
             this.healthStatusAfter.patchValue(this.diagnosisData, {emitEvent: false});
-            this.disableControlsCondition(this.healthStatusAfter.get('healthGood').value);
+            this.disableControlsCondition(this.isHealthGood);
             if (!this.isHealthGood) {
                 this.initGroups.forEach(item => this.checkVisibilityConditions(this.diagnosisData.diagnoses[item].id, item + 'Org'));
             }
-            this.localData = this.diagnosisData;
             this.healthStatusAfter.get('healthGood').disable();
+            this.localData = this.diagnosisData;
         } else {
             this.isHealthGood = this.diagnosisData;
-            this.disableControlsCondition(this.healthStatusAfter.get('healthGood').value);
+            this.disableControlsCondition(this.isHealthGood);
             this.healthStatusAfter.get('healthGood').setValue(this.diagnosisData, {emitEvent: false});
         }
     }
 
     checkHealthGoodChanges() {
-        this.healthStatusAfter.get('healthGood').valueChanges.subscribe(data => {
-            this.isHealthGood = data;
-            this.disableControlsCondition(data);
-        });
+        this.healthStatusAfter.get('healthGood').valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(data => {
+                this.isHealthGood = data;
+                this.disableControlsCondition(data);
+            });
     }
 
     disableControlsCondition(value) {
@@ -166,11 +157,15 @@ export class AddDiagnosisAfterComponent implements OnInit {
     }
 
     checkFormValid() {
-        this.healthStatusAfter.valueChanges.subscribe(() => this.isSaveDisabled = !this.healthStatusAfter.valid);
+        this.healthStatusAfter.valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(() => this.isSaveDisabled = !this.healthStatusAfter.valid);
     }
 
     getInitValues() {
-        this.cardThirteenYService.activeTabInitValues.subscribe(card => this.formValues = card);
+        this.cardThirteenYService.activeTabInitValues
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(card => this.formValues = card);
     }
 
     getDispensaryObservations() {
@@ -206,6 +201,7 @@ export class AddDiagnosisAfterComponent implements OnInit {
                 filter(value => value !== ''),
                 debounceTime(500),
                 filter(text => this.diagnosisList ? !this.diagnosisList.find(item => item.name === text) : true),
+                takeUntil(this.onDestroy$)
             ).subscribe(data => {
             this.dictionaryService.getMkb10s(1, 50, data).subscribe((list: Mkb10[]) => {
                 this.diagnosisList = list.filter(orgItem => {
@@ -227,32 +223,33 @@ export class AddDiagnosisAfterComponent implements OnInit {
 
     checkFormChanges() {
         this.healthStatusAfter.valueChanges
+            .pipe(takeUntil(this.onDestroy$))
             .subscribe(data => this.cardThirteenYService.setSelectedTabCurrentValues(data));
     }
 
     changeMedOrganizationTypeVisibleState() {
-        this.healthStatusAfter.get('diagnoses').get('treatmentCondition').get('id').valueChanges.subscribe((value: number) => {
-            this.checkVisibilityConditions(value, 'treatmentConditionOrg');
-        });
+        this.healthStatusAfter.get('diagnoses').get('treatmentCondition').get('id').valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe((value: number) => this.checkVisibilityConditions(value, 'treatmentConditionOrg'));
     }
 
     changeAdditionalConsultationsAppointedVisibleState() {
-        this.healthStatusAfter.get('diagnoses').get('consulNeed').get('id').valueChanges.subscribe((value: number) => {
-            this.checkVisibilityConditions(value, 'consulNeedOrg');
-        });
+        this.healthStatusAfter.get('diagnoses').get('consulNeed').get('id').valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe((value: number) => this.checkVisibilityConditions(value, 'consulNeedOrg'));
     }
 
     changeAdditionalConsultationsDoneVisibleState() {
-        this.healthStatusAfter.get('diagnoses').get('consulDone').get('id').valueChanges.subscribe((value: number) => {
-            this.checkVisibilityConditions(value, 'consulDoneOrg');
-        });
+        this.healthStatusAfter.get('diagnoses').get('consulDone').get('id').valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe((value: number) => this.checkVisibilityConditions(value, 'consulDoneOrg'));
     }
 
-  changeSklPrescribedMedTypeVisibleState() {
-      this.healthStatusAfter.get('diagnoses').get('rehabilNeed').get('id').valueChanges.subscribe((value: number) => {
-      this.checkVisibilityConditions(value, 'rehabilNeedOrg');
-    });
-  }
+    changeSklPrescribedMedTypeVisibleState() {
+        this.healthStatusAfter.get('diagnoses').get('rehabilNeed').get('id').valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe((value: number) => this.checkVisibilityConditions(value, 'rehabilNeedOrg'));
+    }
 
     checkVisibilityConditions(value: number, groupName: string) {
         if (value === 4) {
@@ -266,13 +263,18 @@ export class AddDiagnosisAfterComponent implements OnInit {
     }
 
     setHealthGroupData() {
-        this.healthStatusAfter.valueChanges.subscribe(val => {
-            this.localData = val;
-            this.cdRef.detectChanges();
-        });
+        this.healthStatusAfter.valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(val => {
+                this.localData = val;
+                this.cdRef.detectChanges();
+            });
     }
 
     saveAndClose() {
+        if (!this.localData.diagnoses.id) {
+            delete this.localData.diagnoses.id;
+        }
         this.dialogRef.close({data: this.localData});
         this.snackBar.open('Диагноз добавлен', 'ОК', {duration: 5000});
     }

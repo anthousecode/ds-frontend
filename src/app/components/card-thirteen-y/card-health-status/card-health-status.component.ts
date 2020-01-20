@@ -116,6 +116,7 @@ export class CardHealthStatusComponent implements OnInit {
                 healthGroup: new FormControl('', [Validators.required])
             }),
             diagnoses: new FormControl(''),
+            diagnosesAfter: new FormControl(''),
             disability: new FormGroup({
                 disabilityType: new FormControl(1, [Validators.required]),
                 disabilityFirstDate: new FormControl('', [Validators.required]),
@@ -171,6 +172,9 @@ export class CardHealthStatusComponent implements OnInit {
         }
         if (data.healthStatusBefore && data.healthStatusBefore.diagnoses) {
             this.healthStatusForm.get('diagnoses').setValue(data.healthStatusBefore.diagnoses, {emitEvent: false});
+        }
+        if (data.healthStatusAfter && data.healthStatusAfter.diagnoses) {
+            this.healthStatusForm.get('diagnosesAfter').setValue(data.healthStatusAfter.diagnoses, {emitEvent: false});
         }
         if (data.disability) {
             if (data.disability.disabilityType) {
@@ -390,6 +394,8 @@ export class CardHealthStatusComponent implements OnInit {
                         healthStatusAfter: healthStatusAfterData
                     };
                     this.formValues = healthStatusAfterObj;
+                    console.log(healthStatusAfterObj)
+                    this.healthStatusForm.get('diagnosesAfter').setValue(this.formValues.healthStatusAfter.diagnoses);
                     this.cardThirteenYService.setTabCurrentValues(healthStatusAfterObj);
                     this.cdRef.detectChanges();
                 }
@@ -408,6 +414,7 @@ export class CardHealthStatusComponent implements OnInit {
             }).afterClosed().subscribe(result => {
                 if (result) {
                     this.formValues.healthStatusAfter.diagnoses[i] = result.data.diagnoses;
+                    this.healthStatusForm.get('diagnosesAfter').setValue(this.formValues.healthStatusAfter.diagnoses);
                     this.cardThirteenYService.setTabCurrentValues(this.formValues);
                     this.cdRef.detectChanges();
                 }
@@ -448,7 +455,6 @@ export class CardHealthStatusComponent implements OnInit {
                 arr: this.formValues.healthStatusBefore.diagnoses,
             }
         }).afterClosed().subscribe(() => {
-            console.log(this.formValues.healthStatusBefore.diagnoses);
             this.cardThirteenYService.setTabCurrentValues(this.formValues);
             this.healthStatusForm.get('diagnoses').setValue(this.formValues.healthStatusBefore.diagnoses);
             this.cdRef.detectChanges();
@@ -464,6 +470,7 @@ export class CardHealthStatusComponent implements OnInit {
             }
         }).afterClosed().subscribe(() => {
             this.cardThirteenYService.setTabCurrentValues(this.formValues);
+            this.healthStatusForm.get('diagnosesAfter').setValue(this.formValues.healthStatusAfter.diagnoses);
             this.cdRef.detectChanges();
         });
     }
