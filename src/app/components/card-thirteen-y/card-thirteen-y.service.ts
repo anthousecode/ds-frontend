@@ -3,21 +3,17 @@ import {HttpClient} from '@angular/common/http';
 import {catchErrorLogEmpty} from '../../@core/shared/rxjs-operators/base-catch-error.operator';
 import {AbstractControl, FormGroup} from '@angular/forms';
 import {BaseApiService} from '../../@core/api/shared/base-api.service';
-import {IDiagnoses} from './shared/interfaces/diagnoses.interface';
+import {IDiagnose} from './shared/interfaces/diagnoses.interface';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {IGroupVaccinations} from './card-vaccination/shared/vaccination.interface';
-import {IAdditionalInfo} from './shared/interfaces/additional-info.interface';
-import {IChangesHistory} from './shared/interfaces/changes-history.interface';
 import {AdditionalResearch} from './shared/interfaces/additional-research.interface';
-import { load } from '@angular/core/src/render3';
-import { finalize } from 'rxjs/operators';
-
+import {finalize} from 'rxjs/operators';
+import {IChangesHistory} from './shared/interfaces/changes-history.interface';
+import {CardService} from '../../@core/shared/services/card.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class CardThirteenYService {
-    getCitiesUrl = 'http://ds-dev.rt-eu.ru/addrobject/search?query=';
     activeTab: BehaviorSubject<string> = new BehaviorSubject('main');
     activeTabInitValues: BehaviorSubject<any> = new BehaviorSubject(false);
     activeTabCurrentValues: BehaviorSubject<any> = new BehaviorSubject(false);
@@ -26,12 +22,16 @@ export class CardThirteenYService {
     isActiveTabValid: Subject<boolean> = new Subject<boolean>();
     isLoading: BehaviorSubject<boolean> = new BehaviorSubject(false);
     isLoading$: Observable<boolean> = this.isLoading.asObservable();
+    isBlocked: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    cardStatus: Subject<number> = new Subject();
 
     baseUrl = 'http://ds-dev.rt-eu.ru/api/';
+    getCitiesUrl = 'http://ds-dev.rt-eu.ru/addrobject/search?query=';
 
     constructor(private http: HttpClient,
-                private apiService: BaseApiService) {
-
+                private apiService: BaseApiService,
+                private cardService: CardService) {
+        console.log(this.cardService.thirteenYCardId);
     }
 
     setActiveTab(tab: string) {
@@ -58,8 +58,16 @@ export class CardThirteenYService {
         this.selectedTabCurrentValues.next(currentValue);
     }
 
+    checkCardStatus(status) {
+        this.cardStatus.next(status);
+    }
+
     setLoading(loader: boolean) {
         this.isLoading.next(loader);
+    }
+
+    setBlockedMode(isBlocked: boolean) {
+        this.isBlocked.next(isBlocked);
     }
 
     getControls(nameForm: FormGroup, nameGroup: string): any {
@@ -76,12 +84,15 @@ export class CardThirteenYService {
             .pipe(finalize(() => this.setLoading(false)));
     }
 
+    setCardStatus(statusParams) {
+        const params = statusParams;
+        return this.http.put(this.baseUrl + 'cards/696/status', params);
+    }
+
     getCities(text) {
         if (text) {
             return this.http.get(this.getCitiesUrl + text)
-                .pipe(
-                    catchErrorLogEmpty()
-                );
+                .pipe(catchErrorLogEmpty());
         }
     }
 
@@ -91,16 +102,20 @@ export class CardThirteenYService {
             .pipe(finalize(() => this.setLoading(false)));
     }
 
-    getAdditionalInfo(): Observable<IAdditionalInfo[]> {
-        return this.apiService.get<IAdditionalInfo[]>('additional-info.json'); // TODO: remove when api will work
-    }
-
     getHistory(): Observable<IChangesHistory> {
         return this.apiService.get<IChangesHistory>('changes-history.json'); // TODO: remove when api will work
     }
 
-    getDiagnoses(): Observable<IDiagnoses[]> {
-        return this.apiService.get<IDiagnoses[]>('diagnoses.json'); // TODO: remove when api will work
+    getDiagnoses(): Observable<IDiagnose[]> {
+        return this.apiService.get<IDiagnose[]>('diagnoses.json'); // TODO: remove when api will work
+    }
+
+    getDiagnosesAfter(): Observable<IDiagnose[]> {
+        return this.apiService.get<IDiagnose[]>('diagnoses-after.json'); // TODO: remove when api will work
+    }
+
+    exportCard(format: string) {
+        return this.http.get(this.baseUrl + 'cards/696.' + format, {responseType: 'blob'});
     }
 
     getAdditionalResearch(): Observable<AdditionalResearch[]> {

@@ -6,7 +6,7 @@
   }
 
   &__field-block {
-    padding: 20px 0;
+    padding-top: 20px;
   }
 
   &__input-field {
@@ -24,6 +24,11 @@
     width: 100%;
     margin-right: 20px;
     margin-bottom: 30px;
+
+    &.__disabled {
+      pointer-events: none;
+      cursor: default;
+    }
   }
 
   &__truncate {

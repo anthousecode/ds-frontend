@@ -1,17 +1,20 @@
-import {Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, Self} from '@angular/core';
 import {CardThirteenYService} from '../card-thirteen-y.service';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDatepicker, MatSelectChange} from '@angular/material';
-import {skip} from 'rxjs/operators';
+import {debounceTime, map, skip, takeUntil} from 'rxjs/operators';
 import {DictionaryService} from '../../../service/dictionary.service';
 import {AbsenceReason, DoctorForConclusion, DoctorForExamination, HealthGroup, ReasonMissed} from '../../../models/dictionary.model';
 import * as moment from 'moment';
+import {NgOnDestroy} from '../../../@core/shared/services/destroy.service';
+import {Observable} from 'rxjs';
 
 @Component({
     selector: 'app-card-conclusion',
     templateUrl: './card-conclusion.component.html',
     styleUrls: ['./card-conclusion.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [NgOnDestroy]
 })
 export class CardConclusionComponent implements OnInit {
     private conclusionForm: FormGroup;
@@ -22,15 +25,20 @@ export class CardConclusionComponent implements OnInit {
     private missedReasons: ReasonMissed[];
     private absenceReasons: AbsenceReason[];
     private formValues!: any;
-    private doctorsList: DoctorForConclusion[];
+    isCardDisabled!: boolean;
+    private doctorsForConclusion: DoctorForConclusion[];
+    private filteredDoctors: Observable<DoctorForConclusion[]>;
     canDisabledControls = ['missedReasons', 'absence', 'nonExecutionTextarea'];
 
 
     constructor(private  fb: FormBuilder,
                 private cardThirteenYService: CardThirteenYService,
                 private dictionaryService: DictionaryService,
-                private cdRef: ChangeDetectorRef) {
-        this.cardThirteenYService.activeTabCurrentValues.subscribe(data => this.formValues = data);
+                private cdRef: ChangeDetectorRef,
+                @Self() private onDestroy$: NgOnDestroy) {
+        // this.cardThirteenYService.activeTabCurrentValues
+        //     .pipe(takeUntil(this.onDestroy$))
+        //     .subscribe(data => this.formValues = data);
     }
 
     get doctorExaminations() {
@@ -43,23 +51,46 @@ export class CardConclusionComponent implements OnInit {
         this.checkIsFormValid();
         this.initDoctorExaminationsForm();
         this.initMissedReasons();
-        this.initDoctorsList();
         this.initAbsenceReasons();
+        this.initDoctorsForConclusion();
+        this.getFilteredDoctors();
         this.checkChangeOfMedicalExamination();
         this.setDoctorsDateData();
         this.setHealthGroupData();
+        this.checkBlockState();
         this.checkFormChanges();
     }
 
     checkIsFormValid() {
-        this.conclusionForm.valueChanges.subscribe(() => this.cardThirteenYService.setActiveTabValid(this.conclusionForm.valid));
+        this.conclusionForm.valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(() => this.cardThirteenYService.setActiveTabValid(this.conclusionForm.valid));
+    }
+
+    checkBlockState() {
+        this.cardThirteenYService.isBlocked
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(state => {
+                if (state) {
+                    this.disableGroup();
+                }
+            });
+    }
+
+    disableGroup() {
+        this.conclusionForm.disable({emitEvent: false});
+        this.isCardDisabled = true;
+        this.cardThirteenYService.setSelectedTabCurrentValues(null);
+        this.cdRef.detectChanges();
     }
 
     getInitValues() {
-        this.cardThirteenYService.activeTabInitValues.subscribe(data => {
-            this.formValues = data;
-            this.initHealthGroup();
-        });
+        this.cardThirteenYService.activeTabInitValues
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(data => {
+                this.formValues = data;
+                this.initHealthGroup();
+            });
     }
 
     createConclusionForm() {
@@ -69,6 +100,7 @@ export class CardConclusionComponent implements OnInit {
                 healthGroup: new FormControl('', [Validators.required]),
                 date: new FormControl(moment().format(), [Validators.required]),
                 doctor: new FormControl('', [Validators.required]),
+                doctorId: new FormControl('', [Validators.required]),
                 recommendation: new FormControl('', [Validators.required]),
                 medicalExamination: new FormControl(''),
                 missedReasons: new FormControl(''),
@@ -79,12 +111,13 @@ export class CardConclusionComponent implements OnInit {
     }
 
     initDoctorExaminationsForm() {
-        this.dictionaryService.getDoctorsForExamination().subscribe((doctors) => {
+        this.dictionaryService.getDoctorsForExamination().subscribe((doctors: DoctorForExamination[]) => {
             this.doctorsForExaminations = doctors;
             this.doctorsForExaminations.forEach((item: DoctorForExamination, i) => {
+                const date = this.formValues.doctorExaminations[i] ? this.formValues.doctorExaminations[i].date : '';
                 this.doctorExaminations.push(
                     this.fb.group({
-                        date: [this.formValues.doctorExaminations[i].date || '', [Validators.required]],
+                        date: [date, [Validators.required]],
                         id: [item.id, [Validators.required]],
                         name: [item.name, [Validators.required]]
                     })
@@ -92,91 +125,125 @@ export class CardConclusionComponent implements OnInit {
             });
             this.cdRef.detectChanges();
             this.cardThirteenYService.setSelectedTabCurrentValues(null);
+            if (this.isCardDisabled) {
+                this.disableGroup();
+            }
         });
     }
 
     setFormInitValues(data) {
-        console.log(data)
         if (data.conclusion) {
-            if (data.disability.disabilityType.id === 1) {
-                this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').healthGroup.setValue(5, {emitEvent: false});
-                this.healthGroupFiltered = this.healthGroup.filter(item => item.id === 5);
-            } else {
-
-            }
-            this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').recommendation
-                .setValue(data.conclusion.recommend, {emitEvent: false});
+            this.healthGroupConditions(data.disability.disabilityType, data.healthStatusAfter.healthGood);
+            this.conclusionForm.get('opinionForm').get('recommendation').setValue(data.conclusion.recommend, {emitEvent: false});
             if (data.conclusion.person) {
-                this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').doctor
-                // tslint:disable-next-line:max-line-length
-                    .setValue(`${data.conclusion.person.surname} + '' + ${data.conclusion.person.name} + '' + ${data.conclusion.person.lastname}`, {emitEvent: false});
+                this.conclusionForm.get('opinionForm').get('doctor').setValue(data.conclusion.person.surname + ' ' +
+                    data.conclusion.person.name + ' ' + data.conclusion.person.lastname, {emitEvent: false});
+                this.conclusionForm.get('opinionForm').get('doctorId').setValue(data.conclusion.person.id, {emitEvent: false});
             }
-            this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').medicalExamination
+            this.conclusionForm.get('opinionForm').get('medicalExamination')
                 .setValue(data.conclusion.dispanserizationFail, {emitEvent: false});
             if (!data.conclusion.dispanserizationFail) {
                 this.canDisabledControls.forEach(item => {
-                    this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm')[item].disable();
+                    this.conclusionForm.get('opinionForm').get(item).disable();
                 });
             }
             this.conditionMedicalExaminationValue(data.conclusion.dispanserizationFail);
             if (data.conclusion.failReason) {
-                this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').missedReasons
-                    .setValue(data.conclusion.failReason.id, {emitEvent: false});
+                this.conclusionForm.get('opinionForm').get('missedReasons').setValue(data.conclusion.failReason.id, {emitEvent: false});
                 if (data.conclusion.failReason.id === 1) {
-                    this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').absence.enable();
+                    this.conclusionForm.get('opinionForm').get('absence').enable();
                 }
                 if (data.conclusion.failReason.id === 6) {
-                    this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').nonExecutionTextarea.enable();
+                    this.conclusionForm.get('opinionForm').get('nonExecutionTextarea').enable();
                 }
             }
             if (data.conclusion.absenceReason) {
-                this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').absence
-                    .setValue(data.conclusion.absenceReason.id, {emitEvent: false});
+                this.conclusionForm.get('opinionForm').get('absence').setValue(data.conclusion.absenceReason.id, {emitEvent: false});
             }
             if (data.conclusion.failReasonOther) {
-                this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').nonExecutionTextarea
+                this.conclusionForm.get('opinionForm').get('nonExecutionTextarea')
                     .setValue(data.conclusion.failReasonOther, {emitEvent: false});
             }
         }
     }
 
     initHealthGroup() {
-        this.dictionaryService.getHealthGroups().subscribe(item => {
-            this.healthGroup = item;
-            this.healthGroupFiltered = item;
+        this.dictionaryService.getHealthGroups().subscribe((groups: HealthGroup[]) => {
+            this.healthGroup = groups;
+            this.healthGroupFiltered = groups;
             this.setFormInitValues(this.formValues);
         });
     }
 
-    initDoctorsList() {
-        this.dictionaryService.getDoctorsForConslusion().subscribe(item => this.doctorsList = item);
-    }
-
     initMissedReasons() {
-        this.dictionaryService.getMissedReasons().subscribe(item => this.missedReasons = item);
+        this.dictionaryService.getMissedReasons().subscribe((reasons: ReasonMissed[]) => this.missedReasons = reasons);
     }
 
     initAbsenceReasons() {
-        this.dictionaryService.getAbsenceReasons().subscribe(item => this.absenceReasons = item);
+        this.dictionaryService.getAbsenceReasons().subscribe((reasons: AbsenceReason[]) => this.absenceReasons = reasons);
+    }
+
+    initDoctorsForConclusion() {
+        this.dictionaryService.getDoctorsForConslusion().subscribe((doctors: DoctorForConclusion[]) => {
+            const doctorList = doctors.map(item => ({
+                ...item,
+                fullName: item.surname + ' ' + item.name + ' ' + item.lastname
+            }));
+            this.doctorsForConclusion = doctorList;
+        });
+    }
+
+    getFilteredDoctors() {
+        this.filteredDoctors = this.conclusionForm.get('opinionForm').get('doctor').valueChanges
+            .pipe(
+                debounceTime(300),
+                map(doctor => doctor ? this.filterDoctors(doctor) : this.doctorsForConclusion.slice())
+            );
+    }
+
+    filterDoctors(value): DoctorForConclusion[] {
+        const filterValue = value.toLowerCase();
+        return this.doctorsForConclusion.filter(state => state.fullName.toLowerCase().indexOf(filterValue) > -1);
+    }
+
+    setDoctorId(id: number) {
+        this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').doctorId.setValue(id);
     }
 
     checkFormChanges() {
-        this.conclusionForm.valueChanges.subscribe(data => this.cardThirteenYService.setSelectedTabCurrentValues(data));
+        this.conclusionForm.valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(data => this.cardThirteenYService.setSelectedTabCurrentValues(data));
+    }
+
+    healthGroupConditions(disabilityType, healthGood) {
+        if (disabilityType.id === 1) {
+            this.conclusionForm.get('opinionForm').get('healthGroup').setValue(5, {emitEvent: false});
+            this.healthGroupFiltered = this.healthGroup.filter(item => item.id === 5);
+        } else {
+            if (healthGood) {
+                this.conclusionForm.get('opinionForm').get('healthGroup').setValue(1, {emitEvent: false});
+            } else {
+                this.conclusionForm.get('opinionForm').get('healthGroup').setValue(2, {emitEvent: false});
+                this.healthGroupFiltered = this.healthGroup.filter(item => item.id !== 1);
+            }
+        }
+        this.cdRef.detectChanges();
     }
 
     checkChangeOfMedicalExamination() {
-        this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').medicalExamination.valueChanges.subscribe(checked => {
-            this.conditionMedicalExaminationValue(checked);
-        });
+        this.conclusionForm.get('opinionForm').get('medicalExamination').valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(checked => this.conditionMedicalExaminationValue(checked));
     }
 
     conditionMedicalExaminationValue(checked) {
         if (checked) {
-            this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').missedReasons.enable();
+            this.conclusionForm.get('opinionForm').get('missedReasons').enable();
         } else {
-            this.canDisabledControls.forEach(item => {
-                this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm')[item].disable();
-                this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm')[item].setValue('');
+            this.canDisabledControls.forEach((control: string) => {
+                this.conclusionForm.get('opinionForm').get(control).disable();
+                this.conclusionForm.get('opinionForm').get(control).setValue('');
             });
         }
     }
@@ -187,7 +254,10 @@ export class CardConclusionComponent implements OnInit {
 
     setDoctorsDateData() {
         this.conclusionForm.controls.doctorExaminations.valueChanges
-            .pipe(skip(12))
+            .pipe(
+                skip(12),
+                takeUntil(this.onDestroy$)
+            )
             .subscribe(data => {
                 const formArrayConclusion = data.map(item => {
                     return {
@@ -207,27 +277,32 @@ export class CardConclusionComponent implements OnInit {
     }
 
     setHealthGroupData() {
-        this.conclusionForm.controls.opinionForm.valueChanges.subscribe(val => {
-            const conclusionObj = {
-                ...this.formValues,
-                conclusion: {
-                    healthGroup: {
-                        id: val.healthGroup,
-                    },
-                    recommend: val.recommendation,
-                    date: this.getDoctorDateFormat(val.date),
-                    dispanserizationFail: val.medicalExamination,
-                    failReason: {
-                        id: !val.missedReasons ? '' : val.missedReasons
-                    },
-                    absenceReason: {
-                        id: !val.absence ? '' : val.absence
-                    },
-                    failReasonOther: !val.nonExecutionTextarea ? '' : val.nonExecutionTextarea
-                }
-            };
-            this.cardThirteenYService.setTabCurrentValues(conclusionObj);
-        });
+        this.conclusionForm.controls.opinionForm.valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(val => {
+                const conclusionObj = {
+                    ...this.formValues,
+                    conclusion: {
+                        healthGroup: {
+                            id: val.healthGroup,
+                        },
+                        recommend: val.recommendation,
+                        person: {
+                            id: val.doctorId
+                        },
+                        date: this.getDoctorDateFormat(val.date),
+                        dispanserizationFail: val.medicalExamination,
+                        failReason: {
+                            id: !val.missedReasons ? '' : val.missedReasons
+                        },
+                        absenceReason: {
+                            id: !val.absence ? '' : val.absence
+                        },
+                        failReasonOther: !val.nonExecutionTextarea ? '' : val.nonExecutionTextarea
+                    }
+                };
+                this.cardThirteenYService.setTabCurrentValues(conclusionObj);
+            });
     }
 
     getDoctorDateFormat(date) {
@@ -240,18 +315,18 @@ export class CardConclusionComponent implements OnInit {
 
     isDisabledMissedReasons(event: MatSelectChange) {
         if (event.source.value === 1) {
-            this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').absence.enable();
-            this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').nonExecutionTextarea.setValue('');
-            this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').nonExecutionTextarea.disable();
+            this.conclusionForm.get('opinionForm').get('absence').enable();
+            this.conclusionForm.get('opinionForm').get('nonExecutionTextarea').setValue('');
+            this.conclusionForm.get('opinionForm').get('nonExecutionTextarea').disable();
         } else if (event.source.value === 6) {
-            this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').nonExecutionTextarea.enable();
-            this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').absence.setValue('');
-            this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').absence.disable();
+            this.conclusionForm.get('opinionForm').get('nonExecutionTextarea').enable();
+            this.conclusionForm.get('opinionForm').get('absence').setValue('');
+            this.conclusionForm.get('opinionForm').get('absence').disable();
         } else {
-            this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').absence.setValue('');
-            this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').absence.disable();
-            this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').nonExecutionTextarea.setValue('');
-            this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').nonExecutionTextarea.disable();
+            this.conclusionForm.get('opinionForm').get('absence').setValue('');
+            this.conclusionForm.get('opinionForm').get('absence').disable();
+            this.conclusionForm.get('opinionForm').get('nonExecutionTextarea').setValue('');
+            this.conclusionForm.get('opinionForm').get('nonExecutionTextarea').disable();
         }
     }
 }

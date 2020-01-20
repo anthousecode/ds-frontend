@@ -1,8 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { CardCreateModalComponent } from './shared/dialogs/card-create-modal/card-create-modal.component';
-import { IToken } from '../../ui/shared/interfaces/token.interface';
-import { TokenService } from '../../@core/shared/services/token.service';
 import {TOKEN} from '../card-thirteen-y/shared/data/token';
 
 @Component({
@@ -15,9 +13,7 @@ import {TOKEN} from '../card-thirteen-y/shared/data/token';
 export class CardCreateComponent implements OnInit {
   token = TOKEN;
 
-  constructor(
-    private dialog: MatDialog) {
-  }
+  constructor(private dialog: MatDialog) {}
 
   ngOnInit() {
     localStorage.setItem('token', this.token);

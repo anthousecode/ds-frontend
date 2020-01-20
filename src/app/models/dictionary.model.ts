@@ -318,6 +318,7 @@ export interface DoctorForConclusion {
     surname: string;
     name: string;
     lastname: string;
+    fullName?: string;
     organizationOid: number;
     enabled: number;
     created: string;

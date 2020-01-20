@@ -70,6 +70,12 @@
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .12), 0 1px 5px 0 rgba(0, 0, 0, .2);
     cursor: pointer;
 
+    &.__disabled {
+      background-color: rgba(#1b9881, .6);
+      pointer-events: none;
+      cursor: default;
+    }
+
     @media (max-width: 992px) {
       width: 100%;
     }
@@ -81,6 +87,17 @@
 
   &__diagnoses-table {
     margin-top: 15px;
+
+    &.__disabled {
+      tr {
+        pointer-events: none;
+        cursor: default;
+      }
+
+      .health-status__diagnoses-delete {
+        background-color: rgba(#F44336, .6);
+      }
+    }
 
     &-header {
       th {

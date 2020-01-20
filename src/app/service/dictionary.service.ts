@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpParams} from '@angular/common/http';
 
-import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 
 import {
     AbsenceReason,
@@ -49,11 +49,12 @@ import {
     VmpType,
     VmpTypeGroup
 } from '../models/dictionary.model';
-import { environment } from '../../environments/environment';
-import { FinancingSource, Lgota, Organ, SocialStatus } from '../models/talon.model';
-import { formatDate } from '@angular/common';
-import { PatientDocumentType } from '../models/patient.model';
-import { NoSnilsReasonModel } from '../models/noSnilsReason.model';
+import {environment} from '../../environments/environment';
+import {FinancingSource, Lgota, Organ, SocialStatus} from '../models/talon.model';
+import {formatDate} from '@angular/common';
+import {PatientDocumentType} from '../models/patient.model';
+import {NoSnilsReasonModel} from '../models/noSnilsReason.model';
+import * as moment from 'moment';
 
 @Injectable({
     providedIn: 'root'
@@ -191,8 +192,13 @@ export class DictionaryService {
         return this.http.get<Territory[]>(this.dictionaryUrl + '/territories');
     }
 
-    getAgeGroups(): Observable<AgeGroup[]> {
-        return this.http.get<AgeGroup[]>(this.dictionaryUrl + '/age-groups');
+    getAgeGroups(birthdate?): Observable<AgeGroup[]> {
+        let birthdateShort: string;
+        if (birthdate) {
+            birthdateShort = moment(birthdate).format('YYYY-MM-DD');
+        }
+        return this.http.get<AgeGroup[]>(this.dictionaryUrl + '/age-groups?date=' + (birthdateShort || ''));
+
     }
 
     getChildCategories(): Observable<ChildCategory[]> {
@@ -311,12 +317,17 @@ export class DictionaryService {
     }
 
 
-
     getParamsForPaginationArguments(page: number, pagesize: number, name?: string): HttpParams {
         let params = new HttpParams();
-        if (page) { params = params.set('page', page.toString()); }
-        if (pagesize) { params = params.set('pagesize', pagesize.toString()); }
-        if (name) { params = params.set('name', name); }
+        if (page) {
+            params = params.set('page', page.toString());
+        }
+        if (pagesize) {
+            params = params.set('pagesize', pagesize.toString());
+        }
+        if (name) {
+            params = params.set('name', name);
+        }
         return params;
     }
 

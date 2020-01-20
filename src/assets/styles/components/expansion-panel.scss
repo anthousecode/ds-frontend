@@ -9,11 +9,10 @@
     .mat-expansion-panel-body {
       padding: 20px;
     }
-  }card-main__med-organization-more
 
-  .mat-expansion-panel-header {
-    &.mat-expanded {
+    .mat-expansion-panel-header {
       border-bottom: 1px solid #dddddd;
+      border-radius: 0;
     }
   }
 
@@ -59,4 +58,3 @@
     }
   }
 }
-

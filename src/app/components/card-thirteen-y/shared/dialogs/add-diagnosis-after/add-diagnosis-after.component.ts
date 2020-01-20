@@ -2,7 +2,7 @@ import {Component, OnInit, ChangeDetectionStrategy, Inject, ChangeDetectorRef, O
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {CardThirteenYService} from '../../../card-thirteen-y.service';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
-import {IDiagnoses} from '../../interfaces/diagnoses.interface';
+import {IDiagnose} from '../../interfaces/diagnoses.interface';
 import {debounceTime, filter} from 'rxjs/operators';
 import {DispensaryObservation, Mkb10, TreatmentCondition, TreatmentOrganizationType} from '../../../../../models/dictionary.model';
 import {DictionaryService} from '../../../../../service/dictionary.service';
@@ -248,11 +248,12 @@ export class AddDiagnosisAfterComponent implements OnInit {
         });
     }
 
-    changeSklPrescribedMedTypeVisibleState() {
-        this.healthStatusAfter.get('diagnoses').get('rehabilNeed').get('id').valueChanges.subscribe((value: number) => {
-            this.checkVisibilityConditions(value, 'rehabilNeedOrg');
-        });
-    }
+  changeSklPrescribedMedTypeVisibleState() {
+    this.cardThirteenYService.getControls(this.addDiagnosisAfterForm, 'medSklPrescribed')
+      .sklPrescribedAmbulatoryConditions.valueChanges.subscribe((value: number) => {
+      this.checkVisibilityConditions(value, 'medSklPrescribed', 'sklPrescribedMedType');
+    });
+  }
 
     checkVisibilityConditions(value: number, groupName: string) {
         if (value === 4) {

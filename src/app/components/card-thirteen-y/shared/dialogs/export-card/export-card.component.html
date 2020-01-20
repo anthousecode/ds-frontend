@@ -1,9 +1,9 @@
 <div class="export-card__main">
-  <p class="export-card__title">Экспорт талона</p>
+  <p class="export-card__title">Экспорт карты обследования</p>
   <mat-form-field floatLabel="auto"
                   class="export-card__form">
     <mat-label>Формат для скачивания</mat-label>
-    <mat-select [formControl]="exportControl" multiple>
+    <mat-select [formControl]="exportControl">
       <mat-option *ngFor="let format of exportCardData"
                   [value]="format">
         {{format}}
@@ -17,6 +17,7 @@
     Отмена
   </button>
   <button class="export-card__button-item"
+          [ngClass]="{'__disabled': !exportControl.valid}"
           (click)="downloadCard()">
     Скачать
   </button>

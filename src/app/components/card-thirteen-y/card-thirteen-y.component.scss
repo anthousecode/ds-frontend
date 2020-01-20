@@ -104,7 +104,7 @@
   &__buttons {
     display: flex;
     width: 100%;
-    padding: 20px 20px 0 20px;
+    padding: 30px 20px 0 20px;
 
     @media (max-width: 992px) {
       flex-direction: column;
@@ -152,7 +152,7 @@
   z-index: 1;
   top: 0;
   position: fixed;
-  background-color: rgba(141, 155, 168, 0.42);
+  background-color: rgba(141, 155, 168, .42);
 }
 
 
