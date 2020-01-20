@@ -369,46 +369,46 @@ export class CardHealthStatusComponent implements OnInit {
         }
     }
 
+    checkStatusAfterDisable() {
+        return !!(this.formValues.healthStatusAfter.healthGood && this.formValues.healthStatusAfter.diagnoses.length);
+    }
+
     addDiagnosisAfter() {
-        const dialogRef = this.dialog.open(AddDiagnosisAfterComponent, {
-            panelClass: '__add-diagnosis-after',
-            data: this.formValues.healthStatusAfter.healthGood
-        });
-        dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                const healthStatusAfterData = {
-                    healthGood: result.data.healthGood,
-                    diagnoses: this.formValues.healthStatusAfter.diagnoses.concat(result.data.diagnoses)
-                };
-                const healthStatusAfterObj = {
-                    ...this.formValues,
-                    healthStatusAfter: healthStatusAfterData
-                };
-                this.formValues = healthStatusAfterObj;
-                this.cardThirteenYService.setTabCurrentValues(healthStatusAfterObj);
-                this.cdRef.detectChanges();
-            }
-        });
+        if (!this.checkStatusAfterDisable()) {
+            const dialogRef = this.dialog.open(AddDiagnosisAfterComponent, {
+                panelClass: '__add-diagnosis-after',
+                data: this.formValues.healthStatusAfter.healthGood
+            });
+            dialogRef.afterClosed().subscribe(result => {
+                if (result) {
+                    const healthStatusAfterData = {
+                        healthGood: result.data.healthGood,
+                        diagnoses: this.formValues.healthStatusAfter.diagnoses.concat(result.data.diagnoses)
+                    };
+                    const healthStatusAfterObj = {
+                        ...this.formValues,
+                        healthStatusAfter: healthStatusAfterData
+                    };
+                    this.formValues = healthStatusAfterObj;
+                    this.cardThirteenYService.setTabCurrentValues(healthStatusAfterObj);
+                    this.cdRef.detectChanges();
+                }
+            });
+        }
     }
 
     editDiagnosisAfter(diagnosisData: any, i, event) {
         if (!this.checkDeleteClass(event)) {
             this.dialog.open(AddDiagnosisAfterComponent, {
                 panelClass: '__add-diagnosis-after',
-                data: diagnosisData
+                data: {
+                    healthGood: this.formValues.healthStatusAfter.healthGood,
+                    diagnoses: diagnosisData
+                }
             }).afterClosed().subscribe(result => {
                 if (result) {
-                    const afterObj = this.formValues.healthStatusAfter;
-                    const diagnoses = afterObj.diagnoses;
-                    diagnoses[i] = result.data.diagnoses;
-                    const updatedAfterHealthStatusAfterObj = {
-                        ...this.formValues,
-                        healthStatusAfter: {
-                            healthGood: afterObj.healthGood,
-                            diagnoses
-                        }
-                    };
-                    this.cardThirteenYService.setTabCurrentValues(updatedAfterHealthStatusAfterObj);
+                    this.formValues.healthStatusAfter.diagnoses[i] = result.data.diagnoses;
+                    this.cardThirteenYService.setTabCurrentValues(this.formValues);
                     this.cdRef.detectChanges();
                 }
             });
@@ -447,12 +447,12 @@ export class CardHealthStatusComponent implements OnInit {
                 i,
                 arr: this.formValues.healthStatusBefore.diagnoses,
             }
-        }).afterClosed()
-            .subscribe(() => {
-                this.cardThirteenYService.setTabCurrentValues(this.formValues);
-                this.healthStatusForm.get('diagnoses').setValue(this.formValues.healthStatusBefore.diagnoses);
-                this.cdRef.detectChanges();
-            });
+        }).afterClosed().subscribe(() => {
+            console.log(this.formValues.healthStatusBefore.diagnoses);
+            this.cardThirteenYService.setTabCurrentValues(this.formValues);
+            this.healthStatusForm.get('diagnoses').setValue(this.formValues.healthStatusBefore.diagnoses);
+            this.cdRef.detectChanges();
+        });
     }
 
     deleteDiagnosisAfter(i) {
@@ -462,18 +462,9 @@ export class CardHealthStatusComponent implements OnInit {
                 i,
                 arr: this.formValues.healthStatusAfter.diagnoses,
             }
-        }).afterClosed().subscribe(result => {
-            if (result) {
-                const deletedDiagnose = {
-                    ...this.formValues,
-                    healthStatusAfter: {
-                        healthGood: this.formValues.healthStatusAfter.healthGood,
-                        diagnoses: result.data
-                    }
-                };
-                this.cardThirteenYService.setTabCurrentValues(deletedDiagnose);
-                this.cdRef.detectChanges();
-            }
+        }).afterClosed().subscribe(() => {
+            this.cardThirteenYService.setTabCurrentValues(this.formValues);
+            this.cdRef.detectChanges();
         });
     }
 

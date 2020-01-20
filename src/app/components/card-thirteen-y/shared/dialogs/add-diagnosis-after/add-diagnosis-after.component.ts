@@ -2,7 +2,6 @@ import {Component, OnInit, ChangeDetectionStrategy, Inject, ChangeDetectorRef, O
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {CardThirteenYService} from '../../../card-thirteen-y.service';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
-import {IDiagnose} from '../../interfaces/diagnoses.interface';
 import {debounceTime, filter} from 'rxjs/operators';
 import {DispensaryObservation, Mkb10, TreatmentCondition, TreatmentOrganizationType} from '../../../../../models/dictionary.model';
 import {DictionaryService} from '../../../../../service/dictionary.service';
@@ -24,18 +23,11 @@ export class AddDiagnosisAfterComponent implements OnInit {
     private localData: any;
     isSaveDisabled = true;
     isHealthGood!: boolean;
-
     treatmentConditionOrgVisible!: boolean;
     consulNeedOrgVisible!: boolean;
     consulDoneOrgVisible!: boolean;
     rehabilNeedOrgVisible!: boolean;
-    initGroups = [
-        'treatmentCondition',
-        'consulNeed',
-        'consulDone',
-        'rehabilNeed'
-    ];
-
+    initGroups = ['treatmentCondition', 'consulNeed', 'consulDone', 'rehabilNeed'];
     disabledControlList = [
         'id',
         'dispensaryObservation',
@@ -48,8 +40,7 @@ export class AddDiagnosisAfterComponent implements OnInit {
         'consulDoneOrg',
         'rehabilNeed',
         'rehabilNeedOrg',
-        'needVmp',
-        'recommend'
+        'needVmp'
     ];
 
     constructor(private cardThirteenYService: CardThirteenYService,
@@ -79,33 +70,42 @@ export class AddDiagnosisAfterComponent implements OnInit {
 
         this.dataState();
         this.checkHealthGoodChanges();
-
-        this.healthStatusAfter.valueChanges.subscribe(q => console.log(q));
     }
 
     dataState() {
         if (typeof this.diagnosisData !== 'boolean') {
             this.isHealthGood = this.diagnosisData.healthGood;
+            Object.keys(this.diagnosisData.diagnoses).forEach(key => {
+               if (!this.diagnosisData.diagnoses[key]) {
+                   delete this.diagnosisData.diagnoses[key];
+               }
+            });
             this.healthStatusAfter.patchValue(this.diagnosisData, {emitEvent: false});
-            this.initGroups.forEach(item => this.checkVisibilityConditions(this.diagnosisData.diagnoses[item].id, item + 'Org'));
+            this.disableControlsCondition(this.healthStatusAfter.get('healthGood').value);
+            if (!this.isHealthGood) {
+                this.initGroups.forEach(item => this.checkVisibilityConditions(this.diagnosisData.diagnoses[item].id, item + 'Org'));
+            }
             this.localData = this.diagnosisData;
+            this.healthStatusAfter.get('healthGood').disable();
         } else {
             this.isHealthGood = this.diagnosisData;
+            this.disableControlsCondition(this.healthStatusAfter.get('healthGood').value);
             this.healthStatusAfter.get('healthGood').setValue(this.diagnosisData, {emitEvent: false});
         }
-        this.disableControlsCondition( this.healthStatusAfter.get('healthGood').value);
     }
 
     checkHealthGoodChanges() {
-        this.healthStatusAfter.get('healthGood').valueChanges
-            .subscribe(() => this.disableControlsCondition(this.healthStatusAfter.get('healthGood').value));
+        this.healthStatusAfter.get('healthGood').valueChanges.subscribe(data => {
+            this.isHealthGood = data;
+            this.disableControlsCondition(data);
+        });
     }
 
     disableControlsCondition(value) {
         if (value) {
             this.disabledControlList.forEach(item => {
-                this.healthStatusAfter.get('diagnoses').get(item).disable();
                 this.healthStatusAfter.get('diagnoses').get(item).reset();
+                this.healthStatusAfter.get('diagnoses').get(item).disable();
             });
         } else {
             this.disabledControlList.forEach(item => this.healthStatusAfter.get('diagnoses').get(item).enable());
@@ -249,7 +249,7 @@ export class AddDiagnosisAfterComponent implements OnInit {
     }
 
   changeSklPrescribedMedTypeVisibleState() {
-      this.healthStatusAfter.get('diagnoses').get('rehabilNeed').valueChanges.subscribe((value: number) => {
+      this.healthStatusAfter.get('diagnoses').get('rehabilNeed').get('id').valueChanges.subscribe((value: number) => {
       this.checkVisibilityConditions(value, 'rehabilNeedOrg');
     });
   }
@@ -257,8 +257,8 @@ export class AddDiagnosisAfterComponent implements OnInit {
     checkVisibilityConditions(value: number, groupName: string) {
         if (value === 4) {
             this[groupName + 'Visible'] = false;
-            this.healthStatusAfter.get('diagnoses').get(groupName).disable();
             this.healthStatusAfter.get('diagnoses').get(groupName).reset();
+            this.healthStatusAfter.get('diagnoses').get(groupName).disable();
         } else {
             this[groupName + 'Visible'] = true;
             this.healthStatusAfter.get('diagnoses').get(groupName).enable();

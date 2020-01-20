@@ -57,6 +57,9 @@
          [ngClass]="{'__is-table-disabled': isTableDisabled}">
         <p class="health-status__after-ex-title">По результатам проведения диспансеризации</p>
         <p class="health-status__add-diagnosis"
+           [ngClass]="{'__disabled': checkStatusAfterDisable()}"
+           [matTooltipDisabled]="!checkStatusAfterDisable()"
+           matTooltip="Для здорового ребенка доступно добавление только одного диагноза из класса Z00"
            (click)="addDiagnosisAfter()">
             Добавить
         </p>
