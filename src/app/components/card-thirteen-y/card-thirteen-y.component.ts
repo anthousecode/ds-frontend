@@ -161,6 +161,7 @@ export class CardThirteenYComponent implements OnInit {
                     this.selectedTabCurrentValuesModified = JSON.stringify(data);
                 } else {
                     this.selectedTabCurrentValues = null;
+                    this.selectedTabCurrentValuesModified = '';
                 }
                 this.cdRef.detectChanges();
             });

@@ -50,7 +50,7 @@
     <button class="card-13y__buttons-item"
             *ngIf="cardStatus !== 2"
             (click)="saveCard()"
-            [ngClass]="{'__disabled': !isTabValid || ((selectedTabInitValuesModified) === selectedTabCurrentValuesModified) || !selectedTabCurrentValues}">
+            [ngClass]="{'__disabled': !isTabValid || (selectedTabInitValuesModified === selectedTabCurrentValuesModified) || !selectedTabCurrentValues}">
       Сохранить
     </button>
     <button class="card-13y__buttons-item" (click)="exportCard()">Экспорт</button>

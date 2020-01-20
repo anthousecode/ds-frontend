@@ -45,12 +45,10 @@ export class AddDiagnosisAfterComponent implements OnInit {
 
     ngOnInit() {
         this.initForm();
-        this.getInitValues();
         this.getDiagnosisList();
         this.getTreatmentOrganizationTypes();
         this.getDispensaryObservations();
         this.getTreatmentCondition();
-        this.checkFormChanges();
         this.checkFormValid();
         this.setHealthGroupData();
         this.changeMedOrganizationTypeVisibleState();
@@ -162,12 +160,6 @@ export class AddDiagnosisAfterComponent implements OnInit {
             .subscribe(() => this.isSaveDisabled = !this.healthStatusAfter.valid);
     }
 
-    getInitValues() {
-        this.cardThirteenYService.activeTabInitValues
-            .pipe(takeUntil(this.onDestroy$))
-            .subscribe(card => this.formValues = card);
-    }
-
     getDispensaryObservations() {
         this.dictionaryService.getDispensaryObservations().subscribe(data => {
             this.dispensaryObservation = data;
@@ -219,12 +211,6 @@ export class AddDiagnosisAfterComponent implements OnInit {
     setNewDiagnosisInitValue(groupName, value, data) {
         const obj = data.find(item => item.id === value);
         this.healthStatusAfter.get('diagnoses').get(groupName).patchValue(obj, {emitEvent: false});
-    }
-
-    checkFormChanges() {
-        this.healthStatusAfter.valueChanges
-            .pipe(takeUntil(this.onDestroy$))
-            .subscribe(data => this.cardThirteenYService.setSelectedTabCurrentValues(data));
     }
 
     changeMedOrganizationTypeVisibleState() {

@@ -71,7 +71,6 @@ export class CardHealthStatusComponent implements OnInit {
         this.getInitValues();
         this.checkIsFormValid();
         this.checkBlockState();
-        this.cardThirteenYService.setSelectedTabCurrentValues(null);
         this.healthStatusList$ = this.dictionaryService.getHealthGroups();
         this.disabilityTypeList$ = this.dictionaryService.getInvalidTypes();
         this.doneList$ = this.dictionaryService.getReabilitationStatuses();
@@ -81,13 +80,27 @@ export class CardHealthStatusComponent implements OnInit {
         this.filterDiseases();
         this.filterDisorders();
         this.checkFormChanges();
+        this.cardThirteenYService.setSelectedTabCurrentValues(null);
         this.checkHealthGroupChanges();
     }
 
     checkFormChanges() {
         this.healthStatusForm.valueChanges
-            .pipe(takeUntil(this.onDestroy$))
-            .subscribe(data => this.cardThirteenYService.setSelectedTabCurrentValues(data));
+            .pipe(
+                debounceTime(500),
+                takeUntil(this.onDestroy$)
+            )
+            .subscribe(data => {
+                const formGroupData = {
+                    ...data,
+                    disability: {
+                        ...data.disability,
+                        disabilityDiseases: this.invalidDiseasesChips,
+                        disabilityDisorders: this.disabilityDisordersChips
+                    }
+                };
+                this.cardThirteenYService.setSelectedTabCurrentValues(formGroupData);
+            });
     }
 
     checkIsFormValid() {
@@ -157,7 +170,15 @@ export class CardHealthStatusComponent implements OnInit {
                 this.getInvalidDiseases();
                 this.getDisabilityDisorders();
                 this.setFormInitValues(data);
-                this.cardThirteenYService.setSelectedTabInitValues(this.healthStatusForm.value);
+                const formGroupData = {
+                    ...this.healthStatusForm.value,
+                    disability: {
+                        ...this.healthStatusForm.value.disability,
+                        disabilityDiseases: data.disability.diseases.map(item => item.name),
+                        disabilityDisorders: data.disability.healthDisorders.map(item => item.name)
+                    }
+                };
+                this.cardThirteenYService.setSelectedTabInitValues(formGroupData);
             });
     }
 
@@ -394,7 +415,6 @@ export class CardHealthStatusComponent implements OnInit {
                         healthStatusAfter: healthStatusAfterData
                     };
                     this.formValues = healthStatusAfterObj;
-                    console.log(healthStatusAfterObj)
                     this.healthStatusForm.get('diagnosesAfter').setValue(this.formValues.healthStatusAfter.diagnoses);
                     this.cardThirteenYService.setTabCurrentValues(healthStatusAfterObj);
                     this.cdRef.detectChanges();
