@@ -43,7 +43,7 @@
             <td class="__delete-diagnosis">
               <div class="health-status__diagnoses-delete"
                    matTooltip="Нажмите для удаления диагноза"
-                   (click)="deleteDiagnosis()">
+                   (click)="deleteDiagnosis($event)">
                 <mat-icon svgIcon="delete" class="__s18 __white"></mat-icon>
               </div>
             </td>
@@ -59,39 +59,39 @@
       Добавить
     </p>
     <div class="health-status__after-ex-diagnoses">
-<!--      <table class="health-status__diagnoses-table">-->
-<!--        <thead class="health-status__diagnoses-table-header">-->
-<!--        <tr>-->
-<!--          <th>Диагноз</th>-->
-<!--          <th>МКБ-10</th>-->
-<!--          <th>Диспансерное наблюдение</th>-->
-<!--          <th>Лечение</th>-->
-<!--          <th>Реабилитация/СКЛ</th>-->
-<!--          <th>Доп. консультации и исследования</th>-->
-<!--          <th>ВМП</th>-->
-<!--          <th>Удалить</th>-->
-<!--        </tr>-->
-<!--        </thead>-->
-<!--        <tbody class="health-status__diagnoses-table-body">-->
-<!--        <tr *ngFor="let diagnosis of diagnosesListAfter"-->
-<!--            (click)="editDiagnosisAfter(diagnosis, $event)">-->
-<!--          <td>{{diagnosis.diagnosis}}</td>-->
-<!--          <td>{{diagnosis.mkb_10}}</td>-->
-<!--          <td>{{diagnosis.observation}}</td>-->
-<!--          <td>{{diagnosis.treatment}}</td>-->
-<!--          <td>{{diagnosis.rehabilitation}}</td>-->
-<!--          <td>{{diagnosis.consultations}}</td>-->
-<!--          <td>{{diagnosis.vmp}}</td>-->
-<!--          <td class="__delete-diagnosis">-->
-<!--            <div class="health-status__diagnoses-delete"-->
-<!--                 matTooltip="Нажмите для удаления диагноза"-->
-<!--                 (click)="deleteDiagnosis()">-->
-<!--              <mat-icon svgIcon="delete" class="__s18 __white"></mat-icon>-->
-<!--            </div>-->
-<!--          </td>-->
-<!--        </tr>-->
-<!--        </tbody>-->
-<!--      </table>-->
+      <table class="health-status__diagnoses-table">
+        <thead class="health-status__diagnoses-table-header">
+        <tr>
+          <th>Диагноз</th>
+          <th>МКБ-10</th>
+          <th>Диспансерное наблюдение</th>
+          <th>Лечение</th>
+          <th>Реабилитация/СКЛ</th>
+          <th>Доп. консультации и исследования</th>
+          <th>ВМП</th>
+          <th>Удалить</th>
+        </tr>
+        </thead>
+        <tbody class="health-status__diagnoses-table-body">
+        <tr *ngFor="let diagnosis of formValues?.healthStatusAfter?.diagnoses, let i = index"
+            (click)="editDiagnosisAfter(diagnosis, i, $event)">
+          <td>{{diagnosis?.mkb10?.name}}</td>
+          <td>{{diagnosis?.mkb10?.code}}</td>
+          <td>{{diagnosis?.dispensaryObservation?.name}}</td>
+          <td>{{diagnosis?.treatmentCondition?.name}}</td>
+          <td>{{diagnosis?.rehabilNeed?.name}}</td>
+          <td>{{diagnosis?.consulNeed?.name}}</td>
+          <td>{{getVmpInfo(diagnosis?.needVmp?.name)}}</td>
+          <td class="__delete-diagnosis">
+            <div class="health-status__diagnoses-delete"
+                 matTooltip="Нажмите для удаления диагноза"
+                 (click)="deleteDiagnosis(i)">
+              <mat-icon svgIcon="delete" class="__s18 __white"></mat-icon>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
     </div>
   </div>
   <div class="health-status__disability"

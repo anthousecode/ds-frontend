@@ -13,27 +13,34 @@ export class DeleteConfirmComponent {
   constructor(private cardThirteenYService: CardThirteenYService,
               private dialogRef: MatDialogRef<DeleteConfirmComponent>,
               private snackBar: MatSnackBar,
-              @Inject(MAT_DIALOG_DATA) public additionalExaminationsData: any,
+              @Inject(MAT_DIALOG_DATA) public data: any,
               private cdRef: ChangeDetectorRef
   ) {
   }
 
   deleteData() {
-    this.additionalExaminationsData.additionalExaminations.splice(this.additionalExaminationsData.i, 1);
-    this.additionalExaminationsData.formValues.additionalExaminations = this.additionalExaminationsData.additionalExaminations;
-    this.cardThirteenYService.setTabCurrentValues(this.additionalExaminationsData.formValues);
-    this.additionalExaminationsData.cdRef.detectChanges();
-    this.dialogRef.close();
-    this.snackBar.open(this.getDeleteConfirmMessage(), 'ОК', {
+    if (this.data.additionalExaminations) {
+      this.data.additionalExaminations.splice(this.data.i, 1);
+      this.data.formValues.additionalExaminations = this.data.additionalExaminations;
+      this.cardThirteenYService.setTabCurrentValues(this.data.formValues);
+      this.dialogRef.close();
+    }
+
+    if (this.data.arr) {
+      this.data.arr.splice(this.data.i, 1);
+      console.log('this.data.arr', this.data.arr);
+      this.dialogRef.close({data: this.data.arr});
+    }
+    this.snackBar.open('Исследование удалено', 'ОК', {
       duration: 5000
     });
   }
 
   getDeleteKey() {
-    return this.additionalExaminationsData.key === 'research' ? 'исследование' : 'диагноз';
+    return this.data.key === 'research' ? 'исследование' : 'диагноз';
   }
 
   getDeleteConfirmMessage() {
-    return this.additionalExaminationsData.key === 'research' ? 'Исследование удалено' : 'Диагноз удалён';
+    return this.data.key === 'research' ? 'Исследование удалено' : 'Диагноз удалён';
   }
 }

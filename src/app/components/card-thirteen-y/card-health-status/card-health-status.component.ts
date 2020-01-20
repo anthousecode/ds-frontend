@@ -29,7 +29,7 @@ export class CardHealthStatusComponent implements OnInit {
     healthStatusForm!: FormGroup;
     healthStatusList$!: Observable<HealthGroup[]>;
     diagnosisList!: Observable<IDiagnoses[]>;
-    diagnosisListAfter!: Observable<IDiagnoses[]>;
+    diagnosisListAfter!: any;
     disabilityTypeList$!: Observable<InvalidType[]>;
     doneList$!: Observable<ReabilitationStatus[]>;
     private filteredDiseases$: Observable<any[]>;
@@ -75,7 +75,6 @@ export class CardHealthStatusComponent implements OnInit {
         this.disabilityTypeList$ = this.dictionaryService.getInvalidTypes();
         this.doneList$ = this.dictionaryService.getReabilitationStatuses();
         this.diagnosisList = this.cardThirteenYService.getDiagnoses();
-        this.diagnosisListAfter = this.cardThirteenYService.getDiagnosesAfter();
         this.disabilityTypeChange();
         this.disableRehabilitationPerformance();
         this.setDisabilityData();
@@ -126,6 +125,10 @@ export class CardHealthStatusComponent implements OnInit {
     }
 
     setFormInitValues(data) {
+        if (data.healthStatusAfter.diagnoses) {
+            this.diagnosesListAfter = data.healthStatusAfter.diagnoses;
+            this.cdRef.detectChanges();
+        }
         if (data.disability) {
             if (data.disability.disabilityType) {
                 this.cardThirteenYService.getControls(this.healthStatusForm, 'disability').disabilityType
@@ -157,7 +160,7 @@ export class CardHealthStatusComponent implements OnInit {
         this.healthStatusForm.controls.disability.valueChanges
             .pipe(debounceTime(500))
             .subscribe(data => {
-                console.log(data)
+                console.log(data);
                 const diseasesChipsArr = this.invalidDiseasesQuery.filter(item => this.invalidDiseasesChips.includes(item.name));
                 const disordersChipsArr = this.disordersQuery.filter(item => this.disabilityDisordersChips.includes(item.name));
                 const disabilityObj = {
@@ -302,34 +305,57 @@ export class CardHealthStatusComponent implements OnInit {
         }
     }
 
-  addDiagnosisAfter(action?, obj?) {
-    const dialogRef = this.dialog.open(AddDiagnosisAfterComponent, {
-      panelClass: '__add-diagnosis-after',
-      data: obj
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('result', result);
-      const healthStatusAfterObj = {
-        ...this.formValues,
-        healthStatusAfter: result.data.healthStatusAfter
-      };
-      this.cardThirteenYService.setTabCurrentValues(healthStatusAfterObj);
-      console.log('healthStatusAfterObj', healthStatusAfterObj);
-    });
-  }
+    addDiagnosisAfter() {
+        const dialogRef = this.dialog.open(AddDiagnosisAfterComponent, {
+            panelClass: '__add-diagnosis-after',
+            data: this.formValues.healthStatusAfter.healthGood
+        });
+        dialogRef.afterClosed().subscribe(result => {
+            console.log(result)
+            if (result) {
+                const healthStatusAfterData = {
+                    healthGood: result.data.healthGood,
+                    diagnoses: this.formValues.healthStatusAfter.diagnoses.concat(result.data.diagnoses)
+                };
+                const healthStatusAfterObj = {
+                    ...this.formValues,
+                    healthStatusAfter: healthStatusAfterData
+                };
+                this.cardThirteenYService.setTabCurrentValues(healthStatusAfterObj);
+                this.cdRef.detectChanges();
+            }
+        });
+    }
 
-  addRowDiagnosisAfter(diagnosis) {
-    console.log('diagnosis', diagnosis);
+    getVmpInfo(vmp: boolean) {
+        return vmp ? 'есть' : 'отсутствует';
+    }
 
-
-    console.log('this.formValues', this.formValues);
-  }
-
-    editDiagnosisAfter(diagnosis: IDiagnoses, event) {
+    editDiagnosisAfter(diagnosis: IDiagnoses, i, event) {
+        const diagnosisData = {
+            healthGood: this.formValues.healthStatusAfter.healthGood,
+            diagnoses: diagnosis
+        };
         if (!this.checkDeleteClass(event)) {
             this.dialog.open(AddDiagnosisAfterComponent, {
                 panelClass: '__add-diagnosis-after',
-                data: diagnosis
+                data: diagnosisData
+            }).afterClosed().subscribe(result => {
+                if (result) {
+                    console.log('result', result);
+                    const afterObj = this.formValues.healthStatusAfter;
+                    const diagnoses = afterObj.diagnoses;
+                    diagnoses[i] = result.data.diagnoses;
+                    const updatedAfterHealthStatusAfterObj = {
+                        ...this.formValues,
+                        healthStatusAfter: {
+                            healthGood: afterObj.healthGood,
+                            diagnoses
+                        }
+                    };
+                    this.cardThirteenYService.setTabCurrentValues(updatedAfterHealthStatusAfterObj);
+                    this.cdRef.detectChanges();
+                }
             });
         }
     }
@@ -357,8 +383,26 @@ export class CardHealthStatusComponent implements OnInit {
         this.disabilityDisorders = this.disordersQuery.map(item => item.name);
     }
 
-    deleteDiagnosis() {
-        this.dialog.open(DeleteConfirmComponent, {panelClass: '__delete-confirm'});
+    deleteDiagnosis(i) {
+        this.dialog.open(DeleteConfirmComponent, {
+            panelClass: '__delete-confirm',
+            data: {
+                i,
+                arr: this.formValues.healthStatusAfter.diagnoses,
+            }
+        }).afterClosed().subscribe(result => {
+            if (result) {
+                const deletedDiagnose = {
+                    ...this.formValues,
+                    healthStatusAfter: {
+                        healthGood: this.formValues.healthStatusAfter.healthGood,
+                        diagnoses: result.data
+                    }
+                };
+                this.cardThirteenYService.setTabCurrentValues(deletedDiagnose);
+                this.cdRef.detectChanges();
+            }
+        });
     }
 
     openDatepicker(name: string) {
