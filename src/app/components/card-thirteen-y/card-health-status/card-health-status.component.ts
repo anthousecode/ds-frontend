@@ -1,7 +1,6 @@
 import {Component, OnInit, ChangeDetectionStrategy, ViewChild, ChangeDetectorRef, ElementRef, Self} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {CardThirteenYService} from '../card-thirteen-y.service';
-import {IDiagnose} from '../shared/interfaces/diagnoses.interface';
 import {Observable} from 'rxjs';
 import {MatDatepicker, MatDialog, MatAutocomplete, MatAutocompleteSelectedEvent} from '@angular/material';
 import {AddDiagnosisComponent} from '../shared/dialogs/add-diagnosis/add-diagnosis.component';
@@ -12,6 +11,7 @@ import {DictionaryService} from '../../../service/dictionary.service';
 import {HealthDisorder, HealthGroup, InvalidDisease, InvalidType, ReabilitationStatus} from '../../../models/dictionary.model';
 import {ENTER} from '@angular/cdk/keycodes';
 import {NgOnDestroy} from '../../../@core/shared/services/destroy.service';
+import {DISABILITY_DISABLED_CONTROL_LIST} from './shared/disabled-controls';
 
 @Component({
     selector: 'app-card-health-status',
@@ -49,14 +49,7 @@ export class CardHealthStatusComponent implements OnInit {
     isChipsDisabled!: boolean;
     separatorKeysCodes: number[] = [ENTER];
     maxDate = new Date();
-    disabilityDisabledControlList = [
-        'disabilityFirstDate',
-        'disabilityLastDate',
-        'disabilityDiseases',
-        'disabilityDisorders',
-        'rehabilitationDate',
-        'rehabilitationPerformance'
-    ];
+    disabilityDisabledControlList = DISABILITY_DISABLED_CONTROL_LIST;
 
     constructor(private cardThirteenYService: CardThirteenYService,
                 private dictionaryService: DictionaryService,
@@ -143,10 +136,7 @@ export class CardHealthStatusComponent implements OnInit {
     }
 
     checkHealthGroupChanges() {
-        this.cardThirteenYService.getControls(this.healthStatusForm, 'beforeMedicalExamination').healthGroup.valueChanges
-            .subscribe(id => {
-                this.setHealthGroup(id);
-            });
+        this.healthStatusForm.get('beforeMedicalExamination').get('healthGroup').valueChanges.subscribe(id => this.setHealthGroup(id));
     }
 
     setHealthGroup(id) {
@@ -449,8 +439,7 @@ export class CardHealthStatusComponent implements OnInit {
     disableDisabilityControls() {
         this.isChipsDisabled = true;
         this.disabilityDisabledControlList.forEach(control => {
-            this.healthStatusForm.get('disability').get(control).disable();
-            this.healthStatusForm.get('disability').get(control).setValue('');
+            this.cardThirteenYService.disableResetControl(this.healthStatusForm, 'disability', control);
             if (control === 'disabilityDisorders') {
                 this.invalidDiseasesChips = [];
             }
@@ -512,8 +501,7 @@ export class CardHealthStatusComponent implements OnInit {
                 if (data) {
                     this.healthStatusForm.get('disability').get('rehabilitationPerformance').enable();
                 } else {
-                    this.healthStatusForm.get('disability').get('rehabilitationPerformance').disable();
-                    this.healthStatusForm.get('disability').get('rehabilitationPerformance').setValue('');
+                    this.cardThirteenYService.disableResetControl(this.healthStatusForm, 'disability', 'rehabilitationPerformance');
                 }
             });
     }

@@ -20,7 +20,6 @@ export class CardResearchComponent implements OnInit {
     researchFormGroup!: FormGroup;
     requiredExaminations: Examination[];
     maxDate = new Date();
-    // additionalExaminations: [];
     formValues!: any;
     isCardDisabled!: boolean;
     isTableDisabled!: boolean;

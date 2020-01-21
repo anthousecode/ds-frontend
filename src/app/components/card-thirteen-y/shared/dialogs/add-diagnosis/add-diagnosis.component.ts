@@ -1,19 +1,17 @@
 import {Component, OnInit, ChangeDetectionStrategy, Inject, ChangeDetectorRef, ElementRef, ViewChild} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {CardThirteenYService} from '../../../card-thirteen-y.service';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
 import {IDiagnose, IHealthStatusBefore, IMkb10} from '../../interfaces/diagnoses.interface';
 import {DictionaryService} from '../../../../../service/dictionary.service';
-import {debounceTime, filter, map, switchMap} from 'rxjs/operators';
+import {debounceTime, filter} from 'rxjs/operators';
 import {
     DispensaryObservation,
-    Mkb10,
     ReasonMissed,
     TreatmentCondition,
     TreatmentOrganizationType,
     VmpNecessity
 } from '../../../../../models/dictionary.model';
-import {Observable, of, pipe} from 'rxjs';
 
 @Component({
     selector: 'app-add-diagnosis',
@@ -53,7 +51,6 @@ export class AddDiagnosisComponent implements OnInit {
 
     ngOnInit() {
         this.modalName = this.cardHealthStatusData.modalName;
-
         if (this.cardHealthStatusData.healthStatusBefore) {
             this.healthStatusBefore = this.cardHealthStatusData.healthStatusBefore;
             this.diagnose = this.cardHealthStatusData.healthStatusBefore.diagnoses[this.cardHealthStatusData.i];
@@ -205,63 +202,47 @@ export class AddDiagnosisComponent implements OnInit {
 
     subscribeForm() {
         // need mkb10 === mkb10Name
-        this.cardThirteenYService
-            .getControls(this.addDiagnosisForm, 'diagnosisInfo').mkb10Name.valueChanges
-            .subscribe((mkb10Name: string) => {
-                if (this.cardThirteenYService
-                    .getControls(this.addDiagnosisForm, 'diagnosisInfo').mkb10.value.name !== mkb10Name) {
-                    this.cardThirteenYService
-                        .getControls(this.addDiagnosisForm, 'diagnosisInfo').mkb10Name.setErrors({validDiagnose: true});
-                }
-            });
+        this.addDiagnosisForm.get('diagnosisInfo').get('mkb10Name').valueChanges.subscribe((mkb10Name: string) => {
+            if (this.addDiagnosisForm.get('diagnosisInfo').get('mkb10').value.name !== mkb10Name) {
+                this.addDiagnosisForm.get('diagnosisInfo').get('mkb10Name').setErrors({validDiagnose: true});
+            }
+        });
 
         // Лечение было назначено/Амбулаторные условия (diagnose)
-        this.cardThirteenYService
-            .getControls(this.addDiagnosisForm, 'treatmentConditionGroup').treatmentCondition.valueChanges
-            .subscribe(id => {
-                this.setTreatmentConditionVisibleDependencies(id);
-            });
+        this.addDiagnosisForm.get('treatmentConditionGroup').get('treatmentCondition').valueChanges.subscribe(id => {
+            this.setTreatmentConditionVisibleDependencies(id);
+        });
 
         // Лечение было выполнено/Амбулаторные условия (diagnose)
-        this.cardThirteenYService
-            .getControls(this.addDiagnosisForm, 'treatmentDoneGroup').treatmentDone.valueChanges
-            .subscribe(id => {
-                this.setTreatmentDoneVisibleDependencies(id);
-            });
+        this.addDiagnosisForm.get('treatmentDoneGroup').get('treatmentDone').valueChanges.subscribe(id => {
+            this.setTreatmentDoneVisibleDependencies(id);
+        });
 
         // Лечение было выполнено/Причина невыполнения в соответствии со значением (diagnose)
-        this.cardThirteenYService
-            .getControls(this.addDiagnosisForm, 'treatmentFailReasonGroup').treatmentFailReason.valueChanges
-            .subscribe(id => {
-                this.setTreatmentFailReasonVisibleDependencies(id);
-            });
+        this.addDiagnosisForm.get('treatmentFailReasonGroup').get('treatmentFailReason').valueChanges.subscribe(id => {
+            this.setTreatmentFailReasonVisibleDependencies(id);
+        });
 
         // Медицинская реабилитация_санатарно курортное лечение были назначены/Амбулаторные условия (diagnose)
-        this.cardThirteenYService
-            .getControls(this.addDiagnosisForm, 'rehabilConditionGroup').rehabilCondition.valueChanges
-            .subscribe(id => {
-                this.setRehabilConditionVisibleDependencies(id);
-            });
+        this.addDiagnosisForm.get('rehabilConditionGroup').get('rehabilCondition').valueChanges.subscribe(id => {
+            this.setRehabilConditionVisibleDependencies(id);
+        });
 
         // Медицинская реабилитация_санатарно курортное лечение были выполнены/Амбулаторные условия (diagnose)
-        this.cardThirteenYService
-            .getControls(this.addDiagnosisForm, 'rehabilDoneGroup').rehabilDone.valueChanges
-            .subscribe(id => {
-                this.setRehabilDoneVisibleDependencies(id);
-            });
+        this.addDiagnosisForm.get('rehabilDoneGroup').get('rehabilDone').valueChanges.subscribe(id => {
+            this.setRehabilDoneVisibleDependencies(id);
+        });
 
         /* Медицинская реабилитация_санатарно курортное лечение были выполнены/
         Причина невыполнения в соответствии со значением (реабилитации) */
-        this.cardThirteenYService
-            .getControls(this.addDiagnosisForm, 'rehabilFailReasonGroup').rehabilFailReason.valueChanges
-            .subscribe(id => {
-                this.setRehabilFailReasonVisibleDependencies(id);
-            });
+        this.addDiagnosisForm.get('rehabilFailReasonGroup').get('rehabilFailReason').valueChanges.subscribe(id => {
+            this.setRehabilFailReasonVisibleDependencies(id);
+        });
     }
 
     checkMkb10(mkb10: IMkb10) {
-        this.cardThirteenYService.getControls(this.addDiagnosisForm, 'diagnosisInfo').mkb10Name.setValue(mkb10.name);
-        this.cardThirteenYService.getControls(this.addDiagnosisForm, 'diagnosisInfo').mkb10.setValue(mkb10);
+        this.addDiagnosisForm.get('diagnosisInfo').get('mkb10Name').setValue(mkb10.name);
+        this.addDiagnosisForm.get('diagnosisInfo').get('mkb10').setValue(mkb10);
 
         setTimeout(() => {
             this.mkb10NameInput.nativeElement.blur();
@@ -269,19 +250,17 @@ export class AddDiagnosisComponent implements OnInit {
     }
 
     getTreatmentOrganizationTypes() {
-        return this.dictionaryService.getTreatmentOrganizationTypes()
-            .subscribe(data => {
-                this.treatmentOrganizationTypes = data;
-                this.cdRef.detectChanges();
-            });
+        return this.dictionaryService.getTreatmentOrganizationTypes().subscribe(data => {
+            this.treatmentOrganizationTypes = data;
+            this.cdRef.detectChanges();
+        });
     }
 
     getDispensaryObservations() {
-        return this.dictionaryService.getDispensaryObservations()
-            .subscribe(data => {
-                this.diagnosticObservationValues = data;
-                this.cdRef.detectChanges();
-            });
+        return this.dictionaryService.getDispensaryObservations().subscribe(data => {
+            this.diagnosticObservationValues = data;
+            this.cdRef.detectChanges();
+        });
     }
 
     getTreatmentConditions() {
@@ -306,110 +285,107 @@ export class AddDiagnosisComponent implements OnInit {
     }
 
     getDiagnosisList() {
-        this.cardThirteenYService.getControls(this.addDiagnosisForm, 'diagnosisInfo').mkb10Name.valueChanges
+        this.addDiagnosisForm.get('diagnosisInfo').get('mkb10Name').valueChanges
             .pipe(
                 filter(value => value !== ''),
                 debounceTime(500),
                 filter(text => this.mkb10s ? !this.mkb10s.find(item => item.name === text) : true),
             ).subscribe(data => {
-            this.dictionaryService.getMkb10s(1, 50, data)
-                .subscribe((mkb10s: IMkb10[]) => {
-                    const {healthGroup, healthGood} = this.cardHealthStatusData.formValues.healthStatusBefore;
-                    this.mkb10s = mkb10s.filter(mkb10 => {
-                        return healthGroup.id === 1 || healthGood ? mkb10.code === 'Z00' : mkb10;
-                    });
-                    this.cdRef.detectChanges();
-                });
+            this.dictionaryService.getMkb10s(1, 50, data).subscribe((mkb10s: IMkb10[]) => {
+                const {healthGroup, healthGood} = this.cardHealthStatusData.formValues.healthStatusBefore;
+                this.mkb10s = mkb10s.filter(mkb10 => healthGroup.id === 1 || healthGood ? mkb10.code === 'Z00' : mkb10);
+                this.cdRef.detectChanges();
+            });
         });
     }
 
     setTreatmentConditionVisibleDependencies(id) {
         if (id === 4) {
             this.treatmentConditionOrgVisible = false;
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'treatmentConditionGroup').treatmentConditionOrg.reset();
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'treatmentConditionGroup').treatmentConditionOrg.disable();
+            this.addDiagnosisForm.get('treatmentConditionGroup').get('treatmentConditionOrg').reset();
+            this.addDiagnosisForm.get('treatmentConditionGroup').get('treatmentConditionOrg').disable();
         } else {
             this.treatmentConditionOrgVisible = true;
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'treatmentConditionGroup').treatmentConditionOrg.enable();
+            this.addDiagnosisForm.get('treatmentConditionGroup').get('treatmentConditionOrg').enable();
         }
     }
 
     setTreatmentDoneVisibleDependencies(id) {
         if (id === 4) {
             this.treatmentDoneOrgVisible = false;
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'treatmentDoneGroup').treatmentDoneOrg.reset();
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'treatmentDoneGroup').treatmentDoneOrg.disable();
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'treatmentFailReasonGroup').treatmentFailReason.enable();
+            this.addDiagnosisForm.get('treatmentDoneGroup').get('treatmentDoneOrg').reset();
+            this.addDiagnosisForm.get('treatmentDoneGroup').get('treatmentDoneOrg').disable();
+            this.addDiagnosisForm.get('treatmentFailReasonGroup').get('treatmentFailReason').enable();
         } else {
             this.treatmentDoneOrgVisible = true;
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'treatmentDoneGroup').treatmentDoneOrg.enable();
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'treatmentFailReasonGroup').treatmentFailReason.reset();
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'treatmentFailReasonGroup').treatmentFailReason.disable();
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'treatmentFailReasonGroup').treatmentFailReasonOther.reset();
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'treatmentFailReasonGroup').treatmentFailReasonOther.disable();
+            this.addDiagnosisForm.get('treatmentDoneGroup').get('treatmentDoneOrg').enable();
+            this.addDiagnosisForm.get('treatmentFailReasonGroup').get('treatmentFailReason').reset();
+            this.addDiagnosisForm.get('treatmentFailReasonGroup').get('treatmentFailReason').disable();
+            this.addDiagnosisForm.get('treatmentFailReasonGroup').get('treatmentFailReasonOther').reset();
+            this.addDiagnosisForm.get('treatmentFailReasonGroup').get('treatmentFailReasonOther').disable();
         }
     }
 
     setTreatmentFailReasonVisibleDependencies(id) {
         if (id === 6) {
             this.treatmentFailReasonOtherVisible = true;
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'treatmentFailReasonGroup').treatmentFailReasonOther.enable();
+            this.addDiagnosisForm.get('treatmentFailReasonGroup').get('treatmentFailReasonOther').enable();
         } else {
             this.treatmentFailReasonOtherVisible = false;
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'treatmentFailReasonGroup').treatmentFailReasonOther.reset();
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'treatmentFailReasonGroup').treatmentFailReasonOther.disable();
+            this.addDiagnosisForm.get('treatmentFailReasonGroup').get('treatmentFailReasonOther').reset();
+            this.addDiagnosisForm.get('treatmentFailReasonGroup').get('treatmentFailReasonOther').disable();
         }
     }
 
     setRehabilConditionVisibleDependencies(id) {
         if (id === 4) {
             this.rehabilConditionOrgVisible = false;
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'rehabilConditionGroup').rehabilConditionOrg.reset();
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'rehabilConditionGroup').rehabilConditionOrg.disable();
+            this.addDiagnosisForm.get('rehabilConditionGroup').get('rehabilConditionOrg').reset();
+            this.addDiagnosisForm.get('rehabilConditionGroup').get('rehabilConditionOrg').disable();
         } else {
             this.rehabilConditionOrgVisible = true;
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'rehabilConditionGroup').rehabilConditionOrg.enable();
+            this.addDiagnosisForm.get('rehabilConditionGroup').get('rehabilConditionOrg').enable();
         }
     }
 
     setRehabilDoneVisibleDependencies(id) {
         if (id === 4) {
             this.rehabilDoneOrgVisible = false;
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'rehabilDoneGroup').rehabilDoneOrg.reset();
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'rehabilDoneGroup').rehabilDoneOrg.disable();
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'rehabilFailReasonGroup').rehabilFailReason.enable();
+            this.addDiagnosisForm.get('rehabilDoneGroup').get('rehabilDoneOrg').reset();
+            this.addDiagnosisForm.get('rehabilDoneGroup').get('rehabilDoneOrg').disable();
+            this.addDiagnosisForm.get('rehabilFailReasonGroup').get('rehabilFailReason').enable();
 
         } else {
             this.rehabilDoneOrgVisible = true;
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'rehabilDoneGroup').rehabilDoneOrg.enable();
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'rehabilFailReasonGroup').rehabilFailReason.reset();
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'rehabilFailReasonGroup').rehabilFailReason.disable();
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'rehabilFailReasonGroup').rehabilFailReasonOther.reset();
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'rehabilFailReasonGroup').rehabilFailReasonOther.disable();
+            this.addDiagnosisForm.get('rehabilDoneGroup').get('rehabilDoneOrg').enable();
+            this.addDiagnosisForm.get('rehabilFailReasonGroup').get('rehabilFailReason').reset();
+            this.addDiagnosisForm.get('rehabilFailReasonGroup').get('rehabilFailReason').disable();
+            this.addDiagnosisForm.get('rehabilFailReasonGroup').get('rehabilFailReasonOther').reset();
+            this.addDiagnosisForm.get('rehabilFailReasonGroup').get('rehabilFailReasonOther').disable();
         }
     }
 
     setRehabilFailReasonVisibleDependencies(id) {
         if (id === 6) {
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'rehabilFailReasonGroup').rehabilFailReasonOther.enable();
+            this.addDiagnosisForm.get('rehabilFailReasonGroup').get('rehabilFailReasonOther').enable();
             this.rehabilFailReasonOtherVisible = true;
         } else {
             this.rehabilFailReasonOtherVisible = false;
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'rehabilFailReasonGroup').rehabilFailReasonOther.reset();
-            this.cardThirteenYService.getControls(this.addDiagnosisForm, 'rehabilFailReasonGroup').rehabilFailReasonOther.disable();
+            this.addDiagnosisForm.get('rehabilFailReasonGroup').get('rehabilFailReasonOther').reset();
+            this.addDiagnosisForm.get('rehabilFailReasonGroup').get('rehabilFailReasonOther').disable();
         }
     }
 
     setDiagnose() {
         // Практически здоров healthStatusBefore
-        const healthGood = this.cardThirteenYService.getControls(this.addDiagnosisForm, 'diagnosisInfo').healthGood.value;
+        const healthGood = this.addDiagnosisForm.get('diagnosisInfo').get('healthGood').value;
         this.healthStatusBefore = {
             ...this.healthStatusBefore,
             healthGood
         };
 
         // Диагноз diagnose object
-        const mkb10 = this.cardThirteenYService.getControls(this.addDiagnosisForm, 'diagnosisInfo').mkb10.value;
+        const mkb10 = this.addDiagnosisForm.get('diagnosisInfo').get('mkb10').value;
         this.diagnose = {
             ...this.diagnose,
             mkb10
@@ -423,16 +399,14 @@ export class AddDiagnosisComponent implements OnInit {
         };
 
         // Лечение было назначено/Амбулаторные условия (diagnose)
-        const treatmentConditionId = this.cardThirteenYService
-            .getControls(this.addDiagnosisForm, 'treatmentConditionGroup').treatmentCondition.value;
+        const treatmentConditionId = this.addDiagnosisForm.get('treatmentConditionGroup').get('treatmentCondition').value;
         this.diagnose = {
             ...this.diagnose,
             treatmentCondition: this.treatmentConditionList[treatmentConditionId - 1]
         };
 
         // Лечение было назначено/Выберите тип медицинской организации (diagnose)
-        const treatmentConditionOrgId = this.cardThirteenYService
-            .getControls(this.addDiagnosisForm, 'treatmentConditionGroup').treatmentConditionOrg.value;
+        const treatmentConditionOrgId = this.addDiagnosisForm.get('treatmentConditionGroup').get('treatmentConditionOrg').value;
 
         if (treatmentConditionOrgId) {
             this.diagnose = {
@@ -443,16 +417,14 @@ export class AddDiagnosisComponent implements OnInit {
 
 
         // Лечение было выполнено/Амбулаторные условия (diagnose)
-        const treatmentDoneId = this.cardThirteenYService
-            .getControls(this.addDiagnosisForm, 'treatmentDoneGroup').treatmentDone.value;
+        const treatmentDoneId = this.addDiagnosisForm.get('treatmentDoneGroup').get('treatmentDone').value;
         this.diagnose = {
             ...this.diagnose,
             treatmentDone: this.treatmentConditionList[treatmentDoneId - 1]
         };
 
         // Лечение было выполнено/Выберите тип медицинской организации (diagnose)
-        const treatmentDoneOrgId = this.cardThirteenYService
-            .getControls(this.addDiagnosisForm, 'treatmentDoneGroup').treatmentDoneOrg.value;
+        const treatmentDoneOrgId = this.addDiagnosisForm.get('treatmentDoneGroup').get('treatmentDoneOrg').value;
 
         if (treatmentDoneOrgId) {
             this.diagnose = {
@@ -462,8 +434,7 @@ export class AddDiagnosisComponent implements OnInit {
         }
 
         // Лечение было выполнено/Причина невыполнения в соответствии со значением (diagnose)
-        const reasonValueId = this.cardThirteenYService
-            .getControls(this.addDiagnosisForm, 'treatmentFailReasonGroup').treatmentFailReason.value;
+        const reasonValueId = this.addDiagnosisForm.get('treatmentFailReasonGroup').get('treatmentFailReason').value;
 
         if (reasonValueId) {
             this.diagnose = {
@@ -473,8 +444,7 @@ export class AddDiagnosisComponent implements OnInit {
         }
 
         // Лечение было выполнено/Причина невыполнения в соответствии со значением/прочие (diagnose)
-        const treatmentFailReasonOther = this.cardThirteenYService
-            .getControls(this.addDiagnosisForm, 'treatmentFailReasonGroup').treatmentFailReasonOther.value;
+        const treatmentFailReasonOther = this.addDiagnosisForm.get('treatmentFailReasonGroup').get('treatmentFailReasonOther').value;
 
         if (treatmentFailReasonOther) {
             this.diagnose = {
@@ -484,16 +454,14 @@ export class AddDiagnosisComponent implements OnInit {
         }
 
         // Медицинская реабилитация_санатарно курортное лечение были назначены/Амбулаторные условия (diagnose)
-        const sklPrescribedtreatmentConditionId = this.cardThirteenYService
-            .getControls(this.addDiagnosisForm, 'rehabilConditionGroup').rehabilCondition.value;
+        const sklPrescribedtreatmentConditionId = this.addDiagnosisForm.get('rehabilConditionGroup').get('rehabilCondition').value;
         this.diagnose = {
             ...this.diagnose,
             rehabilCondition: this.treatmentConditionList[sklPrescribedtreatmentConditionId - 1]
         };
 
         // Медицинская реабилитация_санатарно курортное лечение были назначены/Выберите тип медицинской организации (diagnose)
-        const sklPrescribedMedTypeId = this.cardThirteenYService
-            .getControls(this.addDiagnosisForm, 'rehabilConditionGroup').rehabilConditionOrg.value;
+        const sklPrescribedMedTypeId = this.addDiagnosisForm.get('rehabilConditionGroup').get('rehabilConditionOrg').value;
 
         if (sklPrescribedMedTypeId) {
             this.diagnose = {
@@ -503,8 +471,7 @@ export class AddDiagnosisComponent implements OnInit {
         }
 
         // Медицинская реабилитация_санатарно курортное лечение были выполнены/Амбулаторные условия (diagnose)
-        const sklPerformedtreatmentConditionId = this.cardThirteenYService
-            .getControls(this.addDiagnosisForm, 'rehabilDoneGroup').rehabilDone.value;
+        const sklPerformedtreatmentConditionId = this.addDiagnosisForm.get('rehabilDoneGroup').get('rehabilDone').value;
 
         this.diagnose = {
             ...this.diagnose,
@@ -512,8 +479,7 @@ export class AddDiagnosisComponent implements OnInit {
         };
 
         // Медицинская реабилитация_санатарно курортное лечение были выполнены/Выберите тип медицинской организации (diagnose)
-        const sklPerformedMedTypeId = this.cardThirteenYService
-            .getControls(this.addDiagnosisForm, 'rehabilDoneGroup').rehabilDoneOrg.value;
+        const sklPerformedMedTypeId = this.addDiagnosisForm.get('rehabilDoneGroup').get('rehabilDoneOrg').value;
 
         if (sklPerformedMedTypeId) {
             this.diagnose = {
@@ -524,8 +490,7 @@ export class AddDiagnosisComponent implements OnInit {
 
         /* Медицинская реабилитация_санатарно курортное лечение были выполнены/
         Причина невыполнения в соответствии со значением (реабилитации) */
-        const performedReasonValueId = this.cardThirteenYService
-            .getControls(this.addDiagnosisForm, 'rehabilFailReasonGroup').rehabilFailReason.value;
+        const performedReasonValueId = this.addDiagnosisForm.get('rehabilFailReasonGroup').get('rehabilFailReason').value;
 
         if (performedReasonValueId) {
             this.diagnose = {
@@ -535,8 +500,7 @@ export class AddDiagnosisComponent implements OnInit {
         }
 
 
-        const rehabilFailReasonOther = this.cardThirteenYService
-            .getControls(this.addDiagnosisForm, 'rehabilFailReasonGroup').rehabilFailReasonOther.value;
+        const rehabilFailReasonOther = this.addDiagnosisForm.get('rehabilFailReasonGroup').get('rehabilFailReasonOther').value;
 
         if (rehabilFailReasonOther) {
             this.diagnose = {

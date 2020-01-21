@@ -254,10 +254,8 @@ export class CardDevelopmentAssessmentComponent implements OnInit {
             this.devAssessmentForm.get('sexualDevelopment').get('menarheYear').enable();
             this.devAssessmentForm.get('sexualDevelopment').get('menarheMonth').enable();
         } else {
-            this.devAssessmentForm.get('sexualDevelopment').get('menarheYear').disable();
-            this.devAssessmentForm.get('sexualDevelopment').get('menarheYear').setValue('');
-            this.devAssessmentForm.get('sexualDevelopment').get('menarheMonth').disable();
-            this.devAssessmentForm.get('sexualDevelopment').get('menarheMonth').setValue('');
+            this.cardThirteenYService.disableResetControl(this.devAssessmentForm, 'sexualDevelopment', 'menarheYear');
+            this.cardThirteenYService.disableResetControl(this.devAssessmentForm, 'sexualDevelopment', 'menarheMonth');
         }
     }
 }

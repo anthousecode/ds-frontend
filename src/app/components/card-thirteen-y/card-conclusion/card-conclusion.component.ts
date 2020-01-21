@@ -36,9 +36,6 @@ export class CardConclusionComponent implements OnInit {
                 private dictionaryService: DictionaryService,
                 private cdRef: ChangeDetectorRef,
                 @Self() private onDestroy$: NgOnDestroy) {
-        // this.cardThirteenYService.activeTabCurrentValues
-        //     .pipe(takeUntil(this.onDestroy$))
-        //     .subscribe(data => this.formValues = data);
     }
 
     get doctorExaminations() {
@@ -185,11 +182,10 @@ export class CardConclusionComponent implements OnInit {
 
     initDoctorsForConclusion() {
         this.dictionaryService.getDoctorsForConslusion().subscribe((doctors: DoctorForConclusion[]) => {
-            const doctorList = doctors.map(item => ({
+            this.doctorsForConclusion = doctors.map(item => ({
                 ...item,
                 fullName: item.surname + ' ' + item.name + ' ' + item.lastname
             }));
-            this.doctorsForConclusion = doctorList;
         });
     }
 
@@ -207,7 +203,7 @@ export class CardConclusionComponent implements OnInit {
     }
 
     setDoctorId(id: number) {
-        this.cardThirteenYService.getControls(this.conclusionForm, 'opinionForm').doctorId.setValue(id);
+        this.conclusionForm.get('opinionForm').get('doctorId').setValue(id);
     }
 
     checkFormChanges() {
@@ -242,8 +238,7 @@ export class CardConclusionComponent implements OnInit {
             this.conclusionForm.get('opinionForm').get('missedReasons').enable();
         } else {
             this.canDisabledControls.forEach((control: string) => {
-                this.conclusionForm.get('opinionForm').get(control).disable();
-                this.conclusionForm.get('opinionForm').get(control).setValue('');
+                this.cardThirteenYService.disableResetControl(this.conclusionForm, 'opinionForm', control);
             });
         }
     }
@@ -307,7 +302,7 @@ export class CardConclusionComponent implements OnInit {
 
     getDoctorDateFormat(date) {
         if (date !== []) {
-            return date._isAMomentObject  ? date.format() : date;
+            return date._isAMomentObject ? date.format() : date;
         } else {
             return '';
         }
@@ -316,17 +311,13 @@ export class CardConclusionComponent implements OnInit {
     isDisabledMissedReasons(event: MatSelectChange) {
         if (event.source.value === 1) {
             this.conclusionForm.get('opinionForm').get('absence').enable();
-            this.conclusionForm.get('opinionForm').get('nonExecutionTextarea').setValue('');
-            this.conclusionForm.get('opinionForm').get('nonExecutionTextarea').disable();
+            this.cardThirteenYService.disableResetControl(this.conclusionForm, 'opinionForm', 'nonExecutionTextarea');
         } else if (event.source.value === 6) {
             this.conclusionForm.get('opinionForm').get('nonExecutionTextarea').enable();
-            this.conclusionForm.get('opinionForm').get('absence').setValue('');
-            this.conclusionForm.get('opinionForm').get('absence').disable();
+            this.cardThirteenYService.disableResetControl(this.conclusionForm, 'opinionForm', 'absence');
         } else {
-            this.conclusionForm.get('opinionForm').get('absence').setValue('');
-            this.conclusionForm.get('opinionForm').get('absence').disable();
-            this.conclusionForm.get('opinionForm').get('nonExecutionTextarea').setValue('');
-            this.conclusionForm.get('opinionForm').get('nonExecutionTextarea').disable();
+            this.cardThirteenYService.disableResetControl(this.conclusionForm, 'opinionForm', 'absence');
+            this.cardThirteenYService.disableResetControl(this.conclusionForm, 'opinionForm', 'nonExecutionTextarea');
         }
     }
 }

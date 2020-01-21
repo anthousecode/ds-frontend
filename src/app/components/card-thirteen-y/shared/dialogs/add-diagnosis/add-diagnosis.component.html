@@ -22,7 +22,7 @@
                         {{mkb10.name}}
                     </mat-option>
                 </mat-autocomplete>
-                <mat-error *ngIf="cardThirteenYService.getControls(addDiagnosisForm,'diagnosisInfo').mkb10Name.invalid">
+                <mat-error *ngIf="addDiagnosisForm.get('diagnosisInfo').get('mkb10Name').invalid">
                     Выберите страховую медицинскую организацию
                 </mat-error>
             </mat-form-field>

@@ -9,6 +9,7 @@ import {AdditionalResearch} from './shared/interfaces/additional-research.interf
 import {finalize} from 'rxjs/operators';
 import {IChangesHistory} from './shared/interfaces/changes-history.interface';
 import {CardService} from '../../@core/shared/services/card.service';
+import {el} from '@angular/platform-browser/testing/src/browser_util';
 
 @Injectable({
     providedIn: 'root'
@@ -70,8 +71,15 @@ export class CardThirteenYService {
         this.isBlocked.next(isBlocked);
     }
 
-    getControls(nameForm: FormGroup, nameGroup: string): any {
-        return (nameForm.get(nameGroup) as FormGroup).controls;
+    disableResetControl(group: FormGroup, first: string, second?: string) {
+        const firstLevel = group.get(first);
+        if (second) {
+            firstLevel.get(second).disable();
+            firstLevel.get(second).setValue('');
+        } else {
+            firstLevel.disable();
+            firstLevel.setValue('');
+        }
     }
 
     saveCard(values) {

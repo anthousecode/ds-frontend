@@ -334,10 +334,6 @@ export class CardMainComponent implements OnInit {
         this.cardThirteenYService.setTabCurrentValues(objData);
     }
 
-    cutNumber(item) {
-        return Number(item.replace('images', ''));
-    }
-
     getOrganizationList() {
         this.mainForm.get('medicalOrganization').get('organizationName').valueChanges
             .pipe(

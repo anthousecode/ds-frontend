@@ -14,7 +14,7 @@
                  [max]="maxDate"
                  (click)="openDatepicker('datepicker')"
                  required>
-          <mat-error *ngIf="cardThirteenYService.getControls(mainForm, 'generalInfo').dateBegin.invalid">
+          <mat-error *ngIf="mainForm.get('generalInfo').get('dateBegin').invalid">
             Выберите дату
           </mat-error>
           <mat-datepicker class="__mainbar-header" #datepicker></mat-datepicker>
@@ -56,7 +56,7 @@
           {{hospital.name}}
         </mat-option>
       </mat-autocomplete>
-      <mat-error *ngIf="cardThirteenYService.getControls(mainForm,'omsInfo').hospitalName.invalid">
+      <mat-error *ngIf="mainForm.get('omsInfo').get('hospitalName').invalid">
         Выберите страховую медицинскую организацию
       </mat-error>
     </mat-form-field>
@@ -78,7 +78,7 @@
                placeholder="Серия полиса"
                formControlName="policySeries"
                required>
-        <mat-error *ngIf="cardThirteenYService.getControls(mainForm,'omsInfo').policySeries.invalid">
+        <mat-error *ngIf="mainForm.get('omsInfo').get('policySeries').invalid">
           {{getPolicySeriesError()}}
         </mat-error>
       </mat-form-field>
@@ -90,7 +90,7 @@
                placeholder="Номер полиса"
                formControlName="policyNumber"
                required>
-        <mat-error *ngIf="cardThirteenYService.getControls(mainForm, 'omsInfo').policyNumber.invalid">
+        <mat-error *ngIf="mainForm.get('omsInfo').get('policyNumber').invalid">
           {{getPolicyNumberError()}}
         </mat-error>
       </mat-form-field>
@@ -128,7 +128,7 @@
           {{organization.shortName}}
         </mat-option>
       </mat-autocomplete>
-      <mat-error *ngIf="cardThirteenYService.getControls(mainForm, 'medicalOrganization').organizationName.invalid">
+      <mat-error *ngIf="mainForm.get('medicalOrganization').get('organizationName').invalid">
         Выберите медицинскую организацию
       </mat-error>
     </mat-form-field>
@@ -167,7 +167,7 @@
           {{education.shortName}}
         </mat-option>
       </mat-autocomplete>
-      <mat-error *ngIf="cardThirteenYService.getControls(mainForm, 'education').educationName.invalid">
+      <mat-error *ngIf="mainForm.get('education').get('educationName').invalid">
         Выберите образовательное учреждение
       </mat-error>
     </mat-form-field>
@@ -213,7 +213,7 @@
                [max]="maxDate"
                (click)="openDatepicker('datepickerLocation')"
                required>
-        <mat-error *ngIf="cardThirteenYService.getControls(mainForm, 'location').locationDate.invalid">
+        <mat-error *ngIf="mainForm.get('location').get('locationDate').invalid">
           Выберите дату
         </mat-error>
         <mat-datepicker class="__mainbar-header" #datepickerLocation></mat-datepicker>
@@ -233,7 +233,7 @@
           {{institution.shortName}}
         </mat-option>
       </mat-autocomplete>
-      <mat-error *ngIf="cardThirteenYService.getControls(mainForm, 'location').institutionName.invalid">
+      <mat-error *ngIf="mainForm.get('location').get('institutionName').invalid">
         Выберите стационарное учреждение
       </mat-error>
     </mat-form-field>

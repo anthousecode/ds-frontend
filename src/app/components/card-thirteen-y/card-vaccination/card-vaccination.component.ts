@@ -103,7 +103,6 @@ export class CardVaccinationComponent implements OnInit {
                 takeUntil(this.onDestroy$)
             )
             .subscribe(data => {
-                console.log(this.chipsVaccinations)
                 const formGroupData = {
                     ...data,
                     vaccination: this.chipsVaccinations

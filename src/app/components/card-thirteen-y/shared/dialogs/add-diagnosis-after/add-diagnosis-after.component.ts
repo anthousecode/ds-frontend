@@ -22,7 +22,6 @@ export class AddDiagnosisAfterComponent implements OnInit {
     diagnosisList!: Mkb10[];
     treatmentCondition!: TreatmentCondition[];
     treatmentOrganizationTypes!: TreatmentOrganizationType[];
-    private formValues!: any;
     private localData: any;
     isSaveDisabled = true;
     isHealthGood!: boolean;
