@@ -21,6 +21,7 @@ import {
 })
 export class AddDiagnosisComponent implements OnInit {
     modalName: string;
+    mode!: string;
     addDiagnosisForm!: FormGroup;
     healthStatusBefore: IHealthStatusBefore;
     diagnose: IDiagnose;
@@ -51,6 +52,8 @@ export class AddDiagnosisComponent implements OnInit {
 
     ngOnInit() {
         this.modalName = this.cardHealthStatusData.modalName;
+        this.mode = this.cardHealthStatusData.mode;
+        console.log(this.cardHealthStatusData)
         if (this.cardHealthStatusData.healthStatusBefore) {
             this.healthStatusBefore = this.cardHealthStatusData.healthStatusBefore;
             this.diagnose = this.cardHealthStatusData.healthStatusBefore.diagnoses[this.cardHealthStatusData.i];
@@ -538,8 +541,6 @@ export class AddDiagnosisComponent implements OnInit {
         }
 
         this.dialogRef.close();
-        this.snackBar.open('Диагноз добавлен', 'ОК', {
-            duration: 5000
-        });
+        this.snackBar.open(this.mode === 'edit' ? 'Диагноз изменён' : 'Диагноз добавлен', 'ОК', {duration: 5000});
     }
 }

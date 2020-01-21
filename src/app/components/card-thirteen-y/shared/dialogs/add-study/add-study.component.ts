@@ -68,7 +68,7 @@ export class AddStudyComponent implements OnInit {
     saveAndClose() {
         let snackBarMessage = 'Исследование добавлено';
         if (this.additionalExaminationsData.exam) {
-            snackBarMessage = 'Исследование сохранено';
+            snackBarMessage = 'Исследование изменено';
             this.additionalExaminationsData.additionalExaminations[this.additionalExaminationsData.index] = {
                 ...this.addStudyForm.value,
                 date: moment(this.addStudyForm.value.date).format()

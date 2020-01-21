@@ -374,6 +374,7 @@ export class CardHealthStatusComponent implements OnInit {
                     healthStatusBefore: this.formValues.healthStatusBefore,
                     i,
                     formValues: this.formValues,
+                    mode: 'edit',
                     modalName: 'Изменить диагноз'
                 }
             }).afterClosed().subscribe(() => {
@@ -419,6 +420,7 @@ export class CardHealthStatusComponent implements OnInit {
                 panelClass: '__add-diagnosis-after',
                 data: {
                     healthGood: this.formValues.healthStatusAfter.healthGood,
+                    mode: 'edit',
                     diagnoses: diagnosisData
                 }
             }).afterClosed().subscribe(result => {

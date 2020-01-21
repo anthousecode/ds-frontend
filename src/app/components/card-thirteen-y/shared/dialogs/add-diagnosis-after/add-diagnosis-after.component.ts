@@ -22,6 +22,7 @@ export class AddDiagnosisAfterComponent implements OnInit {
     diagnosisList!: Mkb10[];
     treatmentCondition!: TreatmentCondition[];
     treatmentOrganizationTypes!: TreatmentOrganizationType[];
+    mode!: string;
     private localData: any;
     isSaveDisabled = true;
     isHealthGood!: boolean;
@@ -61,6 +62,7 @@ export class AddDiagnosisAfterComponent implements OnInit {
     dataState() {
         if (typeof this.diagnosisData !== 'boolean') {
             this.isHealthGood = this.diagnosisData.healthGood;
+            this.mode = this.diagnosisData.mode;
             Object.keys(this.diagnosisData.diagnoses).forEach(key => {
                 if (!this.diagnosisData.diagnoses[key]) {
                     delete this.diagnosisData.diagnoses[key];
@@ -261,6 +263,6 @@ export class AddDiagnosisAfterComponent implements OnInit {
             delete this.localData.diagnoses.id;
         }
         this.dialogRef.close({data: this.localData});
-        this.snackBar.open('Диагноз добавлен', 'ОК', {duration: 5000});
+        this.snackBar.open(this.mode === 'edit' ? 'Диагноз изменён' : 'Диагноз добавлен', 'ОК', {duration: 5000});
     }
 }
