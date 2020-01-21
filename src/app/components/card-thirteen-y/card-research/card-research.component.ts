@@ -8,6 +8,7 @@ import {Examination} from '../../../models/dictionary.model';
 import {DictionaryService} from '../../../service/dictionary.service';
 import {NgOnDestroy} from '../../../@core/shared/services/destroy.service';
 import {takeUntil} from 'rxjs/operators';
+import {childsCurrentLocationValidator} from '../../../validators/date.validator';
 
 @Component({
     selector: 'app-card-research',
@@ -23,6 +24,7 @@ export class CardResearchComponent implements OnInit {
     formValues!: any;
     isCardDisabled!: boolean;
     isTableDisabled!: boolean;
+    childsCurrentLocationValidator = childsCurrentLocationValidator;
 
     constructor(private cdRef: ChangeDetectorRef,
                 private dialog: MatDialog,

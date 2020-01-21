@@ -8,6 +8,7 @@ import {AbsenceReason, DoctorForConclusion, DoctorForExamination, HealthGroup, R
 import * as moment from 'moment';
 import {NgOnDestroy} from '../../../@core/shared/services/destroy.service';
 import {Observable} from 'rxjs';
+import {childsCurrentLocationValidator} from 'src/app/validators/date.validator';
 
 @Component({
     selector: 'app-card-conclusion',
@@ -29,6 +30,9 @@ export class CardConclusionComponent implements OnInit {
     private doctorsForConclusion: DoctorForConclusion[];
     private filteredDoctors: Observable<DoctorForConclusion[]>;
     canDisabledControls = ['missedReasons', 'absence', 'nonExecutionTextarea'];
+    childsCurrentLocationValidator = childsCurrentLocationValidator;
+    private allDate: number[];
+    private latestDate: string;
 
 
     constructor(private  fb: FormBuilder,
@@ -86,8 +90,61 @@ export class CardConclusionComponent implements OnInit {
             .pipe(takeUntil(this.onDestroy$))
             .subscribe(data => {
                 this.formValues = data;
+                this.getAllDate(data);
+                this.setLatestDateConclusion(this.latestDate);
                 this.initHealthGroup();
             });
+    }
+
+    private getAllDate(card) {
+        this.allDate = [];
+
+        if (card.startDate) {
+            this.allDate.push(moment(card.startDate).valueOf());
+        }
+
+        if (card.currentLocationDate) {
+            this.allDate.push(moment(card.currentLocationDate).valueOf());
+        }
+
+        if (card.disability) {
+            if (card.disability.lastExamDate) {
+                this.allDate.push(moment(card.disability.lastExamDate).valueOf());
+            }
+
+            if (card.disability.iprDate) {
+                this.allDate.push(moment(card.disability.iprDate).valueOf());
+            }
+        }
+
+        if (card.requiredExaminations && card.requiredExaminations.length) {
+            card.requiredExaminations.forEach(requiredExaminations => {
+                this.allDate.push(moment(requiredExaminations.date).valueOf());
+            });
+        }
+
+        if (card.additionalExaminations && card.additionalExaminations.length) {
+            card.requiredExaminations.forEach(additionalExaminations => {
+                this.allDate.push(moment(additionalExaminations.date).valueOf());
+            });
+        }
+
+        if (card.doctorExaminations && card.doctorExaminations.length) {
+            card.doctorExaminations.forEach(doctorExaminations => {
+                this.allDate.push(moment(doctorExaminations.date).valueOf());
+            });
+        }
+
+        const latestDate = Math.max(...this.allDate);
+        this.setLatestDate(latestDate);
+    }
+
+    setLatestDate(latestDate) {
+        this.latestDate = moment(latestDate).format();
+    }
+
+    setLatestDateConclusion(latestDate) {
+        childsCurrentLocationValidator(this.conclusionForm.get('opinionForm').get('date'), latestDate, this.formValues.startDate);
     }
 
     createConclusionForm() {
@@ -255,6 +312,22 @@ export class CardConclusionComponent implements OnInit {
             )
             .subscribe(data => {
                 const formArrayConclusion = data.map(item => {
+                    let latestDateSeconds: number;
+                    if (this.allDate) {
+                        if (typeof item.date === 'string') {
+                            latestDateSeconds = moment(item.date).valueOf();
+                        } else {
+                            latestDateSeconds = item.date.valueOf();
+                        }
+
+                        this.allDate.push(latestDateSeconds);
+                        const latestDate = Math.max(...this.allDate);
+                        childsCurrentLocationValidator(
+                            this.conclusionForm.get('opinionForm').get('date'), moment(latestDate).format(), this.formValues.startDate
+                        );
+                    }
+
+                    // this.setLatestDateConclusion();
                     return {
                         date: this.getDoctorDateFormat(item.date),
                         doctor: {

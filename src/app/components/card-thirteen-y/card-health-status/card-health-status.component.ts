@@ -1,5 +1,5 @@
 import {Component, OnInit, ChangeDetectionStrategy, ViewChild, ChangeDetectorRef, ElementRef, Self} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {CardThirteenYService} from '../card-thirteen-y.service';
 import {Observable} from 'rxjs';
 import {MatDatepicker, MatDialog, MatAutocomplete, MatAutocompleteSelectedEvent} from '@angular/material';
@@ -12,6 +12,7 @@ import {HealthDisorder, HealthGroup, InvalidDisease, InvalidType, ReabilitationS
 import {ENTER} from '@angular/cdk/keycodes';
 import {NgOnDestroy} from '../../../@core/shared/services/destroy.service';
 import {DISABILITY_DISABLED_CONTROL_LIST} from './shared/disabled-controls';
+import {childsCurrentLocationValidator} from '../../../validators/date.validator';
 
 @Component({
     selector: 'app-card-health-status',
@@ -23,7 +24,7 @@ import {DISABILITY_DISABLED_CONTROL_LIST} from './shared/disabled-controls';
 export class CardHealthStatusComponent implements OnInit {
     @ViewChild('datepickerFirstDate') datepickerFirstDate!: MatDatepicker<any>;
     @ViewChild('datepickerLastDate') datepickerLastDate!: MatDatepicker<any>;
-    @ViewChild('rehabilitationDate') rehabilitationDate!: MatDatepicker<any>;
+    @ViewChild('datepickerRehabilitationDate') datepickerRehabilitationDate!: MatDatepicker<any>;
     @ViewChild('invalidDiseasesInput') invalidDiseasesInput: ElementRef<HTMLInputElement>;
     @ViewChild('disabilityDisordersInput') disabilityDisordersInput: ElementRef<HTMLInputElement>;
     @ViewChild('auto') matAutocomplete: MatAutocomplete;
@@ -35,6 +36,7 @@ export class CardHealthStatusComponent implements OnInit {
     doneList$!: Observable<ReabilitationStatus[]>;
     formValues!: any;
     isTableDisabled!: boolean;
+    childsCurrentLocationValidator = childsCurrentLocationValidator;
 
     private filteredDiseases$: Observable<string[]>;
     invalidDiseasesQuery!: InvalidDisease[];
@@ -75,6 +77,28 @@ export class CardHealthStatusComponent implements OnInit {
         this.checkFormChanges();
         this.cardThirteenYService.setSelectedTabCurrentValues(null);
         this.checkHealthGroupChanges();
+        this.checkMinDisabilityLastDate();
+    }
+
+    get disabilityFirstDate(): AbstractControl {
+        return this.healthStatusForm.get('disability').get('disabilityFirstDate');
+    }
+
+    get disabilityLastDate(): AbstractControl {
+        return this.healthStatusForm.get('disability').get('disabilityLastDate');
+    }
+
+    get rehabilitationDate(): AbstractControl {
+        return this.healthStatusForm.get('disability').get('rehabilitationDate');
+    }
+
+    checkMinDisabilityLastDate() {
+        this.disabilityFirstDate.valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(minDate => {
+                this.childsCurrentLocationValidator(this.disabilityLastDate, minDate, this.formValues.startDate);
+                console.log(minDate);
+            });
     }
 
     checkFormChanges() {

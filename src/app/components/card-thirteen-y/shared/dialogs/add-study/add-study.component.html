@@ -5,6 +5,10 @@
     <mat-form-field class="add-study__date" floatLabel="auto">
       <input matInput [matDatepicker]="addStudyDatepicker" placeholder="Дата" formControlName="date" [max]="maxDate"
              (click)="openDatepicker('addStudyDatepicker')"
+             (blur)="childsCurrentLocationValidator(
+             date,
+             additionalExaminationsData.formValues.patient.birthdate, additionalExaminationsData.formValues.startDate
+             )"
              matTooltip="Допустимый интервал: от даты рождения ребенка до текущей даты" required>
       <mat-error *ngIf="addStudyForm.get('date').invalid">
         Выберите дату

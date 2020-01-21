@@ -1,5 +1,5 @@
 import {Component, OnInit, ChangeDetectionStrategy, ViewChild, ChangeDetectorRef, Self} from '@angular/core';
-import {FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {MatDatepicker} from '@angular/material';
 import {debounceTime, filter, mergeMap, takeUntil} from 'rxjs/operators';
 import {CardThirteenYService} from '../card-thirteen-y.service';
@@ -25,6 +25,8 @@ import {IPolicyType} from '../shared/interfaces/policy-type.interface';
 import {NgOnDestroy} from '../../../@core/shared/services/destroy.service';
 import {IOrganizationInfo} from '../shared/interfaces/organization-info.interface';
 import {getControlDischarge} from '../../../@core/shared/utils/policy-number-discharge';
+import {childsCurrentLocationValidator} from '../../../validators/date.validator';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-card-main',
@@ -57,6 +59,7 @@ export class CardMainComponent implements OnInit {
     institutionList!: StationaryOrganization[];
     institutionInfo!: IOrganizationInfo;
     formValues!: any;
+    childsCurrentLocationValidator = childsCurrentLocationValidator;
 
     constructor(private cardThirteenYService: CardThirteenYService,
                 private dictionaryService: DictionaryService,
@@ -83,6 +86,10 @@ export class CardMainComponent implements OnInit {
         this.setLocationDateData();
         this.setLocationPlaceData();
         this.checkFormChanges();
+    }
+
+    get locationDate(): AbstractControl {
+        return this.mainForm.get('location').get('locationDate');
     }
 
     checkFormChanges() {

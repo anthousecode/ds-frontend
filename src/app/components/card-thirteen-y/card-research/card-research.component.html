@@ -8,6 +8,10 @@
                 <input matInput placeholder="Дата" [matDatepicker]="ii"
                        [formControl]="requiredExaminationsArray.controls[i].controls.dateBegin" [max]="maxDate"
                        (click)="openDatepicker(ii)"
+                       (blur)="childsCurrentLocationValidator(
+                       requiredExaminationsArray.controls[i].controls.dateBegin,
+                       formValues.patient.birthdate, formValues.startDate
+                       )"
                        matTooltip="Допустимый интервал: от даты рождения ребенка до текущей даты" required>
                 <mat-error *ngIf="requiredExaminationsArray.controls[i].controls.dateBegin.invalid">
                     Выберите дату

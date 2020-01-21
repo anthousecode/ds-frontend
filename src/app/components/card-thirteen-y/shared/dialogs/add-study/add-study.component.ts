@@ -1,10 +1,11 @@
 import {Component, OnInit, ChangeDetectionStrategy, ViewChild, Inject, Self} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDatepicker, MatSnackBar} from '@angular/material';
 import {CardThirteenYService} from '../../../card-thirteen-y.service';
 import * as moment from 'moment';
 import {NgOnDestroy} from '../../../../../@core/shared/services/destroy.service';
 import {takeUntil} from 'rxjs/operators';
+import {childsCurrentLocationValidator} from 'src/app/validators/date.validator';
 
 @Component({
     selector: 'app-add-study',
@@ -17,6 +18,7 @@ export class AddStudyComponent implements OnInit {
     addStudyForm!: FormGroup;
     maxDate = new Date();
     additionalExamination: any;
+    childsCurrentLocationValidator = childsCurrentLocationValidator;
 
     @ViewChild('addStudyDatepicker') addStudyDatepicker!: MatDatepicker<any>;
 
@@ -32,6 +34,10 @@ export class AddStudyComponent implements OnInit {
             this.initAdditionalResearchData();
         }
         this.checkAdditionalResearchDataChanges();
+    }
+
+    get date(): AbstractControl {
+        return this.addStudyForm.get('date');
     }
 
     createFormGroups() {

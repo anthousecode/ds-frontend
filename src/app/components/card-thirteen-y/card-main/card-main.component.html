@@ -212,6 +212,7 @@
                formControlName="locationDate"
                [max]="maxDate"
                (click)="openDatepicker('datepickerLocation')"
+               (blur)="childsCurrentLocationValidator(locationDate, formValues.patient.birthdate, formValues.startDate)"
                required>
         <mat-error *ngIf="mainForm.get('location').get('locationDate').invalid">
           Выберите дату
