@@ -179,8 +179,9 @@ export class CardThirteenYComponent implements OnInit {
                 || !this.selectedTabCurrentValues) {
                 this.cardThirteenYService.setActiveTab(tabKey);
             } else {
-                this.dialog.open(SaveConfirmComponent, {panelClass: '__save-confirm'}).afterClosed()
-                    .subscribe(value => value && value.save ? this.saveCard(tabKey) : this.cardThirteenYService.setActiveTab(tabKey));
+                this.dialog.open(SaveConfirmComponent, {panelClass: '__save-confirm'}).afterClosed().subscribe(value => {
+                    value && value.save ? this.saveCard(tabKey) : this.cardThirteenYService.setActiveTab(tabKey);
+                });
             }
         }
     }
