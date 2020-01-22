@@ -4,6 +4,19 @@ mat-form-field {
   }
 }
 
+.__assessment,
+.__research {
+  .mat-placeholder-required {
+    color: #F44336
+  }
+
+  &.mat-form-field-invalid {
+    .mat-form-field-label {
+      color: #F44336;
+    }
+  }
+}
+
 .__card-main,
 .__health-status,
 .__add-diagnosis-before,
