@@ -122,23 +122,27 @@ export class CardResearchComponent implements OnInit {
 
     setRequiredExaminations() {
         for (let i = 0; i < this.requiredExaminationsArray.length; i++) {
-            this.requiredExaminationsArray.get(`${i}`).get('dateBegin').valueChanges.subscribe(date => {
-                date = typeof date === 'string' ? date : date.format();
-                this.formValues.requiredExaminations[i] = {
-                    ...this.formValues.requiredExaminations[i],
-                    exam: this.requiredExaminations[i],
-                    date,
-                };
-                this.cardThirteenYService.setTabCurrentValues(this.formValues);
-            });
-            this.requiredExaminationsArray.get(`${i}`).get('result').valueChanges.subscribe(result => {
-                this.formValues.requiredExaminations[i] = {
-                    ...this.formValues.requiredExaminations[i],
-                    exam: this.requiredExaminations[i],
-                    result
-                };
-                this.cardThirteenYService.setTabCurrentValues(this.formValues);
-            });
+            this.requiredExaminationsArray.get(`${i}`).get('dateBegin').valueChanges
+                .pipe(takeUntil(this.onDestroy$))
+                .subscribe(date => {
+                    date = typeof date === 'string' ? date : date.format();
+                    this.formValues.requiredExaminations[i] = {
+                        ...this.formValues.requiredExaminations[i],
+                        exam: this.requiredExaminations[i],
+                        date,
+                    };
+                    this.cardThirteenYService.setTabCurrentValues(this.formValues);
+                });
+            this.requiredExaminationsArray.get(`${i}`).get('result').valueChanges
+                .pipe(takeUntil(this.onDestroy$))
+                .subscribe(result => {
+                    this.formValues.requiredExaminations[i] = {
+                        ...this.formValues.requiredExaminations[i],
+                        exam: this.requiredExaminations[i],
+                        result
+                    };
+                    this.cardThirteenYService.setTabCurrentValues(this.formValues);
+                });
         }
     }
 

@@ -26,7 +26,6 @@ import {NgOnDestroy} from '../../../@core/shared/services/destroy.service';
 import {IOrganizationInfo} from '../shared/interfaces/organization-info.interface';
 import {getControlDischarge} from '../../../@core/shared/utils/policy-number-discharge';
 import {childsCurrentLocationValidator} from '../../../validators/date.validator';
-import * as moment from 'moment';
 
 @Component({
     selector: 'app-card-main',

@@ -9,7 +9,6 @@ import {AdditionalResearch} from './shared/interfaces/additional-research.interf
 import {finalize} from 'rxjs/operators';
 import {IChangesHistory} from './shared/interfaces/changes-history.interface';
 import {CardService} from '../../@core/shared/services/card.service';
-import {el} from '@angular/platform-browser/testing/src/browser_util';
 
 @Injectable({
     providedIn: 'root'
@@ -114,19 +113,7 @@ export class CardThirteenYService {
         return this.apiService.get<IChangesHistory>('changes-history.json'); // TODO: remove when api will work
     }
 
-    getDiagnoses(): Observable<IDiagnose[]> {
-        return this.apiService.get<IDiagnose[]>('diagnoses.json'); // TODO: remove when api will work
-    }
-
-    getDiagnosesAfter(): Observable<IDiagnose[]> {
-        return this.apiService.get<IDiagnose[]>('diagnoses-after.json'); // TODO: remove when api will work
-    }
-
     exportCard(format: string) {
         return this.http.get(this.baseUrl + 'cards/696.' + format, {responseType: 'blob'});
-    }
-
-    getAdditionalResearch(): Observable<AdditionalResearch[]> {
-        return this.apiService.get<AdditionalResearch[]>('additional-research.json'); // TODO: remove when api will work
     }
 }

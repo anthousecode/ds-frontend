@@ -1,10 +1,10 @@
-import {Component, OnInit, ChangeDetectionStrategy, Inject, ChangeDetectorRef, ElementRef, ViewChild} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy, Inject, ChangeDetectorRef, ElementRef, ViewChild, Self} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {CardThirteenYService} from '../../../card-thirteen-y.service';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
 import {IDiagnose, IHealthStatusBefore, IMkb10} from '../../interfaces/diagnoses.interface';
 import {DictionaryService} from '../../../../../service/dictionary.service';
-import {debounceTime, filter} from 'rxjs/operators';
+import {debounceTime, filter, takeUntil} from 'rxjs/operators';
 import {
     DispensaryObservation,
     ReasonMissed,
@@ -12,12 +12,14 @@ import {
     TreatmentOrganizationType,
     VmpNecessity
 } from '../../../../../models/dictionary.model';
+import {NgOnDestroy} from '../../../../../@core/shared/services/destroy.service';
 
 @Component({
     selector: 'app-add-diagnosis',
     templateUrl: './add-diagnosis.component.html',
     styleUrls: ['./add-diagnosis.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [NgOnDestroy]
 })
 export class AddDiagnosisComponent implements OnInit {
     modalName: string;
@@ -47,33 +49,34 @@ export class AddDiagnosisComponent implements OnInit {
                 private snackBar: MatSnackBar,
                 private cdRef: ChangeDetectorRef,
                 private dialogRef: MatDialogRef<AddDiagnosisComponent>,
-                @Inject(MAT_DIALOG_DATA) public cardHealthStatusData) {
+                @Inject(MAT_DIALOG_DATA) public cardHealthStatusData,
+                @Self() private onDestroy$: NgOnDestroy) {
     }
 
     ngOnInit() {
         this.modalName = this.cardHealthStatusData.modalName;
         this.mode = this.cardHealthStatusData.mode;
-        console.log(this.cardHealthStatusData)
         if (this.cardHealthStatusData.healthStatusBefore) {
             this.healthStatusBefore = this.cardHealthStatusData.healthStatusBefore;
             this.diagnose = this.cardHealthStatusData.healthStatusBefore.diagnoses[this.cardHealthStatusData.i];
             this.initFormGroups();
-            this.setTreatmentConditionVisibleDependencies(this.diagnose.treatmentCondition.id);
-            this.setTreatmentDoneVisibleDependencies(this.diagnose.treatmentDone.id);
+            if (!this.healthStatusBefore.healthGood) {
+                this.setTreatmentConditionVisibleDependencies(this.diagnose.treatmentCondition.id);
+                this.setTreatmentDoneVisibleDependencies(this.diagnose.treatmentDone.id);
 
-            if (this.diagnose.treatmentFailReason) {
-                this.setTreatmentFailReasonVisibleDependencies(this.diagnose.treatmentFailReason.id);
-            }
+                if (this.diagnose.treatmentFailReason) {
+                    this.setTreatmentFailReasonVisibleDependencies(this.diagnose.treatmentFailReason.id);
+                }
 
-            this.setRehabilConditionVisibleDependencies(this.diagnose.rehabilCondition.id);
-            this.setRehabilDoneVisibleDependencies(this.diagnose.rehabilDone.id);
+                this.setRehabilConditionVisibleDependencies(this.diagnose.rehabilCondition.id);
+                this.setRehabilDoneVisibleDependencies(this.diagnose.rehabilDone.id);
 
-            if (this.diagnose.rehabilFailReason) {
-                this.setRehabilFailReasonVisibleDependencies(this.diagnose.rehabilFailReason.id);
+                if (this.diagnose.rehabilFailReason) {
+                    this.setRehabilFailReasonVisibleDependencies(this.diagnose.rehabilFailReason.id);
+                }
             }
         } else {
             this.initFormGroups();
-            this.setTreatmentConditionVisibleDependencies(1);
         }
 
         this.getDiagnosisList();
@@ -205,42 +208,44 @@ export class AddDiagnosisComponent implements OnInit {
 
     subscribeForm() {
         // need mkb10 === mkb10Name
-        this.addDiagnosisForm.get('diagnosisInfo').get('mkb10Name').valueChanges.subscribe((mkb10Name: string) => {
-            if (this.addDiagnosisForm.get('diagnosisInfo').get('mkb10').value.name !== mkb10Name) {
-                this.addDiagnosisForm.get('diagnosisInfo').get('mkb10Name').setErrors({validDiagnose: true});
-            }
-        });
+        this.addDiagnosisForm.get('diagnosisInfo').get('mkb10Name').valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe((mkb10Name: string) => {
+                if (this.addDiagnosisForm.get('diagnosisInfo').get('mkb10').value.name !== mkb10Name) {
+                    this.addDiagnosisForm.get('diagnosisInfo').get('mkb10Name').setErrors({validDiagnose: true});
+                }
+            });
 
         // Лечение было назначено/Амбулаторные условия (diagnose)
-        this.addDiagnosisForm.get('treatmentConditionGroup').get('treatmentCondition').valueChanges.subscribe(id => {
-            this.setTreatmentConditionVisibleDependencies(id);
-        });
+        this.addDiagnosisForm.get('treatmentConditionGroup').get('treatmentCondition').valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(id => this.setTreatmentConditionVisibleDependencies(id));
 
         // Лечение было выполнено/Амбулаторные условия (diagnose)
-        this.addDiagnosisForm.get('treatmentDoneGroup').get('treatmentDone').valueChanges.subscribe(id => {
-            this.setTreatmentDoneVisibleDependencies(id);
-        });
+        this.addDiagnosisForm.get('treatmentDoneGroup').get('treatmentDone').valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(id => this.setTreatmentDoneVisibleDependencies(id));
 
         // Лечение было выполнено/Причина невыполнения в соответствии со значением (diagnose)
-        this.addDiagnosisForm.get('treatmentFailReasonGroup').get('treatmentFailReason').valueChanges.subscribe(id => {
-            this.setTreatmentFailReasonVisibleDependencies(id);
-        });
+        this.addDiagnosisForm.get('treatmentFailReasonGroup').get('treatmentFailReason').valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(id => this.setTreatmentFailReasonVisibleDependencies(id));
 
         // Медицинская реабилитация_санатарно курортное лечение были назначены/Амбулаторные условия (diagnose)
-        this.addDiagnosisForm.get('rehabilConditionGroup').get('rehabilCondition').valueChanges.subscribe(id => {
-            this.setRehabilConditionVisibleDependencies(id);
-        });
+        this.addDiagnosisForm.get('rehabilConditionGroup').get('rehabilCondition').valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(id => this.setRehabilConditionVisibleDependencies(id));
 
         // Медицинская реабилитация_санатарно курортное лечение были выполнены/Амбулаторные условия (diagnose)
-        this.addDiagnosisForm.get('rehabilDoneGroup').get('rehabilDone').valueChanges.subscribe(id => {
-            this.setRehabilDoneVisibleDependencies(id);
-        });
+        this.addDiagnosisForm.get('rehabilDoneGroup').get('rehabilDone').valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(id => this.setRehabilDoneVisibleDependencies(id));
 
         /* Медицинская реабилитация_санатарно курортное лечение были выполнены/
         Причина невыполнения в соответствии со значением (реабилитации) */
-        this.addDiagnosisForm.get('rehabilFailReasonGroup').get('rehabilFailReason').valueChanges.subscribe(id => {
-            this.setRehabilFailReasonVisibleDependencies(id);
-        });
+        this.addDiagnosisForm.get('rehabilFailReasonGroup').get('rehabilFailReason').valueChanges
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(id => this.setRehabilFailReasonVisibleDependencies(id));
     }
 
     checkMkb10(mkb10: IMkb10) {
@@ -253,14 +258,14 @@ export class AddDiagnosisComponent implements OnInit {
     }
 
     getTreatmentOrganizationTypes() {
-        return this.dictionaryService.getTreatmentOrganizationTypes().subscribe(data => {
+        this.dictionaryService.getTreatmentOrganizationTypes().subscribe(data => {
             this.treatmentOrganizationTypes = data;
             this.cdRef.detectChanges();
         });
     }
 
     getDispensaryObservations() {
-        return this.dictionaryService.getDispensaryObservations().subscribe(data => {
+        this.dictionaryService.getDispensaryObservations().subscribe(data => {
             this.diagnosticObservationValues = data;
             this.cdRef.detectChanges();
         });
@@ -293,10 +298,11 @@ export class AddDiagnosisComponent implements OnInit {
                 filter(value => value !== ''),
                 debounceTime(500),
                 filter(text => this.mkb10s ? !this.mkb10s.find(item => item.name === text) : true),
+                takeUntil(this.onDestroy$)
             ).subscribe(data => {
             this.dictionaryService.getMkb10s(1, 50, data).subscribe((mkb10s: IMkb10[]) => {
-                const {healthGroup, healthGood} = this.cardHealthStatusData.formValues.healthStatusBefore;
-                this.mkb10s = mkb10s.filter(mkb10 => healthGroup.id === 1 || healthGood ? mkb10.code === 'Z00' : mkb10);
+                const healthGroup = this.cardHealthStatusData.formValues.healthStatusBefore.healthGroup;
+                this.mkb10s = mkb10s.filter(mkb10 => healthGroup.id === 1 ? mkb10.code === 'Z00' : mkb10);
                 this.cdRef.detectChanges();
             });
         });
@@ -522,7 +528,6 @@ export class AddDiagnosisComponent implements OnInit {
 
     saveAndClose() {
         this.setDiagnose();
-
         if (this.cardHealthStatusData.healthStatusBefore) {
             this.healthStatusBefore.diagnoses[this.cardHealthStatusData.i] = this.diagnose;
             this.cardHealthStatusData.formValues.healthStatusBefore = this.healthStatusBefore;
@@ -539,7 +544,6 @@ export class AddDiagnosisComponent implements OnInit {
             this.healthStatusBefore.diagnoses.push(this.diagnose);
             this.cardHealthStatusData.formValues.healthStatusBefore = this.healthStatusBefore;
         }
-
         this.dialogRef.close();
         this.snackBar.open(this.mode === 'edit' ? 'Диагноз изменён' : 'Диагноз добавлен', 'ОК', {duration: 5000});
     }

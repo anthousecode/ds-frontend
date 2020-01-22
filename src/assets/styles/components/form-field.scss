@@ -39,10 +39,6 @@ mat-form-field {
       @media (max-width: 992px) {
         width: 100% !important;
       }
-
-      //input {
-      //  height: auto !important;
-      //}
     }
 
     &.health-status__disability-type,
@@ -109,14 +105,3 @@ mat-form-field {
     font-size: 16px;
   }
 }
-
-//.__card-main,
-//.__health-status,
-//.__add-diagnosis-after {
-//  mat-form-field {
-//    .mat-select,
-//    .mat-input-element {
-//      height: auto !important;
-//    }
-//  }
-//}

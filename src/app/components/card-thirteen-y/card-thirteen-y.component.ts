@@ -46,8 +46,8 @@ export class CardThirteenYComponent implements OnInit {
     selectedTabInitValuesModified!: string;
     selectedTabCurrentValues!: AbstractControl;
     selectedTabCurrentValuesModified!: string;
-    cardId = 696;
-    // cardId = 1161;
+    // cardId = 696;
+    cardId = 1161;
     cardInfo!: any;
     token = TOKEN;
     formValues!: any;
@@ -64,6 +64,7 @@ export class CardThirteenYComponent implements OnInit {
                 private cdRef: ChangeDetectorRef,
                 private eventManager: EventManager,
                 @Self() private onDestroy$: NgOnDestroy) {
+        localStorage.setItem('token', this.token);
         this.eventManager.addGlobalEventListener('window', 'resize', () => {
             this.innerWidth = this.document.body.offsetWidth;
             if (this.innerWidth <= 1300) {
@@ -71,17 +72,13 @@ export class CardThirteenYComponent implements OnInit {
                 this.cdRef.detectChanges();
             }
         });
-        this.cardThirteenYService.cardStatus.subscribe(status => {
-            this.cardStatus = status;
-            this.cdRef.detectChanges();
-        });
+        this.getCardStatus();
         this.getCardInfo();
         this.getActiveCardCurrentValues();
         this.getValidState();
     }
 
     ngOnInit() {
-        localStorage.setItem('token', this.token);
         this.getIsLoading();
         this.innerWidth = this.document.body.offsetWidth;
         this.checkActiveTab();
@@ -94,6 +91,15 @@ export class CardThirteenYComponent implements OnInit {
             .pipe(takeUntil(this.onDestroy$))
             .subscribe((state: boolean) => {
                 this.isTabValid = state;
+                this.cdRef.detectChanges();
+            });
+    }
+
+    getCardStatus() {
+        this.cardThirteenYService.cardStatus
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe(status => {
+                this.cardStatus = status;
                 this.cdRef.detectChanges();
             });
     }
@@ -174,7 +180,7 @@ export class CardThirteenYComponent implements OnInit {
                 this.cardThirteenYService.setActiveTab(tabKey);
             } else {
                 this.dialog.open(SaveConfirmComponent, {panelClass: '__save-confirm'}).afterClosed()
-                    .subscribe((value) => value && value.save ? this.saveCard(tabKey) : this.cardThirteenYService.setActiveTab(tabKey));
+                    .subscribe(value => value && value.save ? this.saveCard(tabKey) : this.cardThirteenYService.setActiveTab(tabKey));
             }
         }
     }

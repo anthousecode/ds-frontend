@@ -34,7 +34,6 @@ export class CardConclusionComponent implements OnInit {
     private allDate: number[];
     private latestDate: string;
 
-
     constructor(private  fb: FormBuilder,
                 private cardThirteenYService: CardThirteenYService,
                 private dictionaryService: DictionaryService,
@@ -118,21 +117,15 @@ export class CardConclusionComponent implements OnInit {
         }
 
         if (card.requiredExaminations && card.requiredExaminations.length) {
-            card.requiredExaminations.forEach(requiredExaminations => {
-                this.allDate.push(moment(requiredExaminations.date).valueOf());
-            });
+            card.requiredExaminations.forEach(requiredExaminations => this.allDate.push(moment(requiredExaminations.date).valueOf()));
         }
 
         if (card.additionalExaminations && card.additionalExaminations.length) {
-            card.requiredExaminations.forEach(additionalExaminations => {
-                this.allDate.push(moment(additionalExaminations.date).valueOf());
-            });
+            card.requiredExaminations.forEach(additionalExaminations => this.allDate.push(moment(additionalExaminations.date).valueOf()));
         }
 
         if (card.doctorExaminations && card.doctorExaminations.length) {
-            card.doctorExaminations.forEach(doctorExaminations => {
-                this.allDate.push(moment(doctorExaminations.date).valueOf());
-            });
+            card.doctorExaminations.forEach(doctorExaminations => this.allDate.push(moment(doctorExaminations.date).valueOf()));
         }
 
         const latestDate = Math.max(...this.allDate);
@@ -197,9 +190,7 @@ export class CardConclusionComponent implements OnInit {
             this.conclusionForm.get('opinionForm').get('medicalExamination')
                 .setValue(data.conclusion.dispanserizationFail, {emitEvent: false});
             if (!data.conclusion.dispanserizationFail) {
-                this.canDisabledControls.forEach(item => {
-                    this.conclusionForm.get('opinionForm').get(item).disable();
-                });
+                this.canDisabledControls.forEach(item => this.conclusionForm.get('opinionForm').get(item).disable());
             }
             this.conditionMedicalExaminationValue(data.conclusion.dispanserizationFail);
             if (data.conclusion.failReason) {
@@ -314,12 +305,7 @@ export class CardConclusionComponent implements OnInit {
                 const formArrayConclusion = data.map(item => {
                     let latestDateSeconds: number;
                     if (this.allDate) {
-                        if (typeof item.date === 'string') {
-                            latestDateSeconds = moment(item.date).valueOf();
-                        } else {
-                            latestDateSeconds = item.date.valueOf();
-                        }
-
+                        latestDateSeconds = typeof item.date === 'string' ? moment(item.date).valueOf() : item.date.valueOf();
                         this.allDate.push(latestDateSeconds);
                         const latestDate = Math.max(...this.allDate);
                         childsCurrentLocationValidator(
@@ -327,7 +313,6 @@ export class CardConclusionComponent implements OnInit {
                         );
                     }
 
-                    // this.setLatestDateConclusion();
                     return {
                         date: this.getDoctorDateFormat(item.date),
                         doctor: {

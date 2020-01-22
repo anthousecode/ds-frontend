@@ -47,7 +47,6 @@ export class CardDevelopmentAssessmentComponent implements OnInit {
         this.initPhysicalDevTeen();
         this.initCharacteristicMenstrualFunc();
         this.checkIsFormValid();
-        // this.cardThirteenYService.setTabInitValues(this.devAssessmentForm.value);
         this.cardThirteenYService.setTabCurrentValues(null);
         this.checkFormChanges();
     }

@@ -2,7 +2,6 @@ import {Component, OnInit, ChangeDetectionStrategy, ViewChild, ChangeDetectorRef
 import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDatepicker} from '@angular/material';
 import {CardCreateService} from '../../../card-create.service';
-import {CARD_DATA} from '../../data/card';
 import {DateExaminationValidator} from '../../../../../validators/date.validator';
 import {CardService} from '../../../../../@core/shared/services/card.service';
 import {Router} from '@angular/router';

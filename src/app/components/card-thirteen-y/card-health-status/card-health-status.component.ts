@@ -31,7 +31,6 @@ export class CardHealthStatusComponent implements OnInit {
     @ViewChild('auto2') matAutocomplete2: MatAutocomplete;
     healthStatusForm!: FormGroup;
     healthStatusList$!: Observable<HealthGroup[]>;
-    diagnosisListAfter!: any;
     disabilityTypeList$!: Observable<InvalidType[]>;
     doneList$!: Observable<ReabilitationStatus[]>;
     formValues!: any;
@@ -95,10 +94,7 @@ export class CardHealthStatusComponent implements OnInit {
     checkMinDisabilityLastDate() {
         this.disabilityFirstDate.valueChanges
             .pipe(takeUntil(this.onDestroy$))
-            .subscribe(minDate => {
-                this.childsCurrentLocationValidator(this.disabilityLastDate, minDate, this.formValues.startDate);
-                console.log(minDate);
-            });
+            .subscribe(minDate => this.childsCurrentLocationValidator(this.disabilityLastDate, minDate, this.formValues.startDate));
     }
 
     checkFormChanges() {
@@ -188,8 +184,8 @@ export class CardHealthStatusComponent implements OnInit {
                     ...this.healthStatusForm.value,
                     disability: {
                         ...this.healthStatusForm.value.disability,
-                        disabilityDiseases: data.disability.diseases.map(item => item.name),
-                        disabilityDisorders: data.disability.healthDisorders.map(item => item.name)
+                        disabilityDiseases: data.disability ? data.disability.diseases.map(item => item.name) : '',
+                        disabilityDisorders: data.disability ? data.disability.healthDisorders.map(item => item.name) : ''
                     }
                 };
                 this.cardThirteenYService.setSelectedTabInitValues(formGroupData);
@@ -410,20 +406,22 @@ export class CardHealthStatusComponent implements OnInit {
     }
 
     checkStatusAfterDisable() {
-        return !!(this.formValues.healthStatusAfter.healthGood && this.formValues.healthStatusAfter.diagnoses.length);
+        if (this.formValues.healthStatusAfter) {
+            return !!(this.formValues.healthStatusAfter.healthGood && this.formValues.healthStatusAfter.diagnoses.length);
+        }
     }
 
     addDiagnosisAfter() {
         if (!this.checkStatusAfterDisable()) {
-            const dialogRef = this.dialog.open(AddDiagnosisAfterComponent, {
+            this.dialog.open(AddDiagnosisAfterComponent, {
                 panelClass: '__add-diagnosis-after',
-                data: this.formValues.healthStatusAfter.healthGood
-            });
-            dialogRef.afterClosed().subscribe(result => {
+                data: this.formValues.healthStatusAfter ? this.formValues.healthStatusAfter.healthGood : false
+            }).afterClosed().subscribe(result => {
                 if (result) {
+                    const statusAfter = this.formValues.healthStatusAfter;
                     const healthStatusAfterData = {
                         healthGood: result.data.healthGood,
-                        diagnoses: this.formValues.healthStatusAfter.diagnoses.concat(result.data.diagnoses)
+                        diagnoses: statusAfter ? statusAfter.diagnoses.concat(result.data.diagnoses) : [result.data.diagnoses]
                     };
                     const healthStatusAfterObj = {
                         ...this.formValues,
