@@ -41,13 +41,11 @@ export class CardThirteenYComponent implements OnInit {
     menuItems: ICardThirteenYMenu[] = CARD_THIRTEEN_Y_MENU;
     activeTabKey: string;
     isAdditionalInfoVisible = false;
-    private innerWidth!: number;
+    innerWidth!: number;
     selectedTabInitValues!: AbstractControl;
     selectedTabInitValuesModified!: string;
     selectedTabCurrentValues!: AbstractControl;
     selectedTabCurrentValuesModified!: string;
-    // cardId = 696;
-    cardId = 1161;
     cardInfo!: any;
     token = TOKEN;
     formValues!: any;
@@ -98,14 +96,14 @@ export class CardThirteenYComponent implements OnInit {
     getCardStatus() {
         this.cardThirteenYService.cardStatus
             .pipe(takeUntil(this.onDestroy$))
-            .subscribe(status => {
+            .subscribe((status: number) => {
                 this.cardStatus = status;
                 this.cdRef.detectChanges();
             });
     }
 
     getCardInfo() {
-        this.cardThirteenYService.getCardInfo(this.cardId)
+        this.cardThirteenYService.getCardInfo()
             .pipe(takeUntil(this.onDestroy$))
             .subscribe(data => {
                 this.cardInfo = data;

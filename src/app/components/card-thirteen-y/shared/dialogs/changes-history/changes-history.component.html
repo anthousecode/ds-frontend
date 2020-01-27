@@ -1,46 +1,145 @@
 <div class="changes-history__main">
-  <p class="changes-history__title">История изменений в карте</p>
-  <div class="changes-history__menu">
-    <p class="changes-history__menu-item"
-       *ngFor="let item of historyMenu"
-       [ngClass]="{'__active': item.key === activeTabKey}"
-       (click)="changeTab(item.key)">
-      {{item.name}}
-    </p>
-  </div>
-  <ng-container [ngSwitch]="activeTabKey">
-    <div *ngSwitchCase="'info'"
-         class="changes-history__info">
-      <mat-accordion class="changes-history__info-accordion">
-        <mat-expansion-panel *ngFor="let infoItem of infoData"
-                             class="changes-history__info-item">
-          <mat-expansion-panel-header expandedHeight="48px">
-            <mat-panel-title>
-              {{infoItem.title}}
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div class="changes-history__info-content"
-               [ngClass]="{'__alone': infoItem.changes.length === 1}">
-            <p *ngFor="let changesItem of infoItem.changes"
-               class="changes-history__info-changes-item">
-              {{changesItem}}
-            </p>
-          </div>
-        </mat-expansion-panel>
-      </mat-accordion>
+    <p class="changes-history__title">История изменений в карте</p>
+    <div class="changes-history__menu">
+        <p class="changes-history__menu-item"
+           *ngFor="let item of historyMenu"
+           [ngClass]="{'__active': item.key === activeTabKey}"
+           (click)="changeTab(item.key)">
+            {{item.name}}
+        </p>
     </div>
-    <div *ngSwitchCase="'status'"
-         class="changes-history__status">
-      <p class="changes-history__status-item"
-         *ngFor="let statusItem of statusData">
-        {{statusItem}}
-      </p>
-    </div>
-  </ng-container>
+    <ng-container [ngSwitch]="activeTabKey">
+        <div *ngSwitchCase="'info'"
+             class="changes-history__info">
+            <mat-accordion class="changes-history__info-accordion">
+                <mat-expansion-panel class="changes-history__info-item">
+                    <mat-expansion-panel-header expandedHeight="48px">
+                        <mat-panel-title>История изменения карты</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="changes-history__info-content">
+                        <p class="changes-history__info-changes-item"
+                           [ngClass]="{'__alone': historyChanges.length === 1}"
+                           *ngFor="let item of historyChanges">
+                            {{getCardCreateMessage(item)}}
+                        </p>
+                        <p class="changes-history__no-changes"
+                           *ngIf="!historyChanges?.length">
+                            Изменений в разделе не было
+                        </p>
+                    </div>
+                </mat-expansion-panel>
+                <mat-expansion-panel class="changes-history__info-item">
+                    <mat-expansion-panel-header expandedHeight="48px">
+                        <mat-panel-title>Общее</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="changes-history__info-content">
+                        <p class="changes-history__info-changes-item"
+                           [ngClass]="{'__alone': main.length === 1}"
+                           *ngFor="let item of main">
+                            {{getChangeMessage(item)}}
+                        </p>
+                        <p class="changes-history__no-changes"
+                           *ngIf="!main?.length">
+                            Изменений в разделе не было
+                        </p>
+                    </div>
+                </mat-expansion-panel>
+                <mat-expansion-panel class="changes-history__info-item">
+                    <mat-expansion-panel-header expandedHeight="48px">
+                        <mat-panel-title>Оценка развития</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="changes-history__info-content">
+                        <p class="changes-history__info-changes-item"
+                           [ngClass]="{'__alone': assessment.length === 1}"
+                           *ngFor="let item of assessment">
+                            {{getChangeMessage(item)}}
+                        </p>
+                        <p class="changes-history__no-changes"
+                           *ngIf="!assessment?.length">
+                            Изменений в разделе не было
+                        </p>
+                    </div>
+                </mat-expansion-panel>
+                <mat-expansion-panel class="changes-history__info-item">
+                    <mat-expansion-panel-header expandedHeight="48px">
+                        <mat-panel-title>Состояние здоровья</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="changes-history__info-content">
+                        <p class="changes-history__info-changes-item"
+                           [ngClass]="{'__alone': healthStatus.length === 1}"
+                           *ngFor="let item of healthStatus">
+                            {{getChangeMessage(item)}}
+                        </p>
+                        <p class="changes-history__no-changes"
+                           *ngIf="!healthStatus?.length">
+                            Изменений в разделе не было
+                        </p>
+                    </div>
+                </mat-expansion-panel>
+                <mat-expansion-panel class="changes-history__info-item">
+                    <mat-expansion-panel-header expandedHeight="48px">
+                        <mat-panel-title>Исследования</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="changes-history__info-content">
+                        <p class="changes-history__info-changes-item"
+                           [ngClass]="{'__alone': research.length === 1}"
+                           *ngFor="let item of research">
+                            {{getChangeMessage(item)}}
+                        </p>
+                        <p class="changes-history__no-changes"
+                           *ngIf="!research?.length">
+                            Изменений в разделе не было
+                        </p>
+                    </div>
+                </mat-expansion-panel>
+                <mat-expansion-panel class="changes-history__info-item">
+                    <mat-expansion-panel-header expandedHeight="48px">
+                        <mat-panel-title>Вакцинации</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="changes-history__info-content">
+                        <p class="changes-history__info-changes-item"
+                           [ngClass]="{'__alone': vaccination.length === 1}"
+                           *ngFor="let item of vaccination">
+                            {{getChangeMessage(item)}}
+                        </p>
+                        <p class="changes-history__no-changes"
+                           *ngIf="!vaccination?.length">
+                            Изменений в разделе не было
+                        </p>
+                    </div>
+                </mat-expansion-panel>
+                <mat-expansion-panel class="changes-history__info-item">
+                    <mat-expansion-panel-header expandedHeight="48px">
+                        <mat-panel-title>Заключение</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="changes-history__info-content">
+                        <p class="changes-history__info-changes-item"
+                           [ngClass]="{'__alone': conclusion.length === 1}"
+                           *ngFor="let item of conclusion">
+                            {{getChangeMessage(item)}}
+                        </p>
+                        <p class="changes-history__no-changes"
+                           *ngIf="!conclusion?.length">
+                            Изменений в разделе не было
+                        </p>
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+        <div *ngSwitchCase="'status'"
+             class="changes-history__status">
+            <div class="changes-history__status-item"
+                 *ngFor="let statusItem of statusData">
+                <p class="changes-history__status-item-change">
+                    {{getStatusMessage(statusItem)}}
+                </p>
+            </div>
+        </div>
+    </ng-container>
 </div>
 <div class="changes-history__button-block">
-  <button mat-dialog-close
-          class="changes-history__button">
-    Ок
-  </button>
+    <button mat-dialog-close
+            class="changes-history__button">
+        Ок
+    </button>
 </div>

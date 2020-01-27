@@ -3,11 +3,8 @@ import {HttpClient} from '@angular/common/http';
 import {catchErrorLogEmpty} from '../../@core/shared/rxjs-operators/base-catch-error.operator';
 import {AbstractControl, FormGroup} from '@angular/forms';
 import {BaseApiService} from '../../@core/api/shared/base-api.service';
-import {IDiagnose} from './shared/interfaces/diagnoses.interface';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {AdditionalResearch} from './shared/interfaces/additional-research.interface';
 import {finalize} from 'rxjs/operators';
-import {IChangesHistory} from './shared/interfaces/changes-history.interface';
 import {CardService} from '../../@core/shared/services/card.service';
 
 @Injectable({
@@ -24,6 +21,7 @@ export class CardThirteenYService {
     isLoading$: Observable<boolean> = this.isLoading.asObservable();
     isBlocked: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     cardStatus: Subject<number> = new Subject();
+    cardId: number;
 
     baseUrl = 'http://ds-dev.rt-eu.ru/api/';
     getCitiesUrl = 'http://ds-dev.rt-eu.ru/addrobject/search?query=';
@@ -31,7 +29,7 @@ export class CardThirteenYService {
     constructor(private http: HttpClient,
                 private apiService: BaseApiService,
                 private cardService: CardService) {
-        console.log(this.cardService.thirteenYCardId);
+        this.setCardId();
     }
 
     setActiveTab(tab: string) {
@@ -58,7 +56,7 @@ export class CardThirteenYService {
         this.selectedTabCurrentValues.next(currentValue);
     }
 
-    checkCardStatus(status) {
+    checkCardStatus(status: number) {
         this.cardStatus.next(status);
     }
 
@@ -68,6 +66,10 @@ export class CardThirteenYService {
 
     setBlockedMode(isBlocked: boolean) {
         this.isBlocked.next(isBlocked);
+    }
+
+    setCardId() {
+        this.cardId = this.cardService.thirteenYCardId;
     }
 
     disableResetControl(group: FormGroup, first: string, second?: string) {
@@ -87,13 +89,13 @@ export class CardThirteenYService {
         };
         card.card = values;
         this.setLoading(true);
-        return this.http.patch(this.baseUrl + 'cards/696', card)
+        return this.http.patch(this.baseUrl + 'cards/' + this.cardId, card)
             .pipe(finalize(() => this.setLoading(false)));
     }
 
     setCardStatus(statusParams) {
         const params = statusParams;
-        return this.http.put(this.baseUrl + 'cards/696/status', params);
+        return this.http.put(this.baseUrl + 'cards/' + this.cardId + '/status', params);
     }
 
     getCities(text) {
@@ -103,17 +105,19 @@ export class CardThirteenYService {
         }
     }
 
-    getCardInfo(patientId: number) {
+    getCardInfo() {
         this.setLoading(true);
-        return this.http.get(this.baseUrl + 'cards/' + patientId)
+        return this.http.get(this.baseUrl + 'cards/' + this.cardId)
             .pipe(finalize(() => this.setLoading(false)));
     }
 
-    getHistory(): Observable<IChangesHistory> {
-        return this.apiService.get<IChangesHistory>('changes-history.json'); // TODO: remove when api will work
+    getCardHistory() {
+        this.setLoading(true);
+        return this.http.get(this.baseUrl + 'cards/' + this.cardId + '/log')
+            .pipe(finalize(() => this.setLoading(false)));
     }
 
     exportCard(format: string) {
-        return this.http.get(this.baseUrl + 'cards/696.' + format, {responseType: 'blob'});
+        return this.http.get(this.baseUrl + 'cards/' + this.cardId + '.' + format, {responseType: 'blob'});
     }
 }

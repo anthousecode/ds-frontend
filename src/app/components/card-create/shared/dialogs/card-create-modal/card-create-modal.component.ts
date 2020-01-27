@@ -80,11 +80,12 @@ export class CardCreateModalComponent implements OnInit {
 
         this.patientService.getPatient(this.cardService.patientId).subscribe(patient => {
             this.patient = patient;
-            this.dictionaryService.getAgeGroups(patient.birthdate).subscribe(data => {
-                this.ageGroupValues = data;
-                this.ageGroupControl.setValue(data[this.ageGroupId].id);
-                this.cdRef.detectChanges();
-            });
+            // this.dictionaryService.getAgeGroups(patient.birthdate).subscribe(data => {
+            //     this.ageGroupValues = data;
+            //     this.ageGroupControl.setValue(data[this.ageGroupId].id);
+            //     this.cdRef.detectChanges();
+            // });
+            // TODO: uncoment when patient will be younger than 18 years
         });
     }
 

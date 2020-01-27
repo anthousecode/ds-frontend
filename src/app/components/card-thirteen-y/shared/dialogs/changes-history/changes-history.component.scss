@@ -60,12 +60,6 @@
     &-content {
       padding: 30px;
       background-color: #fafafa;
-
-      &.__alone {
-        .changes-history__info-changes-item {
-          border-bottom: none;
-        }
-      }
     }
 
     &-changes-item {
@@ -73,7 +67,22 @@
       font-size: 15px;
       color: rgba(#000000, .87);
       border-bottom: 1px solid rgba(#000000, .12);
+
+      &.__alone {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      &:first-child {
+        padding-top: 0;
+      }
     }
+  }
+
+  &__no-changes {
+    padding: 0 5px;
+    font-size: 15px;
+    color: rgba(#000000, .87);
   }
 
   &__status {
