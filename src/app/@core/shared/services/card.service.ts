@@ -4,9 +4,9 @@ import {Injectable} from '@angular/core';
     providedIn: 'root'
 })
 export class CardService {
-    // thirteenYCardId = 696;
+    thirteenYCardId = 696;
     // thirteenYCardId = 1161;
-    thirteenYCardId!: number;
+    // thirteenYCardId!: number;
     patientId = 16995;
 
     setThirteenYCardId(id: number) {
