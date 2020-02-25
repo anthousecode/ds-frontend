@@ -16,8 +16,9 @@ import {CardService} from '../../@core/shared/services/card.service';
 import {TOKEN} from './shared/data/token';
 import {DoneCardComponent} from './shared/dialogs/done-card/done-card.component';
 import {BlockCardComponent} from './shared/dialogs/block-card/block-card.component';
-import {skip, takeUntil} from 'rxjs/operators';
+import {map, skip, switchMap, takeUntil} from 'rxjs/operators';
 import {NgOnDestroy} from '../../@core/shared/services/destroy.service';
+import {combineLatest, of} from 'rxjs';
 
 @Component({
     selector: 'app-card-thirteen-y',

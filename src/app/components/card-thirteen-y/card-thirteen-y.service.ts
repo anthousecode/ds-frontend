@@ -120,4 +120,17 @@ export class CardThirteenYService {
     exportCard(format: string) {
         return this.http.get(this.baseUrl + 'cards/' + this.cardId + '.' + format, {responseType: 'blob'});
     }
+
+
+
+
+
+
+    getMovies() {
+        return this.apiService.get('movies.json');
+    }
+
+    getMoviePerson(id: number) {
+        return this.apiService.get(`movie${id}.json`);
+    }
 }
